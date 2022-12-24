@@ -1,11 +1,12 @@
 import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/loginpage/loginpage.dart';
+import 'package:csvapp/screen/partyMaster/partyMaster.dart';
 import 'package:csvapp/screen/users/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../userBottomsheet.dart';
+import 'userBottomsheet.dart';
 
 class drawer extends StatelessWidget {
   drawer({
@@ -93,6 +94,21 @@ class drawer extends StatelessWidget {
                 },
               ),
             ),
+            ListTile(
+              leading: Icon(Icons.business),
+              title: Text("PartyMaster"),
+              onTap: () {
+                Get.toNamed(PartyMasterPage.routeName);
+              },
+            ),
+           
+            // ListTile(
+            //   leading: Icon(Icons.party_mode),
+            //   title: Text("PartyMaster"),
+            //   onTap: () {
+            //     Get.toNamed(PartyMasterPage.routeName);
+            //   },
+            // ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("Settings"),

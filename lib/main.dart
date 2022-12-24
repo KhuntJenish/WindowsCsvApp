@@ -1,5 +1,7 @@
 import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/loginpage/loginpage.dart';
+import 'package:csvapp/screen/partyMaster/partyComission.dart';
+import 'package:csvapp/screen/partyMaster/partyMaster.dart';
 import 'package:csvapp/screen/users/user.dart';
 import 'package:csvapp/utils/constant.dart';
 import 'package:drift/drift.dart';
@@ -42,13 +44,14 @@ class MyApp extends StatelessWidget {
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     if (GetStorage('box').read('cuser') != null) {
       var userData = GetStorage('box').read('cuser');
+      print(userData);
       var user = UserData(
           id: userData['id'],
           username: userData['username'],
           password: userData['password'],
           phone: userData['phone'],
           mail: userData['mail']);
-      print(user);
+      // print(user);
       GetStorage('box').write('cuser', user);
     }
 
@@ -82,6 +85,18 @@ class MyApp extends StatelessWidget {
               name: Userspage.routeName,
               page: () => Userspage(),
             ),
+            GetPage(
+              name: PartyMasterPage.routeName,
+              page: () => PartyMasterPage(),
+            ),
+            GetPage(
+              name: PartyComission.routeName,
+              page: () => PartyComission(),
+            ),
+            // GetPage(
+            //   name: MaterialTypeMasterPage.routeName,
+            //   page: () => MaterialTypeMasterPage(),
+            // ),
           ],
         );
       },

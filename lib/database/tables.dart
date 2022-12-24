@@ -30,12 +30,88 @@ class PartyMaster extends Table {
   IntColumn get ptID => integer().references(PartyTypeMaster, #id)();
 }
 
-@DriftDatabase(tables: [User, MaterialType, PartyTypeMaster, PartyMaster])
+class PartyComissionDetail extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get pID => integer().references(PartyMaster, #id)();
+  IntColumn get mtID => integer().references(MaterialType, #id)();
+  RealColumn get comission1 => real()();
+  RealColumn get comission2 => real()();
+  RealColumn get comission3 => real()();
+}
+
+class InputData extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get documentType => text()();
+  DateTimeColumn get distDocDate => dateTime()();
+  TextColumn get distDocNo => text()();
+  IntColumn get pID => integer().references(PartyMaster, #id)();
+  TextColumn get custBillCity => text()();
+  TextColumn get matCode => text()();
+  TextColumn get matName => text()();
+  IntColumn get mtID => integer().references(MaterialType, #id)();
+  IntColumn get qty => integer()();
+  TextColumn get doctorName => text()();
+  TextColumn get techniqalStaff => text()();
+  RealColumn get saleAmount => real()();
+  RealColumn get totalSale => real()();
+  DateTimeColumn get smtDocDate => dateTime()();
+  TextColumn get smtDocNo => text()();
+  TextColumn get smtInvNo => text()();
+  RealColumn get purchaseTaxableAmount => real()();
+  RealColumn get totalPurchaseAmount => real()();
+  IntColumn get logId => integer()();
+  IntColumn get ledgerId => integer().references(Ledger, #id)();
+  RealColumn get comission => real()();
+  RealColumn get comissionAmount => real()();
+  DateTimeColumn get comissionPaidDate => dateTime()();
+  RealColumn get adjustComissionAmount => real()();
+}
+
+class Ledger extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get type => text()();
+  IntColumn get pID => integer().references(PartyMaster, #id)();
+  DateTimeColumn get ledgerDate => dateTime()();
+  RealColumn get drAmount => real()();
+  RealColumn get crAmount => real()();
+  TextColumn get ledgerNote => text()();
+}
+
+@DriftDatabase(tables: [
+  User,
+  MaterialType,
+  PartyTypeMaster,
+  PartyMaster,
+  PartyComissionDetail,
+  InputData,
+  Ledger
+])
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          // we added the dueDate property in the change from version 1 to
+          // version 2
+           partyComissionDetail;
+        }
+        // if (from < 3) {
+        //   // we added the priority property in the change from version 1 or 2
+        //   // to version 3
+        //   await m.addColumn(todos, todos.priority);
+        // }
+      },
+    );
+  }
 }
 
 LazyDatabase _openConnection() {

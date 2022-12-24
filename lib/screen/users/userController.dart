@@ -21,20 +21,28 @@ class UserController extends GetxController {
     String? mail,
   }) async {
     try {
-      var data = await db.into(db.user).insert(UserCompanion.insert(
-          username: username,
-          password: password,
-          phone: phone ?? 0,
-          mail: mail ?? ''));
-      // print(data.length);
-      if (data > 0) {
-        Get.back();
-        'User Add Successful'.successSnackbar;
-        // print('user not exist');
+      var user = await (db.select(db.user)
+            ..where((tbl) => (tbl.username.equals(username))))
+          .get();
+      if (user.isEmpty) {
+        var data = await db.into(db.user).insert(UserCompanion.insert(
+            username: username,
+            password: password,
+            phone: phone ?? 0,
+            mail: mail ?? ''));
+        // print(data.length);
+        if (data > 0) {
+          Get.back();
+          'User Add Successful'.successSnackbar;
+          // print('user not exist');
+        } else {
+          // print(data);
+          Get.back();
+          'something went wrong!'.errorSnackbar;
+        }
       } else {
-        // print(data);
         Get.back();
-        'something went wrong!'.errorSnackbar;
+        'User already exist'.errorSnackbar;
       }
     } catch (e) {
       e.toString().errorSnackbar;

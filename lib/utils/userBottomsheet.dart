@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'theam/theam_constants.dart';
-import 'utils/helper_widget.dart';
+import '../theam/theam_constants.dart';
+import 'helper_widget.dart';
 
 class UserBottomsheet extends StatelessWidget {
   UserBottomsheet({
@@ -176,7 +176,7 @@ class UserBottomsheet extends StatelessWidget {
                     ),
                     onPressed: () {
                       if (username.text.isNotEmpty ||
-                          password.text.isNotEmpty) {
+                          password.text.isNotEmpty ) {
                         if (id != null && id! >= 1) {
                           if (btnText == 'Forget Password' &&
                               phone.text.isNotEmpty &&
