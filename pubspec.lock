@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "50.0.0"
+  adaptive_scrollbar:
+    dependency: "direct main"
+    description:
+      name: adaptive_scrollbar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.2"
   analyzer:
     dependency: transitive
     description:
@@ -211,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.3"
+  dual_scroll:
+    dependency: "direct main"
+    description:
+      name: dual_scroll
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.9"
   fake_async:
     dependency: transitive
     description:
@@ -331,6 +345,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
+  hovering:
+    dependency: transitive
+    description:
+      name: hovering
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   http:
     dependency: transitive
     description:
@@ -422,6 +443,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  multiselect:
+    dependency: "direct main"
+    description:
+      name: multiselect
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   package_config:
     dependency: transitive
     description:
@@ -534,6 +562,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.7"
   shelf:
     dependency: transitive
     description:
@@ -595,6 +630,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  states_rebuilder:
+    dependency: transitive
+    description:
+      name: states_rebuilder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.4.0"
   stream_channel:
     dependency: transitive
     description:
@@ -616,6 +658,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.4.38"
+  syncfusion_flutter_datepicker:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_datepicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.4.38"
   term_glyph:
     dependency: transitive
     description:

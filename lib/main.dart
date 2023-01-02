@@ -9,17 +9,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'homepage1.dart';
-import 'screen/homepage/homepage.dart';
+import 'mainpage.dart';
+import 'screen/homepage/generatedReport.dart';
+import 'screen/homepage/pendingReport.dart';
 import 'theam/theam_constants.dart';
 
 Future<void> main() async {
   //  static final db = MyDatabase();
 
-  // final id = await Constantdata.db
-  //     .into(Constantdata.db.user)
-  //     .insert(UserCompanion.insert(username: 'admin', password: 'admin',mail: 'admin@gmail.com',phone: 9624891105));
+  // final id = await Constantdata.db.into(Constantdata.db.user).insert(
+  //     UserCompanion.insert(
+  //         username: 'admin',
+  //         password: 'admin',
+  //         mail: 'admin@gmail.com',
+  //         phone: 9624891105));
+  // print(id);
 
+  // final id = await (Constantdata.db.delete(Constantdata.db.materialType)
+  //       ..where((tbl) => tbl.id.equals(2)))
+  //     .go();
+  // print(id);
+ 
 // await db
 //       .into(db.partyMaster)
 //       .insert(PartyMasterCompanion.insert(name: 'brijal patel',ptID: id));
@@ -68,14 +78,18 @@ class MyApp extends StatelessWidget {
           themeMode: Get.isDarkMode ? ThemeMode.dark : ThemeMode.light,
           initialRoute: (GetStorage('box').read('cuser')) == null
               ? Login.routeName
-              : Homepage.routeName, //themeMode,
+              : Mainpage.routeName, //themeMode,
           defaultTransition: Transition.cupertino,
           title: 'First Method',
 
           getPages: [
             GetPage(
-              name: Homepage.routeName,
-              page: () => Homepage(),
+              name: PendingReport.routeName,
+              page: () => PendingReport(),
+            ),
+            GetPage(
+              name: GeneratedReport.routeName,
+              page: () => GeneratedReport(),
             ),
             GetPage(
               name: Login.routeName,
@@ -87,11 +101,15 @@ class MyApp extends StatelessWidget {
             ),
             GetPage(
               name: PartyMasterPage.routeName,
-              page: () => PartyMasterPage(),
+              page: () => const PartyMasterPage(),
             ),
             GetPage(
               name: PartyComission.routeName,
               page: () => PartyComission(),
+            ),
+            GetPage(
+              name: Mainpage.routeName,
+              page: () => const Mainpage(),
             ),
             // GetPage(
             //   name: MaterialTypeMasterPage.routeName,

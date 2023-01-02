@@ -1,4 +1,4 @@
-import 'package:csvapp/homepage1.dart';
+import 'package:csvapp/mainpage.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../theam/theam_constants.dart';
 import '../../utils/userBottomsheet.dart';
 import '../../utils/helper_widget.dart';
-import '../homepage/homepage.dart';
+import '../homepage/pendingReport.dart';
 import 'logincontroller.dart';
 
 class Login extends StatelessWidget {
@@ -105,7 +105,6 @@ Please register first''',
                   () => Padding(
                     padding: EdgeInsets.symmetric(horizontal: Get.width * 0.25),
                     child: TextField(
-                      
                       maxLength: 10,
                       controller: _passwordController,
                       obscureText: !_loginController.isPwdVisible.value,
@@ -136,23 +135,18 @@ Please register first''',
                 addVerticaleSpace(Get.height * 0.01),
                 GestureDetector(
                   onTap: () {
-
-                     Get.bottomSheet(
-                          isScrollControlled: true,
-                          ignoreSafeArea: false,
-                          UserBottomsheet(
-                            id: 5,
-                            btnText: 'Forget Password',
-                            username: TextEditingController(
-                                text: ''),
-                            password: TextEditingController(
-                                text:''),
-                            email:
-                                TextEditingController(text: ''),
-                            phone: TextEditingController(
-                                text: ''),
-                          ),
-                        );
+                    Get.bottomSheet(
+                      isScrollControlled: true,
+                      ignoreSafeArea: false,
+                      UserBottomsheet(
+                        id: 5,
+                        btnText: 'Forget Password',
+                        username: TextEditingController(text: ''),
+                        password: TextEditingController(text: ''),
+                        email: TextEditingController(text: ''),
+                        phone: TextEditingController(text: ''),
+                      ),
+                    );
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: Get.width * 0.25),
@@ -162,7 +156,8 @@ Please register first''',
                         Text(
                           'Forget Password?',
                           style: TextStyle(
-                            color: Get.isDarkMode ? Colors.white : lCOLOR_PRIMARY,
+                            color:
+                                Get.isDarkMode ? Colors.white : lCOLOR_PRIMARY,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -171,55 +166,22 @@ Please register first''',
                   ),
                 ),
                 addVerticaleSpace(Get.height * 0.02),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  width: Get.width * 0.5,
+                Button(
                   height: Get.height * 0.06,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        gradient: LinearGradient(
-                            colors: Get.isDarkMode
-                                ? [dCOLOR_PRIMARY, dCOLOR_ACCENT]
-                                : [
-                                    lCOLOR_PRIMARY,
-                                    lCOLOR_ACCENT,
-                                  ]),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const <BoxShadow>[
-                          BoxShadow(
-                              color: Color.fromRGBO(
-                                  0, 0, 0, 0.57), //shadow for button
-                              blurRadius: 5) //blur radius of shadow
-                        ]),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.transparent,
-                        onSurface: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        //make color or elevated button transparent
-                      ),
-                      child: Text(
-                        'Login',
-                        style: _textTheme.headline6?.copyWith(
-                          color: Get.isDarkMode ? Colors.black : Colors.white,
-                          fontSize: Get.width * 0.015,
-                        ),
-                      ),
-                      onPressed: () {
-                        if (_usernameController.text.isEmpty ||
-                            _passwordController.text.isEmpty) {
-                          
-                          'Enter Valid Data fields'.errorSnackbar;
-                        }else{
-                        _loginController.login(
-                            username: _usernameController.text,
-                            password: _passwordController.text);
-                        }
-                        // Get.offAllNamed(Homepage.routeName);
-                      },
-                    ),
-                  ),
+                  width: Get.width * 0.5,
+                  fontSize: Get.width * 0.015,
+                  text: 'Login',
+                  onPressed: () {
+                    if (_usernameController.text.isEmpty ||
+                        _passwordController.text.isEmpty) {
+                      'Enter Valid Data fields'.errorSnackbar;
+                    } else {
+                      _loginController.login(
+                          username: _usernameController.text,
+                          password: _passwordController.text);
+                    }
+                    // Get.offAllNamed(Homepage.routeName);
+                  },
                 ),
                 addVerticaleSpace(Get.height * 0.01),
                 Row(

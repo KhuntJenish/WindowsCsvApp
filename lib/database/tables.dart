@@ -90,28 +90,34 @@ class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
-  @override
-  MigrationStrategy get migration {
-    return MigrationStrategy(
-      onCreate: (Migrator m) async {
-        await m.createAll();
-      },
-      onUpgrade: (Migrator m, int from, int to) async {
-        if (from < 2) {
-          // we added the dueDate property in the change from version 1 to
-          // version 2
-           partyComissionDetail;
-        }
-        // if (from < 3) {
-        //   // we added the priority property in the change from version 1 or 2
-        //   // to version 3
-        //   await m.addColumn(todos, todos.priority);
-        // }
-      },
-    );
-  }
+  // @override
+  // MigrationStrategy get migration {
+  //   return MigrationStrategy(
+  //     onCreate: (Migrator m) async {
+  //       await m.createAll();
+  //     },
+  //     onUpgrade: (Migrator m, int from, int to) async {
+  //       if (from < 2) {
+  //         // we added the dueDate property in the change from version 1 to
+  //         // version 2
+  //         partyComissionDetail;
+  //         user;
+  //         materialType;
+  //         partyTypeMaster;
+  //         partyMaster;
+  //         inputData;
+  //         ledger;
+  //       }
+  //       // if (from < 3) {
+  //       //   // we added the priority property in the change from version 1 or 2
+  //       //   // to version 3
+  //       //   await m.addColumn(todos, todos.priority);
+  //       // }
+  //     },
+  //   );
+  // }
 }
 
 LazyDatabase _openConnection() {
@@ -121,7 +127,7 @@ LazyDatabase _openConnection() {
     // for your app.
     print('database Created');
     final dbFolder = Directory.current.path + '\\backupData';
-    final file = File(p.join(dbFolder, 'db.sqlite'));
+    final file = File(p.join(dbFolder, 'backup.sqlite'));
     return NativeDatabase.createInBackground(file);
   });
 }

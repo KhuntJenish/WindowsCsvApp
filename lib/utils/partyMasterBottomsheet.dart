@@ -1,4 +1,5 @@
 import 'package:csvapp/database/tables.dart';
+import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/screen/partyMaster/partyController.dart';
 import 'package:csvapp/screen/users/userController.dart';
 import 'package:csvapp/utils/extensions.dart';
@@ -24,6 +25,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
   final String btnText;
   final int? id;
   final PartyController _partyController = Get.put(PartyController());
+  final HomepageController _homepageController = Get.put(HomepageController());
   TextEditingController partyType = TextEditingController(text: '');
   TextEditingController name;
 
@@ -49,7 +51,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.28),
                 child: TextField(
                   keyboardType: TextInputType.text,
-                  maxLength: 30,
+                  maxLength: 50,
                   controller: name,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.person),
@@ -67,68 +69,43 @@ class PartyTypeBottomsheet extends StatelessWidget {
                 //  color: Colors.grey[400],
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.25),
                 child: PartyTypeDropDownItems(
-                  defualtValue: _partyController.defualtParty,
+                  defualtValue: _partyController.defualtPartyType,
                   itemList: _partyController.partyTypeList,
                 ),
               ),
               addVerticaleSpace(Get.height * 0.01),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                width: Get.width * 0.5,
+              Button(
                 height: Get.height * 0.06,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      gradient: LinearGradient(
-                          colors: Get.isDarkMode
-                              ? [dCOLOR_PRIMARY, dCOLOR_ACCENT]
-                              : [
-                                  lCOLOR_PRIMARY,
-                                  lCOLOR_ACCENT,
-                                ]),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromRGBO(
-                                0, 0, 0, 0.57), //shadow for button
-                            blurRadius: 5) //blur radius of shadow
-                      ]),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.transparent,
-                      onSurface: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      //make color or elevated button transparent
-                    ),
-                    child: Text(
-                      'submit',
-                      style: _textTheme.headline6?.copyWith(
-                        color: Get.isDarkMode ? Colors.black : Colors.white,
-                        fontSize: Get.width * 0.015,
-                      ),
-                    ),
-                    onPressed: () {
-                      if (name.text.isNotEmpty) {
-                        if (btnText == 'Add Party') {
-                          
-                        _partyController.addParty(
-                          name: name.text,
-                          type: _partyController.defualtParty.value.id,
-                        );
-                     
-                        } else if(btnText == 'Update Party'){
-                          _partyController.updateParty(
-                            id: id!,
-                            name: name.text,
-                            ptID: _partyController.defualtParty.value.id,
-                          );
-                        }
-                      } else {
-                        'Please Enter Party Name'.errorSnackbar;
+                width: Get.width * 0.5,
+                fontSize: Get.width * 0.015,
+                text: 'submit',
+                onPressed: () {
+                  if (name.text.isNotEmpty) {
+                    if (btnText == 'Add Party' || btnText == 'Add New Party') {
+                      _partyController.addParty(
+                        name: name.text,
+                        type: _partyController.defualtPartyType.value.id,
+                      );
+                      if (btnText == 'Add New Party') {
+                        List<List<dynamic>> data = [];
+                        data.addAll(_homepageController.pendingReportData);
+                        _homepageController.displayData.clear();
+                        _homepageController.partyNaNSetData.clear();
+                        _homepageController.comissionAndmatTypeNaNSetData
+                            .clear();
+                        _homepageController.checkInputData(fields: data);
                       }
-                    },
-                  ),
-                ),
+                    } else if (btnText == 'Update Party') {
+                      _partyController.updateParty(
+                        id: id!,
+                        name: name.text,
+                        ptID: _partyController.defualtPartyType.value.id,
+                      );
+                    }
+                  } else {
+                    'Please Enter Party Name'.errorSnackbar;
+                  }
+                },
               ),
             ],
           ),
@@ -176,60 +153,19 @@ class PartyTypeBottomsheet extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    width: Get.width * 0.09,
+                  Button(
                     height: Get.height * 0.06,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          gradient: LinearGradient(
-                              colors: Get.isDarkMode
-                                  ? [dCOLOR_PRIMARY, dCOLOR_ACCENT]
-                                  : [
-                                      lCOLOR_PRIMARY,
-                                      lCOLOR_ACCENT,
-                                    ]),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: const <BoxShadow>[
-                            BoxShadow(
-                                color: Color.fromRGBO(
-                                    0, 0, 0, 0.57), //shadow for button
-                                blurRadius: 5) //blur radius of shadow
-                          ]),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.transparent,
-                            onSurface: Colors.transparent,
-                            shadowColor: Colors.transparent,
-                            //make color or elevated button transparent
-                          ),
-                          child: Text(
-                            _partyController.addPartyBtnText.value,
-                            style: _textTheme.headline6?.copyWith(
-                              color:
-                                  Get.isDarkMode ? Colors.black : Colors.white,
-                              fontSize: Get.width * 0.015,
-                            ),
-                          ),
-                          onPressed: () {
-                            // if (_partyController.addPartyBtnText.value ==
-                            //     'Add Party') {
-                            //   _partyController.addPartyBtnText.value = 'Add';
-                            //   print(_partyController.addPartyBtnText.value);
-                            // }
-                            if (partyType.text.isNotEmpty) {
-                              _partyController.addPartyType(
-                                  partyType: partyType.text);
-                              // db.into(db.partyTypeMaster).insert(
-                              //       PartyTypeMasterCompanion.insert(
-                              //           type: partyType.text),
-                              //     );
-                            } else {
-                              'Fill Require Feild'.errorSnackbar;
-                            }
-                          }),
-                    ),
+                    width: Get.width * 0.09,
+                    fontSize: Get.width * 0.015,
+                    text: _partyController.addPartyBtnText.value,
+                    onPressed: () {
+                      if (partyType.text.isNotEmpty) {
+                        _partyController.addPartyType(
+                            partyType: partyType.text);
+                      } else {
+                        'Fill Require Feild'.errorSnackbar;
+                      }
+                    },
                   ),
                 ],
               ),

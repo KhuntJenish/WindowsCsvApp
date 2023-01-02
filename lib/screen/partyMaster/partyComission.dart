@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/partyMaster/partyController.dart';
 import 'package:csvapp/screen/users/userController.dart';
@@ -45,10 +46,17 @@ class PartyComission extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('${party.name.toString()}`s Comission ',
+                Container(
+                  height: Get.height * 0.1,
+                  width: Get.width*0.8,
+                  child: AutoSizeText(
+                    '${party.name.toString()}`s Comission ',
                     style: GoogleFonts.padauk(
                       fontSize: Get.width * 0.04,
-                    )),
+                    ),
+                    minFontSize: 15,
+                  ),
+                ),
                 addVerticaleSpace(Get.height * 0.01),
                 // Text(partyName.toString(),
                 //     style: GoogleFonts.padauk(
@@ -60,8 +68,9 @@ class PartyComission extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       StreamBuilder(
-                          stream: _partyController.db
-                              .select(_partyController.db.partyComissionDetail)
+                          stream: (_partyController.db.select(
+                                  _partyController.db.partyComissionDetail)
+                                ..where((tbl) => tbl.pID.equals(party.id)))
                               .watch(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
@@ -360,7 +369,7 @@ class PartyComission extends StatelessWidget {
           // _partyController.defualtParty.value = PartyType(id: 1, name: 'Buyer');
           // newComission.text = '';
           // Get.toNamed(PartyComission.routeName);
-          print(partyTypeIDList);
+          // print(partyTypeIDList);
           btnText = 'Add Comission';
           Get.bottomSheet(
             isScrollControlled: true,
@@ -370,7 +379,7 @@ class PartyComission extends StatelessWidget {
               party: party,
               btnText: btnText,
               isShow: true,
-              partyTypeIDList: partyTypeIDList,
+              // partyTypeIDList: partyTypeIDList,
               // id: snapshot.data?[index].id,
               // newComission: name,
             ),

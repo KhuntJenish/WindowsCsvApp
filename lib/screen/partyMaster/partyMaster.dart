@@ -1,3 +1,4 @@
+import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../theam/theam_constants.dart';
@@ -47,6 +48,7 @@ class PartyMasterPage extends StatelessWidget {
                     itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
                       // print(snapshot.data?[index].ptID);
+
                       var data = _partyController.partyTypeList?.firstWhere(
                           (element) =>
                               element.id == snapshot.data?[index].ptID);
@@ -67,72 +69,26 @@ class PartyMasterPage extends StatelessWidget {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                width: Get.width * 0.1,
+                              Button(
                                 height: Get.height * 0.06,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      gradient: LinearGradient(
-                                          colors: Get.isDarkMode
-                                              ? [dCOLOR_PRIMARY, dCOLOR_ACCENT]
-                                              : [
-                                                  lCOLOR_PRIMARY,
-                                                  lCOLOR_ACCENT,
-                                                ]),
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: const <BoxShadow>[
-                                        BoxShadow(
-                                            color: Color.fromRGBO(0, 0, 0,
-                                                0.57), //shadow for button
-                                            blurRadius:
-                                                5) //blur radius of shadow
-                                      ]),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.transparent,
-                                      onSurface: Colors.transparent,
-                                      shadowColor: Colors.transparent,
-                                      //make color or elevated button transparent
-                                    ),
-                                    child: Text(
-                                      'Comission',
-                                      style: _textTheme.headline6?.copyWith(
-                                        color: Get.isDarkMode
-                                            ? Colors.black
-                                            : Colors.white,
-                                        fontSize: Get.width * 0.015,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      btnText = 'Add Comission';
-                                      name.text = 0.toString();
+                                width: Get.width * 0.1,
+                                fontSize: Get.width * 0.015,
+                                text: 'Comission',
+                                onPressed: () {
+                                  btnText = 'Add Comission';
+                                  name.text = 0.toString();
 
-                                      Get.toNamed(PartyComission.routeName,
-                                          arguments: snapshot.data?[index]);
-                                      // Get.bottomSheet(
-                                      //   isScrollControlled: true,
-                                      //   ignoreSafeArea: false,
-                                      //   PartyComissionBottomsheet(
-                                      //     partyName: '${(snapshot.data?[index].name).toString()}',
-                                      //     btnText: btnText,
-                                      //     id: snapshot.data?[index].id,
-                                      //     newComission: name,
-                                      //   ),
-                                      // );
-                                      // Get.offAllNamed(Homepage.routeName);
-                                    },
-                                  ),
-                                ),
+                                  Get.toNamed(PartyComission.routeName,
+                                      arguments: snapshot.data?[index]);
+                                },
                               ),
                               IconButton(
                                 onPressed: (() {
                                   btnText = 'Update Party';
                                   name.text =
                                       (snapshot.data?[index].name).toString();
-                                  _partyController.defualtParty.value = data!;
+                                  _partyController.defualtPartyType.value =
+                                      data!;
                                   Get.bottomSheet(
                                     isScrollControlled: true,
                                     ignoreSafeArea: false,

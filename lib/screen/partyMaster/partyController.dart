@@ -1,4 +1,5 @@
 import 'package:csvapp/utils/extensions.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../database/tables.dart';
@@ -9,12 +10,12 @@ class PartyController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getPartyList();
+    getPartyTypeList();
     getMaterialTypeList();
     // getcomissionDetail();
   }
 
-  Rx<PartyTypeMasterData> defualtParty =
+  Rx<PartyTypeMasterData> defualtPartyType =
       PartyTypeMasterData(id: 0, type: '').obs;
   Rx<MaterialTypeData> defualtMaterialType =
       MaterialTypeData(id: 0, type: '').obs;
@@ -37,7 +38,7 @@ class PartyController extends GetxController {
   //   //  print(ldata);
   // }
 
-  getPartyList() async {
+  getPartyTypeList() async {
     partyTypeList?.clear();
     var data = await db.select(db.partyTypeMaster).get();
     // .then((value) {
@@ -50,16 +51,16 @@ class PartyController extends GetxController {
     // print(data);
     if (partyTypeList!.isNotEmpty) {
       // print(partyTypeList![0]);
-      var defualt = partyTypeList![0].obs;
-      defualtParty.value = defualt.value;
-      print('defualtParty: ${defualtParty.value}');
+      // var defualt = .obs;
+      defualtPartyType.value = partyTypeList![0];
+      print('defualtParty: ${defualtPartyType.value}');
     }
 
     print(partyTypeList);
   }
 
   getMaterialTypeList() async {
-    partyTypeList?.clear();
+    materialTypeList?.clear();
     var data = await db.select(db.materialType).get();
 
     materialTypeList?.addAll(data);
@@ -67,8 +68,8 @@ class PartyController extends GetxController {
     // print(data);
     if (materialTypeList!.isNotEmpty) {
       // print(materialTypeList![0]);
-      var defualt = materialTypeList![0].obs;
-      defualtMaterialType.value = defualt.value;
+      defualtMaterialType.value = materialTypeList![0];
+      //  = defualt.value;
       print('defualtMaterialType: ${defualtMaterialType.value}');
     }
 
@@ -98,23 +99,35 @@ class PartyController extends GetxController {
     // return list;
   }
 
-  addPartyType({String? partyType}) {
+  addPartyType({String? partyType}) async{
+     var checkPartyType = await (db.select(db.partyTypeMaster)
+          ..where((tbl) => tbl.type.equals(partyType!)))
+        .get();
+    if (checkPartyType.isNotEmpty) {
+      "Party type already exist".errorSnackbar;
+      return;
+    }
     var data = db.into(db.partyTypeMaster).insert(
           PartyTypeMasterCompanion.insert(type: partyType.toString()),
         );
     print(data);
     // partyList?.add(partyType!);
-    getPartyList();
+    getPartyTypeList();
     "party type added".successSnackbar;
   }
 
   addMaterialType({String? materialType}) async {
+    var checkMaterialType = await (db.select(db.materialType)
+          ..where((tbl) => tbl.type.equals(materialType!)))
+        .get();
+    if (checkMaterialType.isNotEmpty) {
+      "Material type already exist".errorSnackbar;
+      return;
+    }
     var data = await db.into(db.materialType).insert(
           MaterialTypeCompanion.insert(type: materialType.toString()),
         );
-    //  var data = await (db.delete(db.materialType)).go();
-    //   ..where((tbl) => tbl.id.equals(1)))
-    // .go();
+
     print(data);
     // partyList?.add(partyType!);
     getMaterialTypeList();
@@ -140,19 +153,26 @@ class PartyController extends GetxController {
   }
 
   addPartyComission({int? pID, int? mtID, double? newComission}) async {
+    var data = await (db.select(db.partyComissionDetail)
+          ..where((tbl) => tbl.pID.equals(pID!) & tbl.mtID.equals(mtID!)))
+        .get();
     print('comissionDetail');
+    if (data.isEmpty) {
+      var data = await db.into(db.partyComissionDetail).insert(
+          PartyComissionDetailCompanion.insert(
+              pID: pID!.toInt(),
+              mtID: mtID!.toInt(),
+              comission1: newComission!.toDouble(),
+              comission2: 0,
+              comission3: 0));
 
-    var data = await db.into(db.partyComissionDetail).insert(
-        PartyComissionDetailCompanion.insert(
-            pID: pID!.toInt(),
-            mtID: mtID!.toInt(),
-            comission1: newComission!.toDouble(),
-            comission2: 0,
-            comission3: 0));
-
-    print(data);
-    Get.back();
-    "party added".successSnackbar;
+      print(data);
+      Get.back();
+      "party added".successSnackbar;
+    } else {
+      Get.back();
+      "partyComission already exist".errorSnackbar;
+    }
   }
 
   deleteParty({int? id}) async {
@@ -201,6 +221,7 @@ class PartyController extends GetxController {
       );
       // print(data.length);
       if (data > 0) {
+        Get.back();
         'User update Successful'.successSnackbar;
         // print('user not exist');
 

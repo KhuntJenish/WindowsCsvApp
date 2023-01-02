@@ -72,7 +72,7 @@ class UserBottomsheet extends StatelessWidget {
                     keyboardType: TextInputType.visiblePassword,
                     maxLength: 10,
                     controller: password,
-                     obscureText: !_userController.isPwdVisible.value,
+                    obscureText: !_userController.isPwdVisible.value,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -139,82 +139,49 @@ class UserBottomsheet extends StatelessWidget {
                 ),
               ),
               addVerticaleSpace(Get.height * 0.01),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                width: Get.width * 0.5,
+              Button(
                 height: Get.height * 0.06,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      gradient: LinearGradient(
-                          colors: Get.isDarkMode
-                              ? [dCOLOR_PRIMARY, dCOLOR_ACCENT]
-                              : [
-                                  lCOLOR_PRIMARY,
-                                  lCOLOR_ACCENT,
-                                ]),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: const <BoxShadow>[
-                        BoxShadow(
-                            color: Color.fromRGBO(
-                                0, 0, 0, 0.57), //shadow for button
-                            blurRadius: 5) //blur radius of shadow
-                      ]),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.transparent,
-                      onSurface: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      //make color or elevated button transparent
-                    ),
-                    child: Text(
-                      'submit',
-                      style: _textTheme.headline6?.copyWith(
-                        color: Get.isDarkMode ? Colors.black : Colors.white,
-                        fontSize: Get.width * 0.015,
-                      ),
-                    ),
-                    onPressed: () {
-                      if (username.text.isNotEmpty ||
-                          password.text.isNotEmpty ) {
-                        if (id != null && id! >= 1) {
-                          if (btnText == 'Forget Password' &&
-                              phone.text.isNotEmpty &&
-                              email.text.isNotEmpty) {
-                            _userController.forgetPassword(
-                                id: id!,
-                                username: username.text,
-                                password: password.text,
-                                mail: email.text,
-                                phone: int.parse(phone.text));
-                          } else if (btnText == 'Update User') {
-                            _userController.updateUser(
-                                id: id!,
-                                username: username.text,
-                                password: password.text,
-                                mail: email.text,
-                                phone: int.parse(phone.text));
-                          } else {
-                            Get.back();
-                            'Fill Require Feild'.infoSnackbar;
-                          }
-                        } else {
-                          _userController.createUser(
-                              username: username.text,
-                              password: password.text,
-                              mail: email.text,
-                              phone:
-                                  phone.text != '' ? int.parse(phone.text) : 0);
-                        }
+                width: Get.width * 0.5,
+                fontSize: Get.width * 0.015,
+                text: 'submit',
+                onPressed: () {
+                  if (username.text.isNotEmpty || password.text.isNotEmpty) {
+                    if (id != null && id! >= 1) {
+                      if (btnText == 'Forget Password' &&
+                          phone.text.isNotEmpty &&
+                          email.text.isNotEmpty) {
+                        _userController.forgetPassword(
+                            id: id!,
+                            username: username.text,
+                            password: password.text,
+                            mail: email.text,
+                            phone: int.parse(phone.text));
+                      } else if (btnText == 'Update User') {
+                        _userController.updateUser(
+                            id: id!,
+                            username: username.text,
+                            password: password.text,
+                            mail: email.text,
+                            phone: int.parse(phone.text));
                       } else {
                         Get.back();
-                        'Data not Valid.'.errorSnackbar;
+                        'Fill Require Feild'.infoSnackbar;
                       }
-                      // Get.offAllNamed(Homepage.routeName);
-                    },
-                  ),
-                ),
+                    } else {
+                      _userController.createUser(
+                          username: username.text,
+                          password: password.text,
+                          mail: email.text,
+                          phone: phone.text != '' ? int.parse(phone.text) : 0);
+                    }
+                  } else {
+                    Get.back();
+                    'Data not Valid.'.errorSnackbar;
+                  }
+                  // Get.offAllNamed(Homepage.routeName);
+                },
               ),
+              
             ],
           ),
           Positioned(
