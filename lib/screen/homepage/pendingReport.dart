@@ -88,6 +88,7 @@ class PendingReport extends StatelessWidget {
                                   ],
                                 ),
                                 PartyDropDownItems(
+                                  width: Get.width * 0.28,
                                   defualtValue:
                                       _homepageController.defualtParty,
                                   itemList: _homepageController.partyList,
@@ -96,62 +97,69 @@ class PendingReport extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: Get.width * 0.20,
-                            child: Container(
-                              // color: Colors.amber,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: Get.width * 0.05,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Start:',
-                                          style: _textTheme.bodyText1?.copyWith(
-                                            fontSize: Get.height * 0.015,
-                                          ),
+                            // width: Get.width * 0.25,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: Get.width * 0.07,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Start:',
+                                        style: _textTheme.bodyText1?.copyWith(
+                                          fontSize: Get.height * 0.015,
                                         ),
-                                        Text(DateFormat('dd-MM-yyyy').format(
-                                            _homepageController
-                                                .dateRange.value.start)),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Get.width * 0.05,
-                                    child: CircleAvatar(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          _homepageController
-                                              .chooseDateRangePicker();
-                                        },
-                                        icon: const Icon(Icons.date_range),
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Get.width * 0.05,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'End:',
-                                          style: _textTheme.bodyText1?.copyWith(
-                                            fontSize: Get.height * 0.015,
-                                          ),
-                                        ),
-                                        Text(DateFormat('dd-MM-yyyy').format(
+                                      Text(
+                                        DateFormat('dd-MM-yyyy').format(
                                             _homepageController
-                                                .dateRange.value.end)),
-                                      ],
+                                                .dateRange.value.start),
+                                        style: _textTheme.bodyText1?.copyWith(
+                                          fontSize: Get.height * 0.020,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.05,
+                                  child: CircleAvatar(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        _homepageController
+                                            .chooseDateRangePicker();
+                                      },
+                                      icon: const Icon(Icons.date_range),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.07,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'End:',
+                                        style: _textTheme.bodyText1?.copyWith(
+                                          fontSize: Get.height * 0.015,
+                                        ),
+                                      ),
+                                      Text(
+                                        DateFormat('dd-MM-yyyy').format(
+                                            _homepageController
+                                                .dateRange.value.end),
+                                        style: _textTheme.bodyText1?.copyWith(
+                                          fontSize: Get.height * 0.020,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Button(
@@ -227,7 +235,7 @@ class PendingReport extends StatelessWidget {
                             ),
                           ),
                     Container(
-                      height: Get.height * 0.78,
+                      height: Get.height * 0.75,
                       width: Get.width * 1.5,
                       child: ListView.builder(
                         // itemCount: _homepageController.data.isEmpty ? 0 : 3,
@@ -512,7 +520,8 @@ class PendingReport extends StatelessWidget {
                   text: 'Generate',
                   onPressed: () async {
                     print('Generate Report');
-                    await _homepageController.generateComissionReport(data: _homepageController.pendingReportData);
+                    await _homepageController.generateComissionReport(
+                        data: _homepageController.pendingReportData);
                   }),
             ),
             FloatingActionButton(
@@ -554,7 +563,6 @@ class PendingReport extends StatelessWidget {
                     } else {
                       Get.defaultDialog(
                         title: 'Error',
-
                         middleText: 'Please check the data',
                         textConfirm: 'Ok',
                         confirmTextColor: Colors.white,

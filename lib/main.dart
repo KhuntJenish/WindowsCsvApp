@@ -4,6 +4,7 @@ import 'package:csvapp/screen/partyMaster/partyComission.dart';
 import 'package:csvapp/screen/partyMaster/partyMaster.dart';
 import 'package:csvapp/screen/users/user.dart';
 import 'package:csvapp/utils/constant.dart';
+import 'package:desktop_window/desktop_window.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,7 +30,7 @@ Future<void> main() async {
   //       ..where((tbl) => tbl.id.equals(2)))
   //     .go();
   // print(id);
- 
+
 // await db
 //       .into(db.partyMaster)
 //       .insert(PartyMasterCompanion.insert(name: 'brijal patel',ptID: id));
@@ -43,14 +44,35 @@ Future<void> main() async {
   // print( (db.delete(db.partyTypeMaster)..where((tbl) => tbl.id.isSmallerThanValue(7))).go());
   await GetStorage.init('box');
   WidgetsFlutterBinding.ensureInitialized();
+  // if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  //   setWindowTitle('Flutter Demo');
+  //   setWindowMinSize(const Size(400, 300));
+  //   setWindowMaxSize(Size.infinite);
+  // }
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+  Future testWindowFunctions() async {
+    Size size = await DesktopWindow.getWindowSize();
+    print(size);
+    await DesktopWindow.setWindowSize(Size(1000, 800));
+
+    await DesktopWindow.setMinWindowSize(Size(1000, 800));
+    // await DesktopWindow.setMaxWindowSize(Size(800, 800));
+
+    // await DesktopWindow.resetMaxWindowSize();
+    // await DesktopWindow.toggleFullScreen();
+    bool isFullScreen = await DesktopWindow.getFullScreen();
+    await DesktopWindow.setFullScreen(true);
+    // await DesktopWindow.setFullScreen(false);
+  }
 
   @override
   Widget build(BuildContext context) {
+    testWindowFunctions();
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     if (GetStorage('box').read('cuser') != null) {
       var userData = GetStorage('box').read('cuser');

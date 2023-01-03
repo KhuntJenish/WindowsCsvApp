@@ -390,27 +390,50 @@ class HomepageController extends GetxController {
     try {
       print('generateComissionReport');
       print(data);
-      print(data?.length);
-      var data1 = await db.select(db.inputData).get();
-      print(data1);
+      // print(data?.length);
 
-      final count = (db.inputData.saleAmount.count());
-      print('count');
-      print(count);
-      final sum = db.inputData.saleAmount.sum();
-      print('sum');
-      print(sum);
-      final avgLength = db.inputData.saleAmount.max();
-      print('avg');
-      print(avgLength);
-      var data2 = await (db.select(db.inputData)
-            ..addColumns([count, sum, avgLength]))
+      var pendingData = await (db.select(db.inputData)
+            ..where((tbl) =>
+                tbl.logId.equals(0) &
+                tbl.smtDocDate.isBetweenValues(
+                    dateRange.value.start, dateRange.value.start)))
           .get();
-      print(data2);
+      print(pendingData);
+      var totalComission = 0;
+      for (var element in pendingData) {
+        var checkParty = await (db.select(db.partyMaster)
+              ..where((tbl) => tbl.id.equals(element.pID)))
+            .get();
+
+        if (checkParty.isNotEmpty) {
+          var checkMaterialType = await (db.select(db.materialType)
+                ..where((tbl) => tbl.id.equals(element.mtID)))
+              .get();
+          if (checkMaterialType.isNotEmpty) {
+            var resPartyComission = await (db.select(db.partyComissionDetail)
+                  ..where((tbl) =>
+                      tbl.pID.equals(checkParty[0].id) &
+                      tbl.mtID.equals(checkMaterialType[0].id)))
+                .get();
+            if (resPartyComission.isNotEmpty) {
+              // displayData.add(data[15].toString());
+              var comission = resPartyComission[0].comission1;
+              print('comission(%): $comission');
+              print('TotalAmount(%): ${element.saleAmount}');
+              print('comissionAmount(%): ${(comission * element.saleAmount) / 100}');
+              print('************');
+            }
+          } else {
+            comissionAndmatTypeNaNSetData.add(element.smtInvNo.toString());
+          }
+        } else {
+          partyNaNSetData.add(element.smtInvNo.toString());
+        }
+      }
+      print('done');
 
       // var data = db.select(db.inputData).get();
 
-      print('done');
     } catch (e) {
       printError(info: e.toString());
       e.toString().errorSnackbar;

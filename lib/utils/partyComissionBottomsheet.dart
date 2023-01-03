@@ -89,6 +89,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                 //  color: Colors.grey[400],
                 padding: EdgeInsets.symmetric(horizontal: Get.height * 0.25),
                 child: MaterialTypeDropDownItems(
+                  width: Get.width * 0.9,
                   defualtValue: _partyController.defualtMaterialType,
                   itemList: _partyController.materialTypeList,
                 ),
