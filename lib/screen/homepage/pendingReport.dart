@@ -26,7 +26,7 @@ class PendingReport extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Homepage',
+          'Pending Report',
           style: _textTheme.bodyText1?.copyWith(
             color: Colors.white,
             fontSize: Get.height * 0.03,
@@ -178,7 +178,7 @@ class PendingReport extends StatelessWidget {
                                   0) {
                                 '😀Please Select Party'.errorSnackbar;
                               } else {
-                                await _homepageController.getSearchData(
+                                await _homepageController.getPendingSearchData(
                                     start: _homepageController
                                         .dateRange.value.start,
                                     end:

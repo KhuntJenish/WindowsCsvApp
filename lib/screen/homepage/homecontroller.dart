@@ -9,6 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/date_time_patterns.dart';
 import 'package:intl/intl.dart';
 
@@ -17,6 +18,7 @@ import '../../utils/constant.dart';
 class HomepageController extends GetxController {
   int abc = 0;
   RxList<List<dynamic>> pendingReportData = RxList<List<dynamic>>();
+  RxList<List<dynamic>> generatedReportData = RxList<List<dynamic>>();
   RxList<String> displayData = RxList<String>();
   RxList<String> partyNaNSetData = RxList<String>();
   RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
@@ -27,6 +29,9 @@ class HomepageController extends GetxController {
   String? filePath;
   RxBool isLoading = false.obs;
   RxBool isAllPartySelected = true.obs;
+  RxDouble partyWiseTotalAmount = 0.0.obs;
+  RxDouble partyWisePaidAmount = 0.0.obs;
+  RxDouble partyWisePayableAmount = 0.0.obs;
   var db = Constantdata.db;
   var dateRange = DateTimeRange(
     start: DateTime(DateTime.now().year, DateTime.now().month, 1),
@@ -73,7 +78,7 @@ class HomepageController extends GetxController {
     print(partyList);
   }
 
-  Future<void> getSearchData(
+  Future<void> getPendingSearchData(
       {DateTime? start,
       DateTime? end,
       bool? isAllPartySelected,
@@ -87,17 +92,20 @@ class HomepageController extends GetxController {
       print('isAllPartySelected: $isAllPartySelected');
       if (isAllPartySelected!) {
         serachData = await (db.select(db.inputData)
-              ..where((tbl) => tbl.smtDocDate.isBetweenValues(start!, end!)))
+              ..where((tbl) =>
+                  tbl.smtDocDate.isBetweenValues(start!, end!) &
+                  tbl.logId.equals(0)))
             .get();
         // print(serachData);
       } else {
         serachData = await (db.select(db.inputData)
               ..where((tbl) =>
                   tbl.smtDocDate.isBetweenValues(start!, end!) &
-                  tbl.pID.equals(selectedParty!.id)))
+                  tbl.pID.equals(selectedParty!.id) &
+                  tbl.logId.equals(0)))
             .get();
       }
-      print('searchData length');
+      print('Pending searchData length');
 
       pendingReportData.clear();
       List sublist = [];
@@ -181,91 +189,182 @@ class HomepageController extends GetxController {
     }
   }
 
-  void getPendingData() async {
-    // isLoading.value = true;
+  Future<void> getGeneratedSearchData(
+      {DateTime? start,
+      DateTime? end,
+      bool? isAllPartySelected,
+      PartyMasterData? selectedParty}) async {
+    try {
+      isLoading.value = true;
 
-    displayData.clear();
-    comissionAndmatTypeNaNSetData.clear();
-    partyNaNSetData.clear();
-    var pendingData = await db.select(db.inputData).get();
-
-    print('pendingData length');
-    print(pendingData.length);
-    List sublist = [];
-    sublist.add('Document Type');
-    sublist.add('Dist Doc. Date');
-    sublist.add('Dist. Document No.');
-    sublist.add('Customer');
-    sublist.add('Cust. Bill City');
-    sublist.add('Mat. Code');
-    sublist.add('Mat. Name');
-    sublist.add('Mat. Type');
-    sublist.add('Quantity');
-    sublist.add('Doctor Name');
-    sublist.add('Technical Staff');
-    sublist.add('Sales Amount');
-    sublist.add('Total Sales');
-    sublist.add('SMT Doc. Date.');
-    sublist.add('SMT Document No.');
-    sublist.add('SMT Invoice No.');
-    sublist.add('Purchase Taxable');
-    sublist.add('Total Purchase');
-    pendingReportData.add(sublist);
-
-    for (var i = 0; i < pendingData.length; i++) {
-      var checkParty = await (db.select(db.partyMaster)
-            ..where((tbl) => tbl.id.equals(pendingData[i].pID)))
-          .get();
-
-      if (checkParty.isNotEmpty) {
-        var checkMaterialType = await (db.select(db.materialType)
-              ..where((tbl) => tbl.id.equals(pendingData[i].mtID)))
+      displayData.clear();
+      comissionAndmatTypeNaNSetData.clear();
+      partyNaNSetData.clear();
+      var serachData = [];
+      print('isAllPartySelected: $isAllPartySelected');
+      if (isAllPartySelected!) {
+        serachData = await (db.select(db.inputData)
+              ..where((tbl) =>
+                  tbl.smtDocDate.isBetweenValues(start!, end!) &
+                  tbl.logId.isBiggerThanValue(0)))
             .get();
-        if (checkMaterialType.isNotEmpty) {
-          displayData.add(pendingData[i].smtInvNo.toString());
-          List sublist = [];
-
-          // print(pendingData[i]);
-          sublist.add(pendingData[i].documentType);
-          sublist
-              .add(DateFormat('dd.MM.yyyy').format(pendingData[i].distDocDate));
-          sublist.add(pendingData[i].distDocNo);
-          sublist.add(checkParty.first.name);
-          sublist.add(pendingData[i].custBillCity);
-          sublist.add(pendingData[i].matCode);
-          sublist.add(pendingData[i].matName);
-          sublist.add(checkMaterialType.first.type);
-          sublist.add(pendingData[i].qty);
-          sublist.add(pendingData[i].doctorName);
-          sublist.add(pendingData[i].techniqalStaff);
-          sublist.add(pendingData[i].saleAmount);
-          sublist.add(pendingData[i].totalSale);
-          sublist
-              .add(DateFormat('dd.MM.yyyy').format(pendingData[i].smtDocDate));
-          sublist.add(pendingData[i].smtDocNo);
-          sublist.add(pendingData[i].smtInvNo);
-          sublist.add(pendingData[i].purchaseTaxableAmount);
-          sublist.add(pendingData[i].totalPurchaseAmount);
-
-          // print(sublist);
-
-          pendingReportData.add(sublist);
-        } else {
-          comissionAndmatTypeNaNSetData.add(pendingData[i].smtInvNo.toString());
-        }
+        // print(serachData);
       } else {
-        partyNaNSetData.add(pendingData[i].smtInvNo.toString());
+        serachData = await (db.select(db.inputData)
+              ..where((tbl) =>
+                  tbl.smtDocDate.isBetweenValues(start!, end!) &
+                  tbl.pID.equals(selectedParty!.id) &
+                  tbl.logId.isBiggerThanValue(0)))
+            .get();
+        var ledger = await (db.select(db.inputData)
+              ..where((tbl) =>
+                  tbl.comissionPaidDate
+                      .isBiggerThanValue(DateTime(1800, 01, 01)) &
+                  tbl.pID.equals(selectedParty!.id) &
+                  tbl.logId.isBiggerThanValue(0)))
+            .get();
+        partyWisePaidAmount.value = 0;
+        partyWiseTotalAmount.value = 0;
+        partyWisePayableAmount.value = 0;
+        for (var element in ledger) {
+          partyWisePaidAmount.value += element.comissionAmount;
+        }
+        print(ledger);
+        print(partyWisePaidAmount.value);
       }
+      print('Generated searchData length');
+
+      generatedReportData.clear();
+      List sublist = [];
+      sublist.add('Document Type');
+      sublist.add('Dist Doc. Date');
+      sublist.add('Dist. Document No.');
+      sublist.add('Customer');
+      sublist.add('Cust. Bill City');
+      sublist.add('Mat. Code');
+      sublist.add('Mat. Name');
+      sublist.add('Mat. Type');
+      sublist.add('Quantity');
+      sublist.add('Doctor Name');
+      sublist.add('Technical Staff');
+      sublist.add('Sales Amount');
+      sublist.add('Total Sales');
+      sublist.add('SMT Doc. Date.');
+      sublist.add('SMT Document No.');
+      sublist.add('SMT Invoice No.');
+      sublist.add('Purchase Taxable');
+      sublist.add('Total Purchase');
+      sublist.add('Comission(%)');
+      sublist.add('Comission Amount');
+      generatedReportData.add(sublist);
+      print(serachData.length);
+      print(generatedReportData.length);
+
+      for (var i = 0; i < serachData.length; i++) {
+        var checkParty = await (db.select(db.partyMaster)
+              ..where((tbl) => tbl.id.equals(serachData[i].pID)))
+            .get();
+
+        if (checkParty.isNotEmpty) {
+          var checkMaterialType = await (db.select(db.materialType)
+                ..where((tbl) => tbl.id.equals(serachData[i].mtID)))
+              .get();
+          if (checkMaterialType.isNotEmpty) {
+            displayData.add(serachData[i].smtInvNo.toString());
+            List sublist = [];
+
+            // print(pendingData[i]);
+            sublist.add(serachData[i].documentType);
+            sublist.add(
+                DateFormat('dd.MM.yyyy').format(serachData[i].distDocDate));
+            sublist.add(serachData[i].distDocNo);
+            sublist.add(checkParty.first.name);
+            sublist.add(serachData[i].custBillCity);
+            sublist.add(serachData[i].matCode);
+            sublist.add(serachData[i].matName);
+            sublist.add(checkMaterialType.first.type);
+            sublist.add(serachData[i].qty);
+            sublist.add(serachData[i].doctorName);
+            sublist.add(serachData[i].techniqalStaff);
+            sublist.add(serachData[i].saleAmount);
+            sublist.add(serachData[i].totalSale);
+            sublist
+                .add(DateFormat('dd.MM.yyyy').format(serachData[i].smtDocDate));
+            sublist.add(serachData[i].smtDocNo);
+            sublist.add(serachData[i].smtInvNo);
+            sublist.add(serachData[i].purchaseTaxableAmount);
+            sublist.add(serachData[i].totalPurchaseAmount);
+            sublist.add(serachData[i].comission);
+            sublist.add(serachData[i].comissionAmount);
+
+            // print(sublist);
+
+            generatedReportData.add(sublist);
+
+            if (!isAllPartySelected) {
+              partyWiseTotalAmount.value = partyWiseTotalAmount.value +
+                  double.parse(serachData[i].comissionAmount.toString());
+            }
+          } else {
+            comissionAndmatTypeNaNSetData
+                .add(serachData[i].smtInvNo.toString());
+          }
+        } else {
+          partyNaNSetData.add(serachData[i].smtInvNo.toString());
+        }
+      }
+      print('Serch Data');
+      // print('PartyWiseTotalAmount' + partyWiseTotalAmount.value.toString());
+      print(displayData);
+      print(partyNaNSetData);
+      print(comissionAndmatTypeNaNSetData);
+      isLoading.value = false;
+    } catch (e) {
+      e.toString().errorSnackbar;
+
+      e.toString().printError;
     }
-    // print(data);
-    if (pendingReportData.length == 1) {
-      pendingReportData.clear();
+  }
+
+  Future<void> partyWisePayment({
+    required PartyMasterData? selectedParty,
+    required double? crAmount,
+    // String? ledgerNote,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      // var data = await db.into(db.ledger).insert(LedgerCompanion.insert(
+      //     type: Constantdata.payment,
+      //     pID: selectedParty!.id,
+      //     ledgerDate: DateTime.now(),
+      //     drAmount: 0,
+      //     crAmount: crAmount!,
+      //     ledgerNote: Constantdata.defualtNote));
+      print('Generated Report Data Length');
+      print(generatedReportData);
+
+      for (var i = 1; i < generatedReportData.length; i++) {
+        print(generatedReportData[i][15]);
+        // var data = await db.update(db.inputData)..where((tbl) => tbl.smtInvNo.equals(
+        //     generatedReportData[i][15]));
+      }
+
+      // print(data);
+      // if (data > 0) {
+      //   Get.back();
+      //   'Payment Added Successfully'.successSnackbar;
+      // } else {
+      //   Get.back();
+      //   'Payment Not Added'.errorSnackbar;
+      // }
+
+      isLoading.value = false;
+    } catch (e) {
+      e.toString().errorSnackbar;
+
+      e.toString().printError;
     }
-    print(displayData);
-    print(partyNaNSetData);
-    print(comissionAndmatTypeNaNSetData);
-    // data.addAll(pendingData);
-    // isLoading.value = false;
   }
 
   void pickFile() async {
@@ -388,15 +487,21 @@ class HomepageController extends GetxController {
   Future<void> generateComissionReport(
       {List<List<dynamic>>? data, DateTime? start, DateTime? end}) async {
     try {
+      isLoading.value = true;
       print('generateComissionReport');
       print(data);
       // print(data?.length);
-
+      Set<int> partySet = {};
+      List partyTotalComissionSet = [];
+      List<List<String>> partyWiseList = [];
+      GetStorage('box').write('logID', 0);
+      var logID = GetStorage('box').read('logID') ?? 0;
+      print('prevID :' + logID.toString());
+      GetStorage('box').write('logID', logID + 1);
+      print(dateRange.value.start);
+      print(dateRange.value.end);
       var pendingData = await (db.select(db.inputData)
-            ..where((tbl) =>
-                tbl.logId.equals(0) &
-                tbl.smtDocDate.isBetweenValues(
-                    dateRange.value.start, dateRange.value.start)))
+            ..where((tbl) => tbl.logId.equals(0)))
           .get();
       print(pendingData);
       var totalComission = 0;
@@ -418,9 +523,71 @@ class HomepageController extends GetxController {
             if (resPartyComission.isNotEmpty) {
               // displayData.add(data[15].toString());
               var comission = resPartyComission[0].comission1;
+              var comissionAmount = double.parse(
+                  ((comission * element.totalSale) / 100).toStringAsFixed(2));
+              var logID = GetStorage('box').read('logID');
+              print('logID: $logID');
+              print('pname: ${checkParty[0].name}');
+              if (partySet.contains(element.pID)) {
+                int index = partySet
+                    .toList()
+                    .indexWhere((item) => item.isEqual(element.pID));
+                print(index);
+                var oldCommision = partyTotalComissionSet.elementAt(index);
+                print(oldCommision);
+                partyTotalComissionSet[index] = oldCommision + comissionAmount;
+                partyWiseList[index].add(element.smtInvNo);
+
+                print(partyWiseList);
+                print(partyTotalComissionSet.toList());
+                // partyTotalComissionSet.add(comissionAmount);
+              } else {
+                partySet.add(element.pID);
+                int index = partySet
+                    .toList()
+                    .indexWhere((item) => item.isEqual(element.pID));
+                print(index);
+                partyTotalComissionSet.insert(index, comissionAmount);
+                List<String> party = [];
+                party.add(element.smtInvNo);
+                partyWiseList.insert(index, party);
+                // partyTotalComissionSet.elementAt(index);
+                print(partyWiseList);
+                print(partyTotalComissionSet.toList());
+                print(partySet);
+              }
+              var resComissionUpdate = await (db.update(db.inputData)
+                    ..where((tbl) => tbl.id.equals(element.id)))
+                  .write(InputDataData(
+                      id: element.id,
+                      documentType: element.documentType,
+                      distDocDate: element.distDocDate,
+                      distDocNo: element.distDocNo,
+                      pID: element.pID,
+                      custBillCity: element.custBillCity,
+                      matCode: element.matCode,
+                      matName: element.matName,
+                      mtID: element.mtID,
+                      qty: element.qty,
+                      doctorName: element.doctorName,
+                      techniqalStaff: element.techniqalStaff,
+                      saleAmount: element.saleAmount,
+                      totalSale: element.totalSale,
+                      smtDocDate: element.smtDocDate,
+                      smtDocNo: element.smtDocNo,
+                      smtInvNo: element.smtInvNo,
+                      purchaseTaxableAmount: element.purchaseTaxableAmount,
+                      totalPurchaseAmount: element.totalPurchaseAmount,
+                      logId: logID,
+                      ledgerId: element.ledgerId,
+                      comission: comission,
+                      comissionAmount: comissionAmount,
+                      comissionPaidDate: element.comissionPaidDate,
+                      adjustComissionAmount: element.adjustComissionAmount));
+              print(resComissionUpdate);
               print('comission(%): $comission');
-              print('TotalAmount(%): ${element.saleAmount}');
-              print('comissionAmount(%): ${(comission * element.saleAmount) / 100}');
+              print('TotalAmount(%): ${element.totalSale}');
+              print('comissionAmount(%): ${comissionAmount}');
               print('************');
             }
           } else {
@@ -431,9 +598,71 @@ class HomepageController extends GetxController {
         }
       }
       print('done');
+      List ledgerIDList = [];
+
+      for (var i = 0; i < partySet.length; i++) {
+        print('ledgerID: ${i + 1}');
+        var pID = partySet.elementAt(i);
+        print(partySet.elementAt(i));
+        var totalComission = partyTotalComissionSet.elementAt(i);
+        print(partyTotalComissionSet.elementAt(i));
+        var resLedger = await db.into(db.ledger).insert(LedgerCompanion.insert(
+              type: 'sale commission',
+              pID: pID,
+              ledgerDate: DateTime.now(),
+              drAmount: totalComission,
+              crAmount: 0,
+              ledgerNote: Constantdata.defualtNote,
+            ));
+        print(resLedger);
+        ledgerIDList.add(resLedger);
+      }
+
+      for (var i = 0; i < partyWiseList.length; i++) {
+        var element = partyWiseList[i];
+        for (var j = 0; j < element.length; j++) {
+          var data = await (db.select(db.inputData)
+                ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+              .get();
+          print(element[j]); //smtInvNo
+          print(data[0]); // smtInvNo-data
+          print(ledgerIDList[i]); //ledgerID
+          var resUpdate = await (db.update(db.inputData)
+                ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+              .write(InputDataData(
+                  id: data[0].id,
+                  documentType: data[0].documentType,
+                  distDocDate: data[0].distDocDate,
+                  distDocNo: data[0].distDocNo,
+                  pID: data[0].pID,
+                  custBillCity: data[0].custBillCity,
+                  matCode: data[0].matCode,
+                  matName: data[0].matName,
+                  mtID: data[0].mtID,
+                  qty: data[0].qty,
+                  doctorName: data[0].doctorName,
+                  techniqalStaff: data[0].techniqalStaff,
+                  saleAmount: data[0].saleAmount,
+                  totalSale: data[0].totalSale,
+                  smtDocDate: data[0].smtDocDate,
+                  smtDocNo: data[0].smtDocNo,
+                  smtInvNo: data[0].smtInvNo,
+                  purchaseTaxableAmount: data[0].purchaseTaxableAmount,
+                  totalPurchaseAmount: data[0].totalPurchaseAmount,
+                  logId: data[0].logId,
+                  ledgerId: ledgerIDList[i],
+                  comission: data[0].comission,
+                  comissionAmount: data[0].comissionAmount,
+                  comissionPaidDate: data[0].comissionPaidDate,
+                  adjustComissionAmount: data[0].adjustComissionAmount));
+          print(resUpdate);
+          print('update record');
+        }
+      }
 
       // var data = db.select(db.inputData).get();
-
+      pendingReportData.clear();
+      isLoading.value = true;
     } catch (e) {
       printError(info: e.toString());
       e.toString().errorSnackbar;
@@ -534,4 +763,91 @@ class HomepageController extends GetxController {
       e.toString().errorSnackbar;
     }
   }
+
+  // void getPendingData() async {
+  //   // isLoading.value = true;
+
+  //   displayData.clear();
+  //   comissionAndmatTypeNaNSetData.clear();
+  //   partyNaNSetData.clear();
+  //   var pendingData = await db.select(db.inputData).get();
+
+  //   print('pendingData length');
+  //   print(pendingData.length);
+  //   List sublist = [];
+  //   sublist.add('Document Type');
+  //   sublist.add('Dist Doc. Date');
+  //   sublist.add('Dist. Document No.');
+  //   sublist.add('Customer');
+  //   sublist.add('Cust. Bill City');
+  //   sublist.add('Mat. Code');
+  //   sublist.add('Mat. Name');
+  //   sublist.add('Mat. Type');
+  //   sublist.add('Quantity');
+  //   sublist.add('Doctor Name');
+  //   sublist.add('Technical Staff');
+  //   sublist.add('Sales Amount');
+  //   sublist.add('Total Sales');
+  //   sublist.add('SMT Doc. Date.');
+  //   sublist.add('SMT Document No.');
+  //   sublist.add('SMT Invoice No.');
+  //   sublist.add('Purchase Taxable');
+  //   sublist.add('Total Purchase');
+  //   pendingReportData.add(sublist);
+
+  //   for (var i = 0; i < pendingData.length; i++) {
+  //     var checkParty = await (db.select(db.partyMaster)
+  //           ..where((tbl) => tbl.id.equals(pendingData[i].pID)))
+  //         .get();
+
+  //     if (checkParty.isNotEmpty) {
+  //       var checkMaterialType = await (db.select(db.materialType)
+  //             ..where((tbl) => tbl.id.equals(pendingData[i].mtID)))
+  //           .get();
+  //       if (checkMaterialType.isNotEmpty) {
+  //         displayData.add(pendingData[i].smtInvNo.toString());
+  //         List sublist = [];
+
+  //         // print(pendingData[i]);
+  //         sublist.add(pendingData[i].documentType);
+  //         sublist
+  //             .add(DateFormat('dd.MM.yyyy').format(pendingData[i].distDocDate));
+  //         sublist.add(pendingData[i].distDocNo);
+  //         sublist.add(checkParty.first.name);
+  //         sublist.add(pendingData[i].custBillCity);
+  //         sublist.add(pendingData[i].matCode);
+  //         sublist.add(pendingData[i].matName);
+  //         sublist.add(checkMaterialType.first.type);
+  //         sublist.add(pendingData[i].qty);
+  //         sublist.add(pendingData[i].doctorName);
+  //         sublist.add(pendingData[i].techniqalStaff);
+  //         sublist.add(pendingData[i].saleAmount);
+  //         sublist.add(pendingData[i].totalSale);
+  //         sublist
+  //             .add(DateFormat('dd.MM.yyyy').format(pendingData[i].smtDocDate));
+  //         sublist.add(pendingData[i].smtDocNo);
+  //         sublist.add(pendingData[i].smtInvNo);
+  //         sublist.add(pendingData[i].purchaseTaxableAmount);
+  //         sublist.add(pendingData[i].totalPurchaseAmount);
+
+  //         // print(sublist);
+
+  //         pendingReportData.add(sublist);
+  //       } else {
+  //         comissionAndmatTypeNaNSetData.add(pendingData[i].smtInvNo.toString());
+  //       }
+  //     } else {
+  //       partyNaNSetData.add(pendingData[i].smtInvNo.toString());
+  //     }
+  //   }
+  //   // print(data);
+  //   if (pendingReportData.length == 1) {
+  //     pendingReportData.clear();
+  //   }
+  //   print(displayData);
+  //   print(partyNaNSetData);
+  //   print(comissionAndmatTypeNaNSetData);
+  //   // data.addAll(pendingData);
+  //   // isLoading.value = false;
+  // }
 }
