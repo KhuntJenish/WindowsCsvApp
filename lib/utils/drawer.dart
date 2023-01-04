@@ -1,4 +1,5 @@
 import 'package:csvapp/database/tables.dart';
+import 'package:csvapp/screen/homepage/ledgerReport.dart';
 import 'package:csvapp/screen/homepage/pendingReport.dart';
 import 'package:csvapp/screen/loginpage/loginpage.dart';
 import 'package:csvapp/screen/partyMaster/partyController.dart';
@@ -86,6 +87,14 @@ class drawer extends StatelessWidget {
               onTap: () {
                 Get.back();
                 Get.toNamed(GeneratedReport.routeName);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text("Ledger Report"),
+              onTap: () {
+                Get.back();
+                Get.toNamed(LedgerReport.routeName);
               },
             ),
             Visibility(

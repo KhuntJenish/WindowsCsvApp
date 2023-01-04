@@ -1,6 +1,7 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
+import 'package:csvapp/utils/extensions.dart';
 import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -203,8 +204,8 @@ class GeneratedReport extends StatelessWidget {
                                       // height: Get.height * 0.05,
                                       padding: const EdgeInsets.all(8.0),
                                       child: AutoSizeText(
-                                        _homepageController.generatedReportData[0]
-                                                [subIndex]
+                                        _homepageController
+                                            .generatedReportData[0][subIndex]
                                             .toString(),
                                         style: const TextStyle(
                                             fontSize: 18,
@@ -230,8 +231,16 @@ class GeneratedReport extends StatelessWidget {
                             // scrollDirection: Axis.vertical,
                             // shrinkWrap: true,
                             itemBuilder: (_, index) {
-                              // print(_homepageController.displayData
-                              //     .contains(_homepageController.data[index][15]));
+                              print(index != 0
+                                  ? _homepageController
+                                      .generatedReportData[index][20]
+                                  : 0);
+                              var date = index != 0
+                                  ? _homepageController
+                                      .generatedReportData[index][20]
+                                  : DateTime.now();
+
+                              print(date.isAfter(DateTime(1800, 01, 01)));
                               return Visibility(
                                 visible: index != 0,
                                 replacement: Container(),
@@ -240,7 +249,9 @@ class GeneratedReport extends StatelessWidget {
                                   color: _homepageController.displayData
                                           .contains(_homepageController
                                               .generatedReportData[index][15])
-                                      ? Colors.white
+                                      ? date.isAfter(DateTime(1800, 01, 01))
+                                          ? Color.fromARGB(255, 121, 192, 124)
+                                          : Colors.white
                                       : Color.fromARGB(255, 228, 136, 129),
                                   child: Container(
                                     width: Get.width * 1.5,
@@ -250,7 +261,13 @@ class GeneratedReport extends StatelessWidget {
                                         scrollDirection: Axis.horizontal,
 
                                         itemCount: _homepageController
-                                            .generatedReportData[index].length,
+                                                .generatedReportData[index]
+                                                .isNotEmpty
+                                            ? _homepageController
+                                                    .generatedReportData[index]
+                                                    .length -
+                                                1
+                                            : 0,
                                         // shrinkWrap: true,
                                         itemBuilder: (_, subIndex) {
                                           // DateTime tempDate = DateFormat("dd.MM.yyyy")
@@ -511,7 +528,10 @@ class GeneratedReport extends StatelessWidget {
                           () => Visibility(
                             visible:
                                 _homepageController.isAllPartySelected.value ==
-                                        false
+                                            false &&
+                                        _homepageController
+                                                .generatedReportData.length >
+                                            1
                                     ? true
                                     : false,
                             child: Positioned(
@@ -558,36 +578,43 @@ class GeneratedReport extends StatelessWidget {
                                             text: 'Pay',
                                             onPressed: () {
                                               print('payment');
-                                              Get.defaultDialog(
-                                                title: 'payment',
-                                                middleText:
-                                                    'Are you sure you want to pay  ${(_homepageController.partyWiseTotalAmount.value - _homepageController.partyWisePaidAmount.value).toString()}₹ ?',
-                                                textConfirm: 'Ok',
-                                                confirmTextColor: Colors.white,
-                                                onConfirm: () {
-                                                  print('payment');
-                                                  var crAmount = (_homepageController
+                                              if ((_homepageController
                                                           .partyWiseTotalAmount
                                                           .value -
                                                       _homepageController
                                                           .partyWisePaidAmount
-                                                          .value);
-                                                  print(_homepageController
-                                                      .defualtParty.value);
-                                                  _homepageController
-                                                      .partyWisePayment(
-                                                          crAmount: crAmount,
-                                                          selectedParty:
-                                                              _homepageController
-                                                                  .defualtParty
-                                                                  .value);
-                                                },
-                                                // textCancel: 'Cancel',
-                                                // cancelTextColor:  lCOLOR_PRIMARY,
-                                                // onCancel: () {
-                                                //   Get.back();
-                                                // },
-                                              );
+                                                          .value) >
+                                                  0) {
+                                                Get.defaultDialog(
+                                                  title: 'payment',
+                                                  middleText:
+                                                      'Are you sure you want to pay  ${(_homepageController.partyWiseTotalAmount.value - _homepageController.partyWisePaidAmount.value).toString()}₹ ?',
+                                                  textConfirm: 'Ok',
+                                                  confirmTextColor:
+                                                      Colors.white,
+                                                  onConfirm: () {
+                                                    print('payment');
+                                                    Get.back();
+                                                    var crAmount = (_homepageController
+                                                            .partyWiseTotalAmount
+                                                            .value -
+                                                        _homepageController
+                                                            .partyWisePaidAmount
+                                                            .value);
+                                                    print(_homepageController
+                                                        .defualtParty.value);
+                                                    _homepageController
+                                                        .partyWisePayment(
+                                                            crAmount: crAmount,
+                                                            selectedParty:
+                                                                _homepageController
+                                                                    .defualtParty
+                                                                    .value);
+                                                  },
+                                                );
+                                              } else {
+                                                'No amount to pay😀'.infoSnackbar;
+                                              }
                                             },
                                             fontSize: Get.height * 0.02,
                                             height: Get.height * 0.04,

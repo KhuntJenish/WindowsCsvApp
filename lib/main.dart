@@ -1,4 +1,5 @@
 import 'package:csvapp/database/tables.dart';
+import 'package:csvapp/screen/homepage/ledgerReport.dart';
 import 'package:csvapp/screen/loginpage/loginpage.dart';
 import 'package:csvapp/screen/partyMaster/partyComission.dart';
 import 'package:csvapp/screen/partyMaster/partyMaster.dart';
@@ -105,6 +106,10 @@ class MyApp extends StatelessWidget {
           title: 'First Method',
 
           getPages: [
+            GetPage(
+              name: LedgerReport.routeName,
+              page: () => LedgerReport(),
+            ),
             GetPage(
               name: PendingReport.routeName,
               page: () => PendingReport(),

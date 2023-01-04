@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../theam/theam_constants.dart';
+
 extension PaddingExtension on Widget {
   Widget get horizontal15 => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -15,10 +17,7 @@ extension PaddingExtension on Widget {
         padding: const EdgeInsets.all(10),
         child: this,
       );
-
-      
 }
-
 
 extension BuildContextExtension on String {
   dynamic get errorSnackbar => Get
@@ -39,6 +38,6 @@ extension BuildContextExtension on String {
     ..closeAllSnackbars()
     ..rawSnackbar(
       message: this,
-      backgroundColor: Colors.blue,
+      backgroundColor: lCOLOR_PRIMARY,
     );
 }

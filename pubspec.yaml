@@ -51,17 +51,13 @@ dependencies:
   auto_size_text: ^3.0.0
   adaptive_scrollbar: ^2.1.2
   desktop_window: ^0.4.0
-  
- 
-  
-
+  grouped_list: ^5.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   drift_dev: ^2.3.3
-  build_runner: ^2.3.3  
-
+  build_runner: ^2.3.3
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
