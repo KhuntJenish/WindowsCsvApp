@@ -406,95 +406,95 @@ class LedgerReport extends StatelessWidget {
       ),
 
       //
-      floatingActionButton: Obx(
-        () => Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Visibility(
-              visible: _homepageController.pendingReportData.isNotEmpty &&
-                  _homepageController.comissionAndmatTypeNaNSetData.isEmpty,
-              child: Button(
-                  height: Get.height * 0.05,
-                  width: Get.width * 0.1,
-                  fontSize: Get.width * 0.012,
-                  text: 'Generate',
-                  onPressed: () async {
-                    print('Generate Report');
-                    await _homepageController.generateComissionReport(
-                        data: _homepageController.pendingReportData);
-                  }),
-            ),
-            FloatingActionButton(
-              tooltip: _homepageController.pendingReportData.isEmpty
-                  ? 'Add CSV'
-                  : 'Add Data in Database', //child widget inside this button
-              onPressed: () async {
-                print("Button is pressed.");
-                if (_homepageController.isLoading.value == false) {
-                  if (_homepageController.pendingReportData.length > 1 &&
-                      _homepageController
-                          .comissionAndmatTypeNaNSetData.isEmpty &&
-                      _homepageController.partyNaNSetData.isEmpty) {
-                    print(_homepageController.pendingReportData);
-                    List<List<dynamic>> data = [];
-                    data.addAll(_homepageController.pendingReportData);
-                    await _homepageController.checkInputData(fields: data);
-                    if (_homepageController
-                            .comissionAndmatTypeNaNSetData.isEmpty &&
-                        _homepageController.partyNaNSetData.isEmpty) {
-                      await _homepageController.insertData(data);
-                    } else {
-                      Get.defaultDialog(
-                        title: 'Error',
-                        middleText: 'Please check the data',
-                        textConfirm: 'Ok',
-                        confirmTextColor: Colors.white,
-                        onConfirm: () {
-                          Get.back();
-                        },
-                      );
-                    }
-                  } else {
-                    if (_homepageController.pendingReportData.length < 2 &&
-                        _homepageController
-                            .comissionAndmatTypeNaNSetData.isEmpty &&
-                        _homepageController.partyNaNSetData.isEmpty) {
-                      _homepageController.pickFile();
-                    } else {
-                      Get.defaultDialog(
-                        title: 'Error',
-                        middleText: 'Please check the data',
-                        textConfirm: 'Ok',
-                        confirmTextColor: Colors.white,
-                        onConfirm: () {
-                          Get.back();
-                        },
-                      );
-                    }
-                  }
-                } else {
-                  'Data is processing'.infoSnackbar;
-                }
+      // floatingActionButton: Obx(
+      //   () => Row(
+      //     mainAxisAlignment: MainAxisAlignment.end,
+      //     children: [
+      //       Visibility(
+      //         visible: _homepageController.pendingReportData.isNotEmpty &&
+      //             _homepageController.comissionAndmatTypeNaNSetData.isEmpty,
+      //         child: Button(
+      //             height: Get.height * 0.05,
+      //             width: Get.width * 0.1,
+      //             fontSize: Get.width * 0.012,
+      //             text: 'Generate',
+      //             onPressed: () async {
+      //               print('Generate Report');
+      //               await _homepageController.generateComissionReport(
+      //                   data: _homepageController.pendingReportData);
+      //             }),
+      //       ),
+      //       FloatingActionButton(
+      //         tooltip: _homepageController.pendingReportData.isEmpty
+      //             ? 'Add CSV'
+      //             : 'Add Data in Database', //child widget inside this button
+      //         onPressed: () async {
+      //           print("Button is pressed.");
+      //           if (_homepageController.isLoading.value == false) {
+      //             if (_homepageController.pendingReportData.length > 1 &&
+      //                 _homepageController
+      //                     .comissionAndmatTypeNaNSetData.isEmpty &&
+      //                 _homepageController.partyNaNSetData.isEmpty) {
+      //               print(_homepageController.pendingReportData);
+      //               List<List<dynamic>> data = [];
+      //               data.addAll(_homepageController.pendingReportData);
+      //               await _homepageController.checkInputData(fields: data);
+      //               if (_homepageController
+      //                       .comissionAndmatTypeNaNSetData.isEmpty &&
+      //                   _homepageController.partyNaNSetData.isEmpty) {
+      //                 await _homepageController.insertData(data);
+      //               } else {
+      //                 Get.defaultDialog(
+      //                   title: 'Error',
+      //                   middleText: 'Please check the data',
+      //                   textConfirm: 'Ok',
+      //                   confirmTextColor: Colors.white,
+      //                   onConfirm: () {
+      //                     Get.back();
+      //                   },
+      //                 );
+      //               }
+      //             } else {
+      //               if (_homepageController.pendingReportData.length < 2 &&
+      //                   _homepageController
+      //                       .comissionAndmatTypeNaNSetData.isEmpty &&
+      //                   _homepageController.partyNaNSetData.isEmpty) {
+      //                 _homepageController.pickFile();
+      //               } else {
+      //                 Get.defaultDialog(
+      //                   title: 'Error',
+      //                   middleText: 'Please check the data',
+      //                   textConfirm: 'Ok',
+      //                   confirmTextColor: Colors.white,
+      //                   onConfirm: () {
+      //                     Get.back();
+      //                   },
+      //                 );
+      //               }
+      //             }
+      //           } else {
+      //             'Data is processing'.infoSnackbar;
+      //           }
 
-                //task to execute when this button is pressed
-              },
-              child: _homepageController.isLoading.value
-                  ? Center(
-                      child: CupertinoActivityIndicator(
-                        radius: Get.height * 0.02,
-                        color: Colors.white,
-                      ),
-                    )
-                  : (_homepageController.pendingReportData.length < 2 &&
-                          _homepageController
-                              .comissionAndmatTypeNaNSetData.isEmpty &&
-                          _homepageController.partyNaNSetData.isEmpty)
-                      ? const Icon(Icons.add)
-                      : const Icon(Icons.arrow_forward_ios),
-            ),
-          ],
-        ),
-      ),
+      //           //task to execute when this button is pressed
+      //         },
+      //         child: _homepageController.isLoading.value
+      //             ? Center(
+      //                 child: CupertinoActivityIndicator(
+      //                   radius: Get.height * 0.02,
+      //                   color: Colors.white,
+      //                 ),
+      //               )
+      //             : (_homepageController.pendingReportData.length < 2 &&
+      //                     _homepageController
+      //                         .comissionAndmatTypeNaNSetData.isEmpty &&
+      //                     _homepageController.partyNaNSetData.isEmpty)
+      //                 ? const Icon(Icons.add)
+      //                 : const Icon(Icons.arrow_forward_ios),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       // drawer: drawer(),
     );
   }

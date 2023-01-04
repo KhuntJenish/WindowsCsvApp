@@ -471,8 +471,11 @@ class HomepageController extends GetxController {
   Future<void> checkInputData({List<List<dynamic>>? fields}) async {
     isLoading.value = true;
     partyList = await db.select(db.partyMaster).get();
-    defualtParty.value = partyList![0];
+    if (partyList!.isNotEmpty) {
+      defualtParty.value = partyList![0];
+    }
     materialTypeList = await db.select(db.materialType).get();
+
     // .value = materialTypeList![0];
 
     for (var i = 1; i < fields!.length; i++) {
