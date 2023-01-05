@@ -33,6 +33,7 @@ class PendingReport extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        
       ),
       body: AdaptiveScrollbar(
         controller: verticalScroll,

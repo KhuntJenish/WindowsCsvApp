@@ -136,7 +136,7 @@ class MyApp extends StatelessWidget {
             ),
             GetPage(
               name: Mainpage.routeName,
-              page: () => const Mainpage(),
+              page: () =>  Mainpage(),
             ),
             // GetPage(
             //   name: MaterialTypeMasterPage.routeName,

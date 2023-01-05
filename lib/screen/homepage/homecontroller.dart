@@ -13,7 +13,8 @@ import 'package:intl/intl.dart';
 import '../../utils/constant.dart';
 
 class HomepageController extends GetxController {
-  int abc = 0;
+  PageController pageController = PageController(initialPage: 0);
+  RxInt isSelectedReport = 0.obs;
   RxList<List<dynamic>> pendingReportData = RxList<List<dynamic>>();
   RxList<List<dynamic>> generatedReportData = RxList<List<dynamic>>();
   RxList<LedgerData> ledgerReportData = RxList<LedgerData>();
@@ -561,181 +562,201 @@ class HomepageController extends GetxController {
       {List<List<dynamic>>? data, DateTime? start, DateTime? end}) async {
     try {
       isLoading.value = true;
-      print('generateComissionReport');
-      print(data);
-      // print(data?.length);
-      Set<int> partySet = {};
-      List partyTotalComissionSet = [];
-      List<List<String>> partyWiseList = [];
-      GetStorage('box').write('logID', 0);
-      var logID = GetStorage('box').read('logID') ?? 0;
-      print('prevID :' + logID.toString());
-      GetStorage('box').write('logID', logID + 1);
-      print(dateRange.value.start);
-      print(dateRange.value.end);
-      var pendingData = await (db.select(db.inputData)
-            ..where((tbl) => tbl.logId.equals(0)))
+      List<String> smtInvNoList = [];
+      // for (var element in data!) {
+      //   smtInvNoList.add(element[15]);
+      // }
+      for (var i = 1; i < data!.length; i++) {
+        smtInvNoList.add(data[i][15]);  
+      }
+      print(smtInvNoList);
+      var res = await (db.select(db.inputData)
+            ..where(
+                (tbl) => tbl.smtInvNo.isIn(smtInvNoList) & tbl.logId.equals(0)))
           .get();
-      print(pendingData);
-      var totalComission = 0;
-      for (var element in pendingData) {
-        var checkParty = await (db.select(db.partyMaster)
-              ..where((tbl) => tbl.id.equals(element.pID)))
+      if (res.isNotEmpty) {
+        print('generateComissionReport');
+        print(data);
+        // print(data?.length);
+        Set<int> partySet = {};
+        List partyTotalComissionSet = [];
+        List<List<String>> partyWiseList = [];
+        // GetStorage('box').write('logID', 0);
+        var logID = GetStorage('box').read('logID') ?? 0;
+        print('prevID :' + logID.toString());
+        GetStorage('box').write('logID', logID + 1);
+        print(dateRange.value.start);
+        print(dateRange.value.end);
+        var pendingData = await (db.select(db.inputData)
+              ..where((tbl) => tbl.logId.equals(0)))
             .get();
-
-        if (checkParty.isNotEmpty) {
-          var checkMaterialType = await (db.select(db.materialType)
-                ..where((tbl) => tbl.id.equals(element.mtID)))
+        print(pendingData);
+        var totalComission = 0;
+        for (var element in pendingData) {
+          var checkParty = await (db.select(db.partyMaster)
+                ..where((tbl) => tbl.id.equals(element.pID)))
               .get();
-          if (checkMaterialType.isNotEmpty) {
-            var resPartyComission = await (db.select(db.partyComissionDetail)
-                  ..where((tbl) =>
-                      tbl.pID.equals(checkParty[0].id) &
-                      tbl.mtID.equals(checkMaterialType[0].id)))
-                .get();
-            if (resPartyComission.isNotEmpty) {
-              // displayData.add(data[15].toString());
-              var comission = resPartyComission[0].comission1;
-              var comissionAmount = double.parse(
-                  ((comission * element.totalSale) / 100).toStringAsFixed(2));
-              var logID = GetStorage('box').read('logID');
-              print('logID: $logID');
-              print('pname: ${checkParty[0].name}');
-              if (partySet.contains(element.pID)) {
-                int index = partySet
-                    .toList()
-                    .indexWhere((item) => item.isEqual(element.pID));
-                print(index);
-                var oldCommision = partyTotalComissionSet.elementAt(index);
-                print(oldCommision);
-                partyTotalComissionSet[index] = oldCommision + comissionAmount;
-                partyWiseList[index].add(element.smtInvNo);
 
-                print(partyWiseList);
-                print(partyTotalComissionSet.toList());
-                // partyTotalComissionSet.add(comissionAmount);
-              } else {
-                partySet.add(element.pID);
-                int index = partySet
-                    .toList()
-                    .indexWhere((item) => item.isEqual(element.pID));
-                print(index);
-                partyTotalComissionSet.insert(index, comissionAmount);
-                List<String> party = [];
-                party.add(element.smtInvNo);
-                partyWiseList.insert(index, party);
-                // partyTotalComissionSet.elementAt(index);
-                print(partyWiseList);
-                print(partyTotalComissionSet.toList());
-                print(partySet);
+          if (checkParty.isNotEmpty) {
+            var checkMaterialType = await (db.select(db.materialType)
+                  ..where((tbl) => tbl.id.equals(element.mtID)))
+                .get();
+            if (checkMaterialType.isNotEmpty) {
+              var resPartyComission = await (db.select(db.partyComissionDetail)
+                    ..where((tbl) =>
+                        tbl.pID.equals(checkParty[0].id) &
+                        tbl.mtID.equals(checkMaterialType[0].id)))
+                  .get();
+              if (resPartyComission.isNotEmpty) {
+                // displayData.add(data[15].toString());
+                var comission = resPartyComission[0].comission1;
+                var comissionAmount = double.parse(
+                    ((comission * element.totalSale) / 100).toStringAsFixed(2));
+                var logID = GetStorage('box').read('logID');
+                print('logID: $logID');
+                print('pname: ${checkParty[0].name}');
+                if (partySet.contains(element.pID)) {
+                  int index = partySet
+                      .toList()
+                      .indexWhere((item) => item.isEqual(element.pID));
+                  print(index);
+                  var oldCommision = partyTotalComissionSet.elementAt(index);
+                  print(oldCommision);
+                  partyTotalComissionSet[index] =
+                      oldCommision + comissionAmount;
+                  partyWiseList[index].add(element.smtInvNo);
+
+                  print(partyWiseList);
+                  print(partyTotalComissionSet.toList());
+                  // partyTotalComissionSet.add(comissionAmount);
+                } else {
+                  partySet.add(element.pID);
+                  int index = partySet
+                      .toList()
+                      .indexWhere((item) => item.isEqual(element.pID));
+                  print(index);
+                  partyTotalComissionSet.insert(index, comissionAmount);
+                  List<String> party = [];
+                  party.add(element.smtInvNo);
+                  partyWiseList.insert(index, party);
+                  // partyTotalComissionSet.elementAt(index);
+                  print(partyWiseList);
+                  print(partyTotalComissionSet.toList());
+                  print(partySet);
+                }
+                var resComissionUpdate = await (db.update(db.inputData)
+                      ..where((tbl) => tbl.id.equals(element.id)))
+                    .write(InputDataData(
+                        id: element.id,
+                        documentType: element.documentType,
+                        distDocDate: element.distDocDate,
+                        distDocNo: element.distDocNo,
+                        pID: element.pID,
+                        custBillCity: element.custBillCity,
+                        matCode: element.matCode,
+                        matName: element.matName,
+                        mtID: element.mtID,
+                        qty: element.qty,
+                        doctorName: element.doctorName,
+                        techniqalStaff: element.techniqalStaff,
+                        saleAmount: element.saleAmount,
+                        totalSale: element.totalSale,
+                        smtDocDate: element.smtDocDate,
+                        smtDocNo: element.smtDocNo,
+                        smtInvNo: element.smtInvNo,
+                        purchaseTaxableAmount: element.purchaseTaxableAmount,
+                        totalPurchaseAmount: element.totalPurchaseAmount,
+                        logId: logID,
+                        ledgerId: element.ledgerId,
+                        comission: comission,
+                        comissionAmount: comissionAmount,
+                        comissionPaidDate: element.comissionPaidDate,
+                        adjustComissionAmount: element.adjustComissionAmount));
+                print(resComissionUpdate);
+                print('comission(%): $comission');
+                print('TotalAmount(%): ${element.totalSale}');
+                print('comissionAmount(%): ${comissionAmount}');
+                print('************');
               }
-              var resComissionUpdate = await (db.update(db.inputData)
-                    ..where((tbl) => tbl.id.equals(element.id)))
-                  .write(InputDataData(
-                      id: element.id,
-                      documentType: element.documentType,
-                      distDocDate: element.distDocDate,
-                      distDocNo: element.distDocNo,
-                      pID: element.pID,
-                      custBillCity: element.custBillCity,
-                      matCode: element.matCode,
-                      matName: element.matName,
-                      mtID: element.mtID,
-                      qty: element.qty,
-                      doctorName: element.doctorName,
-                      techniqalStaff: element.techniqalStaff,
-                      saleAmount: element.saleAmount,
-                      totalSale: element.totalSale,
-                      smtDocDate: element.smtDocDate,
-                      smtDocNo: element.smtDocNo,
-                      smtInvNo: element.smtInvNo,
-                      purchaseTaxableAmount: element.purchaseTaxableAmount,
-                      totalPurchaseAmount: element.totalPurchaseAmount,
-                      logId: logID,
-                      ledgerId: element.ledgerId,
-                      comission: comission,
-                      comissionAmount: comissionAmount,
-                      comissionPaidDate: element.comissionPaidDate,
-                      adjustComissionAmount: element.adjustComissionAmount));
-              print(resComissionUpdate);
-              print('comission(%): $comission');
-              print('TotalAmount(%): ${element.totalSale}');
-              print('comissionAmount(%): ${comissionAmount}');
-              print('************');
+            } else {
+              comissionAndmatTypeNaNSetData.add(element.smtInvNo.toString());
             }
           } else {
-            comissionAndmatTypeNaNSetData.add(element.smtInvNo.toString());
+            partyNaNSetData.add(element.smtInvNo.toString());
           }
-        } else {
-          partyNaNSetData.add(element.smtInvNo.toString());
         }
-      }
-      print('done');
-      List ledgerIDList = [];
+        print('done');
+        List ledgerIDList = [];
 
-      for (var i = 0; i < partySet.length; i++) {
-        print('ledgerID: ${i + 1}');
-        var pID = partySet.elementAt(i);
-        print(partySet.elementAt(i));
-        var totalComission = partyTotalComissionSet.elementAt(i);
-        print(partyTotalComissionSet.elementAt(i));
-        var resLedger = await db.into(db.ledger).insert(LedgerCompanion.insert(
-              type: 'sale commission',
-              pID: pID,
-              ledgerDate: DateTime.now(),
-              drAmount: totalComission,
-              crAmount: 0,
-              ledgerNote: Constantdata.defualtNote,
-            ));
-        print(resLedger);
-        ledgerIDList.add(resLedger);
-      }
-
-      for (var i = 0; i < partyWiseList.length; i++) {
-        var element = partyWiseList[i];
-        for (var j = 0; j < element.length; j++) {
-          var data = await (db.select(db.inputData)
-                ..where((tbl) => tbl.smtInvNo.equals(element[j])))
-              .get();
-          print(element[j]); //smtInvNo
-          print(data[0]); // smtInvNo-data
-          print(ledgerIDList[i]); //ledgerID
-          var resUpdate = await (db.update(db.inputData)
-                ..where((tbl) => tbl.smtInvNo.equals(element[j])))
-              .write(InputDataData(
-                  id: data[0].id,
-                  documentType: data[0].documentType,
-                  distDocDate: data[0].distDocDate,
-                  distDocNo: data[0].distDocNo,
-                  pID: data[0].pID,
-                  custBillCity: data[0].custBillCity,
-                  matCode: data[0].matCode,
-                  matName: data[0].matName,
-                  mtID: data[0].mtID,
-                  qty: data[0].qty,
-                  doctorName: data[0].doctorName,
-                  techniqalStaff: data[0].techniqalStaff,
-                  saleAmount: data[0].saleAmount,
-                  totalSale: data[0].totalSale,
-                  smtDocDate: data[0].smtDocDate,
-                  smtDocNo: data[0].smtDocNo,
-                  smtInvNo: data[0].smtInvNo,
-                  purchaseTaxableAmount: data[0].purchaseTaxableAmount,
-                  totalPurchaseAmount: data[0].totalPurchaseAmount,
-                  logId: data[0].logId,
-                  ledgerId: ledgerIDList[i],
-                  comission: data[0].comission,
-                  comissionAmount: data[0].comissionAmount,
-                  comissionPaidDate: data[0].comissionPaidDate,
-                  adjustComissionAmount: data[0].adjustComissionAmount));
-          print(resUpdate);
-          print('update record');
+        for (var i = 0; i < partySet.length; i++) {
+          print('ledgerID: ${i + 1}');
+          var pID = partySet.elementAt(i);
+          print(partySet.elementAt(i));
+          var totalComission = partyTotalComissionSet.elementAt(i);
+          print(partyTotalComissionSet.elementAt(i));
+          var resLedger =
+              await db.into(db.ledger).insert(LedgerCompanion.insert(
+                    type: 'sale commission',
+                    pID: pID,
+                    ledgerDate: DateTime.now(),
+                    drAmount: totalComission,
+                    crAmount: 0,
+                    ledgerNote: Constantdata.defualtNote,
+                  ));
+          print(resLedger);
+          ledgerIDList.add(resLedger);
         }
-      }
 
-      // var data = db.select(db.inputData).get();
-      pendingReportData.clear();
-      isLoading.value = true;
+        for (var i = 0; i < partyWiseList.length; i++) {
+          var element = partyWiseList[i];
+          for (var j = 0; j < element.length; j++) {
+            var data = await (db.select(db.inputData)
+                  ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+                .get();
+            print(element[j]); //smtInvNo
+            print(data[0]); // smtInvNo-data
+            print(ledgerIDList[i]); //ledgerID
+            var resUpdate = await (db.update(db.inputData)
+                  ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+                .write(InputDataData(
+                    id: data[0].id,
+                    documentType: data[0].documentType,
+                    distDocDate: data[0].distDocDate,
+                    distDocNo: data[0].distDocNo,
+                    pID: data[0].pID,
+                    custBillCity: data[0].custBillCity,
+                    matCode: data[0].matCode,
+                    matName: data[0].matName,
+                    mtID: data[0].mtID,
+                    qty: data[0].qty,
+                    doctorName: data[0].doctorName,
+                    techniqalStaff: data[0].techniqalStaff,
+                    saleAmount: data[0].saleAmount,
+                    totalSale: data[0].totalSale,
+                    smtDocDate: data[0].smtDocDate,
+                    smtDocNo: data[0].smtDocNo,
+                    smtInvNo: data[0].smtInvNo,
+                    purchaseTaxableAmount: data[0].purchaseTaxableAmount,
+                    totalPurchaseAmount: data[0].totalPurchaseAmount,
+                    logId: data[0].logId,
+                    ledgerId: ledgerIDList[i],
+                    comission: data[0].comission,
+                    comissionAmount: data[0].comissionAmount,
+                    comissionPaidDate: data[0].comissionPaidDate,
+                    adjustComissionAmount: data[0].adjustComissionAmount));
+            print(resUpdate);
+            print('update record');
+          }
+        }
+
+        // var data = db.select(db.inputData).get();
+        pendingReportData.clear();
+        isLoading.value = false;
+        'Generate Report Successfully'.successSnackbar;
+      } else {
+        isLoading.value = false;
+        'No Data Found'.errorSnackbar;
+      }
     } catch (e) {
       printError(info: e.toString());
       e.toString().errorSnackbar;
@@ -776,7 +797,7 @@ class HomepageController extends GetxController {
         int ledgerId = 0;
         double comission = 0;
         double comissionAmount = 0;
-        DateTime comissionPaidDate = DateTime.now();
+        DateTime comissionPaidDate = DateTime(1800, 01, 01);
         double adjustComissionAmount = 0;
         // int? logId ;
         // print(distDocDate);
@@ -821,7 +842,9 @@ class HomepageController extends GetxController {
                     adjustComissionAmount: adjustComissionAmount,
                   ));
           print(result);
+          'data insert Successful'.successSnackbar;
         } else {
+          'already exist'.errorSnackbar;
           print('already exist');
           print(smtInvNo);
         }

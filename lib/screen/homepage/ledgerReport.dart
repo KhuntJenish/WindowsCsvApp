@@ -199,170 +199,246 @@ class LedgerReport extends StatelessWidget {
                     //**Data UI Part
 
                     Obx(
-                      () => Column(
-                        children: [
-                          Visibility(
-                            visible:
-                                _homepageController.ledgerReportData.isNotEmpty,
-                            child: Container(
-                              height: Get.height * 0.04,
-                              width: Get.width,
-                              decoration: BoxDecoration(
-                                color: Colors.yellow,
-                                border: Border.all(width: 1),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    width: Get.width * 0.1,
-                                    child: Text(
-                                      'Date',
-                                      style: _textTheme.bodyText1?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Get.height * 0.018,
-                                          color: Colors.red),
+                      () => SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Visibility(
+                              visible: _homepageController
+                                  .ledgerReportData.isNotEmpty,
+                              child: Container(
+                                height: Get.height * 0.04,
+                                width: Get.width,
+                                decoration: BoxDecoration(
+                                  color: Colors.yellow,
+                                  border: Border.all(width: 1),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      width: Get.width * 0.1,
+                                      child: Text(
+                                        'Date',
+                                        style: _textTheme.bodyText1?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Get.height * 0.018,
+                                            color: Colors.red),
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    width: Get.width * 0.2,
-                                    child: Text(
-                                      'Type',
-                                      style: _textTheme.bodyText1?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Get.height * 0.018,
-                                          color: Colors.red),
+                                    Container(
+                                      width: Get.width * 0.2,
+                                      child: Text(
+                                        'Type',
+                                        style: _textTheme.bodyText1?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Get.height * 0.018,
+                                            color: Colors.red),
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    width: Get.width * 0.1,
-                                    child: Text(
-                                      'Debit',
-                                      style: _textTheme.bodyText1?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Get.height * 0.018,
-                                          color: Colors.red),
-                                      textAlign: TextAlign.right,
+                                    Container(
+                                      width: Get.width * 0.1,
+                                      child: Text(
+                                        'Debit',
+                                        style: _textTheme.bodyText1?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Get.height * 0.018,
+                                            color: Colors.red),
+                                        textAlign: TextAlign.right,
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    width: Get.width * 0.1,
-                                    child: Text(
-                                      'Credit',
-                                      style: _textTheme.bodyText1?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: Get.height * 0.018,
-                                          color: Colors.red),
-                                      textAlign: TextAlign.right,
+                                    Container(
+                                      width: Get.width * 0.1,
+                                      child: Text(
+                                        'Credit',
+                                        style: _textTheme.bodyText1?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Get.height * 0.018,
+                                            color: Colors.red),
+                                        textAlign: TextAlign.right,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: Get.height * 0.8,
-                            width: Get.width,
-                            // color: Colors.amber[50],
-                            child: GroupedListView<LedgerData, String>(
-                              elements:
-                                  _homepageController.ledgerReportData.value,
-                              groupBy: (element) => element.pID.toString(),
-                              groupSeparatorBuilder: (String groupByValue) =>
-                                  Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 20),
-                                child: Card(
-                                  color: Colors.grey[400],
-                                  child: AutoSizeText(
-                                    _homepageController.partyList!
-                                        .firstWhere((item) =>
-                                            item.id == int.parse(groupByValue))
-                                        .name,
-                                    style: _textTheme.bodyText1?.copyWith(
-                                      fontSize: Get.height * 0.020,
-                                    ),
-                                    minFontSize: 10,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                  ],
                                 ),
                               ),
-
-                              itemBuilder: (context, LedgerData element) {
-                                return Container(
-                                  height: Get.height * 0.04,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Container(
-                                        width: Get.width * 0.1,
-                                        child: Text(
-                                          DateFormat('dd-MM-yyyy')
-                                              .format(element.ledgerDate)
-                                              .toString(),
-                                          style: _textTheme.bodyText1?.copyWith(
-                                            fontSize: Get.height * 0.015,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: Get.width * 0.2,
-                                        child: Text(
-                                          element.type,
-                                          style: _textTheme.bodyText1?.copyWith(
-                                            fontSize: Get.height * 0.015,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: Get.width * 0.1,
-                                        child: Text(
-                                          element.drAmount != 0
-                                              ? element.drAmount
-                                                  .toStringAsFixed(2)
-                                              : '',
-                                          style: _textTheme.bodyText1?.copyWith(
-                                            fontSize: Get.height * 0.015,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                      Container(
-                                        width: Get.width * 0.1,
-                                        child: Text(
-                                          element.crAmount != 0
-                                              ? element.crAmount
-                                                  .toStringAsFixed(2)
-                                              : '',
-                                          style: _textTheme.bodyText1?.copyWith(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: Get.height * 0.015,
-                                          ),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              // optional
-                              useStickyGroupSeparators: true, // optional
-                              // floatingHeader: true, // optional
-                              // order: GroupedListOrder.ASC, // optional
                             ),
-                          ),
-                        ],
+                            Container(
+                              height: Get.height * 0.8,
+                              width: Get.width,
+                              // color: Colors.amber[50],
+                              child: GroupedListView<LedgerData, String>(
+                                elements:
+                                    _homepageController.ledgerReportData.value,
+                                groupBy: (element) => element.pID.toString(),
+                                groupSeparatorBuilder: (String groupByValue) =>
+                                    Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0, top: 20),
+                                  child: Card(
+                                    color: lCOLOR_PRIMARY.withOpacity(0.1),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: AutoSizeText(
+                                        _homepageController.partyList!
+                                            .firstWhere((item) =>
+                                                item.id ==
+                                                int.parse(groupByValue))
+                                            .name,
+                                        style: _textTheme.bodyText1?.copyWith(
+                                          fontSize: Get.height * 0.020,
+                                        ),
+                                        minFontSize: 10,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                indexedItemBuilder: ((context, element, index) {
+                                  print('element: ${element}');
+                                  print('index: ${index}');
+                                  return Container(
+                                    height: Get.height * 0.04,
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1),
+                                      // borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                          width: Get.width * 0.1,
+                                          child: Text(
+                                            DateFormat('dd-MM-yyyy')
+                                                .format(element.ledgerDate),
+                                            style: _textTheme.bodyText1
+                                                ?.copyWith(
+                                                    fontSize:
+                                                        Get.height * 0.018),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: Get.width * 0.2,
+                                          child: Text(
+                                            element.type,
+                                            style: _textTheme.bodyText1
+                                                ?.copyWith(
+                                                    fontSize:
+                                                        Get.height * 0.018),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: Get.width * 0.1,
+                                          child: Text(
+                                            element.drAmount.toString(),
+                                            style: _textTheme.bodyText1
+                                                ?.copyWith(
+                                                    fontSize:
+                                                        Get.height * 0.018),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: Get.width * 0.1,
+                                          child: Text(
+                                            element.crAmount.toString(),
+                                            style: _textTheme.bodyText1
+                                                ?.copyWith(
+                                                    fontSize:
+                                                        Get.height * 0.018),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+
+                                // itemBuilder: (context, LedgerData element) {
+                                //   return Container(
+                                //     height: Get.height * 0.04,
+                                //     margin: const EdgeInsets.symmetric(
+                                //         horizontal: 8, vertical: 0),
+                                //     decoration: BoxDecoration(
+                                //       border: Border.all(
+                                //           color: Colors.grey, width: 1),
+                                //       // borderRadius: BorderRadius.circular(5),
+                                //     ),
+                                //     child: Row(
+                                //       mainAxisSize: MainAxisSize.min,
+                                //       mainAxisAlignment:
+                                //           MainAxisAlignment.spaceEvenly,
+                                //       children: [
+                                //         Container(
+                                //           width: Get.width * 0.1,
+                                //           child: Text(
+                                //             DateFormat('dd-MM-yyyy')
+                                //                 .format(element.ledgerDate)
+                                //                 .toString(),
+                                //             style:
+                                //                 _textTheme.bodyText1?.copyWith(
+                                //               fontSize: Get.height * 0.015,
+                                //             ),
+                                //           ),
+                                //         ),
+                                //         Container(
+                                //           width: Get.width * 0.2,
+                                //           child: Text(
+                                //             element.type,
+                                //             style:
+                                //                 _textTheme.bodyText1?.copyWith(
+                                //               fontSize: Get.height * 0.015,
+                                //             ),
+                                //           ),
+                                //         ),
+                                //         Container(
+                                //           width: Get.width * 0.1,
+                                //           child: Text(
+                                //             element.drAmount != 0
+                                //                 ? element.drAmount
+                                //                     .toStringAsFixed(2)
+                                //                 : '',
+                                //             style:
+                                //                 _textTheme.bodyText1?.copyWith(
+                                //               fontSize: Get.height * 0.015,
+                                //             ),
+                                //             textAlign: TextAlign.right,
+                                //           ),
+                                //         ),
+                                //         Container(
+                                //           width: Get.width * 0.1,
+                                //           child: Text(
+                                //             element.crAmount != 0
+                                //                 ? element.crAmount
+                                //                     .toStringAsFixed(2)
+                                //                 : '',
+                                //             style:
+                                //                 _textTheme.bodyText1?.copyWith(
+                                //               fontWeight: FontWeight.w400,
+                                //               fontSize: Get.height * 0.015,
+                                //             ),
+                                //             textAlign: TextAlign.right,
+                                //           ),
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   );
+                                // },
+                                // optional
+                                useStickyGroupSeparators: true, // optional
+                                // floatingHeader: true, // optional
+                                // order: GroupedListOrder.ASC, // optional
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     // Obx(
