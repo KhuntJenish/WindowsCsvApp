@@ -65,7 +65,7 @@ class PartyDropDownItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       height: height,
       width: width,
@@ -91,6 +91,59 @@ class PartyDropDownItems extends StatelessWidget {
               );
             }).toList(),
             onChanged: (PartyMasterData? newValue) {
+              defualtValue?.value = newValue!;
+              print(defualtValue?.value);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class StringDropDownItems extends StatelessWidget {
+  StringDropDownItems({
+    super.key,
+    this.defualtValue,
+    this.itemList,
+    this.selectedItemList,
+    this.height = 50,
+    this.width,
+  });
+  Rx<String>? defualtValue;
+  final List<String>? itemList;
+  final List<String>? selectedItemList;
+  final double height;
+  final double? width;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: Colors.grey[400],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.grey,
+          width: 1,
+        ),
+      ),
+      child: Obx(
+        () => DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            isExpanded: true,
+            value: defualtValue?.value,
+            icon: const Icon(Icons.keyboard_arrow_down),
+            items: itemList?.map((items) {
+              return DropdownMenuItem<String>(
+                value: items,
+                child:
+                    Text(items, maxLines: 1, overflow: TextOverflow.ellipsis),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
               defualtValue?.value = newValue!;
               print(defualtValue?.value);
             },

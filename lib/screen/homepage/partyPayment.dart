@@ -1,24 +1,26 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:csvapp/screen/homepage/generatedReport.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
-import 'package:csvapp/screen/homepage/partyPayment.dart';
+import 'package:csvapp/utils/extensions.dart';
 import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+
 import 'package:intl/intl.dart';
+
 import '../../utils/dropDownItem.dart';
 import '../../utils/partyComissionBottomsheet.dart';
 import '../../utils/partyMasterBottomsheet.dart';
 import 'partyLedger.dart';
 import 'ImportReport.dart';
 
-class GeneratedReport extends StatelessWidget {
-  static const routeName = '/generatedReport';
+class PartyPayment extends StatelessWidget {
+  static const routeName = '/partyPayment';
   HomepageController _homepageController = Get.put(HomepageController());
   @override
   Widget build(BuildContext context) {
-    // _homepageController.generatedReportData.value = [];
     TextTheme _textTheme = Theme.of(context).textTheme;
     final ScrollController horizontalScroll = ScrollController();
     final ScrollController verticalScroll = ScrollController();
@@ -33,7 +35,7 @@ class GeneratedReport extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Generated Report',
+            'Party Payment',
             style: _textTheme.bodyText1?.copyWith(
               color: Colors.white,
               fontSize: Get.height * 0.03,
@@ -105,173 +107,92 @@ class GeneratedReport extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //**Search Ui Part
-                    SizedBox(
+                    Container(
                       width: Get.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SizedBox(
+                          Container(
+                            color: Colors.red,
+                            // width: Get.width * 0.30,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      // color: Colors.red,
-                                      // width: Get.width * 0.30,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: Get.width * 0.20,
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 0),
-                                                  child: AutoSizeText(
-                                                    'Select Party:',
-                                                    style: _textTheme.bodyText1
-                                                        ?.copyWith(
-                                                      fontSize:
-                                                          Get.height * 0.015,
-                                                    ),
-                                                    maxLines: 1,
-                                                  ),
-                                                ),
-                                                Checkbox(
-                                                  value: _homepageController
-                                                      .isAllPartySelected.value,
-                                                  onChanged: (value) =>
-                                                      _homepageController
-                                                          .isAllPartySelected
-                                                          .value = value!,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.20,
-                                            child: PartyDropDownItems(
-                                              defualtValue: _homepageController
-                                                  .defualtParty,
-                                              itemList:
-                                                  _homepageController.partyList,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 0),
+                                  child: AutoSizeText(
+                                    'Select Party:',
+                                    style: _textTheme.bodyText1?.copyWith(
+                                      fontSize: Get.height * 0.015,
                                     ),
-                                    Container(
-                                      // color: Colors.green,
-                                      margin: const EdgeInsets.only(top: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 0),
-                                            child: AutoSizeText(
-                                              'Select Material:',
-                                              style: _textTheme.bodyText1
-                                                  ?.copyWith(
-                                                fontSize: Get.height * 0.015,
-                                              ),
-                                              maxLines: 1,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.20,
-                                            child: MaterialTypeDropDownItems(
-                                              defualtValue: _homepageController
-                                                  .defualtMaterialType,
-                                              itemList: _homepageController
-                                                  .materialTypeList,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.20,
+                                  child: PartyDropDownItems(
+                                    defualtValue:
+                                        _homepageController.defualtParty,
+                                    itemList: _homepageController.partyList,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            color: Colors.green,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 0),
+                                  child: AutoSizeText(
+                                    'Select Material:',
+                                    style: _textTheme.bodyText1?.copyWith(
+                                      fontSize: Get.height * 0.015,
                                     ),
-                                    Container(
-                                      // color: Colors.green,
-                                      // width: Get.width * 0.30,
-                                      margin: const EdgeInsets.only(top: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 0),
-                                            child: AutoSizeText(
-                                              'Select City:',
-                                              style: _textTheme.bodyText1
-                                                  ?.copyWith(
-                                                fontSize: Get.height * 0.015,
-                                              ),
-                                              maxLines: 1,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.20,
-                                            child: StringDropDownItems(
-                                              defualtValue: _homepageController
-                                                  .defualtPartyCity,
-                                              itemList: _homepageController
-                                                  .partyCityList
-                                                  .toList(),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.20,
+                                  child: MaterialTypeDropDownItems(
+                                    defualtValue:
+                                        _homepageController.defualtMaterialType,
+                                    itemList:
+                                        _homepageController.materialTypeList,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            color: Colors.green,
+                            // width: Get.width * 0.30,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 0),
+                                  child: AutoSizeText(
+                                    'Select City:',
+                                    style: _textTheme.bodyText1?.copyWith(
+                                      fontSize: Get.height * 0.015,
                                     ),
-                                    Container(
-                                      // color: Colors.green,
-                                      // width: Get.width * 0.30,
-                                      margin: const EdgeInsets.only(top: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 0),
-                                            child: AutoSizeText(
-                                              'Duration:',
-                                              style: _textTheme.bodyText1
-                                                  ?.copyWith(
-                                                fontSize: Get.height * 0.015,
-                                              ),
-                                              maxLines: 1,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.20,
-                                            child: StringDropDownItems(
-                                              defualtValue: _homepageController
-                                                  .defualtDuration,
-                                              itemList: _homepageController
-                                                  .durationList
-                                                  .toList(),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.20,
+                                  child: StringDropDownItems(
+                                    defualtValue:
+                                        _homepageController.defualtPartyCity,
+                                    itemList: _homepageController.partyCityList
+                                        .toList(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -279,7 +200,6 @@ class GeneratedReport extends StatelessWidget {
                           SizedBox(
                             width: Get.width * 0.20,
                             child: Container(
-                              // color: Colors.amber,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -361,8 +281,6 @@ class GeneratedReport extends StatelessWidget {
                         ],
                       ),
                     ),
-
-                    //**Data Ui Part
                     _homepageController.generatedReportData.isEmpty
                         ? Container()
                         : Card(
@@ -412,14 +330,22 @@ class GeneratedReport extends StatelessWidget {
                             height: Get.height * 0.70,
                             width: Get.width * 1.5,
                             child: ListView.builder(
+                              // itemCount: _homepageController.data.isEmpty ? 0 : 3,
                               itemCount: _homepageController
                                   .generatedReportData.length,
+                              // scrollDirection: Axis.vertical,
+                              // shrinkWrap: true,
                               itemBuilder: (_, index) {
+                                print(index != 0
+                                    ? _homepageController
+                                        .generatedReportData[index][20]
+                                    : 0);
                                 var date = index != 0
                                     ? _homepageController
                                         .generatedReportData[index][20]
                                     : DateTime.now();
 
+                                print(date.isAfter(DateTime(1800, 01, 01)));
                                 return Visibility(
                                   visible: index != 0,
                                   replacement: Container(),
@@ -429,17 +355,16 @@ class GeneratedReport extends StatelessWidget {
                                             .contains(_homepageController
                                                 .generatedReportData[index][15])
                                         ? date.isAfter(DateTime(1800, 01, 01))
-                                            ? const Color.fromARGB(
-                                                255, 121, 192, 124)
+                                            ? Color.fromARGB(255, 121, 192, 124)
                                             : Colors.white
-                                        : const Color.fromARGB(
-                                            255, 228, 136, 129),
+                                        : Color.fromARGB(255, 228, 136, 129),
                                     child: Container(
                                       width: Get.width * 1.5,
                                       height: Get.height * 0.04,
                                       child: AnimationLimiter(
                                         child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
+
                                           itemCount: _homepageController
                                                   .generatedReportData[index]
                                                   .isNotEmpty
@@ -449,7 +374,15 @@ class GeneratedReport extends StatelessWidget {
                                                       .length -
                                                   1
                                               : 0,
+                                          // shrinkWrap: true,
                                           itemBuilder: (_, subIndex) {
+                                            // DateTime tempDate = DateFormat("dd.MM.yyyy")
+                                            //     .parse(_homepageController.data[index][1]
+                                            //         .toString());
+
+                                            // tempDate = DateFormat("dd-MM-yyyy").format(tempDate);
+                                            // print(_homepageController.data[index][15]
+                                            //     .toString());
                                             return AnimationConfiguration
                                                 .staggeredList(
                                               position: index,
@@ -702,6 +635,112 @@ class GeneratedReport extends StatelessWidget {
                             ),
                           ),
                         ),
+                        Obx(
+                          () => Visibility(
+                            visible:
+                                _homepageController.isAllPartySelected.value ==
+                                            false &&
+                                        _homepageController
+                                                .generatedReportData.length >
+                                            1
+                                    ? true
+                                    : false,
+                            child: Positioned(
+                              // width: Get.width,
+                              bottom: Get.height * 0.03,
+                              left: Get.width * 0.20,
+                              right: Get.width * 0.70,
+                              child: Container(
+                                height: Get.height * 0.1,
+                                width: Get.width * 0.5,
+                                child: Card(
+                                  // color: lCOLOR_ACCENT.withOpacity(0.1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      LableText(
+                                          name: 'Total Amount',
+                                          amount: _homepageController
+                                              .partyWiseTotalAmount.value
+                                              .toString()),
+                                      LableText(
+                                          name: 'Paid Amount',
+                                          amount: _homepageController
+                                              .partyWisePaidAmount.value
+                                              .toString()),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          LableText(
+                                              name: 'Payable Amount',
+                                              amount: (_homepageController
+                                                          .partyWiseTotalAmount
+                                                          .value -
+                                                      _homepageController
+                                                          .partyWisePaidAmount
+                                                          .value)
+                                                  .toString()),
+                                          Button(
+                                            text: 'Pay',
+                                            onPressed: () {
+                                              print('payment');
+                                              if ((_homepageController
+                                                          .partyWiseTotalAmount
+                                                          .value -
+                                                      _homepageController
+                                                          .partyWisePaidAmount
+                                                          .value) >
+                                                  0) {
+                                                Get.defaultDialog(
+                                                  title: 'payment',
+                                                  middleText:
+                                                      'Are you sure you want to pay  ${(_homepageController.partyWiseTotalAmount.value - _homepageController.partyWisePaidAmount.value).toString()}₹ ?',
+                                                  textConfirm: 'Ok',
+                                                  confirmTextColor:
+                                                      Colors.white,
+                                                  onConfirm: () {
+                                                    print('payment');
+                                                    Get.back();
+                                                    var crAmount = (_homepageController
+                                                            .partyWiseTotalAmount
+                                                            .value -
+                                                        _homepageController
+                                                            .partyWisePaidAmount
+                                                            .value);
+                                                    print(_homepageController
+                                                        .defualtParty.value);
+                                                    _homepageController
+                                                        .partyWisePayment(
+                                                            crAmount: crAmount,
+                                                            selectedParty:
+                                                                _homepageController
+                                                                    .defualtParty
+                                                                    .value);
+                                                  },
+                                                );
+                                              } else {
+                                                'No amount to pay😀'
+                                                    .infoSnackbar;
+                                              }
+                                            },
+                                            fontSize: Get.height * 0.02,
+                                            height: Get.height * 0.04,
+                                            width: Get.width * 0.06,
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -714,5 +753,35 @@ class GeneratedReport extends StatelessWidget {
         // drawer: drawer(),
       ),
     );
+  }
+}
+
+class LableText extends StatelessWidget {
+  LableText({
+    Key? key,
+    required this.name,
+    required this.amount,
+  });
+  String name;
+  String amount;
+  @override
+  Widget build(BuildContext context) {
+    TextTheme _textTheme = Theme.of(context).textTheme;
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Text(
+        name,
+        style: _textTheme.bodyText1?.copyWith(
+          // color: Colors.white,
+          fontSize: Get.height * 0.02,
+        ),
+      ),
+      Text(
+        amount,
+        style: _textTheme.headline6?.copyWith(
+          // color: Colors.white,
+          fontSize: Get.height * 0.015,
+        ),
+      ),
+    ]);
   }
 }

@@ -1,7 +1,8 @@
 import 'package:csvapp/screen/homepage/generatedReport.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
-import 'package:csvapp/screen/homepage/ledgerReport.dart';
-import 'package:csvapp/screen/homepage/pendingReport.dart';
+import 'package:csvapp/screen/homepage/partyLedger.dart';
+import 'package:csvapp/screen/homepage/ImportReport.dart';
+import 'package:csvapp/screen/homepage/partyPayment.dart';
 import 'package:csvapp/utils/drawer.dart';
 import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +11,15 @@ import 'package:get/get.dart';
 import 'theam/theam_constants.dart';
 import 'utils/userBottomsheet.dart';
 
-class Mainpage extends StatelessWidget {
-  static const routeName = '/mainPage';
+class Dashboard extends StatelessWidget {
+  static const routeName = '/dashboard';
 
   HomepageController _homepageController = Get.put(HomepageController());
 
   @override
   Widget build(BuildContext context) {
     TextTheme _textTheme = Theme.of(context).textTheme;
+
     print(_homepageController.isSelectedReport.value);
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +44,7 @@ class Mainpage extends StatelessWidget {
                   icon: Icon(Icons.insert_chart),
                   onTap: () {
                     _homepageController.isSelectedReport.value = 1;
-                    Get.toNamed(PendingReport.routeName);
+                    Get.toNamed(ImportReport.routeName);
                   },
                 ),
                 ReportLabel(
@@ -51,6 +53,7 @@ class Mainpage extends StatelessWidget {
                   icon: Icon(Icons.auto_graph),
                   onTap: () {
                     _homepageController.isSelectedReport.value = 2;
+                    _homepageController.generatedReportData.value = [];
                     Get.toNamed(GeneratedReport.routeName);
                   },
                 ),
@@ -59,8 +62,9 @@ class Mainpage extends StatelessWidget {
                   text: 'Party Payment',
                   icon: Icon(Icons.payment),
                   onTap: () {
+                    _homepageController.generatedReportData.value = [];
                     _homepageController.isSelectedReport.value = 3;
-                    // Get.toNamed(GeneratedReport.routeName);
+                    Get.toNamed(PartyPayment.routeName);
                   },
                 ),
                 ReportLabel(
@@ -69,20 +73,9 @@ class Mainpage extends StatelessWidget {
                   icon: Icon(Icons.receipt_long),
                   onTap: () {
                     _homepageController.isSelectedReport.value = 4;
-                    Get.toNamed(LedgerReport.routeName);
+                    Get.toNamed(PartyLedger.routeName);
                   },
                 ),
-
-                // ListTile(
-                //   leading: Icon(Icons.receipt_long),
-                //   title: Text(
-                //     'Party Ledger',
-                //     style: _textTheme.bodyText1?.copyWith(
-                //       color: Colors.white,
-                //       fontSize: Get.height * 0.02,
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

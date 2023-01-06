@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 
 import '../screen/homepage/generatedReport.dart';
 import '../screen/homepage/homecontroller.dart';
-import '../screen/homepage/ledgerReport.dart';
-import '../screen/homepage/pendingReport.dart';
+import '../screen/homepage/partyLedger.dart';
+import '../screen/homepage/ImportReport.dart';
 import '../theam/theam_constants.dart';
 
 // spacing constants For Vertical and Horizontal Layout
@@ -38,7 +38,7 @@ class BottomAppBar extends StatelessWidget {
             icon: Icon(Icons.insert_chart),
             onTap: () {
               _homepageController.isSelectedReport.value = 1;
-              Get.toNamed(PendingReport.routeName);
+              Get.toNamed(ImportReport.routeName);
             },
           ),
           ReportLabel(
@@ -65,7 +65,7 @@ class BottomAppBar extends StatelessWidget {
             icon: Icon(Icons.receipt_long),
             onTap: () {
               _homepageController.isSelectedReport.value = 4;
-              Get.toNamed(LedgerReport.routeName);
+              Get.toNamed(PartyLedger.routeName);
             },
           ),
         ],

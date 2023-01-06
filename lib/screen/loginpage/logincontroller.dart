@@ -1,5 +1,5 @@
 import 'package:csvapp/database/tables.dart';
-import 'package:csvapp/mainpage.dart';
+import 'package:csvapp/dashboard.dart';
 import 'package:csvapp/utils/constant.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart';
@@ -33,7 +33,7 @@ class LoginController extends GetxController {
         UserData currentUser = GetStorage('box').read('cuser');
         print(currentUser.username);
         // print(data);
-        Get.offAllNamed(Mainpage.routeName);
+        Get.offAllNamed(Dashboard.routeName);
       }
     } catch (e) {
       e.toString().errorSnackbar;

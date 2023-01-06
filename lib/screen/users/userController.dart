@@ -1,5 +1,5 @@
 import 'package:csvapp/database/tables.dart';
-import 'package:csvapp/screen/homepage/pendingReport.dart';
+import 'package:csvapp/screen/homepage/ImportReport.dart';
 import 'package:csvapp/utils/constant.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart';
@@ -59,7 +59,7 @@ class UserController extends GetxController {
     try {
       // Value<String> username =  Value(username);
       if (username == 'admin') {
-        Get.offAllNamed(PendingReport.routeName);
+        Get.offAllNamed(ImportReport.routeName);
         'Admin can not be updated'.errorSnackbar;
       } else {
         var data = await (db.update(db.user)..where((tbl) => tbl.id.equals(id)))
@@ -80,7 +80,7 @@ class UserController extends GetxController {
                 mail: mail ?? '');
             await GetStorage('box').write('cuser', user);
             print(GetStorage('box').read('cuser'));
-            Get.offAllNamed(PendingReport.routeName);
+            Get.offAllNamed(ImportReport.routeName);
           } else {
             Get.back();
           }

@@ -20,11 +20,24 @@ class HomepageController extends GetxController {
   RxList<LedgerData> ledgerReportData = RxList<LedgerData>();
   RxList<String> displayData = RxList<String>();
   RxList<String> partyNaNSetData = RxList<String>();
+  RxList<String> durationList = RxList<String>([
+    'One Month',
+    'Four Month',
+    'Six Month',
+    'One Year',
+    'Custom',
+  ]);
+  RxSet<String> partyCityList = RxSet<String>();
   RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
   List<MaterialTypeData>? materialTypeList = [];
   List<PartyMasterData>? partyList = [];
+
   Rx<PartyMasterData> defualtParty =
       PartyMasterData(id: 0, name: '', ptID: 0).obs;
+  Rx<String> defualtPartyCity = ''.obs;
+  Rx<String> defualtDuration = 'One Month'.obs;
+  Rx<MaterialTypeData> defualtMaterialType =
+      MaterialTypeData(id: 0, type: '').obs;
   String? filePath;
   RxBool isLoading = false.obs;
   RxBool isAllPartySelected = true.obs;
@@ -44,6 +57,9 @@ class HomepageController extends GetxController {
     super.onInit();
     // getPendingData();
     getPartyList();
+    getMaterialTypeList();
+    getPartyCityList();
+    // print('Homecontroller onInit');
   }
 
   chooseDateRangePicker() async {
@@ -51,7 +67,23 @@ class HomepageController extends GetxController {
         context: Get.context!,
         firstDate: DateTime(DateTime.now().year - 2),
         lastDate: DateTime(DateTime.now().year + 2),
-        initialDateRange: dateRange.value);
+        initialDateRange: dateRange.value,
+        initialEntryMode: DatePickerEntryMode.input,
+        locale: const Locale('en', 'IN'),
+        builder: (context, child) {
+          return Column(
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: 500.0,
+                  // maxHeight: 400.0,
+                ),
+                child: child,
+              )
+            ],
+          );
+        });
+    // );
 
     if (picked != null) {
       dateRange.value = picked;
@@ -75,6 +107,42 @@ class HomepageController extends GetxController {
     }
 
     print(partyList);
+  }
+
+  getPartyCityList() async {
+    partyCityList.clear();
+    var data = await db.select(db.inputData).get();
+
+    for (var element in data) {
+      partyCityList.add(element.custBillCity);
+    }
+
+    // print(data);
+    if (partyCityList.isNotEmpty) {
+      // print(partyTypeList![0]);
+      var defualt = partyCityList.toList();
+      defualtPartyCity.value = defualt[0];
+      print('defualtParty: ${defualtParty.value}');
+    }
+
+    print(partyCityList);
+  }
+
+  getMaterialTypeList() async {
+    materialTypeList?.clear();
+    var data = await db.select(db.materialType).get();
+
+    materialTypeList?.addAll(data);
+
+    // print(data);
+    if (materialTypeList!.isNotEmpty) {
+      // print(partyTypeList![0]);
+
+      defualtMaterialType.value = materialTypeList![0];
+      print('defualtParty: ${defualtMaterialType.value}');
+    }
+
+    print(materialTypeList);
   }
 
   Future<void> getPendingSearchData(
@@ -476,7 +544,9 @@ class HomepageController extends GetxController {
       defualtParty.value = partyList![0];
     }
     materialTypeList = await db.select(db.materialType).get();
-
+    if (materialTypeList!.isNotEmpty) {
+      defualtMaterialType.value = materialTypeList![0];
+    }
     // .value = materialTypeList![0];
 
     for (var i = 1; i < fields!.length; i++) {
@@ -567,7 +637,7 @@ class HomepageController extends GetxController {
       //   smtInvNoList.add(element[15]);
       // }
       for (var i = 1; i < data!.length; i++) {
-        smtInvNoList.add(data[i][15]);  
+        smtInvNoList.add(data[i][15]);
       }
       print(smtInvNoList);
       var res = await (db.select(db.inputData)
@@ -768,6 +838,9 @@ class HomepageController extends GetxController {
       print(data.length);
       partyList = await (db.select(db.partyMaster)).get();
       materialTypeList = await (db.select(db.materialType)).get();
+      if (materialTypeList!.isNotEmpty) {
+        defualtMaterialType.value = materialTypeList![0];
+      }
       print(partyList);
       print(materialTypeList);
 
