@@ -43,6 +43,16 @@ class PartyComissionBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // materialType!.text = _partyController.defualtMaterialType.value.name;
+    if (_partyController.materialTypeList!.isNotEmpty &&
+        materialType!.text != '') {
+      _partyController.defualtMaterialType.value = _partyController
+          .materialTypeList!
+          .firstWhere((element) => element.type == materialType!.text);
+          materialType!.text = '';
+      // _partyController.getMaterialTypeList();
+    }
+
     partyNameController.text = party!.name.toString();
     newComissionController.text = comissionPercentage.toString();
     // print(_partyController.addPartyBtnText.value);
@@ -119,7 +129,8 @@ class PartyComissionBottomSheet extends StatelessWidget {
                 fontSize: Get.width * 0.015,
                 text: 'submit',
                 onPressed: () {
-                  if (partyNameController.text.isNotEmpty) {
+                  if (partyNameController.text.isNotEmpty &&
+                      newComissionController.text.isNotEmpty) {
                     if (btnText == 'Add Comission' ||
                         btnText == 'Add New Comission') {
                       _partyController.addPartyComission(
@@ -146,7 +157,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                       );
                     }
                   } else {
-                    'Please Enter Party Name'.errorSnackbar;
+                    'Please Enter Party Name or Comission'.errorSnackbar;
                   }
                 },
               ),

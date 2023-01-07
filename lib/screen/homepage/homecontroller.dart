@@ -4,6 +4,7 @@ import 'package:csv/csv.dart';
 import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart' as d;
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,6 +42,8 @@ class HomepageController extends GetxController {
   String? filePath;
   RxBool isLoading = false.obs;
   RxBool isAllPartySelected = true.obs;
+  RxBool isAllMaterialTypeSelected = true.obs;
+  RxBool isAllPartyCitySelected = true.obs;
   RxDouble partyWiseTotalAmount = 0.0.obs;
   RxDouble partyWisePaidAmount = 0.0.obs;
   RxDouble partyWisePayableAmount = 0.0.obs;
@@ -291,11 +294,16 @@ class HomepageController extends GetxController {
     }
   }
 
-  Future<void> getGeneratedSearchData(
-      {DateTime? start,
-      DateTime? end,
-      bool? isAllPartySelected,
-      PartyMasterData? selectedParty}) async {
+  Future<void> getGeneratedSearchData({
+    DateTime? start,
+    DateTime? end,
+    bool? isAllPartySelected,
+    bool? isAllPartyCitySelected,
+    bool? isAllMaterialTypeSelected,
+    PartyMasterData? selectedParty,
+    String? selectedPartyCity,
+    MaterialTypeData? selectedMaterialType,
+  }) async {
     try {
       isLoading.value = true;
 
@@ -303,37 +311,62 @@ class HomepageController extends GetxController {
       comissionAndmatTypeNaNSetData.clear();
       partyNaNSetData.clear();
       var serachData = [];
+      d.Expression<bool> duration =
+          db.inputData.smtDocDate.isBetweenValues(start!, end!);
+      d.Expression<bool> partyCity = isAllPartyCitySelected!
+          ? db.inputData.custBillCity.isNotNull()
+          : db.inputData.custBillCity.equals(selectedPartyCity!);
+      d.Expression<bool> party = isAllPartySelected!
+          ? db.inputData.pID.isNotNull()
+          : db.inputData.pID.equals(selectedParty!.id);
+      d.Expression<bool> materialType = isAllMaterialTypeSelected!
+          ? db.inputData.mtID.isNotNull()
+          : db.inputData.mtID.equals(selectedMaterialType!.id);
       print('isAllPartySelected: $isAllPartySelected');
-      if (isAllPartySelected!) {
-        serachData = await (db.select(db.inputData)
-              ..where((tbl) =>
-                  tbl.smtDocDate.isBetweenValues(start!, end!) &
-                  tbl.logId.isBiggerThanValue(0)))
-            .get();
-        // print(serachData);
-      } else {
-        serachData = await (db.select(db.inputData)
-              ..where((tbl) =>
-                  tbl.smtDocDate.isBetweenValues(start!, end!) &
-                  tbl.pID.equals(selectedParty!.id) &
-                  tbl.logId.isBiggerThanValue(0)))
-            .get();
-        var ledger = await (db.select(db.inputData)
-              ..where((tbl) =>
-                  tbl.comissionPaidDate
-                      .isBiggerThanValue(DateTime(1800, 01, 01)) &
-                  tbl.pID.equals(selectedParty!.id) &
-                  tbl.logId.isBiggerThanValue(0)))
-            .get();
-        partyWisePaidAmount.value = 0;
-        partyWiseTotalAmount.value = 0;
-        partyWisePayableAmount.value = 0;
-        for (var element in ledger) {
-          partyWisePaidAmount.value += element.comissionAmount;
-        }
-        print(ledger);
-        print(partyWisePaidAmount.value);
-      }
+      serachData = await (db.select(db.inputData)
+            ..where((tbl) =>
+                duration &
+                partyCity &
+                party &
+                materialType &
+                tbl.logId.isBiggerThanValue(0)))
+          .get();
+
+      print(serachData);
+
+      // if (isAllPartySelected!) {
+      //   serachData = await (db.select(db.inputData)
+      //         ..where((tbl) =>
+      //             duration &
+      //             partyCity &
+      //             party &
+      //             materialType &
+      //             tbl.logId.isBiggerThanValue(0)))
+      //       .get();
+      //   // print(serachData);
+      // } else {
+      //   serachData = await (db.select(db.inputData)
+      //         ..where((tbl) =>
+      //             tbl.smtDocDate.isBetweenValues(start!, end!) &
+      //             tbl.pID.equals(selectedParty!.id) &
+      //             tbl.logId.isBiggerThanValue(0)))
+      //       .get();
+      //   var ledger = await (db.select(db.inputData)
+      //         ..where((tbl) =>
+      //             tbl.comissionPaidDate
+      //                 .isBiggerThanValue(DateTime(1800, 01, 01)) &
+      //             tbl.pID.equals(selectedParty!.id) &
+      //             tbl.logId.isBiggerThanValue(0)))
+      //       .get();
+      //   partyWisePaidAmount.value = 0;
+      //   partyWiseTotalAmount.value = 0;
+      //   partyWisePayableAmount.value = 0;
+      //   for (var element in ledger) {
+      //     partyWisePaidAmount.value += element.comissionAmount;
+      //   }
+      //   print(ledger);
+      //   print(partyWisePaidAmount.value);
+      // }
       print('Generated searchData length');
 
       generatedReportData.clear();

@@ -29,7 +29,7 @@ class ImportReport extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         _homepageController.isSelectedReport.value = 0;
-       
+
         return true;
       },
       child: Scaffold(
@@ -63,7 +63,7 @@ class ImportReport extends StatelessWidget {
                     text: 'Generated Report',
                     icon: Icon(Icons.auto_graph),
                     onTap: () {
-                            _homepageController.generatedReportData.clear();
+                      _homepageController.generatedReportData.clear();
                       _homepageController.isSelectedReport.value = 2;
                       Get.offAndToNamed(GeneratedReport.routeName);
                     },
@@ -73,8 +73,7 @@ class ImportReport extends StatelessWidget {
                     text: 'Party Payment',
                     icon: Icon(Icons.payment),
                     onTap: () {
-
-                           _homepageController.generatedReportData.clear();
+                      _homepageController.generatedReportData.clear();
                       _homepageController.isSelectedReport.value = 3;
                       Get.offAndToNamed(PartyPayment.routeName);
                     },
@@ -561,16 +560,17 @@ class ImportReport extends StatelessWidget {
                     }),
               ),
               FloatingActionButton(
-                tooltip: _homepageController.pendingReportData.isEmpty
+                tooltip: _homepageController.pendingReportData.isEmpty ||
+                        _homepageController.pendingReportData.length < 2
                     ? 'Add CSV'
                     : 'Add Data in Database', //child widget inside this button
                 onPressed: () async {
                   print("Button is pressed.");
                   if (_homepageController.isLoading.value == false) {
-                    if (_homepageController.pendingReportData.length > 1 &&
+                    if (((_homepageController.pendingReportData.length >= 2  ) &&
                         _homepageController
                             .comissionAndmatTypeNaNSetData.isEmpty &&
-                        _homepageController.partyNaNSetData.isEmpty) {
+                        _homepageController.partyNaNSetData.isEmpty)) {
                       print(_homepageController.pendingReportData);
                       List<List<dynamic>> data = [];
                       data.addAll(_homepageController.pendingReportData);
@@ -621,7 +621,9 @@ class ImportReport extends StatelessWidget {
                           color: Colors.white,
                         ),
                       )
-                    : (_homepageController.pendingReportData.length < 2 &&
+                    : ((_homepageController.pendingReportData.length < 2 ||
+                                _homepageController
+                                    .pendingReportData.isEmpty) &&
                             _homepageController
                                 .comissionAndmatTypeNaNSetData.isEmpty &&
                             _homepageController.partyNaNSetData.isEmpty)

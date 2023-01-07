@@ -107,176 +107,340 @@ class PartyPayment extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //**Search Ui Part
-                    Container(
+                    SizedBox(
                       width: Get.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            color: Colors.red,
-                            // width: Get.width * 0.30,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
-                                  child: AutoSizeText(
-                                    'Select Party:',
-                                    style: _textTheme.bodyText1?.copyWith(
-                                      fontSize: Get.height * 0.015,
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: Get.width * 0.20,
-                                  child: PartyDropDownItems(
-                                    defualtValue:
-                                        _homepageController.defualtParty,
-                                    itemList: _homepageController.partyList,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            color: Colors.green,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
-                                  child: AutoSizeText(
-                                    'Select Material:',
-                                    style: _textTheme.bodyText1?.copyWith(
-                                      fontSize: Get.height * 0.015,
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: Get.width * 0.20,
-                                  child: MaterialTypeDropDownItems(
-                                    defualtValue:
-                                        _homepageController.defualtMaterialType,
-                                    itemList:
-                                        _homepageController.materialTypeList,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            color: Colors.green,
-                            // width: Get.width * 0.30,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
-                                  child: AutoSizeText(
-                                    'Select City:',
-                                    style: _textTheme.bodyText1?.copyWith(
-                                      fontSize: Get.height * 0.015,
-                                    ),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: Get.width * 0.20,
-                                  child: StringDropDownItems(
-                                    defualtValue:
-                                        _homepageController.defualtPartyCity,
-                                    itemList: _homepageController.partyCityList
-                                        .toList(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           SizedBox(
-                            width: Get.width * 0.20,
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: Get.width * 0.05,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Start:',
-                                          style: _textTheme.bodyText1?.copyWith(
-                                            fontSize: Get.height * 0.015,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          LableWithCheckbox(
+                                            lable: 'Select Party:',
+                                            checkBoxOnchange: (value) =>
+                                                _homepageController
+                                                    .isAllPartySelected
+                                                    .value = value!,
+                                            checkBoxValue: _homepageController
+                                                .isAllPartySelected.value,
+                                            isCheckBoxVisible: false,
                                           ),
-                                        ),
-                                        Text(DateFormat('dd-MM-yyyy').format(
-                                            _homepageController
-                                                .dateRange.value.start)),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Get.width * 0.05,
-                                    child: CircleAvatar(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          _homepageController
-                                              .chooseDateRangePicker();
-                                        },
-                                        icon: const Icon(Icons.date_range),
+                                          SizedBox(
+                                            width: Get.width * 0.20,
+                                            child: PartyDropDownItems(
+                                              defualtValue: _homepageController
+                                                  .defualtParty,
+                                              itemList:
+                                                  _homepageController.partyList,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: Get.width * 0.05,
-                                    child: Column(
+                                    Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          LableWithCheckbox(
+                                            lable: 'Select Material:',
+                                            checkBoxOnchange: (value) =>
+                                                _homepageController
+                                                    .isAllMaterialTypeSelected
+                                                    .value = value!,
+                                            checkBoxValue: _homepageController
+                                                .isAllMaterialTypeSelected
+                                                .value,
+                                            isCheckBoxVisible: true,
+                                          ),
+                                          SizedBox(
+                                            width: Get.width * 0.20,
+                                            child: MaterialTypeDropDownItems(
+                                              defualtValue: _homepageController
+                                                  .defualtMaterialType,
+                                              itemList: _homepageController
+                                                  .materialTypeList,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'End:',
-                                          style: _textTheme.bodyText1?.copyWith(
-                                            fontSize: Get.height * 0.015,
+                                        LableWithCheckbox(
+                                          lable: 'Select City:',
+                                          checkBoxOnchange: (value) =>
+                                              _homepageController
+                                                  .isAllPartyCitySelected
+                                                  .value = value!,
+                                          checkBoxValue: _homepageController
+                                              .isAllPartyCitySelected.value,
+                                          isCheckBoxVisible: true,
+                                        ),
+                                        SizedBox(
+                                          width: Get.width * 0.20,
+                                          child: StringDropDownItems(
+                                            defualtValue: _homepageController
+                                                .defualtPartyCity,
+                                            itemList: _homepageController
+                                                .partyCityList
+                                                .toList(),
                                           ),
                                         ),
-                                        Text(DateFormat('dd-MM-yyyy').format(
-                                            _homepageController
-                                                .dateRange.value.end)),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () => _homepageController
+                                                .defualtDuration
+                                                .value = 'One Month',
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 0),
+                                              child: AutoSizeText(
+                                                'Duration:',
+                                                style: _textTheme.bodyText1
+                                                    ?.copyWith(
+                                                  fontSize: Get.height * 0.015,
+                                                ),
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Visibility(
+                                            visible: _homepageController
+                                                    .defualtDuration.value !=
+                                                'Custom',
+                                            replacement: SizedBox(
+                                              child: Container(
+                                                width: Get.width * 0.20,
+                                                // color: Colors.amber,
+                                                margin:
+                                                    EdgeInsets.only(left: 10),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      // width: Get.width * 0.05,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            'Start:',
+                                                            style: _textTheme
+                                                                .bodyText1
+                                                                ?.copyWith(
+                                                              fontSize:
+                                                                  Get.height *
+                                                                      0.015,
+                                                            ),
+                                                          ),
+                                                          Text(DateFormat(
+                                                                  'dd-MM-yyyy')
+                                                              .format(
+                                                                  _homepageController
+                                                                      .dateRange
+                                                                      .value
+                                                                      .start)),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: Get.width * 0.05,
+                                                      child: CircleAvatar(
+                                                        child: IconButton(
+                                                          onPressed: () {
+                                                            _homepageController
+                                                                .chooseDateRangePicker();
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.date_range),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      // width: Get.width * 0.05,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            'End:',
+                                                            style: _textTheme
+                                                                .bodyText1
+                                                                ?.copyWith(
+                                                              fontSize:
+                                                                  Get.height *
+                                                                      0.015,
+                                                            ),
+                                                          ),
+                                                          Text(DateFormat(
+                                                                  'dd-MM-yyyy')
+                                                              .format(
+                                                                  _homepageController
+                                                                      .dateRange
+                                                                      .value
+                                                                      .end)),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            child: SizedBox(
+                                              width: Get.width * 0.20,
+                                              child: StringDropDownItems(
+                                                defualtValue:
+                                                    _homepageController
+                                                        .defualtDuration,
+                                                itemList: _homepageController
+                                                    .durationList
+                                                    .toList(),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          Button(
-                            height: Get.height * 0.04,
-                            width: Get.width * 0.08,
-                            fontSize: Get.width * 0.010,
-                            text: 'Search',
-                            onPressed: () async {
-                              print('Search Button Pressed');
-                              print(
-                                  _homepageController.isAllPartySelected.value);
-                              print(_homepageController.defualtParty);
-                              print(_homepageController.dateRange.value.start);
-                              print(_homepageController.dateRange.value.end);
-                              await _homepageController.getGeneratedSearchData(
+                          Container(
+                            margin: const EdgeInsets.only(top: 30),
+                            // color: Colors.amber,
+                            child: Button(
+                              height: Get.height * 0.045,
+                              width: Get.width * 0.08,
+                              fontSize: Get.width * 0.010,
+                              text: 'Search',
+                              onPressed: () async {
+                                print('Search Button Pressed');
+                                print(_homepageController
+                                    .isAllPartySelected.value);
+                                print(_homepageController.defualtParty);
+                                print(_homepageController.defualtDuration);
+                                print(_homepageController.defualtMaterialType);
+                                print(_homepageController.defualtPartyCity);
+                                print(
+                                    _homepageController.dateRange.value.start);
+                                print(_homepageController.dateRange.value.end);
+
+                                switch (
+                                    _homepageController.defualtDuration.value) {
+                                  case 'One Month':
+                                    DateTime last = DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            1)
+                                        .subtract(Duration(days: 1));
+                                    DateTimeRange dateRange = DateTimeRange(
+                                      start: DateTime(last.year, last.month, 1),
+                                      end: last,
+                                    );
+                                    print(dateRange);
+                                    _homepageController.dateRange.value =
+                                        dateRange;
+                                    break;
+                                  case 'Four Month':
+                                    DateTime last = DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            1)
+                                        .subtract(Duration(days: 1));
+                                    DateTimeRange dateRange = DateTimeRange(
+                                      start: DateTime(
+                                          last.year, last.month - 3, 1),
+                                      end: last,
+                                    );
+                                    print(dateRange);
+                                    _homepageController.dateRange.value =
+                                        dateRange;
+                                    break;
+                                  case 'Six Month':
+                                    DateTime last = DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            1)
+                                        .subtract(Duration(days: 1));
+                                    DateTimeRange dateRange = DateTimeRange(
+                                      start: DateTime(
+                                          last.year, last.month - 5, 1),
+                                      end: last,
+                                    );
+                                    print(dateRange);
+                                    _homepageController.dateRange.value =
+                                        dateRange;
+                                    break;
+                                  case 'One Year':
+                                    DateTime last = DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            1)
+                                        .subtract(Duration(days: 1));
+                                    DateTimeRange dateRange = DateTimeRange(
+                                      start: last.month == 12
+                                          ? DateTime(last.year, 1, 1)
+                                          : DateTime(
+                                              last.year - 1, last.month, 1),
+                                      end: last,
+                                    );
+                                    print(dateRange);
+                                    _homepageController.dateRange.value =
+                                        dateRange;
+                                    break;
+                                  default:
+                                }
+                                print(
+                                    _homepageController.dateRange.value.start);
+                                print(_homepageController.dateRange.value.end);
+                                await _homepageController
+                                    .getGeneratedSearchData(
                                   start:
                                       _homepageController.dateRange.value.start,
                                   end: _homepageController.dateRange.value.end,
                                   selectedParty:
                                       _homepageController.defualtParty.value,
                                   isAllPartySelected: _homepageController
-                                      .isAllPartySelected.value);
-                              // Get.offAllNamed(Homepage.routeName);
-                            },
+                                      .isAllPartySelected.value,
+                                  isAllMaterialTypeSelected: _homepageController
+                                      .isAllMaterialTypeSelected.value,
+                                  isAllPartyCitySelected: _homepageController
+                                      .isAllPartyCitySelected.value,
+                                  selectedMaterialType: _homepageController
+                                      .defualtMaterialType.value,
+                                  selectedPartyCity: _homepageController
+                                      .defualtPartyCity.value,
+                                );
+                                // Get.offAllNamed(Homepage.routeName);
+                              },
+                            ),
                           ),
                         ],
                       ),
