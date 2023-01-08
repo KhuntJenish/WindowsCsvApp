@@ -7,24 +7,24 @@ import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
-
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-
+import '../../dashboard.dart';
 import '../../utils/dropDownItem.dart';
 import '../../utils/partyComissionBottomsheet.dart';
 import '../../utils/partyMasterBottomsheet.dart';
-import 'partyLedger.dart';
-import 'ImportReport.dart';
 
 class PartyPayment extends StatelessWidget {
   static const routeName = '/partyPayment';
-  HomepageController _homepageController = Get.put(HomepageController());
+  final HomepageController _homepageController = Get.put(HomepageController());
+
+  PartyPayment({super.key});
   @override
   Widget build(BuildContext context) {
-    TextTheme _textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     final ScrollController horizontalScroll = ScrollController();
     final ScrollController verticalScroll = ScrollController();
-    final double width = 20;
+    const double width = 20;
 
     return WillPopScope(
       onWillPop: () async {
@@ -36,67 +36,27 @@ class PartyPayment extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             'Party Payment',
-            style: _textTheme.bodyText1?.copyWith(
+            style: textTheme.bodyText1?.copyWith(
               color: Colors.white,
               fontSize: Get.height * 0.03,
             ),
           ),
-          centerTitle: true,
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(Get.width * 0.03),
-            child: Container(
-              width: Get.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ReportLabel(
-                    index: 1,
-                    text: 'Import Report',
-                    icon: Icon(Icons.insert_chart),
-                    onTap: () {
-                      _homepageController.isSelectedReport.value = 1;
-                      Get.offAndToNamed(ImportReport.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 2,
-                    text: 'Generated Report',
-                    icon: Icon(Icons.auto_graph),
-                    onTap: () {
-                      _homepageController.generatedReportData.clear();
-                      _homepageController.isSelectedReport.value = 2;
-                      Get.offAndToNamed(GeneratedReport.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 3,
-                    text: 'Party Payment',
-                    icon: Icon(Icons.payment),
-                    onTap: () {
-                      _homepageController.generatedReportData.clear();
-                      _homepageController.isSelectedReport.value = 3;
-                      Get.offAndToNamed(PartyPayment.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 4,
-                    text: 'Party Ledger',
-                    icon: Icon(Icons.receipt_long),
-                    onTap: () {
-                      _homepageController.isSelectedReport.value = 4;
-                      Get.offAndToNamed(PartyLedger.routeName);
-                    },
-                  ),
-                ],
-              ),
-            ),
+          leading: IconButton(
+            onPressed: () {
+              _homepageController.isSelectedReport.value = 0;
+              GetStorage('box').write('isSelectedReport', 0);
+              Get.offAndToNamed(Dashboard.routeName);
+            },
+            icon: const Icon(Icons.arrow_back),
           ),
+          centerTitle: true,
+          bottom: bottomAppBar(homepageController: _homepageController),
         ),
         body: AdaptiveScrollbar(
           controller: horizontalScroll,
           width: width,
           position: ScrollbarPosition.bottom,
-          underSpacing: EdgeInsets.only(bottom: width),
+          underSpacing: const EdgeInsets.only(bottom: width),
           child: SingleChildScrollView(
             controller: horizontalScroll,
             scrollDirection: Axis.horizontal,
@@ -118,60 +78,55 @@ class PartyPayment extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          LableWithCheckbox(
-                                            lable: 'Select Party:',
-                                            checkBoxOnchange: (value) =>
-                                                _homepageController
-                                                    .isAllPartySelected
-                                                    .value = value!,
-                                            checkBoxValue: _homepageController
-                                                .isAllPartySelected.value,
-                                            isCheckBoxVisible: false,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        LableWithCheckbox(
+                                          lable: 'Select Party:',
+                                          checkBoxOnchange: (value) =>
+                                              _homepageController
+                                                  .isAllPartySelected
+                                                  .value = value!,
+                                          checkBoxValue: _homepageController
+                                              .isAllPartySelected.value,
+                                          isCheckBoxVisible: false,
+                                        ),
+                                        SizedBox(
+                                          width: Get.width * 0.20,
+                                          child: PartyDropDownItems(
+                                            defualtValue: _homepageController
+                                                .defualtParty,
+                                            itemList:
+                                                _homepageController.partyList,
                                           ),
-                                          SizedBox(
-                                            width: Get.width * 0.20,
-                                            child: PartyDropDownItems(
-                                              defualtValue: _homepageController
-                                                  .defualtParty,
-                                              itemList:
-                                                  _homepageController.partyList,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    Container(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          LableWithCheckbox(
-                                            lable: 'Select Material:',
-                                            checkBoxOnchange: (value) =>
-                                                _homepageController
-                                                    .isAllMaterialTypeSelected
-                                                    .value = value!,
-                                            checkBoxValue: _homepageController
-                                                .isAllMaterialTypeSelected
-                                                .value,
-                                            isCheckBoxVisible: true,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        LableWithCheckbox(
+                                          lable: 'Select Material:',
+                                          checkBoxOnchange: (value) =>
+                                              _homepageController
+                                                  .isAllMaterialTypeSelected
+                                                  .value = value!,
+                                          checkBoxValue: _homepageController
+                                              .isAllMaterialTypeSelected.value,
+                                          isCheckBoxVisible: true,
+                                        ),
+                                        SizedBox(
+                                          width: Get.width * 0.20,
+                                          child: MaterialTypeDropDownItems(
+                                            defualtValue: _homepageController
+                                                .defualtMaterialType,
+                                            itemList: _homepageController
+                                                .materialTypeList,
                                           ),
-                                          SizedBox(
-                                            width: Get.width * 0.20,
-                                            child: MaterialTypeDropDownItems(
-                                              defualtValue: _homepageController
-                                                  .defualtMaterialType,
-                                              itemList: _homepageController
-                                                  .materialTypeList,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                     Column(
                                       crossAxisAlignment:
@@ -216,7 +171,7 @@ class PartyPayment extends StatelessWidget {
                                                       vertical: 0),
                                               child: AutoSizeText(
                                                 'Duration:',
-                                                style: _textTheme.bodyText1
+                                                style: textTheme.bodyText1
                                                     ?.copyWith(
                                                   fontSize: Get.height * 0.015,
                                                 ),
@@ -235,8 +190,8 @@ class PartyPayment extends StatelessWidget {
                                               child: Container(
                                                 width: Get.width * 0.20,
                                                 // color: Colors.amber,
-                                                margin:
-                                                    EdgeInsets.only(left: 10),
+                                                margin: const EdgeInsets.only(
+                                                    left: 10),
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
@@ -250,7 +205,7 @@ class PartyPayment extends StatelessWidget {
                                                         children: [
                                                           Text(
                                                             'Start:',
-                                                            style: _textTheme
+                                                            style: textTheme
                                                                 .bodyText1
                                                                 ?.copyWith(
                                                               fontSize:
@@ -290,7 +245,7 @@ class PartyPayment extends StatelessWidget {
                                                         children: [
                                                           Text(
                                                             'End:',
-                                                            style: _textTheme
+                                                            style: textTheme
                                                                 .bodyText1
                                                                 ?.copyWith(
                                                               fontSize:
@@ -359,7 +314,7 @@ class PartyPayment extends StatelessWidget {
                                             DateTime.now().year,
                                             DateTime.now().month,
                                             1)
-                                        .subtract(Duration(days: 1));
+                                        .subtract(const Duration(days: 1));
                                     DateTimeRange dateRange = DateTimeRange(
                                       start: DateTime(last.year, last.month, 1),
                                       end: last,
@@ -373,7 +328,7 @@ class PartyPayment extends StatelessWidget {
                                             DateTime.now().year,
                                             DateTime.now().month,
                                             1)
-                                        .subtract(Duration(days: 1));
+                                        .subtract(const Duration(days: 1));
                                     DateTimeRange dateRange = DateTimeRange(
                                       start: DateTime(
                                           last.year, last.month - 3, 1),
@@ -388,7 +343,7 @@ class PartyPayment extends StatelessWidget {
                                             DateTime.now().year,
                                             DateTime.now().month,
                                             1)
-                                        .subtract(Duration(days: 1));
+                                        .subtract(const Duration(days: 1));
                                     DateTimeRange dateRange = DateTimeRange(
                                       start: DateTime(
                                           last.year, last.month - 5, 1),
@@ -403,7 +358,7 @@ class PartyPayment extends StatelessWidget {
                                             DateTime.now().year,
                                             DateTime.now().month,
                                             1)
-                                        .subtract(Duration(days: 1));
+                                        .subtract(const Duration(days: 1));
                                     DateTimeRange dateRange = DateTimeRange(
                                       start: last.month == 12
                                           ? DateTime(last.year, 1, 1)
@@ -490,7 +445,7 @@ class PartyPayment extends StatelessWidget {
                         AdaptiveScrollbar(
                           controller: verticalScroll,
                           width: width,
-                          child: Container(
+                          child: SizedBox(
                             height: Get.height * 0.70,
                             width: Get.width * 1.5,
                             child: ListView.builder(
@@ -519,10 +474,12 @@ class PartyPayment extends StatelessWidget {
                                             .contains(_homepageController
                                                 .generatedReportData[index][15])
                                         ? date.isAfter(DateTime(1800, 01, 01))
-                                            ? Color.fromARGB(255, 121, 192, 124)
+                                            ? const Color.fromARGB(
+                                                255, 121, 192, 124)
                                             : Colors.white
-                                        : Color.fromARGB(255, 228, 136, 129),
-                                    child: Container(
+                                        : const Color.fromARGB(
+                                            255, 228, 136, 129),
+                                    child: SizedBox(
                                       width: Get.width * 1.5,
                                       height: Get.height * 0.04,
                                       child: AnimationLimiter(
@@ -617,7 +574,7 @@ class PartyPayment extends StatelessWidget {
                                                         ),
                                                         child: Row(
                                                           children: [
-                                                            Container(
+                                                            SizedBox(
                                                               width: Get.width *
                                                                   0.06,
                                                               child:
@@ -639,7 +596,7 @@ class PartyPayment extends StatelessWidget {
                                                                         .ellipsis,
                                                               ),
                                                             ),
-                                                            Container(
+                                                            SizedBox(
                                                               width: Get.width *
                                                                   0.03,
                                                               height:
@@ -713,7 +670,7 @@ class PartyPayment extends StatelessWidget {
                                                       ),
                                                       child: Row(
                                                         children: [
-                                                          Container(
+                                                          SizedBox(
                                                             width: Get.width *
                                                                 0.15,
                                                             child: AutoSizeText(
@@ -733,7 +690,7 @@ class PartyPayment extends StatelessWidget {
                                                                       .ellipsis,
                                                             ),
                                                           ),
-                                                          Container(
+                                                          SizedBox(
                                                             width: Get.width *
                                                                 0.03,
                                                             height: Get.height *
@@ -814,7 +771,7 @@ class PartyPayment extends StatelessWidget {
                               bottom: Get.height * 0.03,
                               left: Get.width * 0.20,
                               right: Get.width * 0.70,
-                              child: Container(
+                              child: SizedBox(
                                 height: Get.height * 0.1,
                                 width: Get.width * 0.5,
                                 child: Card(
@@ -921,27 +878,27 @@ class PartyPayment extends StatelessWidget {
 }
 
 class LableText extends StatelessWidget {
-  LableText({
-    Key? key,
+  const LableText({
+    super.key,
     required this.name,
     required this.amount,
   });
-  String name;
-  String amount;
+  final String name;
+  final String amount;
   @override
   Widget build(BuildContext context) {
-    TextTheme _textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Text(
         name,
-        style: _textTheme.bodyText1?.copyWith(
+        style: textTheme.bodyText1?.copyWith(
           // color: Colors.white,
           fontSize: Get.height * 0.02,
         ),
       ),
       Text(
         amount,
-        style: _textTheme.headline6?.copyWith(
+        style: textTheme.headline6?.copyWith(
           // color: Colors.white,
           fontSize: Get.height * 0.015,
         ),

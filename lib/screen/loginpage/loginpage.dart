@@ -1,24 +1,22 @@
-import 'package:csvapp/dashboard.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../../theam/theam_constants.dart';
 import '../../utils/userBottomsheet.dart';
 import '../../utils/helper_widget.dart';
-import '../homepage/ImportReport.dart';
 import 'logincontroller.dart';
 
 class Login extends StatelessWidget {
   static const routeName = '/login';
 
+  const Login({super.key});
+
   @override
   Widget build(BuildContext context) {
-    LoginController _loginController = Get.put(LoginController());
-    TextTheme _textTheme = Theme.of(context).textTheme;
-    TextEditingController _usernameController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
+    LoginController loginController = Get.put(LoginController());
+    TextTheme textTheme = Theme.of(context).textTheme;
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
 
     return Container(
       decoration: BoxDecoration(
@@ -63,14 +61,14 @@ class Login extends StatelessWidget {
                     maxRadius: Get.width * 0.08,
                     child: CircleAvatar(
                       maxRadius: Get.width * 0.078,
-                      backgroundImage: AssetImage('assets/images/h1.png'),
+                      backgroundImage: const AssetImage('assets/images/h1.png'),
                     ),
                   ),
                 ),
                 addVerticaleSpace(Get.height * 0.01),
                 Text(
                   'Welcome',
-                  style: _textTheme.bodyText1?.copyWith(
+                  style: textTheme.bodyText1?.copyWith(
                     fontSize: Get.width * 0.03,
                   ),
                 ),
@@ -78,7 +76,7 @@ class Login extends StatelessWidget {
                 Text(
                   '''Before enjoying Our services
 Please register first''',
-                  style: _textTheme.headline6?.copyWith(
+                  style: textTheme.headline6?.copyWith(
                     fontSize: Get.width * 0.02,
                   ),
                   textAlign: TextAlign.center,
@@ -88,12 +86,12 @@ Please register first''',
                   padding: EdgeInsets.symmetric(horizontal: Get.width * 0.25),
                   child: TextField(
                     maxLength: 30,
-                    controller: _usernameController,
+                    controller: usernameController,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.person),
                       hintText: 'Enter Email or Username',
                       counterText: '',
-                      hintStyle: _textTheme.headline6?.copyWith(
+                      hintStyle: textTheme.headline6?.copyWith(
                         color: Colors.grey,
                         fontSize: Get.height * 0.02,
                       ),
@@ -106,25 +104,25 @@ Please register first''',
                     padding: EdgeInsets.symmetric(horizontal: Get.width * 0.25),
                     child: TextField(
                       maxLength: 10,
-                      controller: _passwordController,
-                      obscureText: !_loginController.isPwdVisible.value,
+                      controller: passwordController,
+                      obscureText: !loginController.isPwdVisible.value,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.lock_open),
                         hintText: 'Enter password',
                         counterText: '',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _loginController.isPwdVisible.value
+                            loginController.isPwdVisible.value
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                           ),
                           onPressed: () {
-                            _loginController.isPwdVisible.value =
-                                !_loginController.isPwdVisible.value;
+                            loginController.isPwdVisible.value =
+                                !loginController.isPwdVisible.value;
                           },
                         ),
                         suffixStyle: Get.theme.textTheme.headline6,
-                        hintStyle: _textTheme.headline6?.copyWith(
+                        hintStyle: textTheme.headline6?.copyWith(
                           color: Colors.grey,
                           fontSize: Get.height * 0.02,
                         ),
@@ -172,13 +170,13 @@ Please register first''',
                   fontSize: Get.width * 0.015,
                   text: 'Login',
                   onPressed: () {
-                    if (_usernameController.text.isEmpty ||
-                        _passwordController.text.isEmpty) {
+                    if (usernameController.text.isEmpty ||
+                        passwordController.text.isEmpty) {
                       'Enter Valid Data fields'.errorSnackbar;
                     } else {
-                      _loginController.login(
-                          username: _usernameController.text,
-                          password: _passwordController.text);
+                      loginController.login(
+                          username: usernameController.text,
+                          password: passwordController.text);
                     }
                     // Get.offAllNamed(Homepage.routeName);
                   },
@@ -189,7 +187,7 @@ Please register first''',
                   children: [
                     Text(
                       'Don\'t have an account?',
-                      style: _textTheme.headline6?.copyWith(
+                      style: textTheme.headline6?.copyWith(
                         fontSize: Get.height * 0.02,
                       ),
                     ),
@@ -197,7 +195,7 @@ Please register first''',
                       onTap: () {},
                       child: Text(
                         ' Register',
-                        style: _textTheme.headline6?.copyWith(
+                        style: textTheme.headline6?.copyWith(
                           fontSize: Get.height * 0.02,
                           fontWeight: FontWeight.w700,
                           color: Get.isDarkMode ? Colors.white : lCOLOR_PRIMARY,
@@ -214,9 +212,9 @@ Please register first''',
           data: Theme.of(context).copyWith(splashColor: Colors.black26),
           child: FloatingActionButton(
             onPressed: () {
-              _loginController.isDarkMode = !_loginController.isDarkMode;
+              loginController.isDarkMode = !loginController.isDarkMode;
               Get.changeTheme(
-                  _loginController.isDarkMode ? darkTheme : lightTheam);
+                  loginController.isDarkMode ? darkTheme : lightTheam);
             },
             tooltip: 'Theme Change',
             child: Get.isDarkMode

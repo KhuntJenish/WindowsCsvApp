@@ -1,32 +1,29 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
-import 'package:csvapp/screen/homepage/partyPayment.dart';
 import 'package:csvapp/utils/extensions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+import '../../dashboard.dart';
 import '../../database/tables.dart';
 import '../../theam/theam_constants.dart';
 import '../../utils/dropDownItem.dart';
 import '../../utils/helper_widget.dart';
-import '../../utils/partyComissionBottomsheet.dart';
-import '../../utils/partyMasterBottomsheet.dart';
-import 'generatedReport.dart';
-import 'ImportReport.dart';
 
 class PartyLedger extends StatelessWidget {
   static const routeName = '/partyLedger';
-  HomepageController _homepageController = Get.put(HomepageController());
+  final HomepageController _homepageController = Get.put(HomepageController());
+
+  PartyLedger({super.key});
   @override
   Widget build(BuildContext context) {
-    TextTheme _textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     final ScrollController horizontalScroll = ScrollController();
     final ScrollController verticalScroll = ScrollController();
-    final double width = 20;
+    const double width = 20;
 
     return WillPopScope(
       onWillPop: () async {
@@ -35,69 +32,28 @@ class PartyLedger extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Ledger Report',
-            style: _textTheme.bodyText1?.copyWith(
-              color: Colors.white,
-              fontSize: Get.height * 0.03,
-            ),
-          ),
-          centerTitle: true,
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(Get.width * 0.03),
-            child: Container(
-              width: Get.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ReportLabel(
-                    index: 1,
-                    text: 'Import Report',
-                    icon: Icon(Icons.insert_chart),
-                    onTap: () {
-                      _homepageController.isSelectedReport.value = 1;
-                      Get.offAndToNamed(ImportReport.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 2,
-                    text: 'Generated Report',
-                    icon: Icon(Icons.auto_graph),
-                    onTap: () {
-                      _homepageController.generatedReportData.clear();
-                      _homepageController.isSelectedReport.value = 2;
-                      Get.offAndToNamed(GeneratedReport.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 3,
-                    text: 'Party Payment',
-                    icon: Icon(Icons.payment),
-                    onTap: () {
-                      _homepageController.generatedReportData.clear();
-                      _homepageController.isSelectedReport.value = 3;
-                      Get.offAndToNamed(PartyPayment.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 4,
-                    text: 'Party Ledger',
-                    icon: Icon(Icons.receipt_long),
-                    onTap: () {
-                      _homepageController.isSelectedReport.value = 4;
-                      Get.offAndToNamed(PartyLedger.routeName);
-                    },
-                  ),
-                ],
+            title: Text(
+              'Ledger Report',
+              style: textTheme.bodyText1?.copyWith(
+                color: Colors.white,
+                fontSize: Get.height * 0.03,
               ),
             ),
-          ),
-        ),
+            leading: IconButton(
+              onPressed: () {
+                _homepageController.isSelectedReport.value = 0;
+                GetStorage('box').write('isSelectedReport', 0);
+                Get.offAndToNamed(Dashboard.routeName);
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
+            centerTitle: true,
+            bottom: bottomAppBar(homepageController: _homepageController)),
         body: AdaptiveScrollbar(
           controller: horizontalScroll,
           width: width,
           position: ScrollbarPosition.bottom,
-          underSpacing: EdgeInsets.only(bottom: width),
+          underSpacing: const EdgeInsets.only(bottom: width),
           child: SingleChildScrollView(
             controller: horizontalScroll,
             scrollDirection: Axis.horizontal,
@@ -108,7 +64,7 @@ class PartyLedger extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //**Search UI Part
-                    Container(
+                    SizedBox(
                       width: Get.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -125,16 +81,12 @@ class PartyLedger extends StatelessWidget {
                                           horizontal: 20, vertical: 8),
                                       child: AutoSizeText(
                                         'Select All Party:',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.015,
                                         ),
                                         maxLines: 1,
                                       ),
                                     ),
-                                    // SizedBox(width: 5), //SizedBox
-
-                                    /** Checkbox Widget **/
-
                                     Checkbox(
                                       value: _homepageController
                                           .isAllPartySelected.value,
@@ -165,7 +117,7 @@ class PartyLedger extends StatelessWidget {
                                     children: [
                                       Text(
                                         'Start:',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.015,
                                         ),
                                       ),
@@ -173,7 +125,7 @@ class PartyLedger extends StatelessWidget {
                                         DateFormat('dd-MM-yyyy').format(
                                             _homepageController
                                                 .dateRange.value.start),
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.020,
                                         ),
                                       ),
@@ -200,7 +152,7 @@ class PartyLedger extends StatelessWidget {
                                     children: [
                                       Text(
                                         'End:',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.015,
                                         ),
                                       ),
@@ -208,7 +160,7 @@ class PartyLedger extends StatelessWidget {
                                         DateFormat('dd-MM-yyyy').format(
                                             _homepageController
                                                 .dateRange.value.end),
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.020,
                                         ),
                                       ),
@@ -224,12 +176,12 @@ class PartyLedger extends StatelessWidget {
                             fontSize: Get.width * 0.010,
                             text: 'Search',
                             onPressed: () async {
-                              print('Search Button Pressed');
-                              print(
-                                  _homepageController.isAllPartySelected.value);
-                              print(_homepageController.defualtParty);
-                              print(_homepageController.dateRange.value.start);
-                              print(_homepageController.dateRange.value.end);
+                              // print('Search Button Pressed');
+                              // print(
+                              //     _homepageController.isAllPartySelected.value);
+                              // print(_homepageController.defualtParty);
+                              // print(_homepageController.dateRange.value.start);
+                              // print(_homepageController.dateRange.value.end);
                               if (_homepageController.defualtParty.value.id ==
                                   0) {
                                 '😀Please Select Party'.errorSnackbar;
@@ -263,7 +215,7 @@ class PartyLedger extends StatelessWidget {
                                 height: Get.height * 0.04,
                                 width: Get.width,
                                 decoration: BoxDecoration(
-                                  color: Colors.yellow,
+                                  color: lCOLOR_ACCENT,
                                   border: Border.all(width: 1),
                                   borderRadius: BorderRadius.circular(5),
                                 ),
@@ -272,42 +224,42 @@ class PartyLedger extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width: Get.width * 0.1,
                                       child: Text(
                                         'Date',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Get.height * 0.018,
                                             color: Colors.red),
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width: Get.width * 0.2,
                                       child: Text(
                                         'Type',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Get.height * 0.018,
                                             color: Colors.red),
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width: Get.width * 0.1,
                                       child: Text(
                                         'Debit',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Get.height * 0.018,
                                             color: Colors.red),
                                         textAlign: TextAlign.right,
                                       ),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width: Get.width * 0.1,
                                       child: Text(
                                         'Credit',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Get.height * 0.018,
                                             color: Colors.red),
@@ -321,13 +273,13 @@ class PartyLedger extends StatelessWidget {
                             AdaptiveScrollbar(
                               controller: verticalScroll,
                               width: width,
-                              child: Container(
+                              child: SizedBox(
                                 height: Get.height * 0.7,
                                 width: Get.width,
                                 // color: Colors.amber[50],
                                 child: GroupedListView<LedgerData, String>(
                                   elements: _homepageController
-                                      .ledgerReportData.value,
+                                      .ledgerReportData,
                                   groupBy: (element) => element.pID.toString(),
                                   groupSeparatorBuilder:
                                       (String groupByValue) => Padding(
@@ -343,7 +295,7 @@ class PartyLedger extends StatelessWidget {
                                                   item.id ==
                                                   int.parse(groupByValue))
                                               .name,
-                                          style: _textTheme.bodyText1?.copyWith(
+                                          style: textTheme.bodyText1?.copyWith(
                                             fontSize: Get.height * 0.020,
                                           ),
                                           minFontSize: 10,
@@ -371,43 +323,43 @@ class PartyLedger extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Container(
+                                          SizedBox(
                                             width: Get.width * 0.1,
                                             child: Text(
                                               DateFormat('dd-MM-yyyy')
                                                   .format(element.ledgerDate),
-                                              style: _textTheme.bodyText1
+                                              style: textTheme.bodyText1
                                                   ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.018),
                                             ),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: Get.width * 0.2,
                                             child: Text(
                                               element.type,
-                                              style: _textTheme.bodyText1
+                                              style: textTheme.bodyText1
                                                   ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.018),
                                             ),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: Get.width * 0.1,
                                             child: Text(
                                               element.drAmount.toString(),
-                                              style: _textTheme.bodyText1
+                                              style: textTheme.bodyText1
                                                   ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.018),
                                               textAlign: TextAlign.right,
                                             ),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: Get.width * 0.1,
                                             child: Text(
                                               element.crAmount.toString(),
-                                              style: _textTheme.bodyText1
+                                              style: textTheme.bodyText1
                                                   ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.018),
@@ -500,136 +452,12 @@ class PartyLedger extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Obx(
-                    //   () => Container(
-                    //     height: Get.height * 0.8,
-                    //     width: Get.width,
-                    //     color: Colors.amber[50],
-                    //     child: ListView.builder(
-                    //         itemCount:
-                    //             _homepageController.ledgerReportData.length,
-                    //         itemBuilder: (context, index) {
-                    //           var data = _homepageController.ledgerReportData;
-                    //           return Card(
-                    //             child: Row(
-                    //               mainAxisSize: MainAxisSize.min,
-                    //               mainAxisAlignment:
-                    //                   MainAxisAlignment.spaceAround,
-                    //               children: [
-                    //                 Text(_homepageController.partyList!
-                    //                     .firstWhere((element) =>
-                    //                         element.id == data[index].pID)
-                    //                     .name),
-                    //                 Text(DateFormat('dd-MM-yyyy')
-                    //                     .format(data[index].ledgerDate)
-                    //                     .toString()),
-                    //                 Text(data[index].type),
-                    //                 Text(data[index].drAmount.toString()),
-                    //                 Text(data[index].crAmount.toString()),
-                    //               ],
-                    //             ),
-                    //           );
-                    //         }),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
             ),
           ),
         ),
-
-        //
-        // floatingActionButton: Obx(
-        //   () => Row(
-        //     mainAxisAlignment: MainAxisAlignment.end,
-        //     children: [
-        //       Visibility(
-        //         visible: _homepageController.pendingReportData.isNotEmpty &&
-        //             _homepageController.comissionAndmatTypeNaNSetData.isEmpty,
-        //         child: Button(
-        //             height: Get.height * 0.05,
-        //             width: Get.width * 0.1,
-        //             fontSize: Get.width * 0.012,
-        //             text: 'Generate',
-        //             onPressed: () async {
-        //               print('Generate Report');
-        //               await _homepageController.generateComissionReport(
-        //                   data: _homepageController.pendingReportData);
-        //             }),
-        //       ),
-        //       FloatingActionButton(
-        //         tooltip: _homepageController.pendingReportData.isEmpty
-        //             ? 'Add CSV'
-        //             : 'Add Data in Database', //child widget inside this button
-        //         onPressed: () async {
-        //           print("Button is pressed.");
-        //           if (_homepageController.isLoading.value == false) {
-        //             if (_homepageController.pendingReportData.length > 1 &&
-        //                 _homepageController
-        //                     .comissionAndmatTypeNaNSetData.isEmpty &&
-        //                 _homepageController.partyNaNSetData.isEmpty) {
-        //               print(_homepageController.pendingReportData);
-        //               List<List<dynamic>> data = [];
-        //               data.addAll(_homepageController.pendingReportData);
-        //               await _homepageController.checkInputData(fields: data);
-        //               if (_homepageController
-        //                       .comissionAndmatTypeNaNSetData.isEmpty &&
-        //                   _homepageController.partyNaNSetData.isEmpty) {
-        //                 await _homepageController.insertData(data);
-        //               } else {
-        //                 Get.defaultDialog(
-        //                   title: 'Error',
-        //                   middleText: 'Please check the data',
-        //                   textConfirm: 'Ok',
-        //                   confirmTextColor: Colors.white,
-        //                   onConfirm: () {
-        //                     Get.back();
-        //                   },
-        //                 );
-        //               }
-        //             } else {
-        //               if (_homepageController.pendingReportData.length < 2 &&
-        //                   _homepageController
-        //                       .comissionAndmatTypeNaNSetData.isEmpty &&
-        //                   _homepageController.partyNaNSetData.isEmpty) {
-        //                 _homepageController.pickFile();
-        //               } else {
-        //                 Get.defaultDialog(
-        //                   title: 'Error',
-        //                   middleText: 'Please check the data',
-        //                   textConfirm: 'Ok',
-        //                   confirmTextColor: Colors.white,
-        //                   onConfirm: () {
-        //                     Get.back();
-        //                   },
-        //                 );
-        //               }
-        //             }
-        //           } else {
-        //             'Data is processing'.infoSnackbar;
-        //           }
-
-        //           //task to execute when this button is pressed
-        //         },
-        //         child: _homepageController.isLoading.value
-        //             ? Center(
-        //                 child: CupertinoActivityIndicator(
-        //                   radius: Get.height * 0.02,
-        //                   color: Colors.white,
-        //                 ),
-        //               )
-        //             : (_homepageController.pendingReportData.length < 2 &&
-        //                     _homepageController
-        //                         .comissionAndmatTypeNaNSetData.isEmpty &&
-        //                     _homepageController.partyNaNSetData.isEmpty)
-        //                 ? const Icon(Icons.add)
-        //                 : const Icon(Icons.arrow_forward_ios),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // drawer: drawer(),
       ),
     );
   }

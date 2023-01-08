@@ -1,11 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../screen/homepage/generatedReport.dart';
 import '../screen/homepage/homecontroller.dart';
 import '../screen/homepage/partyLedger.dart';
 import '../screen/homepage/ImportReport.dart';
+import '../screen/homepage/partyPayment.dart';
 import '../theam/theam_constants.dart';
 
 // spacing constants For Vertical and Horizontal Layout
@@ -21,13 +22,14 @@ addHorizontalSpace(double i) {
   );
 }
 
-
 class BottomAppBar extends StatelessWidget {
   final HomepageController _homepageController = Get.put(HomepageController());
 
+  BottomAppBar({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: Get.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -35,7 +37,7 @@ class BottomAppBar extends StatelessWidget {
           ReportLabel(
             index: 1,
             text: 'Import Report',
-            icon: Icon(Icons.insert_chart),
+            icon: const Icon(Icons.insert_chart),
             onTap: () {
               _homepageController.isSelectedReport.value = 1;
               Get.toNamed(ImportReport.routeName);
@@ -44,7 +46,7 @@ class BottomAppBar extends StatelessWidget {
           ReportLabel(
             index: 2,
             text: 'Generated Report',
-            icon: Icon(Icons.auto_graph),
+            icon: const Icon(Icons.auto_graph),
             onTap: () {
               _homepageController.isSelectedReport.value = 2;
               Get.toNamed(GeneratedReport.routeName);
@@ -53,7 +55,7 @@ class BottomAppBar extends StatelessWidget {
           ReportLabel(
             index: 3,
             text: 'Party Payment',
-            icon: Icon(Icons.payment),
+            icon: const Icon(Icons.payment),
             onTap: () {
               _homepageController.isSelectedReport.value = 3;
               // Get.toNamed(GeneratedReport.routeName);
@@ -62,7 +64,7 @@ class BottomAppBar extends StatelessWidget {
           ReportLabel(
             index: 4,
             text: 'Party Ledger',
-            icon: Icon(Icons.receipt_long),
+            icon: const Icon(Icons.receipt_long),
             onTap: () {
               _homepageController.isSelectedReport.value = 4;
               Get.toNamed(PartyLedger.routeName);
@@ -74,9 +76,9 @@ class BottomAppBar extends StatelessWidget {
   }
 }
 
-
 class ReportLabel extends StatelessWidget {
   ReportLabel({
+    super.key,
     required this.icon,
     required this.text,
     required this.index,
@@ -88,11 +90,11 @@ class ReportLabel extends StatelessWidget {
   String text;
   int index;
   Function()? onTap;
-  HomepageController _homepageController = Get.put(HomepageController());
+  final HomepageController _homepageController = Get.put(HomepageController());
 
   @override
   Widget build(BuildContext context) {
-    TextTheme _textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Obx(
       () => GestureDetector(
         onTap: onTap,
@@ -116,7 +118,7 @@ class ReportLabel extends StatelessWidget {
             leading: icon, // Icon(Icons.insert_chart),
             title: Text(
               text, //'Import Report',
-              style: _textTheme.bodyText1?.copyWith(
+              style: textTheme.bodyText1?.copyWith(
                 color: lCOLOR_PRIMARY,
                 fontSize: 15,
               ),
@@ -130,6 +132,7 @@ class ReportLabel extends StatelessWidget {
 
 class Button extends StatelessWidget {
   Button({
+    super.key,
     required this.height,
     required this.width,
     required this.fontSize,
@@ -145,7 +148,7 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme _textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       width: width,
@@ -168,15 +171,16 @@ class Button extends StatelessWidget {
             ]),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onSurface: Colors.transparent,
+            backgroundColor: Colors.transparent,
+            disabledForegroundColor: Colors.transparent.withOpacity(0.38),
+            disabledBackgroundColor: Colors.transparent.withOpacity(0.12),
             shadowColor: Colors.transparent,
             //make color or elevated button transparent
           ),
           onPressed: onPressed,
           child: Text(
             text,
-            style: _textTheme.headline6?.copyWith(
+            style: textTheme.headline6?.copyWith(
               color: Get.isDarkMode ? Colors.black : Colors.white,
               fontSize: fontSize,
             ),
@@ -185,4 +189,71 @@ class Button extends StatelessWidget {
       ),
     );
   }
+}
+
+PreferredSize bottomAppBar({HomepageController? homepageController}) {
+  return PreferredSize(
+    preferredSize: Size.fromHeight(Get.width * 0.03),
+    child: SizedBox(
+      width: Get.width,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ReportLabel(
+              index: 1,
+              text: 'Import Report',
+              icon: const Icon(Icons.insert_chart),
+              onTap: () {
+                if (homepageController?.isSelectedReport.value != 1) {
+                  homepageController?.isSelectedReport.value = 1;
+                  GetStorage('box').write('isSelectedReport', 1);
+                  Get.offAndToNamed(ImportReport.routeName);
+                }
+              },
+            ),
+            ReportLabel(
+              index: 2,
+              text: 'Generated Report',
+              icon: const Icon(Icons.auto_graph),
+              onTap: () {
+                if (homepageController?.isSelectedReport.value != 2) {
+                  homepageController?.generatedReportData.clear();
+                  homepageController?.isSelectedReport.value = 2;
+                  GetStorage('box').write('isSelectedReport', 2);
+                  Get.offAndToNamed(GeneratedReport.routeName);
+                }
+              },
+            ),
+            ReportLabel(
+              index: 3,
+              text: 'Party Payment',
+              icon: const Icon(Icons.payment),
+              onTap: () {
+                if (homepageController?.isSelectedReport.value != 3) {
+                  homepageController?.generatedReportData.clear();
+                  homepageController?.isSelectedReport.value = 3;
+                  GetStorage('box').write('isSelectedReport', 3);
+                  Get.offAndToNamed(PartyPayment.routeName);
+                }
+              },
+            ),
+            ReportLabel(
+              index: 4,
+              text: 'Party Ledger',
+              icon: const Icon(Icons.receipt_long),
+              onTap: () {
+                if (homepageController?.isSelectedReport.value != 4) {
+                  GetStorage('box').write('isSelectedReport', 4);
+                  homepageController?.isSelectedReport.value = 4;
+                  Get.offAndToNamed(PartyLedger.routeName);
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

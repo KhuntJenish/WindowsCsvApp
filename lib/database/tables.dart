@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 part 'tables.g.dart';
 
@@ -126,7 +125,7 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     print('database Created');
-    final dbFolder = Directory.current.path + '\\backupData';
+    final dbFolder = '${Directory.current.path}\\backupData';
     final file = File(p.join(dbFolder, 'backup.sqlite'));
     return NativeDatabase.createInBackground(file);
   });

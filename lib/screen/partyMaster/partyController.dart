@@ -16,27 +16,14 @@ class PartyController extends GetxController {
   }
 
   Rx<PartyTypeMasterData> defualtPartyType =
-      PartyTypeMasterData(id: 0, type: '').obs;
+      const PartyTypeMasterData(id: 0, type: '').obs;
   Rx<MaterialTypeData> defualtMaterialType =
-      MaterialTypeData(id: 0, type: '').obs;
+      const MaterialTypeData(id: 0, type: '').obs;
   final addPartyBtnText = 'Add Party'.obs;
   List<PartyTypeMasterData>? partyTypeList = [];
   List<MaterialTypeData>? materialTypeList = [];
   var dataRowList = [].obs;
   var db = Constantdata.db;
-  // getcomissionDetail() async {
-  //   var datap = await db.select(db.partyMaster).get();
-  //   print(datap);
-  //   var datam = await db.select(db.materialType).get();
-  //   print(datam);
-  //   var data = await db.select(db.partyComissionDetail).get();
-  //   print('partyComissionDetail');
-  //   print(data);
-  //   //   var date = DateTime.now();
-  //   //   var ldata = await db.into(db.ledger).insert(LedgerCompanion.insert(type: 'sales', pID: 3, ledgerDate: date, drAmount: 100 , crAmount: 100, ledgerNote: 'test'));
-  //   //   print('comissionDetail');
-  //   //  print(ldata);
-  // }
 
   getPartyTypeList() async {
     partyTypeList?.clear();
@@ -81,7 +68,7 @@ class PartyController extends GetxController {
     var data = await db.select(db.partyComissionDetail).get();
     // List<DataRow> list = [];
     if (data.isNotEmpty) {
-      data.forEach((element) {
+      for (var element in data) {
         var material =
             materialTypeList?.firstWhere((m) => m.id == element.mtID).type;
 
@@ -93,14 +80,14 @@ class PartyController extends GetxController {
           DataCell(Text(element.comission3.toString())),
         ]);
         dataRowList.add(dataRow);
-      });
+      }
     }
     print(dataRowList);
     // return list;
   }
 
-  addPartyType({String? partyType}) async{
-     var checkPartyType = await (db.select(db.partyTypeMaster)
+  addPartyType({String? partyType}) async {
+    var checkPartyType = await (db.select(db.partyTypeMaster)
           ..where((tbl) => tbl.type.equals(partyType!)))
         .get();
     if (checkPartyType.isNotEmpty) {

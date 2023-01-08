@@ -16,6 +16,7 @@ import '../../utils/constant.dart';
 class HomepageController extends GetxController {
   PageController pageController = PageController(initialPage: 0);
   RxInt isSelectedReport = 0.obs;
+
   RxList<List<dynamic>> pendingReportData = RxList<List<dynamic>>();
   RxList<List<dynamic>> generatedReportData = RxList<List<dynamic>>();
   RxList<LedgerData> ledgerReportData = RxList<LedgerData>();
@@ -34,11 +35,11 @@ class HomepageController extends GetxController {
   List<PartyMasterData>? partyList = [];
 
   Rx<PartyMasterData> defualtParty =
-      PartyMasterData(id: 0, name: '', ptID: 0).obs;
+      const PartyMasterData(id: 0, name: '', ptID: 0).obs;
   Rx<String> defualtPartyCity = ''.obs;
   Rx<String> defualtDuration = 'One Month'.obs;
   Rx<MaterialTypeData> defualtMaterialType =
-      MaterialTypeData(id: 0, type: '').obs;
+      const MaterialTypeData(id: 0, type: '').obs;
   String? filePath;
   RxBool isLoading = false.obs;
   RxBool isAllPartySelected = true.obs;
@@ -58,10 +59,17 @@ class HomepageController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    // getPendingData();
+
     getPartyList();
     getMaterialTypeList();
     getPartyCityList();
+    print('Report val: ${GetStorage('box').read('isSelectedReport')}');
+    if (GetStorage('box').read('isSelectedReport') != null) {
+      isSelectedReport.value = GetStorage('box').read('isSelectedReport');
+    } else {
+      isSelectedReport.value = 0;
+      GetStorage('box').write('isSelectedReport', 0);
+    }
     // print('Homecontroller onInit');
   }
 
@@ -77,7 +85,7 @@ class HomepageController extends GetxController {
           return Column(
             children: [
               ConstrainedBox(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   maxWidth: 500.0,
                   // maxHeight: 400.0,
                 ),
@@ -694,7 +702,6 @@ class HomepageController extends GetxController {
               ..where((tbl) => tbl.logId.equals(0)))
             .get();
         print(pendingData);
-        var totalComission = 0;
         for (var element in pendingData) {
           var checkParty = await (db.select(db.partyMaster)
                 ..where((tbl) => tbl.id.equals(element.pID)))

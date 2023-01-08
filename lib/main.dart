@@ -5,9 +5,7 @@ import 'package:csvapp/screen/loginpage/loginpage.dart';
 import 'package:csvapp/screen/partyMaster/partyComission.dart';
 import 'package:csvapp/screen/partyMaster/partyMaster.dart';
 import 'package:csvapp/screen/users/user.dart';
-import 'package:csvapp/utils/constant.dart';
 import 'package:desktop_window/desktop_window.dart';
-import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -60,14 +58,13 @@ class MyApp extends StatelessWidget {
   Future testWindowFunctions() async {
     Size size = await DesktopWindow.getWindowSize();
     print(size);
-    await DesktopWindow.setWindowSize(Size(1000, 800));
+    await DesktopWindow.setWindowSize(const Size(1000, 800));
 
-    await DesktopWindow.setMinWindowSize(Size(1000, 800));
+    await DesktopWindow.setMinWindowSize(const Size(1000, 800));
     // await DesktopWindow.setMaxWindowSize(Size(800, 800));
 
     // await DesktopWindow.resetMaxWindowSize();
     // await DesktopWindow.toggleFullScreen();
-    bool isFullScreen = await DesktopWindow.getFullScreen();
     await DesktopWindow.setFullScreen(true);
     // await DesktopWindow.setFullScreen(false);
   }
@@ -125,7 +122,7 @@ class MyApp extends StatelessWidget {
             ),
             GetPage(
               name: Login.routeName,
-              page: () => Login(),
+              page: () => const Login(),
             ),
             GetPage(
               name: Userspage.routeName,
@@ -141,8 +138,8 @@ class MyApp extends StatelessWidget {
             ),
             GetPage(
               name: Dashboard.routeName,
-              page: () =>  Dashboard(),
-            ),
+              page: () => Dashboard(),
+              transition: Transition.native),
             // GetPage(
             //   name: MaterialTypeMasterPage.routeName,
             //   page: () => MaterialTypeMasterPage(),

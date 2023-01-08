@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../theam/theam_constants.dart';
 import 'helper_widget.dart';
 
 class UserBottomsheet extends StatelessWidget {
@@ -31,7 +30,7 @@ class UserBottomsheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme _textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       color: Colors.grey[100],
       // width:  Get.width * 0.5 ,
@@ -57,7 +56,7 @@ class UserBottomsheet extends StatelessWidget {
                     prefixIcon: const Icon(Icons.person),
                     hintText: 'Enter Username',
                     counterText: '',
-                    hintStyle: _textTheme.headline6?.copyWith(
+                    hintStyle: textTheme.headline6?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),
@@ -88,7 +87,7 @@ class UserBottomsheet extends StatelessWidget {
                       prefixIcon: const Icon(Icons.password),
                       hintText: 'Enter password',
                       counterText: '',
-                      hintStyle: _textTheme.headline6?.copyWith(
+                      hintStyle: textTheme.headline6?.copyWith(
                         color: Colors.grey,
                         fontSize: Get.height * 0.02,
                       ),
@@ -107,7 +106,7 @@ class UserBottomsheet extends StatelessWidget {
                     prefixIcon: const Icon(Icons.email),
                     hintText: 'Enter Email',
                     counterText: '',
-                    hintStyle: _textTheme.headline6?.copyWith(
+                    hintStyle: textTheme.headline6?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),
@@ -131,7 +130,7 @@ class UserBottomsheet extends StatelessWidget {
                     prefixIcon: const Icon(Icons.phone),
                     hintText: 'Enter Phone number',
                     counterText: '',
-                    hintStyle: _textTheme.headline6?.copyWith(
+                    hintStyle: textTheme.headline6?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),
@@ -181,7 +180,6 @@ class UserBottomsheet extends StatelessWidget {
                   // Get.offAllNamed(Homepage.routeName);
                 },
               ),
-              
             ],
           ),
           Positioned(

@@ -12,8 +12,8 @@ import 'package:get_storage/get_storage.dart';
 import '../screen/homepage/generatedReport.dart';
 import 'userBottomsheet.dart';
 
-class drawer extends StatelessWidget {
-  drawer({
+class DrawerWidget extends StatelessWidget {
+  DrawerWidget({
     Key? key,
   }) : super(key: key);
 
@@ -21,7 +21,7 @@ class drawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserData currentUser = GetStorage('box').read('cuser');
-    print(currentUser);
+    // print(currentUser);
     // print(currentUser.username);
     // print(currentUser.mail);
     return Drawer(
@@ -113,22 +113,14 @@ class drawer extends StatelessWidget {
               leading: const Icon(Icons.business),
               title: const Text("PartyMaster"),
               onTap: () async {
-                var partyTypeList = await _partyController.db
-                    .select(_partyController.db.partyTypeMaster)
-                    .get();
-                print(partyTypeList);
+                // var partyTypeList = await _partyController.db
+                //     .select(_partyController.db.partyTypeMaster)
+                //     .get();
+                // print(partyTypeList);
                 Get.back();
                 Get.toNamed(PartyMasterPage.routeName);
               },
             ),
-
-            // ListTile(
-            //   leading: Icon(Icons.party_mode),
-            //   title: Text("PartyMaster"),
-            //   onTap: () {
-            //     Get.toNamed(PartyMasterPage.routeName);
-            //   },
-            // ),
             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text("Settings"),

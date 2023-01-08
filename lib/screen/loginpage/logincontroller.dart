@@ -27,7 +27,7 @@ class LoginController extends GetxController {
         'User not found'.errorSnackbar;
         // print('user not exist');
       } else {
-        UserData user = data[0] as UserData;
+        UserData user = data[0];
         GetStorage('box').write('cuser', user);
         print('current User');
         UserData currentUser = GetStorage('box').read('cuser');

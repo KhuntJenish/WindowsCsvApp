@@ -1,31 +1,31 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:csvapp/dashboard.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
-import 'package:csvapp/screen/homepage/partyPayment.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import '../../theam/theam_constants.dart';
 import '../../utils/dropDownItem.dart';
 import '../../utils/helper_widget.dart';
 import '../../utils/partyComissionBottomsheet.dart';
 import '../../utils/partyMasterBottomsheet.dart';
-import 'generatedReport.dart';
-import 'partyLedger.dart';
 
 class ImportReport extends StatelessWidget {
   static const routeName = '/importReport';
-  HomepageController _homepageController = Get.put(HomepageController());
+  final HomepageController _homepageController = Get.put(HomepageController());
+
+  ImportReport({super.key});
   @override
   Widget build(BuildContext context) {
-    TextTheme _textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     final ScrollController horizontalScroll = ScrollController();
     final ScrollController verticalScroll = ScrollController();
-    final double width = 20;
-
+    const double width = 20;
+    // print(_homepageController.isSelectedReport.value);
     return WillPopScope(
       onWillPop: () async {
         _homepageController.isSelectedReport.value = 0;
@@ -34,69 +34,28 @@ class ImportReport extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Pending Report',
-            style: _textTheme.bodyText1?.copyWith(
-              color: Colors.white,
-              fontSize: Get.height * 0.03,
-            ),
-          ),
-          centerTitle: true,
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(Get.width * 0.03),
-            child: Container(
-              width: Get.width,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ReportLabel(
-                    index: 1,
-                    text: 'Import Report',
-                    icon: Icon(Icons.insert_chart),
-                    onTap: () {
-                      _homepageController.isSelectedReport.value = 1;
-                      Get.offAndToNamed(ImportReport.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 2,
-                    text: 'Generated Report',
-                    icon: Icon(Icons.auto_graph),
-                    onTap: () {
-                      _homepageController.generatedReportData.clear();
-                      _homepageController.isSelectedReport.value = 2;
-                      Get.offAndToNamed(GeneratedReport.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 3,
-                    text: 'Party Payment',
-                    icon: Icon(Icons.payment),
-                    onTap: () {
-                      _homepageController.generatedReportData.clear();
-                      _homepageController.isSelectedReport.value = 3;
-                      Get.offAndToNamed(PartyPayment.routeName);
-                    },
-                  ),
-                  ReportLabel(
-                    index: 4,
-                    text: 'Party Ledger',
-                    icon: Icon(Icons.receipt_long),
-                    onTap: () {
-                      _homepageController.isSelectedReport.value = 4;
-                      Get.offAndToNamed(PartyLedger.routeName);
-                    },
-                  ),
-                ],
+            title: Text(
+              'Import Report',
+              style: textTheme.bodyText1?.copyWith(
+                color: Colors.white,
+                fontSize: Get.height * 0.03,
               ),
             ),
-          ),
-        ),
+            leading: IconButton(
+              onPressed: () {
+                _homepageController.isSelectedReport.value = 0;
+                GetStorage('box').write('isSelectedReport', 0);
+                Get.offAndToNamed(Dashboard.routeName);
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
+            centerTitle: true,
+            bottom: bottomAppBar(homepageController: _homepageController)),
         body: AdaptiveScrollbar(
           controller: horizontalScroll,
           width: width,
           position: ScrollbarPosition.bottom,
-          underSpacing: EdgeInsets.only(bottom: width),
+          underSpacing: const EdgeInsets.only(bottom: width),
           child: SingleChildScrollView(
             controller: horizontalScroll,
             scrollDirection: Axis.horizontal,
@@ -107,7 +66,7 @@ class ImportReport extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     //**Search UI Part
-                    Container(
+                    SizedBox(
                       width: Get.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -124,16 +83,12 @@ class ImportReport extends StatelessWidget {
                                           horizontal: 20, vertical: 8),
                                       child: AutoSizeText(
                                         'Select All Party:',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.015,
                                         ),
                                         maxLines: 1,
                                       ),
                                     ),
-                                    // SizedBox(width: 5), //SizedBox
-
-                                    /** Checkbox Widget **/
-
                                     Checkbox(
                                       value: _homepageController
                                           .isAllPartySelected.value,
@@ -164,7 +119,7 @@ class ImportReport extends StatelessWidget {
                                     children: [
                                       Text(
                                         'Start:',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.015,
                                         ),
                                       ),
@@ -172,7 +127,7 @@ class ImportReport extends StatelessWidget {
                                         DateFormat('dd-MM-yyyy').format(
                                             _homepageController
                                                 .dateRange.value.start),
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.020,
                                         ),
                                       ),
@@ -199,7 +154,7 @@ class ImportReport extends StatelessWidget {
                                     children: [
                                       Text(
                                         'End:',
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.015,
                                         ),
                                       ),
@@ -207,7 +162,7 @@ class ImportReport extends StatelessWidget {
                                         DateFormat('dd-MM-yyyy').format(
                                             _homepageController
                                                 .dateRange.value.end),
-                                        style: _textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyText1?.copyWith(
                                           fontSize: Get.height * 0.020,
                                         ),
                                       ),
@@ -292,7 +247,7 @@ class ImportReport extends StatelessWidget {
                     AdaptiveScrollbar(
                       controller: verticalScroll,
                       width: width,
-                      child: Container(
+                      child: SizedBox(
                         height: Get.height * 0.70,
                         width: Get.width * 1.5,
                         child: ListView.builder(
@@ -313,8 +268,8 @@ class ImportReport extends StatelessWidget {
                                         _homepageController
                                             .pendingReportData[index][15])
                                     ? Colors.white
-                                    : Color.fromARGB(255, 228, 136, 129),
-                                child: Container(
+                                    : const Color.fromARGB(255, 228, 136, 129),
+                                child: SizedBox(
                                   width: Get.width * 1.5,
                                   height: Get.height * 0.04,
                                   child: AnimationLimiter(
@@ -386,7 +341,7 @@ class ImportReport extends StatelessWidget {
                                               ),
                                               child: Row(
                                                 children: [
-                                                  Container(
+                                                  SizedBox(
                                                     width: Get.width * 0.06,
                                                     child: AutoSizeText(
                                                       _homepageController
@@ -402,7 +357,7 @@ class ImportReport extends StatelessWidget {
                                                           TextOverflow.ellipsis,
                                                     ),
                                                   ),
-                                                  Container(
+                                                  SizedBox(
                                                     width: Get.width * 0.03,
                                                     height: Get.height * 0.03,
                                                     child: ElevatedButton(
@@ -464,7 +419,7 @@ class ImportReport extends StatelessWidget {
                                             ),
                                             child: Row(
                                               children: [
-                                                Container(
+                                                SizedBox(
                                                   width: Get.width * 0.15,
                                                   child: AutoSizeText(
                                                     _homepageController
@@ -480,7 +435,7 @@ class ImportReport extends StatelessWidget {
                                                         TextOverflow.ellipsis,
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: Get.width * 0.03,
                                                   height: Get.height * 0.03,
                                                   child: ElevatedButton(
@@ -567,7 +522,7 @@ class ImportReport extends StatelessWidget {
                 onPressed: () async {
                   print("Button is pressed.");
                   if (_homepageController.isLoading.value == false) {
-                    if (((_homepageController.pendingReportData.length >= 2  ) &&
+                    if (((_homepageController.pendingReportData.length >= 2) &&
                         _homepageController
                             .comissionAndmatTypeNaNSetData.isEmpty &&
                         _homepageController.partyNaNSetData.isEmpty)) {

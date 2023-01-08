@@ -1,15 +1,9 @@
-import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/screen/partyMaster/partyController.dart';
-import 'package:csvapp/screen/users/userController.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../theam/theam_constants.dart';
-import 'constant.dart';
 import 'dropDownItem.dart';
 import 'helper_widget.dart';
 
@@ -32,7 +26,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print(_partyController.addPartyBtnText.value);
-    TextTheme _textTheme = Theme.of(context).textTheme;
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       color: Colors.grey[100],
       // width:  Get.width * 0.5 ,
@@ -57,7 +51,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
                     prefixIcon: const Icon(Icons.person),
                     hintText: 'Enter Username',
                     counterText: '',
-                    hintStyle: _textTheme.headline6?.copyWith(
+                    hintStyle: textTheme.headline6?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),
@@ -116,7 +110,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
               onPressed: () {
                 Get.back();
               },
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
             ),
           ),
           Obx(
@@ -145,7 +139,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
                           prefixIcon: const Icon(Icons.person),
                           hintText: 'Enter Party Type',
                           counterText: '',
-                          hintStyle: _textTheme.headline6?.copyWith(
+                          hintStyle: textTheme.headline6?.copyWith(
                             color: Colors.grey,
                             fontSize: Get.height * 0.02,
                           ),

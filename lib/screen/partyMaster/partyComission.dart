@@ -1,15 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/partyMaster/partyController.dart';
-import 'package:csvapp/screen/users/userController.dart';
-import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../theam/theam_constants.dart';
 import '../../utils/helper_widget.dart';
 import '../../utils/partyComissionBottomsheet.dart';
 
@@ -17,23 +11,24 @@ class PartyComission extends StatelessWidget {
   static const routeName = '/partyComission';
 
   // PartyComission();
-  PartyComission({super.key});
+  // PartyComission({super.key});
 
   // final UserController _userController;
   late String btnText;
   late String partyName = 'Brijal Patel';
   late int? id;
   final PartyController _partyController = Get.put(PartyController());
-  TextEditingController partyType = TextEditingController(text: '');
+  final TextEditingController partyType = TextEditingController(text: '');
   late TextEditingController newComission = TextEditingController(text: '');
-  PartyMasterData party = Get.arguments;
+  final PartyMasterData party = Get.arguments;
+
+  PartyComission({super.key});
   @override
   Widget build(BuildContext context) {
     // print(party);
     // print(_partyController.addPartyBtnText.value);
     print(_partyController.partyTypeList);
     print(_partyController.materialTypeList);
-    TextTheme _textTheme = Theme.of(context).textTheme;
     List<int> partyTypeIDList = [];
 
     return Scaffold(
@@ -46,9 +41,9 @@ class PartyComission extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   height: Get.height * 0.1,
-                  width: Get.width*0.8,
+                  width: Get.width * 0.8,
                   child: AutoSizeText(
                     '${party.name.toString()}`s Comission ',
                     style: GoogleFonts.padauk(
@@ -85,7 +80,7 @@ class PartyComission extends StatelessWidget {
                                     height: Get.height * 0.05,
                                     decoration: BoxDecoration(
                                         border: Border.all(color: Colors.grey)),
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         'Sr. No.',
                                         style: TextStyle(
@@ -103,7 +98,7 @@ class PartyComission extends StatelessWidget {
                                           decoration: BoxDecoration(
                                               border: Border.all(
                                                   color: Colors.grey)),
-                                          child: Center(
+                                          child: const Center(
                                             child: Text(
                                               'Material Type',
                                               style: TextStyle(
@@ -116,7 +111,7 @@ class PartyComission extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             border:
                                                 Border.all(color: Colors.grey)),
-                                        child: Center(
+                                        child: const Center(
                                           child: Text(
                                             'Comission 1',
                                             style: TextStyle(
@@ -130,7 +125,7 @@ class PartyComission extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             border:
                                                 Border.all(color: Colors.grey)),
-                                        child: Center(
+                                        child: const Center(
                                           child: Text(
                                             'Comission 2',
                                             style: TextStyle(
@@ -144,7 +139,7 @@ class PartyComission extends StatelessWidget {
                                         decoration: BoxDecoration(
                                             border:
                                                 Border.all(color: Colors.grey)),
-                                        child: Center(
+                                        child: const Center(
                                           child: Text(
                                             'Comission 3',
                                             style: TextStyle(
@@ -159,7 +154,7 @@ class PartyComission extends StatelessWidget {
                                     height: Get.height * 0.05,
                                     decoration: BoxDecoration(
                                         border: Border.all(color: Colors.grey)),
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         'Action',
                                         style: TextStyle(
@@ -168,7 +163,7 @@ class PartyComission extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   height: Get.height * 0.7,
                                   child: ListView.builder(
                                       itemCount: snapshot.data!.length,
@@ -192,7 +187,7 @@ class PartyComission extends StatelessWidget {
                                             child: Center(
                                               child: Text(
                                                 (index + 1).toString(),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontWeight:
                                                         FontWeight.w700),
                                               ),
@@ -211,7 +206,7 @@ class PartyComission extends StatelessWidget {
                                                   child: Center(
                                                     child: Text(
                                                       materialType.toString(),
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.w700),
                                                     ),
@@ -227,7 +222,7 @@ class PartyComission extends StatelessWidget {
                                                     snapshot
                                                         .data![index].comission1
                                                         .toString(),
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w700),
                                                   ),
@@ -259,7 +254,7 @@ class PartyComission extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                          trailing: Container(
+                                          trailing: SizedBox(
                                             width: Get.width * 0.1,
                                             height: Get.height * 0.05,
                                             child: Row(
@@ -269,7 +264,7 @@ class PartyComission extends StatelessWidget {
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 IconButton(
-                                                  icon: Icon(Icons.edit),
+                                                  icon: const Icon(Icons.edit),
                                                   onPressed: () {
                                                     // _partyController.deletePartyComission(
                                                     //     id: snapshot.data![index].id);
@@ -304,7 +299,8 @@ class PartyComission extends StatelessWidget {
                                                   },
                                                 ),
                                                 IconButton(
-                                                  icon: Icon(Icons.delete),
+                                                  icon:
+                                                      const Icon(Icons.delete),
                                                   onPressed: () {
                                                     Get.dialog(AlertDialog(
                                                       title: const Text(
@@ -357,7 +353,7 @@ class PartyComission extends StatelessWidget {
                 onPressed: () {
                   Get.back();
                 },
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
               ),
             ),
           ],
@@ -385,7 +381,7 @@ class PartyComission extends StatelessWidget {
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
