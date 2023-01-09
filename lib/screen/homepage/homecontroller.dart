@@ -7,15 +7,19 @@ import 'package:drift/drift.dart' as d;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import '../../utils/constant.dart';
 
 class HomepageController extends GetxController {
   PageController pageController = PageController(initialPage: 0);
   RxInt isSelectedReport = 0.obs;
+  RxInt isNumber = 0.obs;
 
   RxList<List<dynamic>> pendingReportData = RxList<List<dynamic>>();
   RxList<List<dynamic>> generatedReportData = RxList<List<dynamic>>();
@@ -72,6 +76,198 @@ class HomepageController extends GetxController {
     }
     // print('Homecontroller onInit');
   }
+
+  createPdf() async {
+    try {
+      final pdf = pw.Document();
+      List<List<dynamic>> list = [];
+      for (var i = 0; i < generatedReportData.length; i++) {
+        List subList = [];
+        subList.add(generatedReportData[i][3].toString());
+        subList.add(generatedReportData[i][4].toString());
+        subList.add(generatedReportData[i][6].toString());
+        subList.add(generatedReportData[i][7].toString());
+        subList.add(generatedReportData[i][12].toString());
+        subList.add(generatedReportData[i][13].toString());
+        subList.add(generatedReportData[i][15].toString());
+        subList.add(generatedReportData[i][18].toString());
+        subList.add(generatedReportData[i][19].toString());
+        // print(subList);
+        list.add(subList);
+      }
+      print(list);
+      print(list.length);
+
+      int a = 0;
+      List<List<dynamic>> newList = [];
+      List<List<List<dynamic>>> mainList = [];
+      double saletotal = 0;
+      List<double> saletotalList = [];
+
+      double comissiontotal = 0;
+      List<double> comissiontotalList = [];
+      for (var i = 0; i < list.length; i++) {
+        if (a < 15) {
+          newList.add(list[i]);
+          if (i > 0) {
+            saletotal = saletotal + double.parse(list[i][4].toString());
+            comissiontotal =
+                comissiontotal + double.parse(list[i][8].toString());
+            print(saletotal);
+            print(comissiontotal);
+          }
+          a++;
+          if (a >= list.length) {
+            saletotalList.add(saletotal);
+            comissiontotalList.add(comissiontotal);
+            newList.add([
+              'Total',
+              '',
+              '',
+              '',
+              saletotal.toStringAsFixed(2),
+              '',
+              '',
+              '',
+              comissiontotal.toStringAsFixed(2)
+            ]);
+            print(newList);
+            print(newList.length);
+            pdf.addPage(
+              pw.Page(
+                margin: const pw.EdgeInsets.all(8),
+                pageFormat: PdfPageFormat.a4,
+                build: (pw.Context context) {
+                  return pw.Center(
+                    child: pw.Column(children: [
+                      pw.Table.fromTextArray(context: context, data: newList),
+                    ]),
+                  ); // Center
+                },
+              ),
+            );
+            saletotal = 0;
+            comissiontotal = 0;
+            saletotalList = [];
+            comissiontotalList = [];
+            print('half record');
+          }
+        } else {
+          saletotalList.add(saletotal);
+          comissiontotalList.add(comissiontotal);
+          newList.add([
+            'Total',
+            '',
+            '',
+            '',
+            saletotal.toStringAsFixed(2),
+            '',
+            '',
+            '',
+            comissiontotal.toStringAsFixed(2)
+          ]);
+          print(newList);
+          print(newList.length);
+
+          mainList.add(newList);
+          saletotal = 0;
+          // saletotalList = [];
+          // comissiontotalList = [];
+          comissiontotal = 0;
+          newList = [];
+
+          a = 0;
+        }
+      }
+      print(mainList);
+      List<List<dynamic>> lastList = [];
+      lastList.addAll(mainList.elementAt(mainList.length - 1));
+      print(saletotalList);
+      print(comissiontotalList);
+      for (var i = 0; i < saletotalList.length; i++) {
+        saletotal = saletotal + saletotalList[i];
+        comissiontotal = comissiontotal + comissiontotalList[i];
+      }
+
+      lastList.add(
+          ['GranT_Total', '', '', '', saletotal.toStringAsFixed(2), '', '', '', comissiontotal.toStringAsFixed(2)]);
+      print(mainList);
+      mainList.removeLast();
+      print(mainList);
+      mainList.add(lastList);
+      print(mainList);
+      for (var i = 0; i < mainList.length; i++) {
+        pdf.addPage(
+          pw.Page(
+            margin: const pw.EdgeInsets.all(8),
+            pageFormat: PdfPageFormat.a4,
+            build: (pw.Context context) {
+              return pw.Column(
+                children: [
+                  pw.Table.fromTextArray(
+                    context: context,
+                    data: mainList[i],
+                    cellStyle: const pw.TextStyle(fontSize: 10),
+                  ),
+                ],
+              ); // Center
+            },
+          ),
+        );
+      }
+      // for (var element in mainList) {
+      //   pdf.addPage(
+      //     pw.Page(
+      //       margin: const pw.EdgeInsets.all(8),
+      //       pageFormat: PdfPageFormat.a4,
+      //       build: (pw.Context context) {
+      //         return pw.Column(
+      //           children: [
+      //             pw.Table.fromTextArray(
+      //                 context: context,
+      //                 data: element,
+      //                 cellStyle: const pw.TextStyle(fontSize: 10)),
+      //           ],
+      //         ); // Center
+      //       },
+      //     ),
+      //   );
+      // }
+
+      final output = await getDownloadsDirectory();
+      final file = File(
+          "${output?.path}\\invoice_${DateTime.now().microsecond}_$isNumber.pdf");
+      print(file.path);
+      // final file = File("example.pdf");
+      await file.writeAsBytes(await pdf.save());
+      print('save');
+      'pdf Download SuccessFull.😀'.successSnackbar;
+      isNumber.value++;
+    } catch (e) {
+      print(e);
+      e.toString().errorSnackbar;
+    }
+  }
+
+  // Future<void> savePdfFile({String? fileName, Uint8List? byteList}) async {
+  //   try {
+  //     final output = await getDownloadsDirectory();
+
+  //     var filePath = "$output.path\\$fileName"+"_$isNumber.pdf";
+  //     print(filePath);
+
+  //     // final isCheck = await OpenDocument.checkDocument(filePath: filePath);
+  //     // final output = await getTemporaryDirectory();
+  //     // var filePath = "${output.path}/$fileName.pdf}";
+  //     final file = File(filePath);
+  //     await file.writeAsBytes(byteList!);
+
+  //     // await OpenDocument.openDocument(filePath);
+  //   } catch (e) {
+  //     print(e);
+  //     e.toString().errorSnackbar;
+  //   }
+  // }
 
   chooseDateRangePicker() async {
     DateTimeRange? picked = await showDateRangePicker(
@@ -313,6 +509,7 @@ class HomepageController extends GetxController {
     MaterialTypeData? selectedMaterialType,
   }) async {
     try {
+      print('Searching Generated Report Start....');
       isLoading.value = true;
 
       displayData.clear();
@@ -330,7 +527,7 @@ class HomepageController extends GetxController {
       d.Expression<bool> materialType = isAllMaterialTypeSelected!
           ? db.inputData.mtID.isNotNull()
           : db.inputData.mtID.equals(selectedMaterialType!.id);
-      print('isAllPartySelected: $isAllPartySelected');
+      // print('isAllPartySelected: $isAllPartySelected');
       serachData = await (db.select(db.inputData)
             ..where((tbl) =>
                 duration &
@@ -340,42 +537,9 @@ class HomepageController extends GetxController {
                 tbl.logId.isBiggerThanValue(0)))
           .get();
 
-      print(serachData);
+      print(serachData.length);
 
-      // if (isAllPartySelected!) {
-      //   serachData = await (db.select(db.inputData)
-      //         ..where((tbl) =>
-      //             duration &
-      //             partyCity &
-      //             party &
-      //             materialType &
-      //             tbl.logId.isBiggerThanValue(0)))
-      //       .get();
-      //   // print(serachData);
-      // } else {
-      //   serachData = await (db.select(db.inputData)
-      //         ..where((tbl) =>
-      //             tbl.smtDocDate.isBetweenValues(start!, end!) &
-      //             tbl.pID.equals(selectedParty!.id) &
-      //             tbl.logId.isBiggerThanValue(0)))
-      //       .get();
-      //   var ledger = await (db.select(db.inputData)
-      //         ..where((tbl) =>
-      //             tbl.comissionPaidDate
-      //                 .isBiggerThanValue(DateTime(1800, 01, 01)) &
-      //             tbl.pID.equals(selectedParty!.id) &
-      //             tbl.logId.isBiggerThanValue(0)))
-      //       .get();
-      //   partyWisePaidAmount.value = 0;
-      //   partyWiseTotalAmount.value = 0;
-      //   partyWisePayableAmount.value = 0;
-      //   for (var element in ledger) {
-      //     partyWisePaidAmount.value += element.comissionAmount;
-      //   }
-      //   print(ledger);
-      //   print(partyWisePaidAmount.value);
-      // }
-      print('Generated searchData length');
+      // print('Generated searchData length');
 
       generatedReportData.clear();
       List sublist = [];
@@ -400,8 +564,8 @@ class HomepageController extends GetxController {
       sublist.add('Comission(%)');
       sublist.add('Comission Amount');
       generatedReportData.add(sublist);
-      print(serachData.length);
-      print(generatedReportData.length);
+      // print(serachData.length);
+      // print(generatedReportData.length);
 
       for (var i = 0; i < serachData.length; i++) {
         var checkParty = await (db.select(db.partyMaster)
@@ -457,12 +621,12 @@ class HomepageController extends GetxController {
           partyNaNSetData.add(serachData[i].smtInvNo.toString());
         }
       }
-      print('Serch Data');
-      // print('PartyWiseTotalAmount' + partyWiseTotalAmount.value.toString());
-      print(displayData);
-      print(partyNaNSetData);
-      print(comissionAndmatTypeNaNSetData);
+
+      // print(displayData);
+      // print(partyNaNSetData);
+      // print(comissionAndmatTypeNaNSetData);
       isLoading.value = false;
+      print('End Searching Generated Report Data ......');
     } catch (e) {
       e.toString().errorSnackbar;
 

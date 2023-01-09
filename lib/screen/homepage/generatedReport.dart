@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/theam/theam_constants.dart';
 import 'package:csvapp/utils/helper_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -371,9 +372,9 @@ class GeneratedReport extends StatelessWidget {
                                     break;
                                   default:
                                 }
-                                print(
-                                    _homepageController.dateRange.value.start);
-                                print(_homepageController.dateRange.value.end);
+                                // print(
+                                //     _homepageController.dateRange.value.start);
+                                // print(_homepageController.dateRange.value.end);
                                 await _homepageController
                                     .getGeneratedSearchData(
                                   start:
@@ -393,6 +394,22 @@ class GeneratedReport extends StatelessWidget {
                                       .defualtPartyCity.value,
                                 );
                                 // Get.offAllNamed(Homepage.routeName);
+                              },
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 30),
+                            // color: Colors.amber,
+                            child: Button(
+                              height: Get.height * 0.045,
+                              width: Get.width * 0.05,
+                              fontSize: Get.width * 0.010,
+                              text: 'Pdf',
+                              onPressed: () async {
+                                print('Create Pdf');
+                                print(_homepageController.generatedReportData);
+
+                                await _homepageController.createPdf();
                               },
                             ),
                           ),
@@ -416,7 +433,7 @@ class GeneratedReport extends StatelessWidget {
                                   // shrinkWrap: true,
                                   itemBuilder: (_, subIndex) {
                                     return Container(
-                                      color: Colors.red,
+                                      // color: Colors.red,
                                       width: subIndex == 3
                                           ? Get.width * 0.2
                                           : (subIndex == 6 ||
@@ -424,9 +441,15 @@ class GeneratedReport extends StatelessWidget {
                                                   subIndex == 9)
                                               ? Get.width * 0.1
                                               : Get.width * 0.06,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black,
+                                        ),
+                                      ),
                                       // height: Get.height * 0.05,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Flexible(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
                                         child: Text(
                                           _homepageController
                                               .generatedReportData[0][subIndex]
@@ -444,188 +467,120 @@ class GeneratedReport extends StatelessWidget {
                                   }),
                             ),
                           ),
-                    Stack(
-                      children: [
-                        AdaptiveScrollbar(
-                          controller: verticalScroll,
-                          width: width,
-                          child: SizedBox(
-                            height: Get.height * 0.70,
-                            width: Get.width * 1.5,
-                            child: ListView.builder(
-                              itemCount: _homepageController
-                                  .generatedReportData.length,
-                              itemBuilder: (_, index) {
-                                var date = index != 0
-                                    ? _homepageController
-                                        .generatedReportData[index][20]
-                                    : DateTime.now();
+                    Visibility(
+                      visible: _homepageController.isLoading.value == false
+                          ? true
+                          : false,
+                      replacement: Center(
+                        child: CupertinoActivityIndicator(
+                          radius: Get.height * 0.02,
+                          color: lCOLOR_ACCENT,
+                        ),
+                      ),
+                      child: AdaptiveScrollbar(
+                        controller: verticalScroll,
+                        width: width,
+                        child: SizedBox(
+                          height: Get.height * 0.70,
+                          width: Get.width * 1.5,
+                          child: ListView.builder(
+                            itemCount:
+                                _homepageController.generatedReportData.length,
+                            itemBuilder: (_, index) {
+                              var date = index != 0
+                                  ? _homepageController
+                                      .generatedReportData[index][20]
+                                  : DateTime.now();
 
-                                return Visibility(
-                                  visible: index != 0,
-                                  replacement: Container(),
-                                  child: Card(
-                                    margin: const EdgeInsets.all(3),
-                                    color: _homepageController.displayData
-                                            .contains(_homepageController
-                                                .generatedReportData[index][15])
-                                        ? date.isAfter(DateTime(1800, 01, 01))
-                                            ? const Color.fromARGB(
-                                                255, 121, 192, 124)
-                                            : Colors.white
-                                        : const Color.fromARGB(
-                                            255, 228, 136, 129),
-                                    child: SizedBox(
-                                      width: Get.width * 1.5,
-                                      height: Get.height * 0.04,
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: _homepageController
-                                                .generatedReportData[index]
-                                                .isNotEmpty
-                                            ? _homepageController
-                                                    .generatedReportData[index]
-                                                    .length -
-                                                1
-                                            : 0,
-                                        itemBuilder: (_, subIndex) {
-                                          return Container(
-                                            width: subIndex == 3
-                                                ? Get.width * 0.2
-                                                : (subIndex == 6 ||
-                                                        subIndex == 7 ||
-                                                        subIndex == 9)
-                                                    ? Get.width * 0.1
-                                                    : Get.width * 0.06,
-                                            // height: Get.height * 0.05,
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Visibility(
-                                              visible: subIndex == 3 &&
+                              return Visibility(
+                                visible: index != 0,
+                                replacement: Container(),
+                                child: Card(
+                                  margin: const EdgeInsets.all(3),
+                                  color: _homepageController.displayData
+                                          .contains(_homepageController
+                                              .generatedReportData[index][15])
+                                      ? date.isAfter(DateTime(1800, 01, 01))
+                                          ? const Color.fromARGB(
+                                              255, 121, 192, 124)
+                                          : Colors.white
+                                      : const Color.fromARGB(
+                                          255, 228, 136, 129),
+                                  child: SizedBox(
+                                    width: Get.width * 1.5,
+                                    height: Get.height * 0.04,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: _homepageController
+                                              .generatedReportData[index]
+                                              .isNotEmpty
+                                          ? _homepageController
+                                                  .generatedReportData[index]
+                                                  .length -
+                                              1
+                                          : 0,
+                                      itemBuilder: (_, subIndex) {
+                                        return Container(
+                                          width: subIndex == 3
+                                              ? Get.width * 0.2
+                                              : (subIndex == 6 ||
+                                                      subIndex == 7 ||
+                                                      subIndex == 9)
+                                                  ? Get.width * 0.1
+                                                  : Get.width * 0.06,
+                                          // height: Get.height * 0.05,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Visibility(
+                                            visible: subIndex == 3 &&
+                                                _homepageController
+                                                        .partyNaNSetData
+                                                        .contains(
+                                                            _homepageController
+                                                                    .generatedReportData[
+                                                                index][15]) ==
+                                                    true,
+                                            replacement: Visibility(
+                                              visible: subIndex == 7 &&
                                                   _homepageController
-                                                          .partyNaNSetData
+                                                          .comissionAndmatTypeNaNSetData
                                                           .contains(
                                                               _homepageController
                                                                       .generatedReportData[
                                                                   index][15]) ==
                                                       true,
-                                              replacement: Visibility(
-                                                visible: subIndex == 7 &&
-                                                    _homepageController
-                                                            .comissionAndmatTypeNaNSetData
-                                                            .contains(_homepageController
-                                                                    .generatedReportData[
-                                                                index][15]) ==
-                                                        true,
-                                                replacement: AutoSizeText(
-                                                  (index != 0 &&
-                                                          (subIndex == 1 ||
-                                                              subIndex == 13))
-                                                      ? DateFormat("dd-MM-yyyy")
-                                                          .format(DateFormat(
-                                                                  "dd.MM.yyyy")
-                                                              .parse(_homepageController
-                                                                  .generatedReportData[
-                                                                      index]
-                                                                      [subIndex]
-                                                                  .toString()))
-                                                          .toString()
-                                                      : _homepageController
-                                                          .generatedReportData[
-                                                              index][subIndex]
-                                                          .toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.black),
-                                                  minFontSize: 10,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: Get.width * 0.06,
-                                                      child: AutoSizeText(
-                                                        _homepageController
-                                                            .generatedReportData[
-                                                                index][subIndex]
-                                                            .toString(),
-                                                        style: const TextStyle(
-                                                            fontSize: 15,
-                                                            color:
-                                                                Colors.black),
-                                                        minFontSize: 10,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: Get.width * 0.03,
-                                                      height: Get.height * 0.03,
-                                                      child: ElevatedButton(
-                                                        onPressed: () async {
-                                                          print(
-                                                              'new material Type');
-                                                          String btnText =
-                                                              'Add New Comission';
-                                                          print(_homepageController
-                                                                  .generatedReportData[
-                                                              index][3]);
-                                                          var party = await (_homepageController
-                                                                  .db
-                                                                  .select(_homepageController
-                                                                      .db
-                                                                      .partyMaster)
-                                                                ..where((tbl) => tbl
-                                                                    .name
-                                                                    .equals(_homepageController
-                                                                            .generatedReportData[
-                                                                        index][3])))
-                                                              .get();
-
-                                                          print(party);
-
-                                                          Get.bottomSheet(
-                                                            isScrollControlled:
-                                                                true,
-                                                            ignoreSafeArea:
-                                                                false,
-                                                            PartyComissionBottomSheet(
-                                                              comissionPercentage:
-                                                                  '',
-                                                              party: party[0],
-                                                              btnText: btnText,
-                                                              isShow: true,
-                                                              materialType: TextEditingController(
-                                                                  text: _homepageController
-                                                                          .generatedReportData[
-                                                                      index][7]),
-                                                              // partyTypeIDList: partyTypeIDList,
-                                                              // id: snapshot.data?[index].id,
-                                                              // newComission: name,
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: const AutoSizeText(
-                                                            "Add",
-                                                            style: TextStyle(
-                                                              fontSize: 15,
-                                                            ),
-                                                            minFontSize: 10,
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                              replacement: AutoSizeText(
+                                                (index != 0 &&
+                                                        (subIndex == 1 ||
+                                                            subIndex == 13))
+                                                    ? DateFormat("dd-MM-yyyy")
+                                                        .format(DateFormat(
+                                                                "dd.MM.yyyy")
+                                                            .parse(_homepageController
+                                                                .generatedReportData[
+                                                                    index]
+                                                                    [subIndex]
+                                                                .toString()))
+                                                        .toString()
+                                                    : _homepageController
+                                                        .generatedReportData[
+                                                            index][subIndex]
+                                                        .toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.black),
+                                                minFontSize: 10,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                               child: Row(
                                                 children: [
                                                   SizedBox(
-                                                    width: Get.width * 0.15,
+                                                    width: Get.width * 0.06,
                                                     child: AutoSizeText(
                                                       _homepageController
                                                           .generatedReportData[
@@ -644,28 +599,45 @@ class GeneratedReport extends StatelessWidget {
                                                     width: Get.width * 0.03,
                                                     height: Get.height * 0.03,
                                                     child: ElevatedButton(
-                                                      onPressed: () {
+                                                      onPressed: () async {
                                                         print(
-                                                            'new customer add');
-                                                        TextEditingController
-                                                            name =
-                                                            TextEditingController(
-                                                                text: _homepageController
-                                                                    .generatedReportData[
-                                                                        index][
-                                                                        subIndex]
-                                                                    .toString());
-                                                        print(name.text);
+                                                            'new material Type');
                                                         String btnText =
-                                                            'Add New Party';
+                                                            'Add New Comission';
+                                                        print(_homepageController
+                                                                .generatedReportData[
+                                                            index][3]);
+                                                        var party = await (_homepageController
+                                                                .db
+                                                                .select(_homepageController
+                                                                    .db
+                                                                    .partyMaster)
+                                                              ..where((tbl) => tbl
+                                                                  .name
+                                                                  .equals(_homepageController
+                                                                          .generatedReportData[
+                                                                      index][3])))
+                                                            .get();
+
+                                                        print(party);
 
                                                         Get.bottomSheet(
                                                           isScrollControlled:
                                                               true,
                                                           ignoreSafeArea: false,
-                                                          PartyTypeBottomsheet(
-                                                            name: name,
+                                                          PartyComissionBottomSheet(
+                                                            comissionPercentage:
+                                                                '',
+                                                            party: party[0],
                                                             btnText: btnText,
+                                                            isShow: true,
+                                                            materialType: TextEditingController(
+                                                                text: _homepageController
+                                                                        .generatedReportData[
+                                                                    index][7]),
+                                                            // partyTypeIDList: partyTypeIDList,
+                                                            // id: snapshot.data?[index].id,
+                                                            // newComission: name,
                                                           ),
                                                         );
                                                       },
@@ -683,17 +655,76 @@ class GeneratedReport extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
-                                          );
-                                        },
-                                      ),
+                                            child: Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: Get.width * 0.15,
+                                                  child: AutoSizeText(
+                                                    _homepageController
+                                                        .generatedReportData[
+                                                            index][subIndex]
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.black),
+                                                    minFontSize: 10,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: Get.width * 0.03,
+                                                  height: Get.height * 0.03,
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      print('new customer add');
+                                                      TextEditingController
+                                                          name =
+                                                          TextEditingController(
+                                                              text: _homepageController
+                                                                  .generatedReportData[
+                                                                      index]
+                                                                      [subIndex]
+                                                                  .toString());
+                                                      print(name.text);
+                                                      String btnText =
+                                                          'Add New Party';
+
+                                                      Get.bottomSheet(
+                                                        isScrollControlled:
+                                                            true,
+                                                        ignoreSafeArea: false,
+                                                        PartyTypeBottomsheet(
+                                                          name: name,
+                                                          btnText: btnText,
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: const AutoSizeText(
+                                                        "Add",
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                        minFontSize: 10,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              );
+                            },
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
