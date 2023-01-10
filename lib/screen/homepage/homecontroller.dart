@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -77,8 +78,57 @@ class HomepageController extends GetxController {
     // print('Homecontroller onInit');
   }
 
-  createPdf() async {
+  getDurationDateRange({required String? duration}) {
+    switch (duration) {
+      case 'One Month':
+        DateTime last = DateTime(DateTime.now().year, DateTime.now().month, 1)
+            .subtract(const Duration(days: 1));
+        DateTimeRange tempDateRange = DateTimeRange(
+          start: DateTime(last.year, last.month, 1),
+          end: last,
+        );
+        print(tempDateRange);
+        dateRange.value = tempDateRange;
+        break;
+      case 'Four Month':
+        DateTime last = DateTime(DateTime.now().year, DateTime.now().month, 1)
+            .subtract(const Duration(days: 1));
+        DateTimeRange tempDateRange = DateTimeRange(
+          start: DateTime(last.year, last.month - 3, 1),
+          end: last,
+        );
+        print(tempDateRange);
+        dateRange.value = tempDateRange;
+        break;
+      case 'Six Month':
+        DateTime last = DateTime(DateTime.now().year, DateTime.now().month, 1)
+            .subtract(const Duration(days: 1));
+        DateTimeRange tempDateRange = DateTimeRange(
+          start: DateTime(last.year, last.month - 5, 1),
+          end: last,
+        );
+        print(tempDateRange);
+        dateRange.value = tempDateRange;
+        break;
+      case 'One Year':
+        DateTime last = DateTime(DateTime.now().year, DateTime.now().month, 1)
+            .subtract(const Duration(days: 1));
+        DateTimeRange tempDateRange = DateTimeRange(
+          start: last.month == 12
+              ? DateTime(last.year, 1, 1)
+              : DateTime(last.year - 1, last.month, 1),
+          end: last,
+        );
+        print(tempDateRange);
+        dateRange.value = tempDateRange;
+        break;
+      default:
+    }
+  }
+
+  createReportPdf() async {
     try {
+      isLoading.value = true;
       final pdf = pw.Document();
       List<List<dynamic>> list = [];
       for (var i = 0; i < generatedReportData.length; i++) {
@@ -189,8 +239,17 @@ class HomepageController extends GetxController {
         comissiontotal = comissiontotal + comissiontotalList[i];
       }
 
-      lastList.add(
-          ['GranT_Total', '', '', '', saletotal.toStringAsFixed(2), '', '', '', comissiontotal.toStringAsFixed(2)]);
+      lastList.add([
+        'GranT_Total',
+        '',
+        '',
+        '',
+        saletotal.toStringAsFixed(2),
+        '',
+        '',
+        '',
+        comissiontotal.toStringAsFixed(2)
+      ]);
       print(mainList);
       mainList.removeLast();
       print(mainList);
@@ -243,31 +302,47 @@ class HomepageController extends GetxController {
       print('save');
       'pdf Download SuccessFull.😀'.successSnackbar;
       isNumber.value++;
+      isLoading.value = false;
     } catch (e) {
       print(e);
       e.toString().errorSnackbar;
     }
   }
 
-  // Future<void> savePdfFile({String? fileName, Uint8List? byteList}) async {
-  //   try {
-  //     final output = await getDownloadsDirectory();
+  createLedgerPdf() async {
+    try {
+      isLoading.value = true;
+      final pdf = pw.Document();
 
-  //     var filePath = "$output.path\\$fileName"+"_$isNumber.pdf";
-  //     print(filePath);
+      pdf.addPage(
+        pw.Page(
+          margin: const pw.EdgeInsets.all(8),
+          pageFormat: PdfPageFormat.a4,
+          build: (pw.Context context) {
+            return pw.Column(
+              children: [
+                
+              ],
+            ); // Center
+          },
+        ),
+      );
 
-  //     // final isCheck = await OpenDocument.checkDocument(filePath: filePath);
-  //     // final output = await getTemporaryDirectory();
-  //     // var filePath = "${output.path}/$fileName.pdf}";
-  //     final file = File(filePath);
-  //     await file.writeAsBytes(byteList!);
-
-  //     // await OpenDocument.openDocument(filePath);
-  //   } catch (e) {
-  //     print(e);
-  //     e.toString().errorSnackbar;
-  //   }
-  // }
+      final output = await getDownloadsDirectory();
+      final file = File(
+          "${output?.path}\\invoice_${DateTime.now().microsecond}_$isNumber.pdf");
+      print(file.path);
+      // final file = File("example.pdf");
+      await file.writeAsBytes(await pdf.save());
+      print('save');
+      'pdf Download SuccessFull.😀'.successSnackbar;
+      isNumber.value++;
+      isLoading.value = false;
+    } catch (e) {
+      print(e);
+      e.toString().errorSnackbar;
+    }
+  }
 
   chooseDateRangePicker() async {
     DateTimeRange? picked = await showDateRangePicker(
@@ -463,33 +538,105 @@ class HomepageController extends GetxController {
     }
   }
 
-  Future<void> getLedgerSearchData(
-      {DateTime? start,
-      DateTime? end,
-      bool? isAllPartySelected,
-      PartyMasterData? selectedParty}) async {
+  Future<void> getLedgerSearchData({
+    DateTime? start,
+    DateTime? end,
+    bool? isAllPartySelected,
+    PartyMasterData? selectedParty,
+  }) async {
     try {
       isLoading.value = true;
       ledgerReportData.clear();
       print('ledgerSearchData : ');
       List<LedgerData> ledgerData = [];
-      if (isAllPartySelected!) {
-        ledgerData = await (db.select(db.ledger)
-              ..where((tbl) => tbl.ledgerDate.isBetweenValues(start!, end!)))
-            .get();
-      } else {
-        ledgerData = await (db.select(db.ledger)
-              ..where((tbl) =>
-                  tbl.ledgerDate.isBetweenValues(start!, end!) &
-                  tbl.pID.equals(selectedParty!.id)))
-            .get();
-      }
+      d.Expression<bool> party = isAllPartySelected!
+          ? db.ledger.pID.isNotNull()
+          : db.ledger.pID.equals(selectedParty!.id);
+      d.Expression<bool> duration =
+          db.ledger.ledgerDate.isBetweenValues(start!, end!);
+
+      ledgerData =
+          await (db.select(db.ledger)..where((tbl) => party & duration)).get();
+      // ledgerData =await (db.select(db.todos)
+      //       ..orderBy([(t) => OrderingTerm(expression: t.pID)]))
+      //     .get();
+
+      // if (isAllPartySelected!) {
+      //   ledgerData = await (db.select(db.ledger)
+      //         ..where((tbl) => tbl.ledgerDate.isBetweenValues(start!, end!)))
+      //       .get();
+      // } else {
+      //   ledgerData = await (db.select(db.ledger)
+      //         ..where((tbl) =>
+      //             tbl.ledgerDate.isBetweenValues(start!, end!) &
+      //             tbl.pID.equals(selectedParty!.id)))
+      //       .get();
+      // }
 
       ledgerReportData.addAll(ledgerData);
+
       print(ledgerReportData);
       print(ledgerReportData.length);
+      Set ledgerPartySet = Set();
+      List<List<double>> drcrAmountList = [];
+      double dramount = 0;
+      double cramount = 0;
+      for (var element in ledgerReportData) {
+        var data = ledgerPartySet.add(element.pID);
+        print(data);
+        if (data == false) {
+          print('Duplicate Party ID : $data');
+          var index =
+              ledgerPartySet.toList().indexWhere((pid) => pid == element.pID);
+          print(index);
+          drcrAmountList[index][0] += element.drAmount;
+          drcrAmountList[index][1] += element.crAmount;
+          print(ledgerPartySet.toList().indexOf(element.pID));
+        } else {
+          dramount += element.drAmount;
+          cramount += element.crAmount;
+          List<double> sublist = [];
+          sublist.addAll([dramount, cramount]);
+          drcrAmountList.add(sublist);
 
-      // print(ledgerReportData.value.length);
+          print('Unique Party ID : $data');
+        }
+      }
+      print(ledgerPartySet);
+      print(drcrAmountList);
+      for (var i = 0; i < ledgerPartySet.length; i++) {
+        double drAmount = (drcrAmountList[i][0] < drcrAmountList[i][1])
+            ? drcrAmountList[i][1] - drcrAmountList[i][0]
+            : 0;
+        double crAmount = (drcrAmountList[i][1] < drcrAmountList[i][0])
+            ? drcrAmountList[i][0] - drcrAmountList[i][1]
+            : 0;
+        ledgerReportData.add(
+          LedgerData(
+              id: 0,
+              pID: ledgerPartySet.toList()[i],
+              ledgerDate: DateTime(1800, 01, 01),
+              ledgerNote: '',
+              type: 'Closing Balance',
+              drAmount: drAmount,
+              crAmount: crAmount),
+        );
+        drAmount = drcrAmountList[i][0] + drAmount;
+        crAmount = drcrAmountList[i][1] + crAmount;
+
+        ledgerReportData.add(
+          LedgerData(
+              id: 0,
+              pID: ledgerPartySet.toList()[i],
+              ledgerDate: DateTime(1800, 01, 01),
+              ledgerNote: '',
+              type: 'Total',
+              drAmount: drAmount,
+              crAmount: crAmount),
+        );
+      }
+
+      print(ledgerReportData);
       isLoading.value = false;
     } catch (e) {
       e.toString().errorSnackbar;
@@ -712,34 +859,40 @@ class HomepageController extends GetxController {
   }
 
   void pickFile() async {
-    isLoading.value = true;
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    try {
+      isLoading.value = true;
+      final result = await FilePicker.platform.pickFiles(allowMultiple: false);
 
-    // if no file is picked
-    if (result == null) {
-      isLoading.value = false;
-      return;
-    }
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
-    print(result.files.first.name);
-    filePath = result.files.first.path!;
+      // if no file is picked
+      if (result == null) {
+        isLoading.value = false;
+        return;
+      }
+      // we will log the name, size and path of the
+      // first picked file (if multiple are selected)
+      print(result.files.first.name);
+      filePath = result.files.first.path!;
 
-    final input = File(filePath!).openRead();
-    final fields = await input
-        .transform(utf8.decoder)
-        .transform(const CsvToListConverter())
-        .toList();
-    // print(fields[0].length);
-    print(fields.length);
-    if (fields[0].length != 18) {
-      'Invalid File'.errorSnackbar;
-      isLoading.value = false;
-      return;
+      final input = File(filePath!).openRead();
+      final fields = await input
+          .transform(utf8.decoder)
+          .transform(const CsvToListConverter())
+          .toList();
+      // print(fields[0].length);
+      print(fields.length);
+      if (fields[0].length != 18) {
+        'Invalid File'.errorSnackbar;
+        isLoading.value = false;
+        return;
+      }
+      // displyaData.addAll(fields);
+      // print(displyaData);
+      await checkInputData(fields: fields);
+    } catch (e) {
+      'Invalid File'.toString().errorSnackbar;
+
+      e.toString().printError;
     }
-    // displyaData.addAll(fields);
-    // print(displyaData);
-    await checkInputData(fields: fields);
   }
 
   Future<void> checkInputData({List<List<dynamic>>? fields}) async {
@@ -1047,7 +1200,8 @@ class HomepageController extends GetxController {
       }
       print(partyList);
       print(materialTypeList);
-
+      var tempList = [];
+      // TODO: insert data Duaring check already exist or not
       for (var i = 1; i < data.length; i++) {
         print(i);
         String documentType = data[i][0];
@@ -1087,6 +1241,7 @@ class HomepageController extends GetxController {
             .id;
         // print(pID);
         // print(mtID);
+
         var res = await (db.select(db.inputData)
               ..where((tbl) => tbl.smtInvNo.equals(smtInvNo)))
             .get();

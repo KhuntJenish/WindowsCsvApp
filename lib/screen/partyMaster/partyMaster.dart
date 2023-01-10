@@ -53,7 +53,7 @@ class PartyMasterPage extends StatelessWidget {
               }
               // print(snapshot.data);
               return SizedBox(
-                height: Get.height * 0.8,
+                height: Get.height * 0.9,
                 child: ListView.builder(
                   itemCount: snapshot.data?.length,
                   itemBuilder: (context, index) {

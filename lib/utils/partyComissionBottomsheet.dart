@@ -21,6 +21,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
     this.oldComission,
     this.isShow = false,
     this.materialType,
+    this.homepageController,
     // this.partyTypeIDList = const [],
     // required this.newComission,
     // this.id,
@@ -35,7 +36,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
   // final List<int> partyTypeIDList;
   final bool? isShow;
   final PartyController _partyController = Get.put(PartyController());
-  final HomepageController _homepageController = Get.put(HomepageController());
+  final HomepageController? homepageController;
   TextEditingController? materialType = TextEditingController(text: '');
   TextEditingController partyNameController = TextEditingController(text: '');
   TextEditingController newComissionController =
@@ -43,15 +44,18 @@ class PartyComissionBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // materialType!.text = _partyController.defualtMaterialType.value.name;
-    /* if (_partyController.materialTypeList!.isNotEmpty &&
+    // materialType!.text = _partyController.defualtMaterialType.value.type;
+    print(materialType!.text);
+    print(homepageController?.materialTypeList);
+
+     if (_partyController.materialTypeList!.isNotEmpty &&
         materialType!.text != '') {
       _partyController.defualtMaterialType.value = _partyController
           .materialTypeList!
           .firstWhere((element) => element.type == materialType!.text);
           materialType!.text = '';
       // _partyController.getMaterialTypeList();
-    } */
+    } 
 
     partyNameController.text = party!.name.toString();
     newComissionController.text = comissionPercentage.toString();
@@ -141,12 +145,12 @@ class PartyComissionBottomSheet extends StatelessWidget {
                       if (btnText == 'Add New Comission') {
                         List<List<dynamic>> data = [];
 
-                        data.addAll(_homepageController.pendingReportData);
-                        _homepageController.displayData.clear();
-                        _homepageController.partyNaNSetData.clear();
-                        _homepageController.comissionAndmatTypeNaNSetData
+                        data.addAll(homepageController!.pendingReportData);
+                        homepageController!.displayData.clear();
+                        homepageController!.partyNaNSetData.clear();
+                        homepageController!.comissionAndmatTypeNaNSetData
                             .clear();
-                        _homepageController.checkInputData(fields: data);
+                        homepageController!.checkInputData(fields: data);
                       }
                     } else if (btnText == 'Update Comission') {
                       _partyController.updatePartyComission(

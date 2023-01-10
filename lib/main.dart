@@ -73,6 +73,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     testWindowFunctions();
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
+    GetStorage('box').write('isSelectedReport', 0 );
     if (GetStorage('box').read('cuser') != null) {
       var userData = GetStorage('box').read('cuser');
       print(userData);

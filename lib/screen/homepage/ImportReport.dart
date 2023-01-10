@@ -9,6 +9,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import '../../theam/theam_constants.dart';
 import '../../utils/dropDownItem.dart';
 import '../../utils/helper_widget.dart';
 import '../../utils/partyComissionBottomsheet.dart';
@@ -55,7 +56,6 @@ class ImportReport extends StatelessWidget {
           controller: horizontalScroll,
           width: width,
           position: ScrollbarPosition.bottom,
-          underSpacing: const EdgeInsets.only(bottom: width),
           child: SingleChildScrollView(
             controller: horizontalScroll,
             scrollDirection: Axis.horizontal,
@@ -204,11 +204,13 @@ class ImportReport extends StatelessWidget {
                         ],
                       ),
                     ),
+
+                    //**Data Ui Part
                     _homepageController.pendingReportData.isEmpty
                         ? Container()
                         : Card(
                             margin: const EdgeInsets.all(3),
-                            color: Colors.amber,
+                            color: lCOLOR_ACCENT,
                             child: SizedBox(
                               width: Get.width * 1.5,
                               height: Get.height * 0.05,
@@ -219,6 +221,7 @@ class ImportReport extends StatelessWidget {
                                   // shrinkWrap: true,
                                   itemBuilder: (_, subIndex) {
                                     return Container(
+                                      // color: Colors.red,
                                       width: subIndex == 3
                                           ? Get.width * 0.2
                                           : (subIndex == 6 ||
@@ -226,19 +229,27 @@ class ImportReport extends StatelessWidget {
                                                   subIndex == 9)
                                               ? Get.width * 0.1
                                               : Get.width * 0.06,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black,
+                                        ),
+                                      ),
                                       // height: Get.height * 0.05,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: AutoSizeText(
-                                        _homepageController.pendingReportData[0]
-                                                [subIndex]
-                                            .toString(),
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.red),
-                                        minFontSize: 10,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          _homepageController
+                                              .pendingReportData[0][subIndex]
+                                              .toString(),
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                          // minFontSize: 10,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     );
                                   }),
@@ -272,155 +283,66 @@ class ImportReport extends StatelessWidget {
                                 child: SizedBox(
                                   width: Get.width * 1.5,
                                   height: Get.height * 0.04,
-                                  child: AnimationLimiter(
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-
-                                      itemCount: _homepageController
-                                          .pendingReportData[index].length,
-                                      // shrinkWrap: true,
-                                      itemBuilder: (_, subIndex) {
-                                        // DateTime tempDate = DateFormat("dd.MM.yyyy")
-                                        //     .parse(_homepageController.data[index][1]
-                                        //         .toString());
-
-                                        // tempDate = DateFormat("dd-MM-yyyy").format(tempDate);
-                                        // print(_homepageController.data[index][15]
-                                        //     .toString());
-                                        return Container(
-                                          width: subIndex == 3
-                                              ? Get.width * 0.2
-                                              : (subIndex == 6 ||
-                                                      subIndex == 7 ||
-                                                      subIndex == 9)
-                                                  ? Get.width * 0.1
-                                                  : Get.width * 0.06,
-                                          // height: Get.height * 0.05,
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Visibility(
-                                            visible: subIndex == 3 &&
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: _homepageController
+                                        .pendingReportData[index].length,
+                                    itemBuilder: (_, subIndex) {
+                                      return Container(
+                                        width: subIndex == 3
+                                            ? Get.width * 0.2
+                                            : (subIndex == 6 ||
+                                                    subIndex == 7 ||
+                                                    subIndex == 9)
+                                                ? Get.width * 0.1
+                                                : Get.width * 0.06,
+                                        // height: Get.height * 0.05,
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Visibility(
+                                          visible: subIndex == 3 &&
+                                              _homepageController
+                                                      .partyNaNSetData
+                                                      .contains(_homepageController
+                                                              .pendingReportData[
+                                                          index][15]) ==
+                                                  true,
+                                          replacement: Visibility(
+                                            visible: subIndex == 7 &&
                                                 _homepageController
-                                                        .partyNaNSetData
+                                                        .comissionAndmatTypeNaNSetData
                                                         .contains(
                                                             _homepageController
                                                                     .pendingReportData[
                                                                 index][15]) ==
                                                     true,
-                                            replacement: Visibility(
-                                              visible: subIndex == 7 &&
-                                                  _homepageController
-                                                          .comissionAndmatTypeNaNSetData
-                                                          .contains(
-                                                              _homepageController
-                                                                      .pendingReportData[
-                                                                  index][15]) ==
-                                                      true,
-                                              replacement: AutoSizeText(
-                                                (index != 0 &&
-                                                        (subIndex == 1 ||
-                                                            subIndex == 13))
-                                                    ? DateFormat("dd-MM-yyyy")
-                                                        .format(DateFormat(
-                                                                "dd.MM.yyyy")
-                                                            .parse(_homepageController
-                                                                .pendingReportData[
-                                                                    index]
-                                                                    [subIndex]
-                                                                .toString()))
-                                                        .toString()
-                                                    : _homepageController
-                                                        .pendingReportData[
-                                                            index][subIndex]
-                                                        .toString(),
-                                                style: const TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.black),
-                                                minFontSize: 10,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: Get.width * 0.06,
-                                                    child: AutoSizeText(
-                                                      _homepageController
-                                                          .pendingReportData[
-                                                              index][subIndex]
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.black),
-                                                      minFontSize: 10,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: Get.width * 0.03,
-                                                    height: Get.height * 0.03,
-                                                    child: ElevatedButton(
-                                                      onPressed: () async {
-                                                        print(
-                                                            'new material Type');
-                                                        String btnText =
-                                                            'Add New Comission';
-                                                        print(_homepageController
-                                                                .pendingReportData[
-                                                            index][3]);
-                                                        var party = await (_homepageController
-                                                                .db
-                                                                .select(_homepageController
-                                                                    .db
-                                                                    .partyMaster)
-                                                              ..where((tbl) => tbl
-                                                                  .name
-                                                                  .equals(_homepageController
-                                                                          .pendingReportData[
-                                                                      index][3])))
-                                                            .get();
-
-                                                        print(party);
-
-                                                        Get.bottomSheet(
-                                                          isScrollControlled:
-                                                              true,
-                                                          ignoreSafeArea: false,
-                                                          PartyComissionBottomSheet(
-                                                            comissionPercentage:
-                                                                '',
-                                                            party: party[0],
-                                                            btnText: btnText,
-                                                            isShow: true,
-                                                            materialType: TextEditingController(
-                                                                text: _homepageController
-                                                                        .pendingReportData[
-                                                                    index][7]),
-                                                            // partyTypeIDList: partyTypeIDList,
-                                                            // id: snapshot.data?[index].id,
-                                                            // newComission: name,
-                                                          ),
-                                                        );
-                                                      },
-                                                      child: const AutoSizeText(
-                                                          "Add",
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                          ),
-                                                          minFontSize: 10,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                            replacement: AutoSizeText(
+                                              (index != 0 &&
+                                                      (subIndex == 1 ||
+                                                          subIndex == 13))
+                                                  ? DateFormat("dd-MM-yyyy")
+                                                      .format(DateFormat(
+                                                              "dd.MM.yyyy")
+                                                          .parse(_homepageController
+                                                              .pendingReportData[
+                                                                  index]
+                                                                  [subIndex]
+                                                              .toString()))
+                                                      .toString()
+                                                  : _homepageController
+                                                      .pendingReportData[index]
+                                                          [subIndex]
+                                                      .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black),
+                                              minFontSize: 10,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                             child: Row(
                                               children: [
                                                 SizedBox(
-                                                  width: Get.width * 0.15,
+                                                  width: Get.width * 0.06,
                                                   child: AutoSizeText(
                                                     _homepageController
                                                         .pendingReportData[
@@ -439,27 +361,48 @@ class ImportReport extends StatelessWidget {
                                                   width: Get.width * 0.03,
                                                   height: Get.height * 0.03,
                                                   child: ElevatedButton(
-                                                    onPressed: () {
-                                                      print('new customer add');
-                                                      TextEditingController
-                                                          name =
-                                                          TextEditingController(
-                                                              text: _homepageController
-                                                                  .pendingReportData[
-                                                                      index]
-                                                                      [subIndex]
-                                                                  .toString());
-                                                      print(name.text);
+                                                    onPressed: () async {
+                                                      print(
+                                                          'new material Type');
                                                       String btnText =
-                                                          'Add New Party';
+                                                          'Add New Comission';
+                                                      print(_homepageController
+                                                              .pendingReportData[
+                                                          index][3]);
+                                                      var party = await (_homepageController
+                                                              .db
+                                                              .select(
+                                                                  _homepageController
+                                                                      .db
+                                                                      .partyMaster)
+                                                            ..where((tbl) => tbl
+                                                                .name
+                                                                .equals(_homepageController
+                                                                        .pendingReportData[
+                                                                    index][3])))
+                                                          .get();
+
+                                                      print(party);
 
                                                       Get.bottomSheet(
                                                         isScrollControlled:
                                                             true,
                                                         ignoreSafeArea: false,
-                                                        PartyTypeBottomsheet(
-                                                          name: name,
+                                                        PartyComissionBottomSheet(
+                                                          comissionPercentage:
+                                                              '',
+                                                          party: party[0],
                                                           btnText: btnText,
+                                                          isShow: true,
+                                                          materialType:
+                                                              TextEditingController(
+                                                                  text: _homepageController
+                                                                          .pendingReportData[
+                                                                      index][7]),
+                                                                      homepageController: _homepageController,
+                                                          // partyTypeIDList: partyTypeIDList,
+                                                          // id: snapshot.data?[index].id,
+                                                          // newComission: name,
                                                         ),
                                                       );
                                                     },
@@ -477,9 +420,67 @@ class ImportReport extends StatelessWidget {
                                               ],
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                width: Get.width * 0.15,
+                                                child: AutoSizeText(
+                                                  _homepageController
+                                                      .pendingReportData[index]
+                                                          [subIndex]
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.black),
+                                                  minFontSize: 10,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: Get.width * 0.03,
+                                                height: Get.height * 0.03,
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    print('new customer add');
+                                                    TextEditingController name =
+                                                        TextEditingController(
+                                                            text: _homepageController
+                                                                .pendingReportData[
+                                                                    index]
+                                                                    [subIndex]
+                                                                .toString());
+                                                    print(name.text);
+                                                    String btnText =
+                                                        'Add New Party';
+
+                                                    Get.bottomSheet(
+                                                      isScrollControlled: true,
+                                                      ignoreSafeArea: false,
+                                                      PartyTypeBottomsheet(
+                                                        name: name,
+                                                        btnText: btnText,
+                                                        homepageController: _homepageController,
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: const AutoSizeText(
+                                                      "Add",
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                      ),
+                                                      minFontSize: 10,
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow
+                                                          .ellipsis),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),

@@ -12,6 +12,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
     Key? key,
     required this.btnText,
     required this.name,
+    this.homepageController,
     this.id,
   }) : super(key: key);
 
@@ -19,7 +20,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
   final String btnText;
   final int? id;
   final PartyController _partyController = Get.put(PartyController());
-  final HomepageController _homepageController = Get.put(HomepageController());
+  final HomepageController? homepageController;
   TextEditingController partyType = TextEditingController(text: '');
   TextEditingController name;
 
@@ -82,12 +83,12 @@ class PartyTypeBottomsheet extends StatelessWidget {
                       );
                       if (btnText == 'Add New Party') {
                         List<List<dynamic>> data = [];
-                        data.addAll(_homepageController.pendingReportData);
-                        _homepageController.displayData.clear();
-                        _homepageController.partyNaNSetData.clear();
-                        _homepageController.comissionAndmatTypeNaNSetData
+                        data.addAll(homepageController!.pendingReportData);
+                        homepageController!.displayData.clear();
+                        homepageController!.partyNaNSetData.clear();
+                        homepageController!.comissionAndmatTypeNaNSetData
                             .clear();
-                        _homepageController.checkInputData(fields: data);
+                        homepageController!.checkInputData(fields: data);
                       }
                     } else if (btnText == 'Update Party') {
                       _partyController.updateParty(
