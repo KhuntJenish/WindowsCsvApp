@@ -295,18 +295,19 @@ class PartyLedger extends StatelessWidget {
                                 text: 'Pdf',
                                 onPressed: () async {
                                   if (_homepageController
-                                          .generatedReportData.isEmpty ||
+                                          .ledgerReportData.isEmpty ||
                                       _homepageController
-                                              .generatedReportData.length <
+                                              .ledgerReportData.length <
                                           2) {
                                     'No Data Found'.errorSnackbar;
                                     return;
                                   }
                                   print('Create Pdf');
-                                  print(
-                                      _homepageController.generatedReportData);
+                                  print(_homepageController.ledgerPartyWiseSet);
 
-                                  await _homepageController.createLedgerPdf();
+                                  await _homepageController.createLedgerPdf(
+                                      partyWiseList: _homepageController
+                                          .ledgerPartyWiseSet);
                                 },
                               ),
                             ),
@@ -393,44 +394,50 @@ class PartyLedger extends StatelessWidget {
                                 child: GroupedListView<LedgerData, String>(
                                   elements:
                                       _homepageController.ledgerReportData,
-                                  groupBy: (element) => element.pID.toString(),
-                                  groupSeparatorBuilder:
-                                      (String groupByValue) => Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8.0, right: 8.0, top: 20),
-                                        child: Card(
-                                          color:
-                                              lCOLOR_PRIMARY.withOpacity(0.1),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: AutoSizeText(
-                                              _homepageController.partyList!
-                                                  .firstWhere((item) =>
-                                                      item.id ==
-                                                      int.parse(groupByValue))
-                                                  .name,
-                                              style:
-                                                  textTheme.bodyText1?.copyWith(
-                                                fontSize: Get.height * 0.020,
+                                  groupBy: (element) {
+                                    print('G : '+element.pID.toString());
+                                    return element.pID.toString();
+                                  },
+                                  groupSeparatorBuilder: (String groupByValue) {
+                                    print('GS : '+groupByValue);
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 8.0, right: 8.0, top: 20),
+                                          child: Card(
+                                            color:
+                                                lCOLOR_PRIMARY.withOpacity(0.1),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: AutoSizeText(
+                                                _homepageController.partyList!
+                                                    .firstWhere((item) =>
+                                                        item.id ==
+                                                        int.parse(groupByValue))
+                                                    .name,
+                                                style: textTheme.bodyText1
+                                                    ?.copyWith(
+                                                  fontSize: Get.height * 0.020,
+                                                ),
+                                                minFontSize: 10,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                              minFontSize: 10,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
+                                      ],
+                                    );
+                                  },
                                   indexedItemBuilder:
                                       ((context, element, index) {
-                                    print('element: ${element}');
-                                    print('index: ${index}');
+                                    // print('element: ${element}');
+                                    // print('index: ${index}');
 
                                     return Container(
                                       height: Get.height * 0.04,

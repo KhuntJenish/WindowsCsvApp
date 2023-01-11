@@ -2,15 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:csvapp/database/tables.dart';
+import 'package:csvapp/theam/theam_constants.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart' as d;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -38,7 +37,7 @@ class HomepageController extends GetxController {
   RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
   List<MaterialTypeData>? materialTypeList = [];
   List<PartyMasterData>? partyList = [];
-
+  Set ledgerPartyWiseSet = Set();
   Rx<PartyMasterData> defualtParty =
       const PartyMasterData(id: 0, name: '', ptID: 0).obs;
   Rx<String> defualtPartyCity = ''.obs;
@@ -183,19 +182,20 @@ class HomepageController extends GetxController {
             ]);
             print(newList);
             print(newList.length);
-            pdf.addPage(
-              pw.Page(
-                margin: const pw.EdgeInsets.all(8),
-                pageFormat: PdfPageFormat.a4,
-                build: (pw.Context context) {
-                  return pw.Center(
-                    child: pw.Column(children: [
-                      pw.Table.fromTextArray(context: context, data: newList),
-                    ]),
-                  ); // Center
-                },
-              ),
-            );
+            mainList.add(newList);
+            // pdf.addPage(
+            //   pw.Page(
+            //     margin: const pw.EdgeInsets.all(8),
+            //     pageFormat: PdfPageFormat.a4,
+            //     build: (pw.Context context) {
+            //       return pw.Center(
+            //         child: pw.Column(children: [
+            //           pw.Table.fromTextArray(context: context, data: newList),
+            //         ]),
+            //       ); // Center
+            //     },
+            //   ),
+            // );
             saletotal = 0;
             comissiontotal = 0;
             saletotalList = [];
@@ -229,32 +229,35 @@ class HomepageController extends GetxController {
           a = 0;
         }
       }
-      print(mainList);
-      List<List<dynamic>> lastList = [];
-      lastList.addAll(mainList.elementAt(mainList.length - 1));
-      print(saletotalList);
-      print(comissiontotalList);
-      for (var i = 0; i < saletotalList.length; i++) {
-        saletotal = saletotal + saletotalList[i];
-        comissiontotal = comissiontotal + comissiontotalList[i];
+      if (mainList.length > 1) {
+        print(mainList);
+        List<List<dynamic>> lastList = [];
+        lastList.addAll(mainList.elementAt(mainList.length - 1));
+        print(saletotalList);
+        print(comissiontotalList);
+        for (var i = 0; i < saletotalList.length; i++) {
+          saletotal = saletotal + saletotalList[i];
+          comissiontotal = comissiontotal + comissiontotalList[i];
+        }
+
+        lastList.add([
+          'Grant_Total',
+          '',
+          '',
+          '',
+          saletotal.toStringAsFixed(2),
+          '',
+          '',
+          '',
+          comissiontotal.toStringAsFixed(2)
+        ]);
+        print(mainList);
+        mainList.removeLast();
+        print(mainList);
+        mainList.add(lastList);
+        print(mainList);
       }
 
-      lastList.add([
-        'GranT_Total',
-        '',
-        '',
-        '',
-        saletotal.toStringAsFixed(2),
-        '',
-        '',
-        '',
-        comissiontotal.toStringAsFixed(2)
-      ]);
-      print(mainList);
-      mainList.removeLast();
-      print(mainList);
-      mainList.add(lastList);
-      print(mainList);
       for (var i = 0; i < mainList.length; i++) {
         pdf.addPage(
           pw.Page(
@@ -274,24 +277,6 @@ class HomepageController extends GetxController {
           ),
         );
       }
-      // for (var element in mainList) {
-      //   pdf.addPage(
-      //     pw.Page(
-      //       margin: const pw.EdgeInsets.all(8),
-      //       pageFormat: PdfPageFormat.a4,
-      //       build: (pw.Context context) {
-      //         return pw.Column(
-      //           children: [
-      //             pw.Table.fromTextArray(
-      //                 context: context,
-      //                 data: element,
-      //                 cellStyle: const pw.TextStyle(fontSize: 10)),
-      //           ],
-      //         ); // Center
-      //       },
-      //     ),
-      //   );
-      // }
 
       final output = await getDownloadsDirectory();
       final file = File(
@@ -309,28 +294,123 @@ class HomepageController extends GetxController {
     }
   }
 
-  createLedgerPdf() async {
+  createLedgerPdf({required Set partyWiseList}) async {
     try {
       isLoading.value = true;
       final pdf = pw.Document();
+      print(partyWiseList);
+      print(partyWiseList.length);
+      for (var i = 0; i < partyWiseList.length; i++) {
+        print(partyWiseList.elementAt(i));
+        print(partyWiseList.elementAt(i)[0].pID);
+        // print(partyList);
+        var partyName = partyList
+            ?.firstWhere((element) =>
+                element.id.isEqual(partyWiseList.elementAt(i)[0].pID))
+            .name;
+        print(partyName);
+        List newList = [];
+        List<List<dynamic>> newsubList = [];
+        newList.addAll(partyWiseList.elementAt(i));
+        newsubList.add([
+          'Date',
+          'Type',
+          'Dr Amount',
+          'Cr Amount',
+        ]);
+        for (var j = 0; j < newList.length; j++) {
+          print(newList[j]);
+          // List<dynamic> list = [];
+          // list.add([
+          //   newList[j].ledgerDate.toString(),
+          //   newList[j].type.toString(),
+          //   newList[j].drAmount.toString(),
+          //   newList[j].crAmount.toString()
+          // ]);
+          // print(list);
+          var drAmount = newList[j].drAmount.toDouble();
+          var crAmount = newList[j].crAmount.toDouble();
+          var date = DateTime.parse(newList[j].ledgerDate.toString());
+          print(newList[j].drAmount);
+          newsubList.add([
+            date == DateTime(1800, 01, 01)
+                ? ''
+                : DateFormat('dd-MM-yyyy').format(date),
+            newList[j].type.toString(),
+            drAmount < 1 ? '' : drAmount.toStringAsFixed(2),
+            crAmount < 1 ? '' : crAmount.toStringAsFixed(2)
+          ]);
+        }
+        print(newsubList);
+        newList.clear();
+        newList.addAll(newsubList);
+        print(newList);
 
-      pdf.addPage(
-        pw.Page(
-          margin: const pw.EdgeInsets.all(8),
-          pageFormat: PdfPageFormat.a4,
-          build: (pw.Context context) {
-            return pw.Column(
-              children: [
-                
-              ],
-            ); // Center
-          },
-        ),
-      );
+        pdf.addPage(
+          pw.Page(
+            margin: const pw.EdgeInsets.all(8),
+            pageFormat: PdfPageFormat.a4,
+            build: (pw.Context context) {
+              return pw.Column(
+                children: [
+                  // pw.Text('Party Name: $partyName'),
+                  pw.SizedBox(height: Get.height * 0.01),
+                  pw.Container(
+                    color: PdfColors.grey,
+                    child: pw.Padding(
+                      padding: pw.EdgeInsets.all(8.0),
+                      child: pw.Text(
+                        partyName.toString(),
+                        style: pw.TextStyle(
+                          fontSize: Get.height * 0.020,
+                        ),
+                        // minFontSize: 10,
+                        maxLines: 1,
+                        // overflow: pw.TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  pw.SizedBox(height: Get.height * 0.01),
+                  pw.Container(
+                    // color: PdfColors.grey,
+                    child: pw.Padding(
+                      padding: pw.EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10),
+                      child: pw.Table.fromTextArray(
+                        columnWidths: {
+                          0: pw.FlexColumnWidth(1),
+                          1: pw.FlexColumnWidth(1.5),
+                          2: pw.FlexColumnWidth(1),
+                          3: pw.FlexColumnWidth(1),
+                        },
+                        cellAlignments: {
+                          0: pw.Alignment.centerLeft,
+                          1: pw.Alignment.centerLeft,
+                          2: pw.Alignment.centerRight,
+                          3: pw.Alignment.centerRight,
+                        },
+                        headerAlignments: {
+                          0: pw.Alignment.center,
+                          1: pw.Alignment.center,
+                          2: pw.Alignment.center,
+                          3: pw.Alignment.center,
+                        },
+                        context: context,
+                        data: newsubList,
+                        cellStyle: const pw.TextStyle(fontSize: 10),
+                      ),
+                    ),
+                  ),
+                ],
+              ); // Center
+            },
+          ),
+        );
+      }
 
       final output = await getDownloadsDirectory();
       final file = File(
-          "${output?.path}\\invoice_${DateTime.now().microsecond}_$isNumber.pdf");
+          "${output?.path}\\ledgerReport_${DateTime.now().microsecond}_$isNumber.pdf");
       print(file.path);
       // final file = File("example.pdf");
       await file.writeAsBytes(await pdf.save());
@@ -557,32 +637,18 @@ class HomepageController extends GetxController {
 
       ledgerData =
           await (db.select(db.ledger)..where((tbl) => party & duration)).get();
-      // ledgerData =await (db.select(db.todos)
-      //       ..orderBy([(t) => OrderingTerm(expression: t.pID)]))
-      //     .get();
-
-      // if (isAllPartySelected!) {
-      //   ledgerData = await (db.select(db.ledger)
-      //         ..where((tbl) => tbl.ledgerDate.isBetweenValues(start!, end!)))
-      //       .get();
-      // } else {
-      //   ledgerData = await (db.select(db.ledger)
-      //         ..where((tbl) =>
-      //             tbl.ledgerDate.isBetweenValues(start!, end!) &
-      //             tbl.pID.equals(selectedParty!.id)))
-      //       .get();
-      // }
 
       ledgerReportData.addAll(ledgerData);
 
       print(ledgerReportData);
       print(ledgerReportData.length);
       Set ledgerPartySet = Set();
+
       List<List<double>> drcrAmountList = [];
       double dramount = 0;
       double cramount = 0;
       for (var element in ledgerReportData) {
-        var data = ledgerPartySet.add(element.pID);
+        bool data = ledgerPartySet.add(element.pID);
         print(data);
         if (data == false) {
           print('Duplicate Party ID : $data');
@@ -592,18 +658,31 @@ class HomepageController extends GetxController {
           drcrAmountList[index][0] += element.drAmount;
           drcrAmountList[index][1] += element.crAmount;
           print(ledgerPartySet.toList().indexOf(element.pID));
+          //**add Record at old position */
+          List tempPartyList = ledgerPartyWiseSet.toList()[index];
+          print(tempPartyList);
+          // tempPartyList.add(element);
+          ledgerPartyWiseSet.toList()[index].add(element);
+          print(ledgerPartyWiseSet.toList()[index]);
+          // ledgerPartyWiseSet.add(element);
         } else {
           dramount += element.drAmount;
           cramount += element.crAmount;
           List<double> sublist = [];
           sublist.addAll([dramount, cramount]);
           drcrAmountList.add(sublist);
+          //**add Record at new position */
+          List tempPartyList = [];
+          tempPartyList.add(element);
+          ledgerPartyWiseSet.add(tempPartyList);
 
           print('Unique Party ID : $data');
         }
       }
       print(ledgerPartySet);
       print(drcrAmountList);
+      print(ledgerPartyWiseSet);
+      print(ledgerPartyWiseSet.length);
       for (var i = 0; i < ledgerPartySet.length; i++) {
         double drAmount = (drcrAmountList[i][0] < drcrAmountList[i][1])
             ? drcrAmountList[i][1] - drcrAmountList[i][0]
@@ -621,6 +700,16 @@ class HomepageController extends GetxController {
               drAmount: drAmount,
               crAmount: crAmount),
         );
+        ledgerPartyWiseSet.toList()[i].add(
+              LedgerData(
+                  id: 0,
+                  pID: ledgerPartySet.toList()[i],
+                  ledgerDate: DateTime(1800, 01, 01),
+                  ledgerNote: '',
+                  type: 'Closing Balance',
+                  drAmount: drAmount,
+                  crAmount: crAmount),
+            );
         drAmount = drcrAmountList[i][0] + drAmount;
         crAmount = drcrAmountList[i][1] + crAmount;
 
@@ -634,9 +723,20 @@ class HomepageController extends GetxController {
               drAmount: drAmount,
               crAmount: crAmount),
         );
+        ledgerPartyWiseSet.toList()[i].add(
+              LedgerData(
+                  id: 0,
+                  pID: ledgerPartySet.toList()[i],
+                  ledgerDate: DateTime(1800, 01, 01),
+                  ledgerNote: '',
+                  type: 'Total',
+                  drAmount: drAmount,
+                  crAmount: crAmount),
+            );
       }
 
       print(ledgerReportData);
+      print(ledgerPartyWiseSet);
       isLoading.value = false;
     } catch (e) {
       e.toString().errorSnackbar;
@@ -1202,83 +1302,222 @@ class HomepageController extends GetxController {
       print(materialTypeList);
       var tempList = [];
       // TODO: insert data Duaring check already exist or not
+      List smtInvNoList = [];
       for (var i = 1; i < data.length; i++) {
         print(i);
-        String documentType = data[i][0];
-        DateTime distDocDate =
-            DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
-        String distDocNo = data[i][2];
-        var customer = data[i][3];
-        String custBillCity = data[i][4];
-        String matCode = data[i][5];
-        String matName = data[i][6];
-        String matType = data[i][7];
-        int qty = data[i][8];
-        String doctorName = data[i][9];
-        String techniqalStaff = data[i][10];
-        double saleAmount = double.parse((data[i][11]).toString());
-        double totalSale = double.parse((data[i][12]).toString());
-        DateTime smtDocDate =
-            DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
-        String smtDocNo = (data[i][14]).toString();
-        String smtInvNo = (data[i][15]).toString();
-        double purchaseTaxableAmount = double.parse(data[i][16].toString());
-        double totalPurchaseAmount = double.parse(data[i][17].toString());
-        int logId = 0;
-        int ledgerId = 0;
-        double comission = 0;
-        double comissionAmount = 0;
-        DateTime comissionPaidDate = DateTime(1800, 01, 01);
-        double adjustComissionAmount = 0;
-        // int? logId ;
-        // print(distDocDate);
-        // print(smtDocDate);
 
-        var pID =
-            partyList!.firstWhere((element) => element.name == customer).id;
-        var mtID = materialTypeList!
-            .firstWhere((element) => element.type == matType)
-            .id;
-        // print(pID);
-        // print(mtID);
+        String smtInvNo = (data[i][15]).toString();
 
         var res = await (db.select(db.inputData)
               ..where((tbl) => tbl.smtInvNo.equals(smtInvNo)))
             .get();
-        if (res.isEmpty) {
-          var result =
-              await db.into(db.inputData).insert(InputDataCompanion.insert(
-                    documentType: documentType,
-                    distDocDate: distDocDate,
-                    distDocNo: distDocNo,
-                    pID: pID,
-                    custBillCity: custBillCity,
-                    matCode: matCode,
-                    matName: matName,
-                    mtID: mtID,
-                    qty: qty,
-                    doctorName: doctorName,
-                    techniqalStaff: techniqalStaff,
-                    saleAmount: saleAmount,
-                    totalSale: totalSale,
-                    smtDocDate: smtDocDate,
-                    smtDocNo: smtDocNo,
-                    smtInvNo: smtInvNo,
-                    purchaseTaxableAmount: purchaseTaxableAmount,
-                    totalPurchaseAmount: totalPurchaseAmount,
-                    logId: logId,
-                    ledgerId: ledgerId,
-                    comission: comission,
-                    comissionAmount: comissionAmount,
-                    comissionPaidDate: comissionPaidDate,
-                    adjustComissionAmount: adjustComissionAmount,
-                  ));
+        if (res.isNotEmpty) {
+          // 'already exist'.errorSnackbar;
+          print('already exist');
+          smtInvNoList.add(smtInvNo);
+          print(smtInvNo);
+        }
+      }
+      print(smtInvNoList);
+      if (smtInvNoList.length > 1) {
+        String smtInvNoListString = '';
+        for (var i = 0; i < smtInvNoList.length; i++) {
+          smtInvNoListString += smtInvNoList[i].toString() + ', ';
+        }
+        Get.defaultDialog(
+          content: Column(
+            children: [
+              Text(
+                'Duplicate Invoice No',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Get.height * 0.02,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                child: Container(
+                  color: lCOLOR_PRIMARY.withOpacity(0.1),
+                  child: Text(
+                    smtInvNoListString.toString(),
+                    style: TextStyle(fontSize: Get.height * 0.02),
+                  ),
+                ),
+              ),
+              Text(
+                'Are you Remove Invoice No Already Exist in Database',
+                style: TextStyle(fontSize: Get.height * 0.02),
+              ),
+            ],
+          ),
+          textConfirm: 'Ok',
+          confirmTextColor: Colors.white,
+          onConfirm: () async {
+            Get.back();
+            List<List<dynamic>> tempdata = [];
+            // tempdata.addAll(data);
+
+            for (var i = 1; i < data.length; i++) {
+              String smtInvNo = (data[i][15]).toString();
+              if (!smtInvNoList.contains(smtInvNo)) {
+                tempdata.add(data[i]);
+              }
+            }
+
+            print(tempdata);
+            data.clear();
+            data.addAll(tempdata);
+            print(data);
+            pendingReportData.clear();
+            pendingReportData.addAll(data);
+            if (data.length < 1) {
+              'Duplicate Invoice Number Removed'.successSnackbar;
+              return;
+            }
+            for (var i = 1; i < data.length; i++) {
+              String documentType = data[i][0];
+              DateTime distDocDate =
+                  DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
+              String distDocNo = data[i][2];
+              var customer = data[i][3];
+              String custBillCity = data[i][4];
+              String matCode = data[i][5];
+              String matName = data[i][6];
+              String matType = data[i][7];
+              int qty = data[i][8];
+              String doctorName = data[i][9];
+              String techniqalStaff = data[i][10];
+              double saleAmount = double.parse((data[i][11]).toString());
+              double totalSale = double.parse((data[i][12]).toString());
+              DateTime smtDocDate =
+                  DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
+              String smtDocNo = (data[i][14]).toString();
+              String smtInvNo = (data[i][15]).toString();
+              double purchaseTaxableAmount =
+                  double.parse(data[i][16].toString());
+              double totalPurchaseAmount = double.parse(data[i][17].toString());
+              int logId = 0;
+              int ledgerId = 0;
+              double comission = 0;
+              double comissionAmount = 0;
+              DateTime comissionPaidDate = DateTime(1800, 01, 01);
+              double adjustComissionAmount = 0;
+
+              var pID = partyList!
+                  .firstWhere((element) => element.name == customer)
+                  .id;
+              var mtID = materialTypeList!
+                  .firstWhere((element) => element.type == matType)
+                  .id;
+
+              var result = await db.into(db.inputData).insert(
+                    InputDataCompanion.insert(
+                      documentType: documentType,
+                      distDocDate: distDocDate,
+                      distDocNo: distDocNo,
+                      pID: pID,
+                      custBillCity: custBillCity,
+                      matCode: matCode,
+                      matName: matName,
+                      mtID: mtID,
+                      qty: qty,
+                      doctorName: doctorName,
+                      techniqalStaff: techniqalStaff,
+                      saleAmount: saleAmount,
+                      totalSale: totalSale,
+                      smtDocDate: smtDocDate,
+                      smtDocNo: smtDocNo,
+                      smtInvNo: smtInvNo,
+                      purchaseTaxableAmount: purchaseTaxableAmount,
+                      totalPurchaseAmount: totalPurchaseAmount,
+                      logId: logId,
+                      ledgerId: ledgerId,
+                      comission: comission,
+                      comissionAmount: comissionAmount,
+                      comissionPaidDate: comissionPaidDate,
+                      adjustComissionAmount: adjustComissionAmount,
+                    ),
+                  );
+              print(result);
+              'data insert Successful'.successSnackbar;
+            }
+          },
+          textCancel: 'Cancel',
+          cancelTextColor: lCOLOR_PRIMARY,
+          onCancel: () {
+            Get.back();
+          },
+        );
+      } else {
+        for (var i = 1; i < data.length; i++) {
+          String documentType = data[i][0];
+          DateTime distDocDate =
+              DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
+          String distDocNo = data[i][2];
+          var customer = data[i][3];
+          String custBillCity = data[i][4];
+          String matCode = data[i][5];
+          String matName = data[i][6];
+          String matType = data[i][7];
+          int qty = data[i][8];
+          String doctorName = data[i][9];
+          String techniqalStaff = data[i][10];
+          double saleAmount = double.parse((data[i][11]).toString());
+          double totalSale = double.parse((data[i][12]).toString());
+          DateTime smtDocDate =
+              DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
+          String smtDocNo = (data[i][14]).toString();
+          String smtInvNo = (data[i][15]).toString();
+          double purchaseTaxableAmount = double.parse(data[i][16].toString());
+          double totalPurchaseAmount = double.parse(data[i][17].toString());
+          int logId = 0;
+          int ledgerId = 0;
+          double comission = 0;
+          double comissionAmount = 0;
+          DateTime comissionPaidDate = DateTime(1800, 01, 01);
+          double adjustComissionAmount = 0;
+
+          var pID =
+              partyList!.firstWhere((element) => element.name == customer).id;
+          var mtID = materialTypeList!
+              .firstWhere((element) => element.type == matType)
+              .id;
+
+          var result = await db.into(db.inputData).insert(
+                InputDataCompanion.insert(
+                  documentType: documentType,
+                  distDocDate: distDocDate,
+                  distDocNo: distDocNo,
+                  pID: pID,
+                  custBillCity: custBillCity,
+                  matCode: matCode,
+                  matName: matName,
+                  mtID: mtID,
+                  qty: qty,
+                  doctorName: doctorName,
+                  techniqalStaff: techniqalStaff,
+                  saleAmount: saleAmount,
+                  totalSale: totalSale,
+                  smtDocDate: smtDocDate,
+                  smtDocNo: smtDocNo,
+                  smtInvNo: smtInvNo,
+                  purchaseTaxableAmount: purchaseTaxableAmount,
+                  totalPurchaseAmount: totalPurchaseAmount,
+                  logId: logId,
+                  ledgerId: ledgerId,
+                  comission: comission,
+                  comissionAmount: comissionAmount,
+                  comissionPaidDate: comissionPaidDate,
+                  adjustComissionAmount: adjustComissionAmount,
+                ),
+              );
           print(result);
           'data insert Successful'.successSnackbar;
-        } else {
-          'already exist'.errorSnackbar;
-          print('already exist');
-          print(smtInvNo);
         }
       }
       // var res = await db.select(db.inputData).get();

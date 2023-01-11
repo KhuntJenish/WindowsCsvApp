@@ -45,17 +45,18 @@ class PartyComissionBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // materialType!.text = _partyController.defualtMaterialType.value.type;
-    print(materialType!.text);
+    print(materialType?.text);
     print(homepageController?.materialTypeList);
 
-     if (_partyController.materialTypeList!.isNotEmpty &&
-        materialType!.text != '') {
-      _partyController.defualtMaterialType.value = _partyController
-          .materialTypeList!
-          .firstWhere((element) => element.type == materialType!.text);
-          materialType!.text = '';
-      // _partyController.getMaterialTypeList();
-    } 
+    // if (_partyController.materialTypeList!.isNotEmpty &&
+    //     materialType?.text != '') {
+    //   _partyController.defualtMaterialType.value = _partyController
+    //       .materialTypeList!
+    //       .firstWhere((element) => element.type == materialType!.text);
+    //   materialType!.text = '';
+
+    //   // _partyController.getMaterialTypeList();
+    // }
 
     partyNameController.text = party!.name.toString();
     newComissionController.text = comissionPercentage.toString();

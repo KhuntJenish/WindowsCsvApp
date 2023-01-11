@@ -3,10 +3,11 @@ import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../dashboard.dart';
+
 import '../../utils/partyMasterBottomsheet.dart';
 import 'partyComission.dart';
 import 'partyController.dart';
+
 
 class PartyMasterPage extends StatelessWidget {
   static const routeName = '/partyMaster';
@@ -19,6 +20,7 @@ class PartyMasterPage extends StatelessWidget {
     HomepageController homepageController = Get.put(HomepageController());
     String btnText = 'Add User';
     TextEditingController name = TextEditingController(text: '');
+   
 
     return Scaffold(
       appBar: AppBar(
@@ -29,14 +31,6 @@ class PartyMasterPage extends StatelessWidget {
             fontSize: Get.height * 0.03,
           ),
         ),
-        // leading: IconButton(
-        //   onPressed: () {
-        //     homepageController.isSelectedReport.value = 0;
-        //     GetStorage('box').write('isSelectedReport', 0);
-        //     Get.offAndToNamed(Dashboard.routeName);
-        //   },
-        //   icon: const Icon(Icons.arrow_back),
-        // ),
         centerTitle: true,
       ),
       body: Column(
@@ -62,6 +56,7 @@ class PartyMasterPage extends StatelessWidget {
                     var data = partyController.partyTypeList?.firstWhere(
                         (element) => element.id == snapshot.data?[index].ptID);
                     // print(data?.type);
+                   
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
@@ -95,7 +90,8 @@ class PartyMasterPage extends StatelessWidget {
                                 btnText = 'Update Party';
                                 name.text =
                                     (snapshot.data?[index].name).toString();
-                                partyController.defualtPartyType.value = data!;
+                                partyController.defualtPartyType.value =
+                                    data!;
                                 Get.bottomSheet(
                                   isScrollControlled: true,
                                   ignoreSafeArea: false,

@@ -126,7 +126,7 @@ LazyDatabase _openConnection() {
     // for your app.
     print('database Created');
     final dbFolder = '${Directory.current.path}\\backupData';
-    final file = File(p.join(dbFolder, 'backup.sqlite'));
+    final file = File(p.join(dbFolder, 'demo.sqlite'));
     return NativeDatabase.createInBackground(file);
   });
 }

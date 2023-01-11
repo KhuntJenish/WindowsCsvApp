@@ -157,6 +157,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
                       if (partyType.text.isNotEmpty) {
                         _partyController.addPartyType(
                             partyType: partyType.text);
+                        partyType.clear();
                       } else {
                         'Fill Require Feild'.errorSnackbar;
                       }

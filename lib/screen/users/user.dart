@@ -18,6 +18,7 @@ class Userspage extends StatelessWidget {
   late String btnText = 'Add User';
   @override
   Widget build(BuildContext context) {
+    UserData currentUser = GetStorage('box').read('cuser');
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
@@ -49,81 +50,94 @@ class Userspage extends StatelessWidget {
                     // print(snapshot.data?[index].username);
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        leading:
-                            CircleAvatar(child: Text((index + 1).toString())),
-                        title: Text(
-                            '${(snapshot.data?[index].username).toString()} _ _ ${(snapshot.data?[index].password).toString()}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text((snapshot.data?[index].mail).toString()),
-                            Text(snapshot.data?[index].phone != 0
-                                ? (snapshot.data?[index].phone).toString()
-                                : ''),
-                          ],
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: (() {
-                                username.text =
-                                    (snapshot.data?[index].username).toString();
-                                password.text =
-                                    (snapshot.data?[index].password).toString();
-                                email.text =
-                                    (snapshot.data?[index].mail).toString();
-                                phone.text =
-                                    (snapshot.data?[index].phone).toString();
-                                btnText = 'Update User';
-                                var id = snapshot.data?[index].id.toInt();
-                                Get.bottomSheet(
-                                    isScrollControlled: true,
-                                    ignoreSafeArea: false,
-                                    UserBottomsheet(
-                                      id: id!,
-                                      btnText: 'Update User',
-                                      username: username,
-                                      password: password,
-                                      email: email,
-                                      phone: phone,
-                                    ));
-                              }),
-                              icon: const Icon(Icons.edit),
-                            ),
-                            IconButton(
-                              onPressed: (() {
-                                if (snapshot.data?[index].username != 'admin') {
+                      child: Visibility(
+                        visible: currentUser.username == 'admin'
+                            ? true
+                            : currentUser.username ==
+                                    (snapshot.data?[index].username).toString()
+                                ? true
+                                : false,
+                        child: ListTile(
+                          leading:
+                              CircleAvatar(child: Text((index + 1).toString())),
+                          title: Text(
+                              '${(snapshot.data?[index].username).toString()} _ _ ${(snapshot.data?[index].password).toString()}'),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text((snapshot.data?[index].mail).toString()),
+                              Text(snapshot.data?[index].phone != 0
+                                  ? (snapshot.data?[index].phone).toString()
+                                  : ''),
+                            ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: (() {
+                                  username.text =
+                                      (snapshot.data?[index].username)
+                                          .toString();
+                                  password.text =
+                                      (snapshot.data?[index].password)
+                                          .toString();
+                                  email.text =
+                                      (snapshot.data?[index].mail).toString();
+                                  phone.text =
+                                      (snapshot.data?[index].phone).toString();
+                                  btnText = 'Update User';
                                   var id = snapshot.data?[index].id.toInt();
-                                  Get.dialog(AlertDialog(
-                                    title: const Text('Delete User'),
-                                    content: const Text(
-                                        'Are you sure you want to delete this user?'),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Get.back();
-                                          },
-                                          child: const Text('No')),
-                                      TextButton(
-                                          onPressed: () {
-                                            _userController.deleteUser(id: id);
-                                            Get.back();
-                                          },
-                                          child: const Text('Yes')),
-                                    ],
-                                  ));
-                                } else {
-                                  'You can not delete admin user'.errorSnackbar;
+                                  Get.bottomSheet(
+                                      isScrollControlled: true,
+                                      ignoreSafeArea: false,
+                                      UserBottomsheet(
+                                        id: id!,
+                                        btnText: 'Update User',
+                                        username: username,
+                                        password: password,
+                                        email: email,
+                                        phone: phone,
+                                      ));
+                                }),
+                                icon: const Icon(Icons.edit),
+                              ),
+                              IconButton(
+                                onPressed: (() {
+                                  if (snapshot.data?[index].username !=
+                                      'admin') {
+                                    var id = snapshot.data?[index].id.toInt();
+                                    Get.dialog(AlertDialog(
+                                      title: const Text('Delete User'),
+                                      content: const Text(
+                                          'Are you sure you want to delete this user?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            child: const Text('No')),
+                                        TextButton(
+                                            onPressed: () {
+                                              _userController.deleteUser(
+                                                  id: id);
+                                              Get.back();
+                                            },
+                                            child: const Text('Yes')),
+                                      ],
+                                    ));
+                                  } else {
+                                    'You can not delete admin user'
+                                        .errorSnackbar;
 
-                                  print('You can not delete admin user');
-                                  // Get.snackbar('don`t do', 'You can not delete admin user');
-                                }
-                              }),
-                              icon: const Icon(Icons.delete),
-                            ),
-                          ],
+                                    print('You can not delete admin user');
+                                    // Get.snackbar('don`t do', 'You can not delete admin user');
+                                  }
+                                }),
+                                icon: const Icon(Icons.delete),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -135,26 +149,29 @@ class Userspage extends StatelessWidget {
         ],
       ),
       // drawer: drawer(),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            username.text = '';
-            password.text = '';
-            phone.text = '';
-            email.text = '';
-            btnText = 'Add User';
-            Get.bottomSheet(
-              isScrollControlled: true,
-              ignoreSafeArea: false,
-              UserBottomsheet(
-                btnText: btnText,
-                username: username,
-                password: password,
-                email: email,
-                phone: phone,
-              ),
-            );
-          },
-          child: const Icon(Icons.add)),
+      floatingActionButton: Visibility(
+        visible: currentUser.username == 'admin' ? true : false,
+        child: FloatingActionButton(
+            onPressed: () {
+              username.text = '';
+              password.text = '';
+              phone.text = '';
+              email.text = '';
+              btnText = 'Add User';
+              Get.bottomSheet(
+                isScrollControlled: true,
+                ignoreSafeArea: false,
+                UserBottomsheet(
+                  btnText: btnText,
+                  username: username,
+                  password: password,
+                  email: email,
+                  phone: phone,
+                ),
+              );
+            },
+            child: const Icon(Icons.add)),
+      ),
     );
   }
 }
