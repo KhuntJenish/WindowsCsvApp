@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:csv/csv.dart';
@@ -183,19 +184,7 @@ class HomepageController extends GetxController {
             print(newList);
             print(newList.length);
             mainList.add(newList);
-            // pdf.addPage(
-            //   pw.Page(
-            //     margin: const pw.EdgeInsets.all(8),
-            //     pageFormat: PdfPageFormat.a4,
-            //     build: (pw.Context context) {
-            //       return pw.Center(
-            //         child: pw.Column(children: [
-            //           pw.Table.fromTextArray(context: context, data: newList),
-            //         ]),
-            //       ); // Center
-            //     },
-            //   ),
-            // );
+
             saletotal = 0;
             comissiontotal = 0;
             saletotalList = [];
@@ -285,7 +274,11 @@ class HomepageController extends GetxController {
       // final file = File("example.pdf");
       await file.writeAsBytes(await pdf.save());
       print('save');
-      'pdf Download SuccessFull.😀'.successSnackbar;
+      // 'pdf Download SuccessFull.😀'.successSnackbar;
+      'pdf Download SuccessFull.😀'.successDailog;
+      Timer(Duration(seconds: 2), () {
+        Get.back();
+      });
       isNumber.value++;
       isLoading.value = false;
     } catch (e) {
@@ -415,7 +408,11 @@ class HomepageController extends GetxController {
       // final file = File("example.pdf");
       await file.writeAsBytes(await pdf.save());
       print('save');
-      'pdf Download SuccessFull.😀'.successSnackbar;
+      // 'pdf Download SuccessFull.😀'.successSnackbar;
+      'pdf Download SuccessFull.😀'.successDailog;
+      Timer(Duration(seconds: 2), () {
+        Get.back();
+      });
       isNumber.value++;
       isLoading.value = false;
     } catch (e) {
@@ -944,7 +941,11 @@ class HomepageController extends GetxController {
           print(updateRes);
         }
         // Get.back();
-        'Payment Added Successfully'.successSnackbar;
+        // 'Payment Added Successfully'.successSnackbar;
+        'Payment Added Successfully'.successDailog;
+        Timer(Duration(seconds: 2), () {
+          Get.back();
+        });
       } else {
         // Get.back();
         'Payment Not Added'.errorSnackbar;
@@ -1279,7 +1280,11 @@ class HomepageController extends GetxController {
         // var data = db.select(db.inputData).get();
         pendingReportData.clear();
         isLoading.value = false;
-        'Generate Report Successfully'.successSnackbar;
+        // 'Generate Report Successfully'.successSnackbar;
+        'Generate Report Successfully'.successDailog;
+        Timer(Duration(seconds: 2), () {
+          Get.back();
+        });
       } else {
         isLoading.value = false;
         'No Data Found'.errorSnackbar;
@@ -1444,7 +1449,11 @@ class HomepageController extends GetxController {
                     ),
                   );
               print(result);
-              'data insert Successful'.successSnackbar;
+              // 'data insert Successful'.successSnackbar;
+              'data insert Successful'.successDailog;
+              Timer(Duration(seconds: 2), () {
+                Get.back();
+              });
             }
           },
           textCancel: 'Cancel',
@@ -1517,7 +1526,11 @@ class HomepageController extends GetxController {
                 ),
               );
           print(result);
-          'data insert Successful'.successSnackbar;
+          // 'data insert Successful'.successSnackbar;
+          'data insert Successful'.successDailog;
+          Timer(Duration(seconds: 2), () {
+            Get.back();
+          });
         }
       }
       // var res = await db.select(db.inputData).get();

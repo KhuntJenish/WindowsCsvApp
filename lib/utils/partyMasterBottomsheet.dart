@@ -75,7 +75,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
                 fontSize: Get.width * 0.015,
                 text: 'submit',
                 onPressed: () {
-                  if (name.text.isNotEmpty) {
+                  if (name.text.isNotEmpty && _partyController.defualtPartyType.value.type != '') {
                     if (btnText == 'Add Party' || btnText == 'Add New Party') {
                       _partyController.addParty(
                         name: name.text,

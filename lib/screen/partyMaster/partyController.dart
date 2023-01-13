@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +102,12 @@ class PartyController extends GetxController {
     print(data);
     // partyList?.add(partyType!);
     getPartyTypeList();
-    "party type added".successSnackbar;
+    // "party type added".successSnackbar;
+    'party type added.'.successDailog;
+    // "party added".successSnackbar;.
+    Timer(Duration(seconds: 2), () {
+      Get.back();
+    });
   }
 
   addMaterialType({String? materialType}) async {
@@ -132,7 +139,11 @@ class PartyController extends GetxController {
               name: name.toString(), ptID: type!.toInt()));
       print(data);
       Get.back();
-      "party added".successSnackbar;
+      'party Added.'.successDailog;
+      // "party added".successSnackbar;.
+      Timer(Duration(seconds: 2), () {
+        Get.back();
+      });
     } else {
       Get.back();
       "party already exist".errorSnackbar;
@@ -209,7 +220,12 @@ class PartyController extends GetxController {
       // print(data.length);
       if (data > 0) {
         Get.back();
-        'User update Successful'.successSnackbar;
+        'User update Successful.'.successDailog;
+        // "party added".successSnackbar;.
+        Timer(Duration(seconds: 2), () {
+          Get.back();
+        });
+        // 'User update Successful'.successSnackbar;
         // print('user not exist');
 
       } else {

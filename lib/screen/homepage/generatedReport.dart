@@ -326,78 +326,10 @@ class GeneratedReport extends StatelessWidget {
                                     print(_homepageController
                                         .dateRange.value.end);
 
-                                    // switch (_homepageController
-                                    //     .defualtDuration.value) {
-                                    //   case 'One Month':
-                                    //     DateTime last = DateTime(
-                                    //             DateTime.now().year,
-                                    //             DateTime.now().month,
-                                    //             1)
-                                    //         .subtract(const Duration(days: 1));
-                                    //     DateTimeRange dateRange = DateTimeRange(
-                                    //       start: DateTime(
-                                    //           last.year, last.month, 1),
-                                    //       end: last,
-                                    //     );
-                                    //     print(dateRange);
-                                    //     _homepageController.dateRange.value =
-                                    //         dateRange;
-                                    //     break;
-                                    //   case 'Four Month':
-                                    //     DateTime last = DateTime(
-                                    //             DateTime.now().year,
-                                    //             DateTime.now().month,
-                                    //             1)
-                                    //         .subtract(const Duration(days: 1));
-                                    //     DateTimeRange dateRange = DateTimeRange(
-                                    //       start: DateTime(
-                                    //           last.year, last.month - 3, 1),
-                                    //       end: last,
-                                    //     );
-                                    //     print(dateRange);
-                                    //     _homepageController.dateRange.value =
-                                    //         dateRange;
-                                    //     break;
-                                    //   case 'Six Month':
-                                    //     DateTime last = DateTime(
-                                    //             DateTime.now().year,
-                                    //             DateTime.now().month,
-                                    //             1)
-                                    //         .subtract(const Duration(days: 1));
-                                    //     DateTimeRange dateRange = DateTimeRange(
-                                    //       start: DateTime(
-                                    //           last.year, last.month - 5, 1),
-                                    //       end: last,
-                                    //     );
-                                    //     print(dateRange);
-                                    //     _homepageController.dateRange.value =
-                                    //         dateRange;
-                                    //     break;
-                                    //   case 'One Year':
-                                    //     DateTime last = DateTime(
-                                    //             DateTime.now().year,
-                                    //             DateTime.now().month,
-                                    //             1)
-                                    //         .subtract(const Duration(days: 1));
-                                    //     DateTimeRange dateRange = DateTimeRange(
-                                    //       start: last.month == 12
-                                    //           ? DateTime(last.year, 1, 1)
-                                    //           : DateTime(
-                                    //               last.year - 1, last.month, 1),
-                                    //       end: last,
-                                    //     );
-                                    //     print(dateRange);
-                                    //     _homepageController.dateRange.value =
-                                    //         dateRange;
-                                    //     break;
-                                    //   default:
-                                    // }
                                     _homepageController.getDurationDateRange(
                                         duration: _homepageController
                                             .defualtDuration.value);
-                                    // print(
-                                    //     _homepageController.dateRange.value.start);
-                                    // print(_homepageController.dateRange.value.end);
+                                    
                                     await _homepageController
                                         .getGeneratedSearchData(
                                       start: _homepageController
@@ -419,7 +351,7 @@ class GeneratedReport extends StatelessWidget {
                                       selectedPartyCity: _homepageController
                                           .defualtPartyCity.value,
                                     );
-                                    // Get.offAllNamed(Homepage.routeName);
+                                   
                                   },
                                 ),
                               ),

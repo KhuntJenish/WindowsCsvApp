@@ -135,7 +135,8 @@ class PartyComissionBottomSheet extends StatelessWidget {
                 text: 'submit',
                 onPressed: () {
                   if (partyNameController.text.isNotEmpty &&
-                      newComissionController.text.isNotEmpty) {
+                      newComissionController.text.isNotEmpty &&
+                      _partyController.defualtMaterialType.value.type != '') {
                     if (btnText == 'Add Comission' ||
                         btnText == 'Add New Comission') {
                       _partyController.addPartyComission(

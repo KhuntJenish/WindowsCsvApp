@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:csvapp/dashboard.dart';
 import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/homepage/ImportReport.dart';
@@ -35,7 +37,12 @@ class UserController extends GetxController {
         // print(data.length);
         if (data > 0) {
           Get.back();
-          'User Add Successful'.successSnackbar;
+
+          // 'User Add Successful'.successSnackbar;
+          'User Add Successful'.successDailog;
+          Timer(Duration(seconds: 2), () {
+            Get.back();
+          });
           // print('user not exist');
         } else {
           // print(data);
@@ -86,7 +93,12 @@ class UserController extends GetxController {
           } else {
             Get.back();
           }
-          'User update Successful'.successSnackbar;
+          'User update Successful'.successDailog;
+
+          Timer(Duration(seconds: 2), () {
+            Get.back();
+          });
+          // 'User update Successful'.successSnackbar;
           // print('user not exist');
 
         } else {
@@ -126,7 +138,12 @@ class UserController extends GetxController {
         if (data > 0) {
           Get.back();
 
-          'User update Successful'.successSnackbar;
+          // 'User update Successful'.successSnackbar;
+          'User update Successful'.successDailog;
+
+          Timer(Duration(seconds: 2), () {
+            Get.back();
+          });
           // print('user not exist');
 
         } else {
