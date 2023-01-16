@@ -810,6 +810,11 @@ class HomepageController extends GetxController {
       generatedReportData.add(sublist);
       // print(serachData.length);
       // print(generatedReportData.length);
+      if (!isAllPartySelected) {
+        partyWiseTotalAmount.value = 0.0;
+        partyWisePaidAmount.value = 0.0;
+        partyWiseTotalAmount.value = 0.0;
+      }
 
       for (var i = 0; i < serachData.length; i++) {
         var checkParty = await (db.select(db.partyMaster)
@@ -854,8 +859,24 @@ class HomepageController extends GetxController {
             generatedReportData.add(sublist);
 
             if (!isAllPartySelected) {
-              partyWiseTotalAmount.value = partyWiseTotalAmount.value +
-                  double.parse(serachData[i].comissionAmount.toString());
+              var date = serachData[i].comissionPaidDate;
+              // date.isAfter(DateTime(1800, 01, 01));
+              print(date.isAfter(DateTime(1800, 01, 01)));
+              print('partyPaidDate: ${serachData[i].comissionPaidDate}');
+              if (date.isAfter(DateTime(1800, 01, 01))) {
+                partyWiseTotalAmount.value = partyWiseTotalAmount.value +
+                    double.parse(serachData[i].comissionAmount.toString());
+                partyWisePaidAmount.value = partyWisePaidAmount.value +
+                    double.parse(serachData[i].comissionAmount.toString());
+                partyWisePayableAmount.value =
+                    partyWiseTotalAmount.value - partyWisePaidAmount.value;
+              } else {
+                partyWiseTotalAmount.value = partyWiseTotalAmount.value +
+                    double.parse(serachData[i].comissionAmount.toString());
+
+                partyWisePayableAmount.value =
+                    partyWiseTotalAmount.value - partyWisePaidAmount.value;
+              }
             }
           } else {
             comissionAndmatTypeNaNSetData
