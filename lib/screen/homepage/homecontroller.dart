@@ -39,6 +39,7 @@ class HomepageController extends GetxController {
   List<MaterialTypeData>? materialTypeList = [];
   List<PartyMasterData>? partyList = [];
   Set ledgerPartyWiseSet = Set();
+  RxSet<String> smtInvNoSet = RxSet<String>();
   Rx<PartyMasterData> defualtParty =
       const PartyMasterData(id: 0, name: '', ptID: 0).obs;
   Rx<String> defualtPartyCity = ''.obs;
@@ -258,7 +259,7 @@ class HomepageController extends GetxController {
                   pw.Table.fromTextArray(
                     context: context,
                     data: mainList[i],
-                    cellStyle: const pw.TextStyle(fontSize: 10),
+                    cellStyle: const pw.TextStyle(fontSize: 7),
                   ),
                 ],
               ); // Center
@@ -267,9 +268,10 @@ class HomepageController extends GetxController {
         );
       }
 
+      final filename = "invoice_${DateTime.now().microsecond}_$isNumber.pdf";
       final output = await getDownloadsDirectory();
       final file = File(
-          "${output?.path}\\invoice_${DateTime.now().microsecond}_$isNumber.pdf");
+          "${output?.path}\\$filename");
       print(file.path);
       // final file = File("example.pdf");
       await file.writeAsBytes(await pdf.save());
@@ -504,6 +506,78 @@ class HomepageController extends GetxController {
     print(materialTypeList);
   }
 
+  reversePaymentProcess(String smtInvNo) async {
+    try {
+      print('smtInvNo: $smtInvNo');
+      var data = await (db.select(db.inputData)
+            ..where((tbl) => tbl.smtInvNo.equals(smtInvNo)))
+          .getSingle();
+
+      // if (data.isBlank) {
+
+      // }
+      print('logID : ${data.logId}');
+      print('ledgerID : ${data.ledgerId}');
+      if (data.ledgerId != 0) {
+        var ledgerData1 = await (db.select(db.ledger)
+              ..where((tbl) => tbl.id.equals(data.ledgerId)))
+            .getSingle();
+        var ledgerData2 = await (db.select(db.ledger)
+              ..where((tbl) => tbl.ledgerDate.equals(data.comissionPaidDate)))
+            .getSingle();
+
+        print('ledgerData: $ledgerData1');
+        print('ledgerData: $ledgerData2');
+        var deletePaymentLedger =
+            await db.delete(db.ledger).delete(ledgerData2);
+        print(deletePaymentLedger);
+        var updateInputData = await (db.update(db.inputData)
+              ..where((tbl) => tbl.id.equals(data.id)))
+            .write(
+          InputDataData(
+              id: data.id,
+              documentType: data.documentType,
+              distDocDate: data.distDocDate,
+              distDocNo: data.distDocNo,
+              pID: data.pID,
+              custBillCity: data.custBillCity,
+              matCode: data.matCode,
+              matName: data.matName,
+              mtID: data.mtID,
+              qty: data.qty,
+              doctorName: data.doctorName,
+              techniqalStaff: data.techniqalStaff,
+              saleAmount: data.saleAmount,
+              totalSale: data.totalSale,
+              smtDocDate: data.smtDocDate,
+              smtDocNo: data.smtDocNo,
+              smtInvNo: data.smtInvNo,
+              purchaseTaxableAmount: data.purchaseTaxableAmount,
+              totalPurchaseAmount: data.totalPurchaseAmount,
+              logId: data.logId,
+              ledgerId: data.ledgerId,
+              comission: data.comission,
+              comissionAmount: data.comissionAmount,
+              comissionPaidDate: DateTime(1800, 01, 01),
+              adjustComissionAmount: data.adjustComissionAmount),
+        );
+        print('updateInputData: $updateInputData');
+
+        'Payment Rejected Successfully'.successDailog;
+        Timer(Duration(seconds: 2), () {
+          Get.back();
+        });
+      } else {
+        'Payment not found!'.errorSnackbar;
+      }
+      // print('ledgerID : ${data.ledgerId}');
+    } catch (e) {
+      e.toString().errorSnackbar;
+
+      e.toString().printError;
+    }
+  }
+
   Future<void> getPendingSearchData(
       {DateTime? start,
       DateTime? end,
@@ -663,6 +737,8 @@ class HomepageController extends GetxController {
           print(ledgerPartyWiseSet.toList()[index]);
           // ledgerPartyWiseSet.add(element);
         } else {
+          dramount = 0;
+          cramount = 0;
           dramount += element.drAmount;
           cramount += element.crAmount;
           List<double> sublist = [];
@@ -906,11 +982,11 @@ class HomepageController extends GetxController {
   }) async {
     try {
       isLoading.value = true;
-
+      var currentDate = DateTime.now();
       var ledgerData = await db.into(db.ledger).insert(LedgerCompanion.insert(
           type: Constantdata.payment,
           pID: selectedParty!.id,
-          ledgerDate: DateTime.now(),
+          ledgerDate: currentDate,
           drAmount: 0,
           crAmount: crAmount!,
           ledgerNote: Constantdata.defualtNote));
@@ -920,10 +996,13 @@ class HomepageController extends GetxController {
       // print(data);
       if (ledgerData > 0) {
         List<String> smtInvNoList = [];
-        for (var i = 1; i < generatedReportData.length; i++) {
-          smtInvNoList.add(generatedReportData[i][15].toString());
-        }
+        // for (var i = 1; i < generatedReportData.length; i++) {
+        //   smtInvNoList.add(generatedReportData[i][15].toString());
+        // }
+        smtInvNoList.addAll(smtInvNoSet.toList());
+
         print(smtInvNoList);
+
         var inputDatadata = await (db.select(db.inputData)
               ..where((tbl) => tbl.smtInvNo.isIn(smtInvNoList)))
             .get();
@@ -956,7 +1035,7 @@ class HomepageController extends GetxController {
                   ledgerId: inputDatadata[i].ledgerId,
                   comission: inputDatadata[i].comission,
                   comissionAmount: inputDatadata[i].comissionAmount,
-                  comissionPaidDate: DateTime.now(),
+                  comissionPaidDate: currentDate,
                   adjustComissionAmount:
                       inputDatadata[i].adjustComissionAmount));
           print(updateRes);

@@ -14,6 +14,7 @@ import 'dashboard.dart';
 import 'screen/homepage/generatedReport.dart';
 import 'screen/homepage/ImportReport.dart';
 import 'theam/theam_constants.dart';
+import 'utils/constant.dart';
 
 Future<void> main() async {
   //  static final db = MyDatabase();
@@ -25,6 +26,11 @@ Future<void> main() async {
   //         mail: 'admin@gmail.com',
   //         phone: 9624891105));
   // print(id);
+
+  var data = await Constantdata.db.select(Constantdata.db.ledger).get();
+
+  print(data);
+  print('done');
 
   // final id = await (Constantdata.db.delete(Constantdata.db.materialType)
   //       ..where((tbl) => tbl.id.equals(2)))
@@ -73,7 +79,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     testWindowFunctions();
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
-    GetStorage('box').write('isSelectedReport', 0 );
+    GetStorage('box').write('isSelectedReport', 0);
     if (GetStorage('box').read('cuser') != null) {
       var userData = GetStorage('box').read('cuser');
       print(userData);
@@ -138,9 +144,9 @@ class MyApp extends StatelessWidget {
               page: () => PartyComission(),
             ),
             GetPage(
-              name: Dashboard.routeName,
-              page: () => Dashboard(),
-              transition: Transition.native),
+                name: Dashboard.routeName,
+                page: () => Dashboard(),
+                transition: Transition.native),
             // GetPage(
             //   name: MaterialTypeMasterPage.routeName,
             //   page: () => MaterialTypeMasterPage(),

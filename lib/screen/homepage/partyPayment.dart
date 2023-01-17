@@ -5,7 +5,6 @@ import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +26,7 @@ class PartyPayment extends StatelessWidget {
     final ScrollController verticalScroll = ScrollController();
     const double width = 20;
     RxBool? isAllPartyChecked = true.obs;
+    // Set smtInvNo = {};
 
     return WillPopScope(
       onWillPop: () async {
@@ -306,6 +306,7 @@ class PartyPayment extends StatelessWidget {
                                 fontSize: Get.width * 0.010,
                                 text: 'Search',
                                 onPressed: () async {
+                                  _homepageController.smtInvNoSet.clear();
                                   print('Search Button Pressed');
                                   print(_homepageController
                                       .isAllPartySelected.value);
@@ -430,16 +431,20 @@ class PartyPayment extends StatelessWidget {
                                         }),
                                   ),
                                   Obx(
-                                    () => Container(
-                                      width: Get.width * 0.025,
-                                      color: Colors.red,
-                                      child: Checkbox(
-                                        value: isAllPartyChecked.value,
-                                        onChanged: (value) {
-                                          isAllPartyChecked.value = value!;
-                                          print(value);
-                                          // _homepageController.isAllPartySelected.refresh();
-                                        },
+                                    () => Visibility(
+                                      visible: !_homepageController
+                                          .isAllPartySelected.value,
+                                      child: Container(
+                                        width: Get.width * 0.033,
+                                        // color: Colors.red,
+                                        child: Checkbox(
+                                          value: isAllPartyChecked.value,
+                                          onChanged: (value) {
+                                            isAllPartyChecked.value = value!;
+                                            print(value);
+                                            // _homepageController.isAllPartySelected.refresh();
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -465,6 +470,12 @@ class PartyPayment extends StatelessWidget {
                                         .generatedReportData[index][20]
                                     : DateTime.now();
                                 RxBool? isPartyChecked = true.obs;
+                                index != 0
+                                    ? _homepageController.smtInvNoSet.add(
+                                        _homepageController
+                                            .generatedReportData[index][15]
+                                            .toString())
+                                    : null;
                                 // var isPartyChecked = true;
                                 return Visibility(
                                   visible: index != 0,
@@ -737,13 +748,90 @@ class PartyPayment extends StatelessWidget {
                                               child: Container(
                                                 width: Get.width * 0.025,
                                                 // color: Colors.red,
-                                                child: Checkbox(
-                                                  value: isPartyChecked.value,
-                                                  onChanged: (value) {
-                                                    isPartyChecked.value = value!;
-                                                    print(value);
-                                                    // _homepageController.isAllPartySelected.refresh();
-                                                  },
+                                                child: Visibility(
+                                                  visible: date.isAfter(
+                                                      DateTime(1800, 01, 01)),
+                                                  replacement: Checkbox(
+                                                    value: isPartyChecked.value,
+                                                    onChanged: (value) {
+                                                      isPartyChecked.value =
+                                                          value!;
+                                                      print(value);
+                                                      if (value) {
+                                                        _homepageController
+                                                            .smtInvNoSet
+                                                            .add(_homepageController
+                                                                .generatedReportData[
+                                                                    index][15]
+                                                                .toString());
+                                                        _homepageController
+                                                                .partyWiseTotalAmount
+                                                                .value +=
+                                                            double.parse(
+                                                                _homepageController
+                                                                    .generatedReportData[
+                                                                        index]
+                                                                        [19]
+                                                                    .toString());
+                                                        _homepageController
+                                                            .partyWisePayableAmount
+                                                            .value = _homepageController
+                                                                .partyWiseTotalAmount
+                                                                .value -
+                                                            _homepageController
+                                                                .partyWisePaidAmount
+                                                                .value;
+                                                      } else {
+                                                        _homepageController
+                                                            .smtInvNoSet
+                                                            .remove(_homepageController
+                                                                .generatedReportData[
+                                                                    index][15]
+                                                                .toString());
+                                                        _homepageController
+                                                                .partyWiseTotalAmount
+                                                                .value -=
+                                                            double.parse(
+                                                                _homepageController
+                                                                    .generatedReportData[
+                                                                        index]
+                                                                        [19]
+                                                                    .toString());
+                                                        _homepageController
+                                                            .partyWisePayableAmount
+                                                            .value = _homepageController
+                                                                .partyWiseTotalAmount
+                                                                .value -
+                                                            _homepageController
+                                                                .partyWisePaidAmount
+                                                                .value;
+                                                      }
+                                                      print(_homepageController
+                                                          .partyWiseTotalAmount
+                                                          .value);
+
+                                                      print(_homepageController
+                                                          .smtInvNoSet);
+                                                      // _homepageController.isAllPartySelected.refresh();
+                                                    },
+                                                  ),
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      print('payment Back');
+                                                      print(_homepageController
+                                                          .generatedReportData[
+                                                              index][15]
+                                                          .toString());
+                                                      _homepageController
+                                                          .reversePaymentProcess(
+                                                              _homepageController
+                                                                  .generatedReportData[
+                                                                      index][15]
+                                                                  .toString());
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.arrow_back_ios),
+                                                  ),
                                                 ),
                                               ),
                                             ),
