@@ -521,9 +521,10 @@ class HomepageController extends GetxController {
     print(materialTypeList);
   }
 
-  reversePaymentProcess(String smtInvNo) async {
+  reversePaymentProcess(String smtInvNo, double crAmount) async {
     try {
       print('smtInvNo: $smtInvNo');
+      print('amount: $crAmount');
       var data = await (db.select(db.inputData)
             ..where((tbl) => tbl.smtInvNo.equals(smtInvNo)))
           .getSingle();
@@ -534,49 +535,73 @@ class HomepageController extends GetxController {
       print('logID : ${data.logId}');
       print('ledgerID : ${data.ledgerId}');
       if (data.ledgerId != 0) {
-        var ledgerData1 = await (db.select(db.ledger)
-              ..where((tbl) => tbl.id.equals(data.ledgerId)))
-            .getSingle();
+        // var ledgerData1 = await (db.select(db.ledger)
+        //       ..where((tbl) => tbl.id.equals(data.ledgerId)))
+        //     .getSingle();
         var ledgerData2 = await (db.select(db.ledger)
               ..where((tbl) => tbl.ledgerDate.equals(data.comissionPaidDate)))
             .getSingle();
 
-        print('ledgerData: $ledgerData1');
+        // print('ledgerData: $ledgerData1');
         print('ledgerData: $ledgerData2');
-        var deletePaymentLedger =
-            await db.delete(db.ledger).delete(ledgerData2);
-        print(deletePaymentLedger);
+        if (ledgerData2.crAmount != crAmount) {
+          var updateLedgerData = await (db.update(db.ledger)
+                ..where((tbl) => tbl.id.equals(ledgerData2.id)))
+              .write(
+            ledgerData2.copyWith(
+              crAmount: ledgerData2.crAmount - crAmount,
+            ),
+          );
+        } else {
+          var deletePaymentLedger =
+              await db.delete(db.ledger).delete(ledgerData2);
+          print(deletePaymentLedger);
+        }
         var updateInputData = await (db.update(db.inputData)
               ..where((tbl) => tbl.id.equals(data.id)))
             .write(
-          InputDataData(
-              id: data.id,
-              documentType: data.documentType,
-              distDocDate: data.distDocDate,
-              distDocNo: data.distDocNo,
-              pID: data.pID,
-              custBillCity: data.custBillCity,
-              matCode: data.matCode,
-              matName: data.matName,
-              mtID: data.mtID,
-              qty: data.qty,
-              doctorName: data.doctorName,
-              techniqalStaff: data.techniqalStaff,
-              saleAmount: data.saleAmount,
-              totalSale: data.totalSale,
-              smtDocDate: data.smtDocDate,
-              smtDocNo: data.smtDocNo,
-              smtInvNo: data.smtInvNo,
-              purchaseTaxableAmount: data.purchaseTaxableAmount,
-              totalPurchaseAmount: data.totalPurchaseAmount,
-              logId: data.logId,
-              ledgerId: data.ledgerId,
-              comission: data.comission,
-              comissionAmount: data.comissionAmount,
-              comissionPaidDate: DateTime(1800, 01, 01),
-              adjustComissionAmount: data.adjustComissionAmount),
+          data.copyWith(
+            comissionPaidDate: DateTime(1800, 01, 01),
+          ),
+          // InputDataData(
+          //     id: data.id,
+          //     documentType: data.documentType,
+          //     distDocDate: data.distDocDate,
+          //     distDocNo: data.distDocNo,
+          //     pID: data.pID,
+          //     custBillCity: data.custBillCity,
+          //     matCode: data.matCode,
+          //     matName: data.matName,
+          //     mtID: data.mtID,
+          //     qty: data.qty,
+          //     doctorName: data.doctorName,
+          //     techniqalStaff: data.techniqalStaff,
+          //     saleAmount: data.saleAmount,
+          //     totalSale: data.totalSale,
+          //     smtDocDate: data.smtDocDate,
+          //     smtDocNo: data.smtDocNo,
+          //     smtInvNo: data.smtInvNo,
+          //     purchaseTaxableAmount: data.purchaseTaxableAmount,
+          //     totalPurchaseAmount: data.totalPurchaseAmount,
+          //     logId: data.logId,
+          //     ledgerId: data.ledgerId,
+          //     comission: data.comission,
+          //     comissionAmount: data.comissionAmount,
+          //     comissionPaidDate: DateTime(1800, 01, 01),
+          //     adjustComissionAmount: data.adjustComissionAmount),
         );
         print('updateInputData: $updateInputData');
+
+        await getGeneratedSearchData(
+          start: dateRange.value.start,
+          end: dateRange.value.end,
+          selectedParty: defualtParty.value,
+          isAllPartySelected: isAllPartySelected.value,
+          isAllMaterialTypeSelected: isAllMaterialTypeSelected.value,
+          isAllPartyCitySelected: isAllPartyCitySelected.value,
+          selectedMaterialType: defualtMaterialType.value,
+          selectedPartyCity: defualtPartyCity.value,
+        );
 
         'Payment Rejected Successfully'.successDailog;
         Timer(Duration(seconds: 2), () {
@@ -1057,6 +1082,16 @@ class HomepageController extends GetxController {
         }
         // Get.back();
         // 'Payment Added Successfully'.successSnackbar;
+        await getGeneratedSearchData(
+          start: dateRange.value.start,
+          end: dateRange.value.end,
+          selectedParty: defualtParty.value,
+          isAllPartySelected: isAllPartySelected.value,
+          isAllMaterialTypeSelected: isAllMaterialTypeSelected.value,
+          isAllPartyCitySelected: isAllPartyCitySelected.value,
+          selectedMaterialType: defualtMaterialType.value,
+          selectedPartyCity: defualtPartyCity.value,
+        );
         'Payment Added Successfully'.successDailog;
         Timer(Duration(seconds: 2), () {
           Get.back();
@@ -1470,7 +1505,7 @@ class HomepageController extends GetxController {
                 ),
               ),
               Text(
-                'Are you Remove Invoice No Already Exist in Database',
+                'Are you want to Remove Duplicate Invoice No',
                 style: TextStyle(fontSize: Get.height * 0.02),
               ),
             ],
@@ -1490,7 +1525,10 @@ class HomepageController extends GetxController {
             }
 
             print(tempdata);
+            List<dynamic> dataHeader = [];
+            dataHeader.addAll(data[0]);
             data.clear();
+            data.add(dataHeader);
             data.addAll(tempdata);
             print(data);
             pendingReportData.clear();
@@ -1498,73 +1536,75 @@ class HomepageController extends GetxController {
             if (data.length < 1) {
               'Duplicate Invoice Number Removed'.successSnackbar;
               return;
-            }
-            for (var i = 1; i < data.length; i++) {
-              String documentType = data[i][0];
-              DateTime distDocDate =
-                  DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
-              String distDocNo = data[i][2];
-              var customer = data[i][3];
-              String custBillCity = data[i][4];
-              String matCode = data[i][5];
-              String matName = data[i][6];
-              String matType = data[i][7];
-              int qty = data[i][8];
-              String doctorName = data[i][9];
-              String techniqalStaff = data[i][10];
-              double saleAmount = double.parse((data[i][11]).toString());
-              double totalSale = double.parse((data[i][12]).toString());
-              DateTime smtDocDate =
-                  DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
-              String smtDocNo = (data[i][14]).toString();
-              String smtInvNo = (data[i][15]).toString();
-              double purchaseTaxableAmount =
-                  double.parse(data[i][16].toString());
-              double totalPurchaseAmount = double.parse(data[i][17].toString());
-              int logId = 0;
-              int ledgerId = 0;
-              double comission = 0;
-              double comissionAmount = 0;
-              DateTime comissionPaidDate = DateTime(1800, 01, 01);
-              double adjustComissionAmount = 0;
+            } else {
+              for (var i = 1; i < data.length; i++) {
+                String documentType = data[i][0];
+                DateTime distDocDate =
+                    DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
+                String distDocNo = data[i][2];
+                var customer = data[i][3];
+                String custBillCity = data[i][4];
+                String matCode = data[i][5];
+                String matName = data[i][6];
+                String matType = data[i][7];
+                int qty = data[i][8];
+                String doctorName = data[i][9];
+                String techniqalStaff = data[i][10];
+                double saleAmount = double.parse((data[i][11]).toString());
+                double totalSale = double.parse((data[i][12]).toString());
+                DateTime smtDocDate =
+                    DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
+                String smtDocNo = (data[i][14]).toString();
+                String smtInvNo = (data[i][15]).toString();
+                double purchaseTaxableAmount =
+                    double.parse(data[i][16].toString());
+                double totalPurchaseAmount =
+                    double.parse(data[i][17].toString());
+                int logId = 0;
+                int ledgerId = 0;
+                double comission = 0;
+                double comissionAmount = 0;
+                DateTime comissionPaidDate = DateTime(1800, 01, 01);
+                double adjustComissionAmount = 0;
 
-              var pID = partyList!
-                  .firstWhere((element) => element.name == customer)
-                  .id;
-              var mtID = materialTypeList!
-                  .firstWhere((element) => element.type == matType)
-                  .id;
+                var pID = partyList!
+                    .firstWhere((element) => element.name == customer)
+                    .id;
+                var mtID = materialTypeList!
+                    .firstWhere((element) => element.type == matType)
+                    .id;
 
-              var result = await db.into(db.inputData).insert(
-                    InputDataCompanion.insert(
-                      documentType: documentType,
-                      distDocDate: distDocDate,
-                      distDocNo: distDocNo,
-                      pID: pID,
-                      custBillCity: custBillCity,
-                      matCode: matCode,
-                      matName: matName,
-                      mtID: mtID,
-                      qty: qty,
-                      doctorName: doctorName,
-                      techniqalStaff: techniqalStaff,
-                      saleAmount: saleAmount,
-                      totalSale: totalSale,
-                      smtDocDate: smtDocDate,
-                      smtDocNo: smtDocNo,
-                      smtInvNo: smtInvNo,
-                      purchaseTaxableAmount: purchaseTaxableAmount,
-                      totalPurchaseAmount: totalPurchaseAmount,
-                      logId: logId,
-                      ledgerId: ledgerId,
-                      comission: comission,
-                      comissionAmount: comissionAmount,
-                      comissionPaidDate: comissionPaidDate,
-                      adjustComissionAmount: adjustComissionAmount,
-                    ),
-                  );
-              print(result);
-              // 'data insert Successful'.successSnackbar;
+                var result = await db.into(db.inputData).insert(
+                      InputDataCompanion.insert(
+                        documentType: documentType,
+                        distDocDate: distDocDate,
+                        distDocNo: distDocNo,
+                        pID: pID,
+                        custBillCity: custBillCity,
+                        matCode: matCode,
+                        matName: matName,
+                        mtID: mtID,
+                        qty: qty,
+                        doctorName: doctorName,
+                        techniqalStaff: techniqalStaff,
+                        saleAmount: saleAmount,
+                        totalSale: totalSale,
+                        smtDocDate: smtDocDate,
+                        smtDocNo: smtDocNo,
+                        smtInvNo: smtInvNo,
+                        purchaseTaxableAmount: purchaseTaxableAmount,
+                        totalPurchaseAmount: totalPurchaseAmount,
+                        logId: logId,
+                        ledgerId: ledgerId,
+                        comission: comission,
+                        comissionAmount: comissionAmount,
+                        comissionPaidDate: comissionPaidDate,
+                        adjustComissionAmount: adjustComissionAmount,
+                      ),
+                    );
+                print(result);
+                // 'data insert Successful'.successSnackbar;
+              }
               'data insert Successful'.successDailog;
               Timer(Duration(seconds: 2), () {
                 Get.back();

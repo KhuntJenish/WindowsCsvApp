@@ -287,6 +287,9 @@ class PartyComission extends StatelessWidget {
                                                       isScrollControlled: true,
                                                       ignoreSafeArea: false,
                                                       PartyComissionBottomSheet(
+                                                        materialType:
+                                                            TextEditingController(
+                                                                text: ''),
                                                         comissionPercentage: '',
                                                         party: party,
                                                         btnText: btnText,
@@ -371,6 +374,7 @@ class PartyComission extends StatelessWidget {
             isScrollControlled: true,
             ignoreSafeArea: false,
             PartyComissionBottomSheet(
+              materialType: TextEditingController(text: ''),
               comissionPercentage: '',
               party: party,
               btnText: btnText,

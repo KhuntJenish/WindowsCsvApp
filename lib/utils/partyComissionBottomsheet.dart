@@ -20,7 +20,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
     required this.party,
     this.oldComission,
     this.isShow = false,
-    this.materialType,
+    required this.materialType,
     this.homepageController,
     // this.partyTypeIDList = const [],
     // required this.newComission,
@@ -37,7 +37,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
   final bool? isShow;
   final PartyController _partyController = Get.put(PartyController());
   final HomepageController? homepageController;
-  TextEditingController? materialType = TextEditingController(text: '');
+  TextEditingController materialType = TextEditingController(text: '');
   TextEditingController partyNameController = TextEditingController(text: '');
   TextEditingController newComissionController =
       TextEditingController(text: '');
@@ -45,8 +45,8 @@ class PartyComissionBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // materialType!.text = _partyController.defualtMaterialType.value.type;
-    print(materialType?.text);
-    print(homepageController?.materialTypeList);
+    // print(materialType?.text);
+    // print(homepageController?.materialTypeList);
 
     // if (_partyController.materialTypeList!.isNotEmpty &&
     //     materialType?.text != '') {
@@ -213,10 +213,11 @@ class PartyComissionBottomSheet extends StatelessWidget {
                     fontSize: Get.width * 0.015,
                     text: _partyController.addPartyBtnText.value,
                     onPressed: () {
-                      if (materialType!.text.isNotEmpty) {
+                      print(materialType.text);
+                      if (materialType.text.isNotEmpty) {
                         _partyController.addMaterialType(
-                            materialType: materialType!.text);
-                        materialType!.clear();
+                            materialType: materialType.text);
+                        materialType.clear();
                       } else {
                         'Fill Require Feild'.errorSnackbar;
                       }

@@ -110,13 +110,14 @@ class StringDropDownItems extends StatelessWidget {
     this.selectedItemList,
     this.height = 50,
     this.width,
+    this.homecontroller,
   });
   Rx<String>? defualtValue;
   final List<String>? itemList;
   final List<String>? selectedItemList;
   final double height;
   final double? width;
-
+  HomepageController? homecontroller;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -148,6 +149,13 @@ class StringDropDownItems extends StatelessWidget {
             onChanged: (String? newValue) {
               defualtValue?.value = newValue!;
               print(defualtValue?.value);
+              if (defualtValue?.value == 'Custom') {
+                homecontroller?.dateRange.value = DateTimeRange(
+                  start: DateTime(DateTime.now().year, DateTime.now().month, 1),
+                  end: DateTime.now(),
+                );
+                print('jenish');
+              }
             },
           ),
         ),

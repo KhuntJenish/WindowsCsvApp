@@ -226,6 +226,8 @@ class PartyLedger extends StatelessWidget {
                                               child: SizedBox(
                                                 width: Get.width * 0.20,
                                                 child: StringDropDownItems(
+                                                  homecontroller:
+                                                      _homepageController,
                                                   defualtValue:
                                                       _homepageController
                                                           .defualtDuration,
@@ -395,11 +397,11 @@ class PartyLedger extends StatelessWidget {
                                   elements:
                                       _homepageController.ledgerReportData,
                                   groupBy: (element) {
-                                    print('G : '+element.pID.toString());
+                                    print('G : ' + element.pID.toString());
                                     return element.pID.toString();
                                   },
                                   groupSeparatorBuilder: (String groupByValue) {
-                                    print('GS : '+groupByValue);
+                                    print('GS : ' + groupByValue);
                                     return Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:

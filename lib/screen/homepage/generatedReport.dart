@@ -286,6 +286,7 @@ class GeneratedReport extends StatelessWidget {
                                                 child: SizedBox(
                                                   width: Get.width * 0.20,
                                                   child: StringDropDownItems(
+                                                    homecontroller: _homepageController,
                                                     defualtValue:
                                                         _homepageController
                                                             .defualtDuration,
@@ -329,7 +330,7 @@ class GeneratedReport extends StatelessWidget {
                                     _homepageController.getDurationDateRange(
                                         duration: _homepageController
                                             .defualtDuration.value);
-                                    
+
                                     await _homepageController
                                         .getGeneratedSearchData(
                                       start: _homepageController
@@ -351,7 +352,6 @@ class GeneratedReport extends StatelessWidget {
                                       selectedPartyCity: _homepageController
                                           .defualtPartyCity.value,
                                     );
-                                   
                                   },
                                 ),
                               ),
@@ -715,46 +715,3 @@ class GeneratedReport extends StatelessWidget {
   }
 }
 
-class LableWithCheckbox extends StatelessWidget {
-  const LableWithCheckbox(
-      {super.key,
-      required this.lable,
-      this.checkBoxOnchange,
-      this.checkBoxValue,
-      required this.isCheckBoxVisible});
-
-  final String lable; // = 'Select Party:';
-  final bool? checkBoxValue; //= false;
-  final Function(bool?)? checkBoxOnchange;
-  final bool? isCheckBoxVisible; //= false
-
-  @override
-  Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    return SizedBox(
-      width: Get.width * 0.20,
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            child: AutoSizeText(
-              lable,
-              style: textTheme.bodyText1?.copyWith(
-                fontSize: Get.height * 0.015,
-              ),
-              maxLines: 1,
-            ),
-          ),
-          Visibility(
-            visible: isCheckBoxVisible!,
-            replacement: Container(),
-            child: Checkbox(
-              value: checkBoxValue,
-              onChanged: checkBoxOnchange,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

@@ -87,15 +87,9 @@ class PartyPayment extends StatelessWidget {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            LableWithCheckbox(
+                                            const LableWithCheckbox(
                                               lable: 'Select Party:',
-                                              checkBoxOnchange: (value) =>
-                                                  _homepageController
-                                                      .isAllPartySelected
-                                                      .value = value!,
-                                              checkBoxValue: _homepageController
-                                                  .isAllPartySelected.value,
-                                              isCheckBoxVisible: true,
+                                              isCheckBoxVisible: false,
                                             ),
                                             SizedBox(
                                               width: Get.width * 0.20,
@@ -287,6 +281,8 @@ class PartyPayment extends StatelessWidget {
                                                 child: SizedBox(
                                                   width: Get.width * 0.20,
                                                   child: StringDropDownItems(
+                                                    homecontroller:
+                                                        _homepageController,
                                                     defualtValue:
                                                         _homepageController
                                                             .defualtDuration,
@@ -339,8 +335,7 @@ class PartyPayment extends StatelessWidget {
                                           .dateRange.value.end,
                                       selectedParty: _homepageController
                                           .defualtParty.value,
-                                      isAllPartySelected: _homepageController
-                                          .isAllPartySelected.value,
+                                      isAllPartySelected: false,
                                       isAllMaterialTypeSelected:
                                           _homepageController
                                               .isAllMaterialTypeSelected.value,
@@ -843,13 +838,66 @@ class PartyPayment extends StatelessWidget {
                                                             .generatedReportData[
                                                                 index][15]
                                                             .toString());
-                                                        _homepageController
-                                                            .reversePaymentProcess(
-                                                                _homepageController
-                                                                    .generatedReportData[
-                                                                        index]
-                                                                        [15]
-                                                                    .toString());
+                                                        var smtInvNo =
+                                                            _homepageController
+                                                                .generatedReportData[
+                                                                    index][15]
+                                                                .toString();
+                                                        Get.defaultDialog(
+                                                          title: 'Payment Back',
+                                                          middleText:
+                                                              'Are you sure you want to back payment?',
+                                                          textConfirm: 'Yes',
+                                                          textCancel: 'No',
+                                                          confirmTextColor:
+                                                              Colors.white,
+                                                          content: Container(
+                                                            child: Column(
+                                                              children: [
+                                                                Text(
+                                                                  'Payment Back',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        Get.height *
+                                                                            0.02,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 10,
+                                                                ),
+                                                                Text(
+                                                                  'Are you want to Process ${smtInvNo} smtInvNo?',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          Get.height *
+                                                                              0.02),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          onConfirm: () {
+                                                            Get.back();
+                                                            _homepageController
+                                                                .reversePaymentProcess(
+                                                              _homepageController
+                                                                  .generatedReportData[
+                                                                      index][15]
+                                                                  .toString(),
+                                                              double.parse(
+                                                                  _homepageController
+                                                                      .generatedReportData[
+                                                                          index]
+                                                                          [19]
+                                                                      .toString()),
+                                                            );
+                                                          },
+                                                        );
                                                       },
                                                       icon: const Icon(
                                                           Icons.arrow_back_ios),

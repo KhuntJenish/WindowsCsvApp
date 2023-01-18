@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -256,4 +257,49 @@ PreferredSize bottomAppBar({HomepageController? homepageController}) {
       ),
     ),
   );
+}
+
+class LableWithCheckbox extends StatelessWidget {
+  const LableWithCheckbox(
+      {super.key,
+      required this.lable,
+      this.checkBoxOnchange,
+      this.checkBoxValue,
+      required this.isCheckBoxVisible});
+
+  final String lable; // = 'Select Party:';
+  final bool? checkBoxValue; //= false;
+  final Function(bool?)? checkBoxOnchange;
+  final bool? isCheckBoxVisible; //= false
+
+  @override
+  Widget build(BuildContext context) {
+    print('checkbox : ' + isCheckBoxVisible.toString());
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return SizedBox(
+      width: Get.width * 0.20,
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            child: AutoSizeText(
+              lable,
+              style: textTheme.bodyText1?.copyWith(
+                fontSize: Get.height * 0.015,
+              ),
+              maxLines: 1,
+            ),
+          ),
+          Visibility(
+            visible: isCheckBoxVisible == true ? true : false,
+            replacement: Container(),
+            child: Checkbox(
+              value: checkBoxValue ?? false,
+              onChanged: checkBoxOnchange,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -96,13 +96,15 @@ class PartyController extends GetxController {
       "Party type already exist".errorSnackbar;
       return;
     }
-    var data = db.into(db.partyTypeMaster).insert(
+    var data = await db.into(db.partyTypeMaster).insert(
           PartyTypeMasterCompanion.insert(type: partyType.toString()),
         );
     print(data);
     // partyList?.add(partyType!);
-    getPartyTypeList();
+    await getPartyTypeList();
     // "party type added".successSnackbar;
+    print(partyTypeList);
+    defualtPartyType.refresh();
     'party type added.'.successDailog;
     // "party added".successSnackbar;.
     Timer(Duration(seconds: 2), () {
@@ -124,7 +126,10 @@ class PartyController extends GetxController {
 
     print(data);
     // partyList?.add(partyType!);
-    getMaterialTypeList();
+    await getMaterialTypeList();
+
+    // print(materialTypeList);
+    defualtMaterialType.refresh();
 
     "Material type added".successSnackbar;
   }
