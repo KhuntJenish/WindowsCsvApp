@@ -27,10 +27,10 @@ Future<void> main() async {
   //         phone: 9624891105));
   // print(id);
 
-  var data = await Constantdata.db.select(Constantdata.db.ledger).get();
+  // var data = await Constantdata.db.select(Constantdata.db.ledger).get();
 
-  print(data);
-  print('done');
+  // print(data);
+  // print('done');
 
   // final id = await (Constantdata.db.delete(Constantdata.db.materialType)
   //       ..where((tbl) => tbl.id.equals(2)))

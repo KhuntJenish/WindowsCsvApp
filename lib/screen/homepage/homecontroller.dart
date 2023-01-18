@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:url_launcher/url_launcher.dart';
 import '../../utils/constant.dart';
 
 class HomepageController extends GetxController {
@@ -270,8 +271,7 @@ class HomepageController extends GetxController {
 
       final filename = "invoice_${DateTime.now().microsecond}_$isNumber.pdf";
       final output = await getDownloadsDirectory();
-      final file = File(
-          "${output?.path}\\$filename");
+      final file = File("${output?.path}\\$filename");
       print(file.path);
       // final file = File("example.pdf");
       await file.writeAsBytes(await pdf.save());
@@ -281,6 +281,14 @@ class HomepageController extends GetxController {
       Timer(Duration(seconds: 2), () {
         Get.back();
       });
+      // final String filePath = testFile.absolute.path;
+      final Uri uri = Uri.file(file.path);
+      if (await canLaunchUrl(uri)) {
+        // print("launch url : $uri");
+        await launchUrl(uri);
+      } else {
+        print("cannot launch url : $uri");
+      }
       isNumber.value++;
       isLoading.value = false;
     } catch (e) {
@@ -415,6 +423,13 @@ class HomepageController extends GetxController {
       Timer(Duration(seconds: 2), () {
         Get.back();
       });
+      final Uri uri = Uri.file(file.path);
+      if (await canLaunchUrl(uri)) {
+        // print("launch url : $uri");
+        await launchUrl(uri);
+      } else {
+        print("cannot launch url : $uri");
+      }
       isNumber.value++;
       isLoading.value = false;
     } catch (e) {

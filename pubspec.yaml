@@ -54,6 +54,7 @@ dependencies:
   grouped_list: ^5.1.2
   pdf: ^3.8.4
   lottie: ^2.2.0
+  url_launcher: ^6.1.7
   # rive: ^0.10.0
 
 dev_dependencies:
