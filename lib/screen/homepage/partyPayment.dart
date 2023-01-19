@@ -21,6 +21,7 @@ class PartyPayment extends StatelessWidget {
   PartyPayment({super.key});
   @override
   Widget build(BuildContext context) {
+    _homepageController.isAllPartySelected.value = false;
     TextTheme textTheme = Theme.of(context).textTheme;
     final ScrollController horizontalScroll = ScrollController();
     final ScrollController verticalScroll = ScrollController();

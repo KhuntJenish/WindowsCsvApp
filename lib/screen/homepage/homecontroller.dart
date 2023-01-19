@@ -252,15 +252,51 @@ class HomepageController extends GetxController {
       for (var i = 0; i < mainList.length; i++) {
         pdf.addPage(
           pw.Page(
-            margin: const pw.EdgeInsets.all(8),
+            margin:
+                const pw.EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             pageFormat: PdfPageFormat.a4,
             build: (pw.Context context) {
               return pw.Column(
                 children: [
                   pw.Table.fromTextArray(
+                    columnWidths: {
+                      0: const pw.FlexColumnWidth(2),
+                      1: const pw.FlexColumnWidth(1),
+                      2: const pw.FlexColumnWidth(1),
+                      3: const pw.FlexColumnWidth(1),
+                      4: const pw.FlexColumnWidth(1),
+                      5: const pw.FlexColumnWidth(1),
+                      6: const pw.FlexColumnWidth(1.2),
+                      7: const pw.FlexColumnWidth(1),
+                      8: const pw.FlexColumnWidth(1),
+                    },
+                    cellAlignments: {
+                      0: pw.Alignment.centerLeft,
+                      1: pw.Alignment.centerLeft,
+                      2: pw.Alignment.centerLeft,
+                      3: pw.Alignment.centerLeft,
+                      4: pw.Alignment.centerRight,
+                      5: pw.Alignment.centerLeft,
+                      6: pw.Alignment.centerLeft,
+                      7: pw.Alignment.centerRight,
+                      8: pw.Alignment.centerRight,
+                    },
+                    headerAlignments: {
+                      0: pw.Alignment.center,
+                      1: pw.Alignment.center,
+                      2: pw.Alignment.center,
+                      3: pw.Alignment.center,
+                      4: pw.Alignment.center,
+                      5: pw.Alignment.center,
+                      6: pw.Alignment.center,
+                      7: pw.Alignment.center,
+                      8: pw.Alignment.center,
+                    },
                     context: context,
                     data: mainList[i],
                     cellStyle: const pw.TextStyle(fontSize: 7),
+                    headerStyle: pw.TextStyle(
+                        fontSize: 9, fontWeight: pw.FontWeight.bold),
                   ),
                 ],
               ); // Center
@@ -302,7 +338,10 @@ class HomepageController extends GetxController {
       isLoading.value = true;
       final pdf = pw.Document();
       print(partyWiseList);
-      print(partyWiseList.length);
+      debugPrint(partyWiseList.length.toString());
+      List<List<List<dynamic>>> superMainList = [];
+      List<List<dynamic>> newMainList = [];
+      List<List<dynamic>> tempMainList = [];
       for (var i = 0; i < partyWiseList.length; i++) {
         print(partyWiseList.elementAt(i));
         print(partyWiseList.elementAt(i)[0].pID);
@@ -316,6 +355,12 @@ class HomepageController extends GetxController {
         List<List<dynamic>> newsubList = [];
         newList.addAll(partyWiseList.elementAt(i));
         newsubList.add([
+          '$partyName',
+          '',
+          '',
+          '',
+        ]);
+        newsubList.add([
           'Date',
           'Type',
           'Dr Amount',
@@ -323,14 +368,7 @@ class HomepageController extends GetxController {
         ]);
         for (var j = 0; j < newList.length; j++) {
           print(newList[j]);
-          // List<dynamic> list = [];
-          // list.add([
-          //   newList[j].ledgerDate.toString(),
-          //   newList[j].type.toString(),
-          //   newList[j].drAmount.toString(),
-          //   newList[j].crAmount.toString()
-          // ]);
-          // print(list);
+
           var drAmount = newList[j].drAmount.toDouble();
           var crAmount = newList[j].crAmount.toDouble();
           var date = DateTime.parse(newList[j].ledgerDate.toString());
@@ -346,9 +384,99 @@ class HomepageController extends GetxController {
         }
         print(newsubList);
         newList.clear();
-        newList.addAll(newsubList);
-        print(newList);
+        newMainList.addAll(newsubList);
 
+        // pdf.addPage(
+        //   pw.Page(
+        //     margin: const pw.EdgeInsets.all(8),
+        //     pageFormat: PdfPageFormat.a4,
+        //     build: (pw.Context context) {
+        //       return pw.Column(
+        //         children: [
+        //           // pw.Text('Party Name: $partyName'),
+        //           pw.SizedBox(height: Get.height * 0.01),
+        //           pw.Container(
+        //             color: PdfColors.grey,
+        //             child: pw.Padding(
+        //               padding: const pw.EdgeInsets.all(8.0),
+        //               child: pw.Text(
+        //                 partyName.toString(),
+        //                 style: pw.TextStyle(
+        //                   fontSize: Get.height * 0.020,
+        //                 ),
+        //                 // minFontSize: 10,
+        //                 maxLines: 1,
+        //                 // overflow: pw.TextOverflow.ellipsis,
+        //               ),
+        //             ),
+        //           ),
+        //           pw.SizedBox(height: Get.height * 0.01),
+        //           pw.Container(
+        //             // color: PdfColors.grey,
+        //             child: pw.Padding(
+        //               padding: const pw.EdgeInsets.symmetric(
+        //                   horizontal: 20.0, vertical: 10),
+        //               child: pw.Table.fromTextArray(
+        //                 columnWidths: {
+        //                   0: const pw.FlexColumnWidth(1),
+        //                   1: const pw.FlexColumnWidth(1.5),
+        //                   2: const pw.FlexColumnWidth(1),
+        //                   3: const pw.FlexColumnWidth(1),
+        //                 },
+        //                 cellAlignments: {
+        //                   0: pw.Alignment.centerLeft,
+        //                   1: pw.Alignment.centerLeft,
+        //                   2: pw.Alignment.centerRight,
+        //                   3: pw.Alignment.centerRight,
+        //                 },
+        //                 headerAlignments: {
+        //                   0: pw.Alignment.center,
+        //                   1: pw.Alignment.center,
+        //                   2: pw.Alignment.center,
+        //                   3: pw.Alignment.center,
+        //                 },
+        //                 context: context,
+        //                 data: newsubList,
+        //                 cellStyle: const pw.TextStyle(fontSize: 10),
+        //               ),
+        //             ),
+        //           ),
+        //         ],
+        //       ); // Center
+        //     },
+        //   ),
+        // );
+      }
+      print(newMainList);
+      tempMainList.addAll(newMainList);
+      int a = 0;
+      newMainList.clear();
+      for (var i = 0; i < tempMainList.length; i++) {
+        if (((i + 1) % 26) == 0) {
+          // a++;
+          print(i);
+          newMainList.add(tempMainList[i]);
+
+          print(newMainList.length);
+          List<List<dynamic>> temp = [];
+          temp.addAll(newMainList);
+          superMainList.add(temp);
+          newMainList.clear();
+
+          print('hello');
+        } else {
+          newMainList.add(tempMainList[i]);
+          if (i == (tempMainList.length-1)) {
+            List<List<dynamic>> temp = [];
+            temp.addAll(newMainList);
+            superMainList.add(temp);
+            newMainList.clear();
+          }
+          print('$i --');
+        }
+      }
+      print(superMainList);
+      for (var i = 0; i < superMainList.length; i++) {
         pdf.addPage(
           pw.Page(
             margin: const pw.EdgeInsets.all(8),
@@ -358,33 +486,33 @@ class HomepageController extends GetxController {
                 children: [
                   // pw.Text('Party Name: $partyName'),
                   pw.SizedBox(height: Get.height * 0.01),
-                  pw.Container(
-                    color: PdfColors.grey,
-                    child: pw.Padding(
-                      padding: pw.EdgeInsets.all(8.0),
-                      child: pw.Text(
-                        partyName.toString(),
-                        style: pw.TextStyle(
-                          fontSize: Get.height * 0.020,
-                        ),
-                        // minFontSize: 10,
-                        maxLines: 1,
-                        // overflow: pw.TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
+                  // pw.Container(
+                  //   color: PdfColors.grey,
+                  //   child: pw.Padding(
+                  //     padding: const pw.EdgeInsets.all(8.0),
+                  //     child: pw.Text(
+                  //       partyName.toString(),
+                  //       style: pw.TextStyle(
+                  //         fontSize: Get.height * 0.020,
+                  //       ),
+                  //       // minFontSize: 10,
+                  //       maxLines: 1,
+                  //       // overflow: pw.TextOverflow.ellipsis,
+                  //     ),
+                  //   ),
+                  // ),
                   pw.SizedBox(height: Get.height * 0.01),
                   pw.Container(
                     // color: PdfColors.grey,
                     child: pw.Padding(
-                      padding: pw.EdgeInsets.symmetric(
+                      padding: const pw.EdgeInsets.symmetric(
                           horizontal: 20.0, vertical: 10),
                       child: pw.Table.fromTextArray(
                         columnWidths: {
-                          0: pw.FlexColumnWidth(1),
-                          1: pw.FlexColumnWidth(1.5),
-                          2: pw.FlexColumnWidth(1),
-                          3: pw.FlexColumnWidth(1),
+                          0: const pw.FlexColumnWidth(1),
+                          1: const pw.FlexColumnWidth(1.5),
+                          2: const pw.FlexColumnWidth(1),
+                          3: const pw.FlexColumnWidth(1),
                         },
                         cellAlignments: {
                           0: pw.Alignment.centerLeft,
@@ -399,8 +527,9 @@ class HomepageController extends GetxController {
                           3: pw.Alignment.center,
                         },
                         context: context,
-                        data: newsubList,
+                        data: superMainList[i],
                         cellStyle: const pw.TextStyle(fontSize: 10),
+                        headerStyle: const pw.TextStyle(fontSize: 10),
                       ),
                     ),
                   ),
@@ -529,15 +658,9 @@ class HomepageController extends GetxController {
             ..where((tbl) => tbl.smtInvNo.equals(smtInvNo)))
           .getSingle();
 
-      // if (data.isBlank) {
-
-      // }
       print('logID : ${data.logId}');
       print('ledgerID : ${data.ledgerId}');
       if (data.ledgerId != 0) {
-        // var ledgerData1 = await (db.select(db.ledger)
-        //       ..where((tbl) => tbl.id.equals(data.ledgerId)))
-        //     .getSingle();
         var ledgerData2 = await (db.select(db.ledger)
               ..where((tbl) => tbl.ledgerDate.equals(data.comissionPaidDate)))
             .getSingle();
@@ -563,32 +686,6 @@ class HomepageController extends GetxController {
           data.copyWith(
             comissionPaidDate: DateTime(1800, 01, 01),
           ),
-          // InputDataData(
-          //     id: data.id,
-          //     documentType: data.documentType,
-          //     distDocDate: data.distDocDate,
-          //     distDocNo: data.distDocNo,
-          //     pID: data.pID,
-          //     custBillCity: data.custBillCity,
-          //     matCode: data.matCode,
-          //     matName: data.matName,
-          //     mtID: data.mtID,
-          //     qty: data.qty,
-          //     doctorName: data.doctorName,
-          //     techniqalStaff: data.techniqalStaff,
-          //     saleAmount: data.saleAmount,
-          //     totalSale: data.totalSale,
-          //     smtDocDate: data.smtDocDate,
-          //     smtDocNo: data.smtDocNo,
-          //     smtInvNo: data.smtInvNo,
-          //     purchaseTaxableAmount: data.purchaseTaxableAmount,
-          //     totalPurchaseAmount: data.totalPurchaseAmount,
-          //     logId: data.logId,
-          //     ledgerId: data.ledgerId,
-          //     comission: data.comission,
-          //     comissionAmount: data.comissionAmount,
-          //     comissionPaidDate: DateTime(1800, 01, 01),
-          //     adjustComissionAmount: data.adjustComissionAmount),
         );
         print('updateInputData: $updateInputData');
 
@@ -610,7 +707,6 @@ class HomepageController extends GetxController {
       } else {
         'Payment not found!'.errorSnackbar;
       }
-      // print('ledgerID : ${data.ledgerId}');
     } catch (e) {
       e.toString().errorSnackbar;
 
