@@ -286,7 +286,8 @@ class GeneratedReport extends StatelessWidget {
                                                 child: SizedBox(
                                                   width: Get.width * 0.20,
                                                   child: StringDropDownItems(
-                                                    homecontroller: _homepageController,
+                                                    homecontroller:
+                                                        _homepageController,
                                                     defualtValue:
                                                         _homepageController
                                                             .defualtDuration,
@@ -442,10 +443,14 @@ class GeneratedReport extends StatelessWidget {
                         visible: _homepageController.isLoading.value == false
                             ? true
                             : false,
-                        replacement: Center(
-                          child: CupertinoActivityIndicator(
-                            radius: Get.height * 0.02,
-                            color: lCOLOR_ACCENT,
+                        replacement: SizedBox(
+                          height: Get.height * 0.70,
+                          width: Get.width * 1,
+                          child: Center(
+                            child: CupertinoActivityIndicator(
+                              radius: Get.height * 0.02,
+                              color: lCOLOR_ACCENT,
+                            ),
                           ),
                         ),
                         child: AdaptiveScrollbar(
@@ -491,6 +496,7 @@ class GeneratedReport extends StatelessWidget {
                                                 1
                                             : 0,
                                         itemBuilder: (_, subIndex) {
+                                         
                                           return Container(
                                             width: subIndex == 3
                                                 ? Get.width * 0.2
@@ -543,6 +549,10 @@ class GeneratedReport extends StatelessWidget {
                                                   style: const TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.black),
+                                                  textAlign:
+                                                     _homepageController. rightalign.contains(subIndex)
+                                                          ? TextAlign.right
+                                                          : TextAlign.left,
                                                   minFontSize: 10,
                                                   maxLines: 1,
                                                   overflow:
@@ -714,4 +724,3 @@ class GeneratedReport extends StatelessWidget {
     );
   }
 }
-

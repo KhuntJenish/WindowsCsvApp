@@ -580,6 +580,15 @@ class PartyPayment extends StatelessWidget {
                                                                   fontSize: 15,
                                                                   color: Colors
                                                                       .black),
+                                                          textAlign:
+                                                              _homepageController
+                                                                      .rightalign
+                                                                      .contains(
+                                                                          subIndex)
+                                                                  ? TextAlign
+                                                                      .right
+                                                                  : TextAlign
+                                                                      .left,
                                                           minFontSize: 10,
                                                           maxLines: 1,
                                                           overflow: TextOverflow

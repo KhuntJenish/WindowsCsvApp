@@ -254,25 +254,27 @@ class PartyLedger extends StatelessWidget {
                                 fontSize: Get.width * 0.010,
                                 text: 'Search',
                                 onPressed: () async {
-                                  print('Search Button Pressed');
-                                  print(_homepageController
-                                      .isAllPartySelected.value);
-                                  print(_homepageController.defualtParty);
-                                  print(_homepageController.defualtDuration);
-                                  print(
-                                      _homepageController.defualtMaterialType);
-                                  print(_homepageController.defualtPartyCity);
-                                  print(_homepageController
-                                      .dateRange.value.start);
-                                  print(
-                                      _homepageController.dateRange.value.end);
+                                  debugPrint('Search Button Pressed');
+                                  debugPrint(_homepageController
+                                      .isAllPartySelected.value.toString());
+                                  debugPrint(_homepageController.defualtParty.toString());
+                                  debugPrint(
+                                      _homepageController.defualtDuration.toString());
+                                  debugPrint(
+                                      _homepageController.defualtMaterialType.toString());
+                                  debugPrint(
+                                      _homepageController.defualtPartyCity.toString());
+                                  debugPrint(_homepageController
+                                      .dateRange.value.start.toString());
+                                  debugPrint(
+                                      _homepageController.dateRange.value.end.toString());
 
                                   _homepageController.getDurationDateRange(
                                       duration: _homepageController
                                           .defualtDuration.value);
-                                  // print(
+                                  // debugPrint(
                                   //     _homepageController.dateRange.value.start);
-                                  // print(_homepageController.dateRange.value.end);
+                                  // debugPrint(_homepageController.dateRange.value.end);
                                   await _homepageController.getLedgerSearchData(
                                     start: _homepageController
                                         .dateRange.value.start,
@@ -304,8 +306,9 @@ class PartyLedger extends StatelessWidget {
                                     'No Data Found'.errorSnackbar;
                                     return;
                                   }
-                                  print('Create Pdf');
-                                  print(_homepageController.ledgerPartyWiseSet);
+                                  debugPrint('Create Pdf');
+                                  debugPrint(
+                                      _homepageController.ledgerPartyWiseSet.toString());
 
                                   await _homepageController.createLedgerPdf(
                                       partyWiseList: _homepageController
@@ -397,11 +400,11 @@ class PartyLedger extends StatelessWidget {
                                   elements:
                                       _homepageController.ledgerReportData,
                                   groupBy: (element) {
-                                    print('G : ' + element.pID.toString());
+                                    debugPrint('G : ' + element.pID.toString());
                                     return element.pID.toString();
                                   },
                                   groupSeparatorBuilder: (String groupByValue) {
-                                    print('GS : ' + groupByValue);
+                                    debugPrint('GS : ' + groupByValue);
                                     return Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -438,8 +441,8 @@ class PartyLedger extends StatelessWidget {
                                   },
                                   indexedItemBuilder:
                                       ((context, element, index) {
-                                    // print('element: ${element}');
-                                    // print('index: ${index}');
+                                    // debugPrint('element: ${element}');
+                                    // debugPrint('index: ${index}');
 
                                     return Container(
                                       height: Get.height * 0.04,

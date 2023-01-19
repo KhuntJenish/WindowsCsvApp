@@ -60,6 +60,7 @@ class HomepageController extends GetxController {
     start: DateTime(DateTime.now().year, DateTime.now().month, 1),
     end: DateTime.now(),
   ).obs;
+  List<int> rightalign = [8, 11, 12, 16, 17, 18, 19];
   // scrollcon
 
   @override
@@ -466,7 +467,7 @@ class HomepageController extends GetxController {
           print('hello');
         } else {
           newMainList.add(tempMainList[i]);
-          if (i == (tempMainList.length-1)) {
+          if (i == (tempMainList.length - 1)) {
             List<List<dynamic>> temp = [];
             temp.addAll(newMainList);
             superMainList.add(temp);
