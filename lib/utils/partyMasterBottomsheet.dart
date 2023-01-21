@@ -75,7 +75,8 @@ class PartyTypeBottomsheet extends StatelessWidget {
                 fontSize: Get.width * 0.015,
                 text: 'submit',
                 onPressed: () {
-                  if (name.text.isNotEmpty && _partyController.defualtPartyType.value.type != '') {
+                  if (name.text.isNotEmpty &&
+                      _partyController.defualtPartyType.value.type != '') {
                     if (btnText == 'Add Party' || btnText == 'Add New Party') {
                       _partyController.addParty(
                         name: name.text,
@@ -112,59 +113,6 @@ class PartyTypeBottomsheet extends StatelessWidget {
                 Get.back();
               },
               icon: const Icon(Icons.arrow_back),
-            ),
-          ),
-          Obx(
-            () => Positioned(
-              bottom: Get.height * 0.03,
-              right: Get.width * 0.03,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Visibility(
-                    visible:
-                        _partyController.addPartyBtnText.value == 'Add Party'
-                            ? true
-                            : false,
-                    replacement: Container(),
-                    child: Container(
-                      width: Get.width * 0.3,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: Get.height * 0.02),
-                      child: TextField(
-                        readOnly: name.text == 'admin' ? true : false,
-                        keyboardType: TextInputType.text,
-                        maxLength: 30,
-                        controller: partyType,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.person),
-                          hintText: 'Enter Party Type',
-                          counterText: '',
-                          hintStyle: textTheme.headline6?.copyWith(
-                            color: Colors.grey,
-                            fontSize: Get.height * 0.02,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Button(
-                    height: Get.height * 0.06,
-                    width: Get.width * 0.09,
-                    fontSize: Get.width * 0.015,
-                    text: _partyController.addPartyBtnText.value,
-                    onPressed: () {
-                      if (partyType.text.isNotEmpty) {
-                        _partyController.addPartyType(
-                            partyType: partyType.text);
-                        partyType.clear();
-                      } else {
-                        'Fill Require Feild'.errorSnackbar;
-                      }
-                    },
-                  ),
-                ],
-              ),
             ),
           ),
         ],

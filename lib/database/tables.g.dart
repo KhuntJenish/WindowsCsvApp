@@ -1182,384 +1182,19 @@ class $PartyComissionDetailTable extends PartyComissionDetail
   }
 }
 
-class LedgerData extends DataClass implements Insertable<LedgerData> {
-  final int id;
-  final String type;
-  final int pID;
-  final DateTime ledgerDate;
-  final double drAmount;
-  final double crAmount;
-  final String ledgerNote;
-  const LedgerData(
-      {required this.id,
-      required this.type,
-      required this.pID,
-      required this.ledgerDate,
-      required this.drAmount,
-      required this.crAmount,
-      required this.ledgerNote});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['type'] = Variable<String>(type);
-    map['p_i_d'] = Variable<int>(pID);
-    map['ledger_date'] = Variable<DateTime>(ledgerDate);
-    map['dr_amount'] = Variable<double>(drAmount);
-    map['cr_amount'] = Variable<double>(crAmount);
-    map['ledger_note'] = Variable<String>(ledgerNote);
-    return map;
-  }
-
-  LedgerCompanion toCompanion(bool nullToAbsent) {
-    return LedgerCompanion(
-      id: Value(id),
-      type: Value(type),
-      pID: Value(pID),
-      ledgerDate: Value(ledgerDate),
-      drAmount: Value(drAmount),
-      crAmount: Value(crAmount),
-      ledgerNote: Value(ledgerNote),
-    );
-  }
-
-  factory LedgerData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return LedgerData(
-      id: serializer.fromJson<int>(json['id']),
-      type: serializer.fromJson<String>(json['type']),
-      pID: serializer.fromJson<int>(json['pID']),
-      ledgerDate: serializer.fromJson<DateTime>(json['ledgerDate']),
-      drAmount: serializer.fromJson<double>(json['drAmount']),
-      crAmount: serializer.fromJson<double>(json['crAmount']),
-      ledgerNote: serializer.fromJson<String>(json['ledgerNote']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'type': serializer.toJson<String>(type),
-      'pID': serializer.toJson<int>(pID),
-      'ledgerDate': serializer.toJson<DateTime>(ledgerDate),
-      'drAmount': serializer.toJson<double>(drAmount),
-      'crAmount': serializer.toJson<double>(crAmount),
-      'ledgerNote': serializer.toJson<String>(ledgerNote),
-    };
-  }
-
-  LedgerData copyWith(
-          {int? id,
-          String? type,
-          int? pID,
-          DateTime? ledgerDate,
-          double? drAmount,
-          double? crAmount,
-          String? ledgerNote}) =>
-      LedgerData(
-        id: id ?? this.id,
-        type: type ?? this.type,
-        pID: pID ?? this.pID,
-        ledgerDate: ledgerDate ?? this.ledgerDate,
-        drAmount: drAmount ?? this.drAmount,
-        crAmount: crAmount ?? this.crAmount,
-        ledgerNote: ledgerNote ?? this.ledgerNote,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('LedgerData(')
-          ..write('id: $id, ')
-          ..write('type: $type, ')
-          ..write('pID: $pID, ')
-          ..write('ledgerDate: $ledgerDate, ')
-          ..write('drAmount: $drAmount, ')
-          ..write('crAmount: $crAmount, ')
-          ..write('ledgerNote: $ledgerNote')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(id, type, pID, ledgerDate, drAmount, crAmount, ledgerNote);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is LedgerData &&
-          other.id == this.id &&
-          other.type == this.type &&
-          other.pID == this.pID &&
-          other.ledgerDate == this.ledgerDate &&
-          other.drAmount == this.drAmount &&
-          other.crAmount == this.crAmount &&
-          other.ledgerNote == this.ledgerNote);
-}
-
-class LedgerCompanion extends UpdateCompanion<LedgerData> {
-  final Value<int> id;
-  final Value<String> type;
-  final Value<int> pID;
-  final Value<DateTime> ledgerDate;
-  final Value<double> drAmount;
-  final Value<double> crAmount;
-  final Value<String> ledgerNote;
-  const LedgerCompanion({
-    this.id = const Value.absent(),
-    this.type = const Value.absent(),
-    this.pID = const Value.absent(),
-    this.ledgerDate = const Value.absent(),
-    this.drAmount = const Value.absent(),
-    this.crAmount = const Value.absent(),
-    this.ledgerNote = const Value.absent(),
-  });
-  LedgerCompanion.insert({
-    this.id = const Value.absent(),
-    required String type,
-    required int pID,
-    required DateTime ledgerDate,
-    required double drAmount,
-    required double crAmount,
-    required String ledgerNote,
-  })  : type = Value(type),
-        pID = Value(pID),
-        ledgerDate = Value(ledgerDate),
-        drAmount = Value(drAmount),
-        crAmount = Value(crAmount),
-        ledgerNote = Value(ledgerNote);
-  static Insertable<LedgerData> custom({
-    Expression<int>? id,
-    Expression<String>? type,
-    Expression<int>? pID,
-    Expression<DateTime>? ledgerDate,
-    Expression<double>? drAmount,
-    Expression<double>? crAmount,
-    Expression<String>? ledgerNote,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (type != null) 'type': type,
-      if (pID != null) 'p_i_d': pID,
-      if (ledgerDate != null) 'ledger_date': ledgerDate,
-      if (drAmount != null) 'dr_amount': drAmount,
-      if (crAmount != null) 'cr_amount': crAmount,
-      if (ledgerNote != null) 'ledger_note': ledgerNote,
-    });
-  }
-
-  LedgerCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? type,
-      Value<int>? pID,
-      Value<DateTime>? ledgerDate,
-      Value<double>? drAmount,
-      Value<double>? crAmount,
-      Value<String>? ledgerNote}) {
-    return LedgerCompanion(
-      id: id ?? this.id,
-      type: type ?? this.type,
-      pID: pID ?? this.pID,
-      ledgerDate: ledgerDate ?? this.ledgerDate,
-      drAmount: drAmount ?? this.drAmount,
-      crAmount: crAmount ?? this.crAmount,
-      ledgerNote: ledgerNote ?? this.ledgerNote,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (type.present) {
-      map['type'] = Variable<String>(type.value);
-    }
-    if (pID.present) {
-      map['p_i_d'] = Variable<int>(pID.value);
-    }
-    if (ledgerDate.present) {
-      map['ledger_date'] = Variable<DateTime>(ledgerDate.value);
-    }
-    if (drAmount.present) {
-      map['dr_amount'] = Variable<double>(drAmount.value);
-    }
-    if (crAmount.present) {
-      map['cr_amount'] = Variable<double>(crAmount.value);
-    }
-    if (ledgerNote.present) {
-      map['ledger_note'] = Variable<String>(ledgerNote.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('LedgerCompanion(')
-          ..write('id: $id, ')
-          ..write('type: $type, ')
-          ..write('pID: $pID, ')
-          ..write('ledgerDate: $ledgerDate, ')
-          ..write('drAmount: $drAmount, ')
-          ..write('crAmount: $crAmount, ')
-          ..write('ledgerNote: $ledgerNote')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $LedgerTable extends Ledger with TableInfo<$LedgerTable, LedgerData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $LedgerTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
-  @override
-  late final GeneratedColumn<String> type = GeneratedColumn<String>(
-      'type', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _pIDMeta = const VerificationMeta('pID');
-  @override
-  late final GeneratedColumn<int> pID = GeneratedColumn<int>(
-      'p_i_d', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
-  static const VerificationMeta _ledgerDateMeta =
-      const VerificationMeta('ledgerDate');
-  @override
-  late final GeneratedColumn<DateTime> ledgerDate = GeneratedColumn<DateTime>(
-      'ledger_date', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _drAmountMeta =
-      const VerificationMeta('drAmount');
-  @override
-  late final GeneratedColumn<double> drAmount = GeneratedColumn<double>(
-      'dr_amount', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _crAmountMeta =
-      const VerificationMeta('crAmount');
-  @override
-  late final GeneratedColumn<double> crAmount = GeneratedColumn<double>(
-      'cr_amount', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _ledgerNoteMeta =
-      const VerificationMeta('ledgerNote');
-  @override
-  late final GeneratedColumn<String> ledgerNote = GeneratedColumn<String>(
-      'ledger_note', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, type, pID, ledgerDate, drAmount, crAmount, ledgerNote];
-  @override
-  String get aliasedName => _alias ?? 'ledger';
-  @override
-  String get actualTableName => 'ledger';
-  @override
-  VerificationContext validateIntegrity(Insertable<LedgerData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('type')) {
-      context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
-    }
-    if (data.containsKey('p_i_d')) {
-      context.handle(
-          _pIDMeta, pID.isAcceptableOrUnknown(data['p_i_d']!, _pIDMeta));
-    } else if (isInserting) {
-      context.missing(_pIDMeta);
-    }
-    if (data.containsKey('ledger_date')) {
-      context.handle(
-          _ledgerDateMeta,
-          ledgerDate.isAcceptableOrUnknown(
-              data['ledger_date']!, _ledgerDateMeta));
-    } else if (isInserting) {
-      context.missing(_ledgerDateMeta);
-    }
-    if (data.containsKey('dr_amount')) {
-      context.handle(_drAmountMeta,
-          drAmount.isAcceptableOrUnknown(data['dr_amount']!, _drAmountMeta));
-    } else if (isInserting) {
-      context.missing(_drAmountMeta);
-    }
-    if (data.containsKey('cr_amount')) {
-      context.handle(_crAmountMeta,
-          crAmount.isAcceptableOrUnknown(data['cr_amount']!, _crAmountMeta));
-    } else if (isInserting) {
-      context.missing(_crAmountMeta);
-    }
-    if (data.containsKey('ledger_note')) {
-      context.handle(
-          _ledgerNoteMeta,
-          ledgerNote.isAcceptableOrUnknown(
-              data['ledger_note']!, _ledgerNoteMeta));
-    } else if (isInserting) {
-      context.missing(_ledgerNoteMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  LedgerData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return LedgerData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
-      pID: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}p_i_d'])!,
-      ledgerDate: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}ledger_date'])!,
-      drAmount: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}dr_amount'])!,
-      crAmount: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}cr_amount'])!,
-      ledgerNote: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}ledger_note'])!,
-    );
-  }
-
-  @override
-  $LedgerTable createAlias(String alias) {
-    return $LedgerTable(attachedDatabase, alias);
-  }
-}
-
 class InputDataData extends DataClass implements Insertable<InputDataData> {
   final int id;
   final String documentType;
   final DateTime distDocDate;
   final String distDocNo;
-  final int pID;
+  final int hospitalID;
   final String custBillCity;
   final String matCode;
   final String matName;
   final int mtID;
   final int qty;
-  final String doctorName;
-  final String techniqalStaff;
+  final int doctorID;
+  final int techniqalStaffID;
   final double saleAmount;
   final double totalSale;
   final DateTime smtDocDate;
@@ -1568,7 +1203,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
   final double purchaseTaxableAmount;
   final double totalPurchaseAmount;
   final int logId;
-  final int ledgerId;
+  final int generateLedgerId;
+  final int paymentLedgerId;
   final double comission;
   final double comissionAmount;
   final DateTime comissionPaidDate;
@@ -1578,14 +1214,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       required this.documentType,
       required this.distDocDate,
       required this.distDocNo,
-      required this.pID,
+      required this.hospitalID,
       required this.custBillCity,
       required this.matCode,
       required this.matName,
       required this.mtID,
       required this.qty,
-      required this.doctorName,
-      required this.techniqalStaff,
+      required this.doctorID,
+      required this.techniqalStaffID,
       required this.saleAmount,
       required this.totalSale,
       required this.smtDocDate,
@@ -1594,7 +1230,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       required this.purchaseTaxableAmount,
       required this.totalPurchaseAmount,
       required this.logId,
-      required this.ledgerId,
+      required this.generateLedgerId,
+      required this.paymentLedgerId,
       required this.comission,
       required this.comissionAmount,
       required this.comissionPaidDate,
@@ -1606,14 +1243,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
     map['document_type'] = Variable<String>(documentType);
     map['dist_doc_date'] = Variable<DateTime>(distDocDate);
     map['dist_doc_no'] = Variable<String>(distDocNo);
-    map['p_i_d'] = Variable<int>(pID);
+    map['hospital_i_d'] = Variable<int>(hospitalID);
     map['cust_bill_city'] = Variable<String>(custBillCity);
     map['mat_code'] = Variable<String>(matCode);
     map['mat_name'] = Variable<String>(matName);
     map['mt_i_d'] = Variable<int>(mtID);
     map['qty'] = Variable<int>(qty);
-    map['doctor_name'] = Variable<String>(doctorName);
-    map['techniqal_staff'] = Variable<String>(techniqalStaff);
+    map['doctor_i_d'] = Variable<int>(doctorID);
+    map['techniqal_staff_i_d'] = Variable<int>(techniqalStaffID);
     map['sale_amount'] = Variable<double>(saleAmount);
     map['total_sale'] = Variable<double>(totalSale);
     map['smt_doc_date'] = Variable<DateTime>(smtDocDate);
@@ -1622,7 +1259,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
     map['purchase_taxable_amount'] = Variable<double>(purchaseTaxableAmount);
     map['total_purchase_amount'] = Variable<double>(totalPurchaseAmount);
     map['log_id'] = Variable<int>(logId);
-    map['ledger_id'] = Variable<int>(ledgerId);
+    map['generate_ledger_id'] = Variable<int>(generateLedgerId);
+    map['payment_ledger_id'] = Variable<int>(paymentLedgerId);
     map['comission'] = Variable<double>(comission);
     map['comission_amount'] = Variable<double>(comissionAmount);
     map['comission_paid_date'] = Variable<DateTime>(comissionPaidDate);
@@ -1636,14 +1274,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       documentType: Value(documentType),
       distDocDate: Value(distDocDate),
       distDocNo: Value(distDocNo),
-      pID: Value(pID),
+      hospitalID: Value(hospitalID),
       custBillCity: Value(custBillCity),
       matCode: Value(matCode),
       matName: Value(matName),
       mtID: Value(mtID),
       qty: Value(qty),
-      doctorName: Value(doctorName),
-      techniqalStaff: Value(techniqalStaff),
+      doctorID: Value(doctorID),
+      techniqalStaffID: Value(techniqalStaffID),
       saleAmount: Value(saleAmount),
       totalSale: Value(totalSale),
       smtDocDate: Value(smtDocDate),
@@ -1652,7 +1290,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       purchaseTaxableAmount: Value(purchaseTaxableAmount),
       totalPurchaseAmount: Value(totalPurchaseAmount),
       logId: Value(logId),
-      ledgerId: Value(ledgerId),
+      generateLedgerId: Value(generateLedgerId),
+      paymentLedgerId: Value(paymentLedgerId),
       comission: Value(comission),
       comissionAmount: Value(comissionAmount),
       comissionPaidDate: Value(comissionPaidDate),
@@ -1668,14 +1307,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       documentType: serializer.fromJson<String>(json['documentType']),
       distDocDate: serializer.fromJson<DateTime>(json['distDocDate']),
       distDocNo: serializer.fromJson<String>(json['distDocNo']),
-      pID: serializer.fromJson<int>(json['pID']),
+      hospitalID: serializer.fromJson<int>(json['hospitalID']),
       custBillCity: serializer.fromJson<String>(json['custBillCity']),
       matCode: serializer.fromJson<String>(json['matCode']),
       matName: serializer.fromJson<String>(json['matName']),
       mtID: serializer.fromJson<int>(json['mtID']),
       qty: serializer.fromJson<int>(json['qty']),
-      doctorName: serializer.fromJson<String>(json['doctorName']),
-      techniqalStaff: serializer.fromJson<String>(json['techniqalStaff']),
+      doctorID: serializer.fromJson<int>(json['doctorID']),
+      techniqalStaffID: serializer.fromJson<int>(json['techniqalStaffID']),
       saleAmount: serializer.fromJson<double>(json['saleAmount']),
       totalSale: serializer.fromJson<double>(json['totalSale']),
       smtDocDate: serializer.fromJson<DateTime>(json['smtDocDate']),
@@ -1686,7 +1325,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       totalPurchaseAmount:
           serializer.fromJson<double>(json['totalPurchaseAmount']),
       logId: serializer.fromJson<int>(json['logId']),
-      ledgerId: serializer.fromJson<int>(json['ledgerId']),
+      generateLedgerId: serializer.fromJson<int>(json['generateLedgerId']),
+      paymentLedgerId: serializer.fromJson<int>(json['paymentLedgerId']),
       comission: serializer.fromJson<double>(json['comission']),
       comissionAmount: serializer.fromJson<double>(json['comissionAmount']),
       comissionPaidDate:
@@ -1703,14 +1343,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       'documentType': serializer.toJson<String>(documentType),
       'distDocDate': serializer.toJson<DateTime>(distDocDate),
       'distDocNo': serializer.toJson<String>(distDocNo),
-      'pID': serializer.toJson<int>(pID),
+      'hospitalID': serializer.toJson<int>(hospitalID),
       'custBillCity': serializer.toJson<String>(custBillCity),
       'matCode': serializer.toJson<String>(matCode),
       'matName': serializer.toJson<String>(matName),
       'mtID': serializer.toJson<int>(mtID),
       'qty': serializer.toJson<int>(qty),
-      'doctorName': serializer.toJson<String>(doctorName),
-      'techniqalStaff': serializer.toJson<String>(techniqalStaff),
+      'doctorID': serializer.toJson<int>(doctorID),
+      'techniqalStaffID': serializer.toJson<int>(techniqalStaffID),
       'saleAmount': serializer.toJson<double>(saleAmount),
       'totalSale': serializer.toJson<double>(totalSale),
       'smtDocDate': serializer.toJson<DateTime>(smtDocDate),
@@ -1719,7 +1359,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       'purchaseTaxableAmount': serializer.toJson<double>(purchaseTaxableAmount),
       'totalPurchaseAmount': serializer.toJson<double>(totalPurchaseAmount),
       'logId': serializer.toJson<int>(logId),
-      'ledgerId': serializer.toJson<int>(ledgerId),
+      'generateLedgerId': serializer.toJson<int>(generateLedgerId),
+      'paymentLedgerId': serializer.toJson<int>(paymentLedgerId),
       'comission': serializer.toJson<double>(comission),
       'comissionAmount': serializer.toJson<double>(comissionAmount),
       'comissionPaidDate': serializer.toJson<DateTime>(comissionPaidDate),
@@ -1732,14 +1373,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           String? documentType,
           DateTime? distDocDate,
           String? distDocNo,
-          int? pID,
+          int? hospitalID,
           String? custBillCity,
           String? matCode,
           String? matName,
           int? mtID,
           int? qty,
-          String? doctorName,
-          String? techniqalStaff,
+          int? doctorID,
+          int? techniqalStaffID,
           double? saleAmount,
           double? totalSale,
           DateTime? smtDocDate,
@@ -1748,7 +1389,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           double? purchaseTaxableAmount,
           double? totalPurchaseAmount,
           int? logId,
-          int? ledgerId,
+          int? generateLedgerId,
+          int? paymentLedgerId,
           double? comission,
           double? comissionAmount,
           DateTime? comissionPaidDate,
@@ -1758,14 +1400,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
         documentType: documentType ?? this.documentType,
         distDocDate: distDocDate ?? this.distDocDate,
         distDocNo: distDocNo ?? this.distDocNo,
-        pID: pID ?? this.pID,
+        hospitalID: hospitalID ?? this.hospitalID,
         custBillCity: custBillCity ?? this.custBillCity,
         matCode: matCode ?? this.matCode,
         matName: matName ?? this.matName,
         mtID: mtID ?? this.mtID,
         qty: qty ?? this.qty,
-        doctorName: doctorName ?? this.doctorName,
-        techniqalStaff: techniqalStaff ?? this.techniqalStaff,
+        doctorID: doctorID ?? this.doctorID,
+        techniqalStaffID: techniqalStaffID ?? this.techniqalStaffID,
         saleAmount: saleAmount ?? this.saleAmount,
         totalSale: totalSale ?? this.totalSale,
         smtDocDate: smtDocDate ?? this.smtDocDate,
@@ -1775,7 +1417,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
             purchaseTaxableAmount ?? this.purchaseTaxableAmount,
         totalPurchaseAmount: totalPurchaseAmount ?? this.totalPurchaseAmount,
         logId: logId ?? this.logId,
-        ledgerId: ledgerId ?? this.ledgerId,
+        generateLedgerId: generateLedgerId ?? this.generateLedgerId,
+        paymentLedgerId: paymentLedgerId ?? this.paymentLedgerId,
         comission: comission ?? this.comission,
         comissionAmount: comissionAmount ?? this.comissionAmount,
         comissionPaidDate: comissionPaidDate ?? this.comissionPaidDate,
@@ -1789,14 +1432,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           ..write('documentType: $documentType, ')
           ..write('distDocDate: $distDocDate, ')
           ..write('distDocNo: $distDocNo, ')
-          ..write('pID: $pID, ')
+          ..write('hospitalID: $hospitalID, ')
           ..write('custBillCity: $custBillCity, ')
           ..write('matCode: $matCode, ')
           ..write('matName: $matName, ')
           ..write('mtID: $mtID, ')
           ..write('qty: $qty, ')
-          ..write('doctorName: $doctorName, ')
-          ..write('techniqalStaff: $techniqalStaff, ')
+          ..write('doctorID: $doctorID, ')
+          ..write('techniqalStaffID: $techniqalStaffID, ')
           ..write('saleAmount: $saleAmount, ')
           ..write('totalSale: $totalSale, ')
           ..write('smtDocDate: $smtDocDate, ')
@@ -1805,7 +1448,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           ..write('purchaseTaxableAmount: $purchaseTaxableAmount, ')
           ..write('totalPurchaseAmount: $totalPurchaseAmount, ')
           ..write('logId: $logId, ')
-          ..write('ledgerId: $ledgerId, ')
+          ..write('generateLedgerId: $generateLedgerId, ')
+          ..write('paymentLedgerId: $paymentLedgerId, ')
           ..write('comission: $comission, ')
           ..write('comissionAmount: $comissionAmount, ')
           ..write('comissionPaidDate: $comissionPaidDate, ')
@@ -1820,14 +1464,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
         documentType,
         distDocDate,
         distDocNo,
-        pID,
+        hospitalID,
         custBillCity,
         matCode,
         matName,
         mtID,
         qty,
-        doctorName,
-        techniqalStaff,
+        doctorID,
+        techniqalStaffID,
         saleAmount,
         totalSale,
         smtDocDate,
@@ -1836,7 +1480,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
         purchaseTaxableAmount,
         totalPurchaseAmount,
         logId,
-        ledgerId,
+        generateLedgerId,
+        paymentLedgerId,
         comission,
         comissionAmount,
         comissionPaidDate,
@@ -1850,14 +1495,14 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           other.documentType == this.documentType &&
           other.distDocDate == this.distDocDate &&
           other.distDocNo == this.distDocNo &&
-          other.pID == this.pID &&
+          other.hospitalID == this.hospitalID &&
           other.custBillCity == this.custBillCity &&
           other.matCode == this.matCode &&
           other.matName == this.matName &&
           other.mtID == this.mtID &&
           other.qty == this.qty &&
-          other.doctorName == this.doctorName &&
-          other.techniqalStaff == this.techniqalStaff &&
+          other.doctorID == this.doctorID &&
+          other.techniqalStaffID == this.techniqalStaffID &&
           other.saleAmount == this.saleAmount &&
           other.totalSale == this.totalSale &&
           other.smtDocDate == this.smtDocDate &&
@@ -1866,7 +1511,8 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           other.purchaseTaxableAmount == this.purchaseTaxableAmount &&
           other.totalPurchaseAmount == this.totalPurchaseAmount &&
           other.logId == this.logId &&
-          other.ledgerId == this.ledgerId &&
+          other.generateLedgerId == this.generateLedgerId &&
+          other.paymentLedgerId == this.paymentLedgerId &&
           other.comission == this.comission &&
           other.comissionAmount == this.comissionAmount &&
           other.comissionPaidDate == this.comissionPaidDate &&
@@ -1878,14 +1524,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
   final Value<String> documentType;
   final Value<DateTime> distDocDate;
   final Value<String> distDocNo;
-  final Value<int> pID;
+  final Value<int> hospitalID;
   final Value<String> custBillCity;
   final Value<String> matCode;
   final Value<String> matName;
   final Value<int> mtID;
   final Value<int> qty;
-  final Value<String> doctorName;
-  final Value<String> techniqalStaff;
+  final Value<int> doctorID;
+  final Value<int> techniqalStaffID;
   final Value<double> saleAmount;
   final Value<double> totalSale;
   final Value<DateTime> smtDocDate;
@@ -1894,7 +1540,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
   final Value<double> purchaseTaxableAmount;
   final Value<double> totalPurchaseAmount;
   final Value<int> logId;
-  final Value<int> ledgerId;
+  final Value<int> generateLedgerId;
+  final Value<int> paymentLedgerId;
   final Value<double> comission;
   final Value<double> comissionAmount;
   final Value<DateTime> comissionPaidDate;
@@ -1904,14 +1551,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     this.documentType = const Value.absent(),
     this.distDocDate = const Value.absent(),
     this.distDocNo = const Value.absent(),
-    this.pID = const Value.absent(),
+    this.hospitalID = const Value.absent(),
     this.custBillCity = const Value.absent(),
     this.matCode = const Value.absent(),
     this.matName = const Value.absent(),
     this.mtID = const Value.absent(),
     this.qty = const Value.absent(),
-    this.doctorName = const Value.absent(),
-    this.techniqalStaff = const Value.absent(),
+    this.doctorID = const Value.absent(),
+    this.techniqalStaffID = const Value.absent(),
     this.saleAmount = const Value.absent(),
     this.totalSale = const Value.absent(),
     this.smtDocDate = const Value.absent(),
@@ -1920,7 +1567,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     this.purchaseTaxableAmount = const Value.absent(),
     this.totalPurchaseAmount = const Value.absent(),
     this.logId = const Value.absent(),
-    this.ledgerId = const Value.absent(),
+    this.generateLedgerId = const Value.absent(),
+    this.paymentLedgerId = const Value.absent(),
     this.comission = const Value.absent(),
     this.comissionAmount = const Value.absent(),
     this.comissionPaidDate = const Value.absent(),
@@ -1931,14 +1579,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     required String documentType,
     required DateTime distDocDate,
     required String distDocNo,
-    required int pID,
+    required int hospitalID,
     required String custBillCity,
     required String matCode,
     required String matName,
     required int mtID,
     required int qty,
-    required String doctorName,
-    required String techniqalStaff,
+    required int doctorID,
+    required int techniqalStaffID,
     required double saleAmount,
     required double totalSale,
     required DateTime smtDocDate,
@@ -1947,7 +1595,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     required double purchaseTaxableAmount,
     required double totalPurchaseAmount,
     required int logId,
-    required int ledgerId,
+    required int generateLedgerId,
+    required int paymentLedgerId,
     required double comission,
     required double comissionAmount,
     required DateTime comissionPaidDate,
@@ -1955,14 +1604,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
   })  : documentType = Value(documentType),
         distDocDate = Value(distDocDate),
         distDocNo = Value(distDocNo),
-        pID = Value(pID),
+        hospitalID = Value(hospitalID),
         custBillCity = Value(custBillCity),
         matCode = Value(matCode),
         matName = Value(matName),
         mtID = Value(mtID),
         qty = Value(qty),
-        doctorName = Value(doctorName),
-        techniqalStaff = Value(techniqalStaff),
+        doctorID = Value(doctorID),
+        techniqalStaffID = Value(techniqalStaffID),
         saleAmount = Value(saleAmount),
         totalSale = Value(totalSale),
         smtDocDate = Value(smtDocDate),
@@ -1971,7 +1620,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
         purchaseTaxableAmount = Value(purchaseTaxableAmount),
         totalPurchaseAmount = Value(totalPurchaseAmount),
         logId = Value(logId),
-        ledgerId = Value(ledgerId),
+        generateLedgerId = Value(generateLedgerId),
+        paymentLedgerId = Value(paymentLedgerId),
         comission = Value(comission),
         comissionAmount = Value(comissionAmount),
         comissionPaidDate = Value(comissionPaidDate),
@@ -1981,14 +1631,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     Expression<String>? documentType,
     Expression<DateTime>? distDocDate,
     Expression<String>? distDocNo,
-    Expression<int>? pID,
+    Expression<int>? hospitalID,
     Expression<String>? custBillCity,
     Expression<String>? matCode,
     Expression<String>? matName,
     Expression<int>? mtID,
     Expression<int>? qty,
-    Expression<String>? doctorName,
-    Expression<String>? techniqalStaff,
+    Expression<int>? doctorID,
+    Expression<int>? techniqalStaffID,
     Expression<double>? saleAmount,
     Expression<double>? totalSale,
     Expression<DateTime>? smtDocDate,
@@ -1997,7 +1647,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     Expression<double>? purchaseTaxableAmount,
     Expression<double>? totalPurchaseAmount,
     Expression<int>? logId,
-    Expression<int>? ledgerId,
+    Expression<int>? generateLedgerId,
+    Expression<int>? paymentLedgerId,
     Expression<double>? comission,
     Expression<double>? comissionAmount,
     Expression<DateTime>? comissionPaidDate,
@@ -2008,14 +1659,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
       if (documentType != null) 'document_type': documentType,
       if (distDocDate != null) 'dist_doc_date': distDocDate,
       if (distDocNo != null) 'dist_doc_no': distDocNo,
-      if (pID != null) 'p_i_d': pID,
+      if (hospitalID != null) 'hospital_i_d': hospitalID,
       if (custBillCity != null) 'cust_bill_city': custBillCity,
       if (matCode != null) 'mat_code': matCode,
       if (matName != null) 'mat_name': matName,
       if (mtID != null) 'mt_i_d': mtID,
       if (qty != null) 'qty': qty,
-      if (doctorName != null) 'doctor_name': doctorName,
-      if (techniqalStaff != null) 'techniqal_staff': techniqalStaff,
+      if (doctorID != null) 'doctor_i_d': doctorID,
+      if (techniqalStaffID != null) 'techniqal_staff_i_d': techniqalStaffID,
       if (saleAmount != null) 'sale_amount': saleAmount,
       if (totalSale != null) 'total_sale': totalSale,
       if (smtDocDate != null) 'smt_doc_date': smtDocDate,
@@ -2026,7 +1677,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
       if (totalPurchaseAmount != null)
         'total_purchase_amount': totalPurchaseAmount,
       if (logId != null) 'log_id': logId,
-      if (ledgerId != null) 'ledger_id': ledgerId,
+      if (generateLedgerId != null) 'generate_ledger_id': generateLedgerId,
+      if (paymentLedgerId != null) 'payment_ledger_id': paymentLedgerId,
       if (comission != null) 'comission': comission,
       if (comissionAmount != null) 'comission_amount': comissionAmount,
       if (comissionPaidDate != null) 'comission_paid_date': comissionPaidDate,
@@ -2040,14 +1692,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
       Value<String>? documentType,
       Value<DateTime>? distDocDate,
       Value<String>? distDocNo,
-      Value<int>? pID,
+      Value<int>? hospitalID,
       Value<String>? custBillCity,
       Value<String>? matCode,
       Value<String>? matName,
       Value<int>? mtID,
       Value<int>? qty,
-      Value<String>? doctorName,
-      Value<String>? techniqalStaff,
+      Value<int>? doctorID,
+      Value<int>? techniqalStaffID,
       Value<double>? saleAmount,
       Value<double>? totalSale,
       Value<DateTime>? smtDocDate,
@@ -2056,7 +1708,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
       Value<double>? purchaseTaxableAmount,
       Value<double>? totalPurchaseAmount,
       Value<int>? logId,
-      Value<int>? ledgerId,
+      Value<int>? generateLedgerId,
+      Value<int>? paymentLedgerId,
       Value<double>? comission,
       Value<double>? comissionAmount,
       Value<DateTime>? comissionPaidDate,
@@ -2066,14 +1719,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
       documentType: documentType ?? this.documentType,
       distDocDate: distDocDate ?? this.distDocDate,
       distDocNo: distDocNo ?? this.distDocNo,
-      pID: pID ?? this.pID,
+      hospitalID: hospitalID ?? this.hospitalID,
       custBillCity: custBillCity ?? this.custBillCity,
       matCode: matCode ?? this.matCode,
       matName: matName ?? this.matName,
       mtID: mtID ?? this.mtID,
       qty: qty ?? this.qty,
-      doctorName: doctorName ?? this.doctorName,
-      techniqalStaff: techniqalStaff ?? this.techniqalStaff,
+      doctorID: doctorID ?? this.doctorID,
+      techniqalStaffID: techniqalStaffID ?? this.techniqalStaffID,
       saleAmount: saleAmount ?? this.saleAmount,
       totalSale: totalSale ?? this.totalSale,
       smtDocDate: smtDocDate ?? this.smtDocDate,
@@ -2083,7 +1736,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
           purchaseTaxableAmount ?? this.purchaseTaxableAmount,
       totalPurchaseAmount: totalPurchaseAmount ?? this.totalPurchaseAmount,
       logId: logId ?? this.logId,
-      ledgerId: ledgerId ?? this.ledgerId,
+      generateLedgerId: generateLedgerId ?? this.generateLedgerId,
+      paymentLedgerId: paymentLedgerId ?? this.paymentLedgerId,
       comission: comission ?? this.comission,
       comissionAmount: comissionAmount ?? this.comissionAmount,
       comissionPaidDate: comissionPaidDate ?? this.comissionPaidDate,
@@ -2107,8 +1761,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     if (distDocNo.present) {
       map['dist_doc_no'] = Variable<String>(distDocNo.value);
     }
-    if (pID.present) {
-      map['p_i_d'] = Variable<int>(pID.value);
+    if (hospitalID.present) {
+      map['hospital_i_d'] = Variable<int>(hospitalID.value);
     }
     if (custBillCity.present) {
       map['cust_bill_city'] = Variable<String>(custBillCity.value);
@@ -2125,11 +1779,11 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     if (qty.present) {
       map['qty'] = Variable<int>(qty.value);
     }
-    if (doctorName.present) {
-      map['doctor_name'] = Variable<String>(doctorName.value);
+    if (doctorID.present) {
+      map['doctor_i_d'] = Variable<int>(doctorID.value);
     }
-    if (techniqalStaff.present) {
-      map['techniqal_staff'] = Variable<String>(techniqalStaff.value);
+    if (techniqalStaffID.present) {
+      map['techniqal_staff_i_d'] = Variable<int>(techniqalStaffID.value);
     }
     if (saleAmount.present) {
       map['sale_amount'] = Variable<double>(saleAmount.value);
@@ -2157,8 +1811,11 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     if (logId.present) {
       map['log_id'] = Variable<int>(logId.value);
     }
-    if (ledgerId.present) {
-      map['ledger_id'] = Variable<int>(ledgerId.value);
+    if (generateLedgerId.present) {
+      map['generate_ledger_id'] = Variable<int>(generateLedgerId.value);
+    }
+    if (paymentLedgerId.present) {
+      map['payment_ledger_id'] = Variable<int>(paymentLedgerId.value);
     }
     if (comission.present) {
       map['comission'] = Variable<double>(comission.value);
@@ -2183,14 +1840,14 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
           ..write('documentType: $documentType, ')
           ..write('distDocDate: $distDocDate, ')
           ..write('distDocNo: $distDocNo, ')
-          ..write('pID: $pID, ')
+          ..write('hospitalID: $hospitalID, ')
           ..write('custBillCity: $custBillCity, ')
           ..write('matCode: $matCode, ')
           ..write('matName: $matName, ')
           ..write('mtID: $mtID, ')
           ..write('qty: $qty, ')
-          ..write('doctorName: $doctorName, ')
-          ..write('techniqalStaff: $techniqalStaff, ')
+          ..write('doctorID: $doctorID, ')
+          ..write('techniqalStaffID: $techniqalStaffID, ')
           ..write('saleAmount: $saleAmount, ')
           ..write('totalSale: $totalSale, ')
           ..write('smtDocDate: $smtDocDate, ')
@@ -2199,7 +1856,8 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
           ..write('purchaseTaxableAmount: $purchaseTaxableAmount, ')
           ..write('totalPurchaseAmount: $totalPurchaseAmount, ')
           ..write('logId: $logId, ')
-          ..write('ledgerId: $ledgerId, ')
+          ..write('generateLedgerId: $generateLedgerId, ')
+          ..write('paymentLedgerId: $paymentLedgerId, ')
           ..write('comission: $comission, ')
           ..write('comissionAmount: $comissionAmount, ')
           ..write('comissionPaidDate: $comissionPaidDate, ')
@@ -2242,10 +1900,11 @@ class $InputDataTable extends InputData
   late final GeneratedColumn<String> distDocNo = GeneratedColumn<String>(
       'dist_doc_no', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _pIDMeta = const VerificationMeta('pID');
+  static const VerificationMeta _hospitalIDMeta =
+      const VerificationMeta('hospitalID');
   @override
-  late final GeneratedColumn<int> pID = GeneratedColumn<int>(
-      'p_i_d', aliasedName, false,
+  late final GeneratedColumn<int> hospitalID = GeneratedColumn<int>(
+      'hospital_i_d', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints:
@@ -2281,18 +1940,24 @@ class $InputDataTable extends InputData
   late final GeneratedColumn<int> qty = GeneratedColumn<int>(
       'qty', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _doctorNameMeta =
-      const VerificationMeta('doctorName');
+  static const VerificationMeta _doctorIDMeta =
+      const VerificationMeta('doctorID');
   @override
-  late final GeneratedColumn<String> doctorName = GeneratedColumn<String>(
-      'doctor_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _techniqalStaffMeta =
-      const VerificationMeta('techniqalStaff');
+  late final GeneratedColumn<int> doctorID = GeneratedColumn<int>(
+      'doctor_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
+  static const VerificationMeta _techniqalStaffIDMeta =
+      const VerificationMeta('techniqalStaffID');
   @override
-  late final GeneratedColumn<String> techniqalStaff = GeneratedColumn<String>(
-      'techniqal_staff', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+  late final GeneratedColumn<int> techniqalStaffID = GeneratedColumn<int>(
+      'techniqal_staff_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
   static const VerificationMeta _saleAmountMeta =
       const VerificationMeta('saleAmount');
   @override
@@ -2340,15 +2005,18 @@ class $InputDataTable extends InputData
   late final GeneratedColumn<int> logId = GeneratedColumn<int>(
       'log_id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _ledgerIdMeta =
-      const VerificationMeta('ledgerId');
+  static const VerificationMeta _generateLedgerIdMeta =
+      const VerificationMeta('generateLedgerId');
   @override
-  late final GeneratedColumn<int> ledgerId = GeneratedColumn<int>(
-      'ledger_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES ledger (id)'));
+  late final GeneratedColumn<int> generateLedgerId = GeneratedColumn<int>(
+      'generate_ledger_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _paymentLedgerIdMeta =
+      const VerificationMeta('paymentLedgerId');
+  @override
+  late final GeneratedColumn<int> paymentLedgerId = GeneratedColumn<int>(
+      'payment_ledger_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _comissionMeta =
       const VerificationMeta('comission');
   @override
@@ -2379,14 +2047,14 @@ class $InputDataTable extends InputData
         documentType,
         distDocDate,
         distDocNo,
-        pID,
+        hospitalID,
         custBillCity,
         matCode,
         matName,
         mtID,
         qty,
-        doctorName,
-        techniqalStaff,
+        doctorID,
+        techniqalStaffID,
         saleAmount,
         totalSale,
         smtDocDate,
@@ -2395,7 +2063,8 @@ class $InputDataTable extends InputData
         purchaseTaxableAmount,
         totalPurchaseAmount,
         logId,
-        ledgerId,
+        generateLedgerId,
+        paymentLedgerId,
         comission,
         comissionAmount,
         comissionPaidDate,
@@ -2437,11 +2106,13 @@ class $InputDataTable extends InputData
     } else if (isInserting) {
       context.missing(_distDocNoMeta);
     }
-    if (data.containsKey('p_i_d')) {
+    if (data.containsKey('hospital_i_d')) {
       context.handle(
-          _pIDMeta, pID.isAcceptableOrUnknown(data['p_i_d']!, _pIDMeta));
+          _hospitalIDMeta,
+          hospitalID.isAcceptableOrUnknown(
+              data['hospital_i_d']!, _hospitalIDMeta));
     } else if (isInserting) {
-      context.missing(_pIDMeta);
+      context.missing(_hospitalIDMeta);
     }
     if (data.containsKey('cust_bill_city')) {
       context.handle(
@@ -2475,21 +2146,19 @@ class $InputDataTable extends InputData
     } else if (isInserting) {
       context.missing(_qtyMeta);
     }
-    if (data.containsKey('doctor_name')) {
-      context.handle(
-          _doctorNameMeta,
-          doctorName.isAcceptableOrUnknown(
-              data['doctor_name']!, _doctorNameMeta));
+    if (data.containsKey('doctor_i_d')) {
+      context.handle(_doctorIDMeta,
+          doctorID.isAcceptableOrUnknown(data['doctor_i_d']!, _doctorIDMeta));
     } else if (isInserting) {
-      context.missing(_doctorNameMeta);
+      context.missing(_doctorIDMeta);
     }
-    if (data.containsKey('techniqal_staff')) {
+    if (data.containsKey('techniqal_staff_i_d')) {
       context.handle(
-          _techniqalStaffMeta,
-          techniqalStaff.isAcceptableOrUnknown(
-              data['techniqal_staff']!, _techniqalStaffMeta));
+          _techniqalStaffIDMeta,
+          techniqalStaffID.isAcceptableOrUnknown(
+              data['techniqal_staff_i_d']!, _techniqalStaffIDMeta));
     } else if (isInserting) {
-      context.missing(_techniqalStaffMeta);
+      context.missing(_techniqalStaffIDMeta);
     }
     if (data.containsKey('sale_amount')) {
       context.handle(
@@ -2547,11 +2216,21 @@ class $InputDataTable extends InputData
     } else if (isInserting) {
       context.missing(_logIdMeta);
     }
-    if (data.containsKey('ledger_id')) {
-      context.handle(_ledgerIdMeta,
-          ledgerId.isAcceptableOrUnknown(data['ledger_id']!, _ledgerIdMeta));
+    if (data.containsKey('generate_ledger_id')) {
+      context.handle(
+          _generateLedgerIdMeta,
+          generateLedgerId.isAcceptableOrUnknown(
+              data['generate_ledger_id']!, _generateLedgerIdMeta));
     } else if (isInserting) {
-      context.missing(_ledgerIdMeta);
+      context.missing(_generateLedgerIdMeta);
+    }
+    if (data.containsKey('payment_ledger_id')) {
+      context.handle(
+          _paymentLedgerIdMeta,
+          paymentLedgerId.isAcceptableOrUnknown(
+              data['payment_ledger_id']!, _paymentLedgerIdMeta));
+    } else if (isInserting) {
+      context.missing(_paymentLedgerIdMeta);
     }
     if (data.containsKey('comission')) {
       context.handle(_comissionMeta,
@@ -2600,8 +2279,8 @@ class $InputDataTable extends InputData
           DriftSqlType.dateTime, data['${effectivePrefix}dist_doc_date'])!,
       distDocNo: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}dist_doc_no'])!,
-      pID: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}p_i_d'])!,
+      hospitalID: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}hospital_i_d'])!,
       custBillCity: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}cust_bill_city'])!,
       matCode: attachedDatabase.typeMapping
@@ -2612,10 +2291,10 @@ class $InputDataTable extends InputData
           .read(DriftSqlType.int, data['${effectivePrefix}mt_i_d'])!,
       qty: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}qty'])!,
-      doctorName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}doctor_name'])!,
-      techniqalStaff: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}techniqal_staff'])!,
+      doctorID: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}doctor_i_d'])!,
+      techniqalStaffID: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}techniqal_staff_i_d'])!,
       saleAmount: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}sale_amount'])!,
       totalSale: attachedDatabase.typeMapping
@@ -2634,8 +2313,10 @@ class $InputDataTable extends InputData
           data['${effectivePrefix}total_purchase_amount'])!,
       logId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}log_id'])!,
-      ledgerId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}ledger_id'])!,
+      generateLedgerId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}generate_ledger_id'])!,
+      paymentLedgerId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}payment_ledger_id'])!,
       comission: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}comission'])!,
       comissionAmount: attachedDatabase.typeMapping.read(
@@ -2655,6 +2336,456 @@ class $InputDataTable extends InputData
   }
 }
 
+class LedgerData extends DataClass implements Insertable<LedgerData> {
+  final int id;
+  final String type;
+  final int pID;
+  final DateTime ledgerDate;
+  final double drAmount;
+  final double crAmount;
+  final double extradrAmount;
+  final double extracrAmount;
+  final String ledgerNote;
+  const LedgerData(
+      {required this.id,
+      required this.type,
+      required this.pID,
+      required this.ledgerDate,
+      required this.drAmount,
+      required this.crAmount,
+      required this.extradrAmount,
+      required this.extracrAmount,
+      required this.ledgerNote});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['type'] = Variable<String>(type);
+    map['p_i_d'] = Variable<int>(pID);
+    map['ledger_date'] = Variable<DateTime>(ledgerDate);
+    map['dr_amount'] = Variable<double>(drAmount);
+    map['cr_amount'] = Variable<double>(crAmount);
+    map['extradr_amount'] = Variable<double>(extradrAmount);
+    map['extracr_amount'] = Variable<double>(extracrAmount);
+    map['ledger_note'] = Variable<String>(ledgerNote);
+    return map;
+  }
+
+  LedgerCompanion toCompanion(bool nullToAbsent) {
+    return LedgerCompanion(
+      id: Value(id),
+      type: Value(type),
+      pID: Value(pID),
+      ledgerDate: Value(ledgerDate),
+      drAmount: Value(drAmount),
+      crAmount: Value(crAmount),
+      extradrAmount: Value(extradrAmount),
+      extracrAmount: Value(extracrAmount),
+      ledgerNote: Value(ledgerNote),
+    );
+  }
+
+  factory LedgerData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LedgerData(
+      id: serializer.fromJson<int>(json['id']),
+      type: serializer.fromJson<String>(json['type']),
+      pID: serializer.fromJson<int>(json['pID']),
+      ledgerDate: serializer.fromJson<DateTime>(json['ledgerDate']),
+      drAmount: serializer.fromJson<double>(json['drAmount']),
+      crAmount: serializer.fromJson<double>(json['crAmount']),
+      extradrAmount: serializer.fromJson<double>(json['extradrAmount']),
+      extracrAmount: serializer.fromJson<double>(json['extracrAmount']),
+      ledgerNote: serializer.fromJson<String>(json['ledgerNote']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'type': serializer.toJson<String>(type),
+      'pID': serializer.toJson<int>(pID),
+      'ledgerDate': serializer.toJson<DateTime>(ledgerDate),
+      'drAmount': serializer.toJson<double>(drAmount),
+      'crAmount': serializer.toJson<double>(crAmount),
+      'extradrAmount': serializer.toJson<double>(extradrAmount),
+      'extracrAmount': serializer.toJson<double>(extracrAmount),
+      'ledgerNote': serializer.toJson<String>(ledgerNote),
+    };
+  }
+
+  LedgerData copyWith(
+          {int? id,
+          String? type,
+          int? pID,
+          DateTime? ledgerDate,
+          double? drAmount,
+          double? crAmount,
+          double? extradrAmount,
+          double? extracrAmount,
+          String? ledgerNote}) =>
+      LedgerData(
+        id: id ?? this.id,
+        type: type ?? this.type,
+        pID: pID ?? this.pID,
+        ledgerDate: ledgerDate ?? this.ledgerDate,
+        drAmount: drAmount ?? this.drAmount,
+        crAmount: crAmount ?? this.crAmount,
+        extradrAmount: extradrAmount ?? this.extradrAmount,
+        extracrAmount: extracrAmount ?? this.extracrAmount,
+        ledgerNote: ledgerNote ?? this.ledgerNote,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('LedgerData(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('pID: $pID, ')
+          ..write('ledgerDate: $ledgerDate, ')
+          ..write('drAmount: $drAmount, ')
+          ..write('crAmount: $crAmount, ')
+          ..write('extradrAmount: $extradrAmount, ')
+          ..write('extracrAmount: $extracrAmount, ')
+          ..write('ledgerNote: $ledgerNote')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, type, pID, ledgerDate, drAmount, crAmount,
+      extradrAmount, extracrAmount, ledgerNote);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LedgerData &&
+          other.id == this.id &&
+          other.type == this.type &&
+          other.pID == this.pID &&
+          other.ledgerDate == this.ledgerDate &&
+          other.drAmount == this.drAmount &&
+          other.crAmount == this.crAmount &&
+          other.extradrAmount == this.extradrAmount &&
+          other.extracrAmount == this.extracrAmount &&
+          other.ledgerNote == this.ledgerNote);
+}
+
+class LedgerCompanion extends UpdateCompanion<LedgerData> {
+  final Value<int> id;
+  final Value<String> type;
+  final Value<int> pID;
+  final Value<DateTime> ledgerDate;
+  final Value<double> drAmount;
+  final Value<double> crAmount;
+  final Value<double> extradrAmount;
+  final Value<double> extracrAmount;
+  final Value<String> ledgerNote;
+  const LedgerCompanion({
+    this.id = const Value.absent(),
+    this.type = const Value.absent(),
+    this.pID = const Value.absent(),
+    this.ledgerDate = const Value.absent(),
+    this.drAmount = const Value.absent(),
+    this.crAmount = const Value.absent(),
+    this.extradrAmount = const Value.absent(),
+    this.extracrAmount = const Value.absent(),
+    this.ledgerNote = const Value.absent(),
+  });
+  LedgerCompanion.insert({
+    this.id = const Value.absent(),
+    required String type,
+    required int pID,
+    required DateTime ledgerDate,
+    required double drAmount,
+    required double crAmount,
+    required double extradrAmount,
+    required double extracrAmount,
+    required String ledgerNote,
+  })  : type = Value(type),
+        pID = Value(pID),
+        ledgerDate = Value(ledgerDate),
+        drAmount = Value(drAmount),
+        crAmount = Value(crAmount),
+        extradrAmount = Value(extradrAmount),
+        extracrAmount = Value(extracrAmount),
+        ledgerNote = Value(ledgerNote);
+  static Insertable<LedgerData> custom({
+    Expression<int>? id,
+    Expression<String>? type,
+    Expression<int>? pID,
+    Expression<DateTime>? ledgerDate,
+    Expression<double>? drAmount,
+    Expression<double>? crAmount,
+    Expression<double>? extradrAmount,
+    Expression<double>? extracrAmount,
+    Expression<String>? ledgerNote,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (type != null) 'type': type,
+      if (pID != null) 'p_i_d': pID,
+      if (ledgerDate != null) 'ledger_date': ledgerDate,
+      if (drAmount != null) 'dr_amount': drAmount,
+      if (crAmount != null) 'cr_amount': crAmount,
+      if (extradrAmount != null) 'extradr_amount': extradrAmount,
+      if (extracrAmount != null) 'extracr_amount': extracrAmount,
+      if (ledgerNote != null) 'ledger_note': ledgerNote,
+    });
+  }
+
+  LedgerCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? type,
+      Value<int>? pID,
+      Value<DateTime>? ledgerDate,
+      Value<double>? drAmount,
+      Value<double>? crAmount,
+      Value<double>? extradrAmount,
+      Value<double>? extracrAmount,
+      Value<String>? ledgerNote}) {
+    return LedgerCompanion(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      pID: pID ?? this.pID,
+      ledgerDate: ledgerDate ?? this.ledgerDate,
+      drAmount: drAmount ?? this.drAmount,
+      crAmount: crAmount ?? this.crAmount,
+      extradrAmount: extradrAmount ?? this.extradrAmount,
+      extracrAmount: extracrAmount ?? this.extracrAmount,
+      ledgerNote: ledgerNote ?? this.ledgerNote,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (pID.present) {
+      map['p_i_d'] = Variable<int>(pID.value);
+    }
+    if (ledgerDate.present) {
+      map['ledger_date'] = Variable<DateTime>(ledgerDate.value);
+    }
+    if (drAmount.present) {
+      map['dr_amount'] = Variable<double>(drAmount.value);
+    }
+    if (crAmount.present) {
+      map['cr_amount'] = Variable<double>(crAmount.value);
+    }
+    if (extradrAmount.present) {
+      map['extradr_amount'] = Variable<double>(extradrAmount.value);
+    }
+    if (extracrAmount.present) {
+      map['extracr_amount'] = Variable<double>(extracrAmount.value);
+    }
+    if (ledgerNote.present) {
+      map['ledger_note'] = Variable<String>(ledgerNote.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LedgerCompanion(')
+          ..write('id: $id, ')
+          ..write('type: $type, ')
+          ..write('pID: $pID, ')
+          ..write('ledgerDate: $ledgerDate, ')
+          ..write('drAmount: $drAmount, ')
+          ..write('crAmount: $crAmount, ')
+          ..write('extradrAmount: $extradrAmount, ')
+          ..write('extracrAmount: $extracrAmount, ')
+          ..write('ledgerNote: $ledgerNote')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LedgerTable extends Ledger with TableInfo<$LedgerTable, LedgerData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LedgerTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _pIDMeta = const VerificationMeta('pID');
+  @override
+  late final GeneratedColumn<int> pID = GeneratedColumn<int>(
+      'p_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
+  static const VerificationMeta _ledgerDateMeta =
+      const VerificationMeta('ledgerDate');
+  @override
+  late final GeneratedColumn<DateTime> ledgerDate = GeneratedColumn<DateTime>(
+      'ledger_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _drAmountMeta =
+      const VerificationMeta('drAmount');
+  @override
+  late final GeneratedColumn<double> drAmount = GeneratedColumn<double>(
+      'dr_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _crAmountMeta =
+      const VerificationMeta('crAmount');
+  @override
+  late final GeneratedColumn<double> crAmount = GeneratedColumn<double>(
+      'cr_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _extradrAmountMeta =
+      const VerificationMeta('extradrAmount');
+  @override
+  late final GeneratedColumn<double> extradrAmount = GeneratedColumn<double>(
+      'extradr_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _extracrAmountMeta =
+      const VerificationMeta('extracrAmount');
+  @override
+  late final GeneratedColumn<double> extracrAmount = GeneratedColumn<double>(
+      'extracr_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _ledgerNoteMeta =
+      const VerificationMeta('ledgerNote');
+  @override
+  late final GeneratedColumn<String> ledgerNote = GeneratedColumn<String>(
+      'ledger_note', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        type,
+        pID,
+        ledgerDate,
+        drAmount,
+        crAmount,
+        extradrAmount,
+        extracrAmount,
+        ledgerNote
+      ];
+  @override
+  String get aliasedName => _alias ?? 'ledger';
+  @override
+  String get actualTableName => 'ledger';
+  @override
+  VerificationContext validateIntegrity(Insertable<LedgerData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('p_i_d')) {
+      context.handle(
+          _pIDMeta, pID.isAcceptableOrUnknown(data['p_i_d']!, _pIDMeta));
+    } else if (isInserting) {
+      context.missing(_pIDMeta);
+    }
+    if (data.containsKey('ledger_date')) {
+      context.handle(
+          _ledgerDateMeta,
+          ledgerDate.isAcceptableOrUnknown(
+              data['ledger_date']!, _ledgerDateMeta));
+    } else if (isInserting) {
+      context.missing(_ledgerDateMeta);
+    }
+    if (data.containsKey('dr_amount')) {
+      context.handle(_drAmountMeta,
+          drAmount.isAcceptableOrUnknown(data['dr_amount']!, _drAmountMeta));
+    } else if (isInserting) {
+      context.missing(_drAmountMeta);
+    }
+    if (data.containsKey('cr_amount')) {
+      context.handle(_crAmountMeta,
+          crAmount.isAcceptableOrUnknown(data['cr_amount']!, _crAmountMeta));
+    } else if (isInserting) {
+      context.missing(_crAmountMeta);
+    }
+    if (data.containsKey('extradr_amount')) {
+      context.handle(
+          _extradrAmountMeta,
+          extradrAmount.isAcceptableOrUnknown(
+              data['extradr_amount']!, _extradrAmountMeta));
+    } else if (isInserting) {
+      context.missing(_extradrAmountMeta);
+    }
+    if (data.containsKey('extracr_amount')) {
+      context.handle(
+          _extracrAmountMeta,
+          extracrAmount.isAcceptableOrUnknown(
+              data['extracr_amount']!, _extracrAmountMeta));
+    } else if (isInserting) {
+      context.missing(_extracrAmountMeta);
+    }
+    if (data.containsKey('ledger_note')) {
+      context.handle(
+          _ledgerNoteMeta,
+          ledgerNote.isAcceptableOrUnknown(
+              data['ledger_note']!, _ledgerNoteMeta));
+    } else if (isInserting) {
+      context.missing(_ledgerNoteMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LedgerData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LedgerData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      pID: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}p_i_d'])!,
+      ledgerDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}ledger_date'])!,
+      drAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}dr_amount'])!,
+      crAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}cr_amount'])!,
+      extradrAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}extradr_amount'])!,
+      extracrAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}extracr_amount'])!,
+      ledgerNote: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ledger_note'])!,
+    );
+  }
+
+  @override
+  $LedgerTable createAlias(String alias) {
+    return $LedgerTable(attachedDatabase, alias);
+  }
+}
+
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(e);
   late final $UserTable user = $UserTable(this);
@@ -2664,8 +2795,8 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   late final $PartyMasterTable partyMaster = $PartyMasterTable(this);
   late final $PartyComissionDetailTable partyComissionDetail =
       $PartyComissionDetailTable(this);
-  late final $LedgerTable ledger = $LedgerTable(this);
   late final $InputDataTable inputData = $InputDataTable(this);
+  late final $LedgerTable ledger = $LedgerTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2676,7 +2807,7 @@ abstract class _$MyDatabase extends GeneratedDatabase {
         partyTypeMaster,
         partyMaster,
         partyComissionDetail,
-        ledger,
-        inputData
+        inputData,
+        ledger
       ];
 }

@@ -43,14 +43,14 @@ class InputData extends Table {
   TextColumn get documentType => text()();
   DateTimeColumn get distDocDate => dateTime()();
   TextColumn get distDocNo => text()();
-  IntColumn get pID => integer().references(PartyMaster, #id)();
+  IntColumn get hospitalID => integer().references(PartyMaster, #id)();
   TextColumn get custBillCity => text()();
   TextColumn get matCode => text()();
   TextColumn get matName => text()();
   IntColumn get mtID => integer().references(MaterialType, #id)();
   IntColumn get qty => integer()();
-  TextColumn get doctorName => text()();
-  TextColumn get techniqalStaff => text()();
+  IntColumn get doctorID => integer().references(PartyMaster, #id)();
+  IntColumn get techniqalStaffID => integer().references(PartyMaster, #id)();
   RealColumn get saleAmount => real()();
   RealColumn get totalSale => real()();
   DateTimeColumn get smtDocDate => dateTime()();
@@ -59,7 +59,8 @@ class InputData extends Table {
   RealColumn get purchaseTaxableAmount => real()();
   RealColumn get totalPurchaseAmount => real()();
   IntColumn get logId => integer()();
-  IntColumn get ledgerId => integer().references(Ledger, #id)();
+  IntColumn get generateLedgerId => integer()();
+  IntColumn get paymentLedgerId => integer()();
   RealColumn get comission => real()();
   RealColumn get comissionAmount => real()();
   DateTimeColumn get comissionPaidDate => dateTime()();
@@ -73,6 +74,8 @@ class Ledger extends Table {
   DateTimeColumn get ledgerDate => dateTime()();
   RealColumn get drAmount => real()();
   RealColumn get crAmount => real()();
+  RealColumn get extradrAmount => real()();
+  RealColumn get extracrAmount => real()();
   TextColumn get ledgerNote => text()();
 }
 
@@ -125,8 +128,8 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     print('database Created');
-    final dbFolder = '${Directory.current.path}\\backupData';
-    final file = File(p.join(dbFolder, 'demo.sqlite'));
+    final dbFolder = '${Directory.current.path}\\backup';
+    final file = File(p.join(dbFolder, 'backup.sqlite'));
     return NativeDatabase.createInBackground(file);
   });
 }

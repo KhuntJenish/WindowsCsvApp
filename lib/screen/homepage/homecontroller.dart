@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:csvapp/database/tables.dart';
+import 'package:csvapp/screen/partyMaster/partyController.dart';
 import 'package:csvapp/theam/theam_constants.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart' as d;
@@ -20,6 +21,7 @@ import '../../utils/constant.dart';
 
 class HomepageController extends GetxController {
   PageController pageController = PageController(initialPage: 0);
+  PartyController partyController = Get.put(PartyController());
   RxInt isSelectedReport = 0.obs;
   RxInt isNumber = 0.obs;
 
@@ -386,67 +388,6 @@ class HomepageController extends GetxController {
         print(newsubList);
         newList.clear();
         newMainList.addAll(newsubList);
-
-        // pdf.addPage(
-        //   pw.Page(
-        //     margin: const pw.EdgeInsets.all(8),
-        //     pageFormat: PdfPageFormat.a4,
-        //     build: (pw.Context context) {
-        //       return pw.Column(
-        //         children: [
-        //           // pw.Text('Party Name: $partyName'),
-        //           pw.SizedBox(height: Get.height * 0.01),
-        //           pw.Container(
-        //             color: PdfColors.grey,
-        //             child: pw.Padding(
-        //               padding: const pw.EdgeInsets.all(8.0),
-        //               child: pw.Text(
-        //                 partyName.toString(),
-        //                 style: pw.TextStyle(
-        //                   fontSize: Get.height * 0.020,
-        //                 ),
-        //                 // minFontSize: 10,
-        //                 maxLines: 1,
-        //                 // overflow: pw.TextOverflow.ellipsis,
-        //               ),
-        //             ),
-        //           ),
-        //           pw.SizedBox(height: Get.height * 0.01),
-        //           pw.Container(
-        //             // color: PdfColors.grey,
-        //             child: pw.Padding(
-        //               padding: const pw.EdgeInsets.symmetric(
-        //                   horizontal: 20.0, vertical: 10),
-        //               child: pw.Table.fromTextArray(
-        //                 columnWidths: {
-        //                   0: const pw.FlexColumnWidth(1),
-        //                   1: const pw.FlexColumnWidth(1.5),
-        //                   2: const pw.FlexColumnWidth(1),
-        //                   3: const pw.FlexColumnWidth(1),
-        //                 },
-        //                 cellAlignments: {
-        //                   0: pw.Alignment.centerLeft,
-        //                   1: pw.Alignment.centerLeft,
-        //                   2: pw.Alignment.centerRight,
-        //                   3: pw.Alignment.centerRight,
-        //                 },
-        //                 headerAlignments: {
-        //                   0: pw.Alignment.center,
-        //                   1: pw.Alignment.center,
-        //                   2: pw.Alignment.center,
-        //                   3: pw.Alignment.center,
-        //                 },
-        //                 context: context,
-        //                 data: newsubList,
-        //                 cellStyle: const pw.TextStyle(fontSize: 10),
-        //               ),
-        //             ),
-        //           ),
-        //         ],
-        //       ); // Center
-        //     },
-        //   ),
-        // );
       }
       print(newMainList);
       tempMainList.addAll(newMainList);
@@ -487,21 +428,7 @@ class HomepageController extends GetxController {
                 children: [
                   // pw.Text('Party Name: $partyName'),
                   pw.SizedBox(height: Get.height * 0.01),
-                  // pw.Container(
-                  //   color: PdfColors.grey,
-                  //   child: pw.Padding(
-                  //     padding: const pw.EdgeInsets.all(8.0),
-                  //     child: pw.Text(
-                  //       partyName.toString(),
-                  //       style: pw.TextStyle(
-                  //         fontSize: Get.height * 0.020,
-                  //       ),
-                  //       // minFontSize: 10,
-                  //       maxLines: 1,
-                  //       // overflow: pw.TextOverflow.ellipsis,
-                  //     ),
-                  //   ),
-                  // ),
+
                   pw.SizedBox(height: Get.height * 0.01),
                   pw.Container(
                     // color: PdfColors.grey,
@@ -660,8 +587,8 @@ class HomepageController extends GetxController {
           .getSingle();
 
       print('logID : ${data.logId}');
-      print('ledgerID : ${data.ledgerId}');
-      if (data.ledgerId != 0) {
+      print('ledgerID : ${data.generateLedgerId}');
+      if (data.generateLedgerId != 0) {
         var ledgerData2 = await (db.select(db.ledger)
               ..where((tbl) => tbl.ledgerDate.equals(data.comissionPaidDate)))
             .getSingle();
@@ -738,7 +665,7 @@ class HomepageController extends GetxController {
         serachData = await (db.select(db.inputData)
               ..where((tbl) =>
                   tbl.smtDocDate.isBetweenValues(start!, end!) &
-                  tbl.pID.equals(selectedParty!.id) &
+                  tbl.hospitalID.equals(selectedParty!.id) &
                   tbl.logId.equals(0)))
             .get();
       }
@@ -902,46 +829,58 @@ class HomepageController extends GetxController {
             : 0;
         ledgerReportData.add(
           LedgerData(
-              id: 0,
-              pID: ledgerPartySet.toList()[i],
-              ledgerDate: DateTime(1800, 01, 01),
-              ledgerNote: '',
-              type: 'Closing Balance',
-              drAmount: drAmount,
-              crAmount: crAmount),
+            id: 0,
+            pID: ledgerPartySet.toList()[i],
+            ledgerDate: DateTime(1800, 01, 01),
+            ledgerNote: '',
+            type: 'Closing Balance',
+            drAmount: drAmount,
+            crAmount: crAmount,
+            extracrAmount: 0,
+            extradrAmount: 0,
+          ),
         );
         ledgerPartyWiseSet.toList()[i].add(
               LedgerData(
-                  id: 0,
-                  pID: ledgerPartySet.toList()[i],
-                  ledgerDate: DateTime(1800, 01, 01),
-                  ledgerNote: '',
-                  type: 'Closing Balance',
-                  drAmount: drAmount,
-                  crAmount: crAmount),
+                id: 0,
+                pID: ledgerPartySet.toList()[i],
+                ledgerDate: DateTime(1800, 01, 01),
+                ledgerNote: '',
+                type: 'Closing Balance',
+                drAmount: drAmount,
+                crAmount: crAmount,
+                extracrAmount: 0,
+                extradrAmount: 0,
+              ),
             );
         drAmount = drcrAmountList[i][0] + drAmount;
         crAmount = drcrAmountList[i][1] + crAmount;
 
         ledgerReportData.add(
           LedgerData(
-              id: 0,
-              pID: ledgerPartySet.toList()[i],
-              ledgerDate: DateTime(1800, 01, 01),
-              ledgerNote: '',
-              type: 'Total',
-              drAmount: drAmount,
-              crAmount: crAmount),
+            id: 0,
+            pID: ledgerPartySet.toList()[i],
+            ledgerDate: DateTime(1800, 01, 01),
+            ledgerNote: '',
+            type: 'Total',
+            drAmount: drAmount,
+            crAmount: crAmount,
+            extracrAmount: 0,
+            extradrAmount: 0,
+          ),
         );
         ledgerPartyWiseSet.toList()[i].add(
               LedgerData(
-                  id: 0,
-                  pID: ledgerPartySet.toList()[i],
-                  ledgerDate: DateTime(1800, 01, 01),
-                  ledgerNote: '',
-                  type: 'Total',
-                  drAmount: drAmount,
-                  crAmount: crAmount),
+                id: 0,
+                pID: ledgerPartySet.toList()[i],
+                ledgerDate: DateTime(1800, 01, 01),
+                ledgerNote: '',
+                type: 'Total',
+                drAmount: drAmount,
+                crAmount: crAmount,
+                extracrAmount: 0,
+                extradrAmount: 0,
+              ),
             );
       }
 
@@ -964,6 +903,7 @@ class HomepageController extends GetxController {
     PartyMasterData? selectedParty,
     String? selectedPartyCity,
     MaterialTypeData? selectedMaterialType,
+    int? ptID,
   }) async {
     try {
       print('Searching Generated Report Start....');
@@ -978,13 +918,25 @@ class HomepageController extends GetxController {
       d.Expression<bool> partyCity = isAllPartyCitySelected!
           ? db.inputData.custBillCity.isNotNull()
           : db.inputData.custBillCity.equals(selectedPartyCity!);
-      d.Expression<bool> party = isAllPartySelected!
-          ? db.inputData.pID.isNotNull()
-          : db.inputData.pID.equals(selectedParty!.id);
+      d.Expression<bool> hospitalParty = isAllPartySelected!
+          ? db.inputData.hospitalID.isNotNull()
+          : db.inputData.hospitalID.equals(selectedParty!.id);
+      d.Expression<bool> doctorParty = isAllPartySelected
+          ? db.inputData.doctorID.isNotNull()
+          : db.inputData.doctorID.equals(selectedParty!.id);
+      d.Expression<bool> techniqalStaffParty = isAllPartySelected
+          ? db.inputData.techniqalStaffID.isNotNull()
+          : db.inputData.techniqalStaffID.equals(selectedParty!.id);
       d.Expression<bool> materialType = isAllMaterialTypeSelected!
           ? db.inputData.mtID.isNotNull()
           : db.inputData.mtID.equals(selectedMaterialType!.id);
       // print('isAllPartySelected: $isAllPartySelected');
+      d.Expression<bool> party = ptID == 1
+          ? hospitalParty
+          : ptID == 2
+              ? doctorParty
+              : techniqalStaffParty;
+
       serachData = await (db.select(db.inputData)
             ..where((tbl) =>
                 duration &
@@ -1115,18 +1067,23 @@ class HomepageController extends GetxController {
   Future<void> partyWisePayment({
     required PartyMasterData? selectedParty,
     required double? crAmount,
+    int? ptID,
     // String? ledgerNote,
   }) async {
     try {
       isLoading.value = true;
       var currentDate = DateTime.now();
       var ledgerData = await db.into(db.ledger).insert(LedgerCompanion.insert(
-          type: Constantdata.payment,
-          pID: selectedParty!.id,
-          ledgerDate: currentDate,
-          drAmount: 0,
-          crAmount: crAmount!,
-          ledgerNote: Constantdata.defualtNote));
+            type: Constantdata.payment,
+            pID: selectedParty!.id,
+            ledgerDate: currentDate,
+            drAmount: 0,
+            crAmount: crAmount!,
+            ledgerNote: Constantdata.defualtNote,
+            extradrAmount: 0,
+            extracrAmount: 0,
+            // ledgerNote: ledgerNote
+          ));
       print('Generated Report Data Length');
       print(generatedReportData);
 
@@ -1145,36 +1102,15 @@ class HomepageController extends GetxController {
             .get();
         print(inputDatadata);
         for (var i = 0; i < inputDatadata.length; i++) {
+          var inputData = inputDatadata[i];
           print(inputDatadata[i].smtInvNo);
           var updateRes = await (db.update(db.inputData)
                 ..where((tbl) => tbl.id.equals(inputDatadata[i].id)))
-              .write(InputDataData(
-                  id: inputDatadata[i].id,
-                  documentType: inputDatadata[i].documentType,
-                  distDocDate: inputDatadata[i].distDocDate,
-                  distDocNo: inputDatadata[i].distDocNo,
-                  pID: inputDatadata[i].pID,
-                  custBillCity: inputDatadata[i].custBillCity,
-                  matCode: inputDatadata[i].matCode,
-                  matName: inputDatadata[i].matName,
-                  mtID: inputDatadata[i].mtID,
-                  qty: inputDatadata[i].qty,
-                  doctorName: inputDatadata[i].doctorName,
-                  techniqalStaff: inputDatadata[i].techniqalStaff,
-                  saleAmount: inputDatadata[i].saleAmount,
-                  totalSale: inputDatadata[i].totalSale,
-                  smtDocDate: inputDatadata[i].smtDocDate,
-                  smtDocNo: inputDatadata[i].smtDocNo,
-                  smtInvNo: inputDatadata[i].smtInvNo,
-                  purchaseTaxableAmount: inputDatadata[i].purchaseTaxableAmount,
-                  totalPurchaseAmount: inputDatadata[i].totalPurchaseAmount,
-                  logId: inputDatadata[i].logId,
-                  ledgerId: inputDatadata[i].ledgerId,
-                  comission: inputDatadata[i].comission,
-                  comissionAmount: inputDatadata[i].comissionAmount,
-                  comissionPaidDate: currentDate,
-                  adjustComissionAmount:
-                      inputDatadata[i].adjustComissionAmount));
+              .write(
+            inputData.copyWith(
+              comissionPaidDate: currentDate,
+            ),
+          );
           print(updateRes);
         }
         // Get.back();
@@ -1188,6 +1124,7 @@ class HomepageController extends GetxController {
           isAllPartyCitySelected: isAllPartyCitySelected.value,
           selectedMaterialType: defualtMaterialType.value,
           selectedPartyCity: defualtPartyCity.value,
+          ptID: ptID,
         );
         'Payment Added Successfully'.successDailog;
         Timer(Duration(seconds: 2), () {
@@ -1334,465 +1271,471 @@ class HomepageController extends GetxController {
     }
   }
 
-  Future<void> generateComissionReport(
-      {List<List<dynamic>>? data, DateTime? start, DateTime? end}) async {
-    try {
-      isLoading.value = true;
-      List<String> smtInvNoList = [];
-      // for (var element in data!) {
-      //   smtInvNoList.add(element[15]);
-      // }
-      for (var i = 1; i < data!.length; i++) {
-        smtInvNoList.add(data[i][15]);
-      }
-      print(smtInvNoList);
-      var res = await (db.select(db.inputData)
-            ..where(
-                (tbl) => tbl.smtInvNo.isIn(smtInvNoList) & tbl.logId.equals(0)))
-          .get();
-      if (res.isNotEmpty) {
-        print('generateComissionReport');
-        print(data);
-        // print(data?.length);
-        Set<int> partySet = {};
-        List partyTotalComissionSet = [];
-        List<List<String>> partyWiseList = [];
-        // GetStorage('box').write('logID', 0);
-        var logID = GetStorage('box').read('logID') ?? 0;
-        print('prevID :' + logID.toString());
-        GetStorage('box').write('logID', logID + 1);
-        print(dateRange.value.start);
-        print(dateRange.value.end);
-        var pendingData = await (db.select(db.inputData)
-              ..where((tbl) => tbl.logId.equals(0)))
-            .get();
-        print(pendingData);
-        for (var element in pendingData) {
-          var checkParty = await (db.select(db.partyMaster)
-                ..where((tbl) => tbl.id.equals(element.pID)))
-              .get();
+  
 
-          if (checkParty.isNotEmpty) {
-            var checkMaterialType = await (db.select(db.materialType)
-                  ..where((tbl) => tbl.id.equals(element.mtID)))
-                .get();
-            if (checkMaterialType.isNotEmpty) {
-              var resPartyComission = await (db.select(db.partyComissionDetail)
-                    ..where((tbl) =>
-                        tbl.pID.equals(checkParty[0].id) &
-                        tbl.mtID.equals(checkMaterialType[0].id)))
-                  .get();
-              if (resPartyComission.isNotEmpty) {
-                // displayData.add(data[15].toString());
-                var comission = resPartyComission[0].comission1;
-                var comissionAmount = double.parse(
-                    ((comission * element.totalSale) / 100).toStringAsFixed(2));
-                var logID = GetStorage('box').read('logID');
-                print('logID: $logID');
-                print('pname: ${checkParty[0].name}');
-                if (partySet.contains(element.pID)) {
-                  int index = partySet
-                      .toList()
-                      .indexWhere((item) => item.isEqual(element.pID));
-                  print(index);
-                  var oldCommision = partyTotalComissionSet.elementAt(index);
-                  print(oldCommision);
-                  partyTotalComissionSet[index] =
-                      oldCommision + comissionAmount;
-                  partyWiseList[index].add(element.smtInvNo);
+  // Future<void> generateComissionReport(
+  //     {List<List<dynamic>>? data, DateTime? start, DateTime? end}) async {
+  //   try {
+  //     isLoading.value = true;
+  //     List<String> smtInvNoList = [];
+  //     // for (var element in data!) {
+  //     //   smtInvNoList.add(element[15]);
+  //     // }
+  //     for (var i = 1; i < data!.length; i++) {
+  //       smtInvNoList.add(data[i][15]);
+  //     }
+  //     print(smtInvNoList);
+  //     var res = await (db.select(db.inputData)
+  //           ..where(
+  //               (tbl) => tbl.smtInvNo.isIn(smtInvNoList) & tbl.logId.equals(0)))
+  //         .get();
+  //     if (res.isNotEmpty) {
+  //       print('generateComissionReport');
+  //       print(data);
+  //       // print(data?.length);
+  //       Set<int> partySet = {};
+  //       List partyTotalComissionSet = [];
+  //       List<List<String>> partyWiseList = [];
+  //       // GetStorage('box').write('logID', 0);
+  //       var logID = GetStorage('box').read('logID') ?? 0;
+  //       print('prevID :' + logID.toString());
+  //       GetStorage('box').write('logID', logID + 1);
+  //       print(dateRange.value.start);
+  //       print(dateRange.value.end);
+  //       var pendingData = await (db.select(db.inputData)
+  //             ..where((tbl) => tbl.logId.equals(0)))
+  //           .get();
+  //       print(pendingData);
+  //       for (var element in pendingData) {
+  //         var checkParty = await (db.select(db.partyMaster)
+  //               ..where((tbl) => tbl.id.isIn([
+  //                     element.hospitalID,
+  //                     element.doctorID,
+  //                     element.techniqalStaffID
+  //                   ])))
+  //             .get();
 
-                  print(partyWiseList);
-                  print(partyTotalComissionSet.toList());
-                  // partyTotalComissionSet.add(comissionAmount);
-                } else {
-                  partySet.add(element.pID);
-                  int index = partySet
-                      .toList()
-                      .indexWhere((item) => item.isEqual(element.pID));
-                  print(index);
-                  partyTotalComissionSet.insert(index, comissionAmount);
-                  List<String> party = [];
-                  party.add(element.smtInvNo);
-                  partyWiseList.insert(index, party);
-                  // partyTotalComissionSet.elementAt(index);
-                  print(partyWiseList);
-                  print(partyTotalComissionSet.toList());
-                  print(partySet);
-                }
-                var resComissionUpdate = await (db.update(db.inputData)
-                      ..where((tbl) => tbl.id.equals(element.id)))
-                    .write(InputDataData(
-                        id: element.id,
-                        documentType: element.documentType,
-                        distDocDate: element.distDocDate,
-                        distDocNo: element.distDocNo,
-                        pID: element.pID,
-                        custBillCity: element.custBillCity,
-                        matCode: element.matCode,
-                        matName: element.matName,
-                        mtID: element.mtID,
-                        qty: element.qty,
-                        doctorName: element.doctorName,
-                        techniqalStaff: element.techniqalStaff,
-                        saleAmount: element.saleAmount,
-                        totalSale: element.totalSale,
-                        smtDocDate: element.smtDocDate,
-                        smtDocNo: element.smtDocNo,
-                        smtInvNo: element.smtInvNo,
-                        purchaseTaxableAmount: element.purchaseTaxableAmount,
-                        totalPurchaseAmount: element.totalPurchaseAmount,
-                        logId: logID,
-                        ledgerId: element.ledgerId,
-                        comission: comission,
-                        comissionAmount: comissionAmount,
-                        comissionPaidDate: element.comissionPaidDate,
-                        adjustComissionAmount: element.adjustComissionAmount));
-                print(resComissionUpdate);
-                print('comission(%): $comission');
-                print('TotalAmount(%): ${element.totalSale}');
-                print('comissionAmount(%): ${comissionAmount}');
-                print('************');
-              }
-            } else {
-              comissionAndmatTypeNaNSetData.add(element.smtInvNo.toString());
-            }
-          } else {
-            partyNaNSetData.add(element.smtInvNo.toString());
-          }
-        }
-        print('done');
-        List ledgerIDList = [];
+  //         if (checkParty.isNotEmpty) {
+  //           var checkMaterialType = await (db.select(db.materialType)
+  //                 ..where((tbl) => tbl.id.equals(element.mtID)))
+  //               .get();
+  //           if (checkMaterialType.isNotEmpty) {
+  //             var resPartyComission = await (db.select(db.partyComissionDetail)
+  //                   ..where((tbl) =>
+  //                       tbl.pID.equals(checkParty[0].id) &
+  //                       tbl.mtID.equals(checkMaterialType[0].id)))
+  //                 .get();
+  //             if (resPartyComission.isNotEmpty) {
+  //               // displayData.add(data[15].toString());
+  //               var comission = resPartyComission[0].comission1;
+  //               var comissionAmount = double.parse(
+  //                   ((comission * element.totalSale) / 100).toStringAsFixed(2));
+  //               var logID = GetStorage('box').read('logID');
+  //               print('logID: $logID');
+  //               print('pname: ${checkParty[0].name}');
+  //               if (partySet.contains(element.hospitalID)) {
+  //                 int index = partySet
+  //                     .toList()
+  //                     .indexWhere((item) => item.isEqual(element.pID));
+  //                 print(index);
+  //                 var oldCommision = partyTotalComissionSet.elementAt(index);
+  //                 print(oldCommision);
+  //                 partyTotalComissionSet[index] =
+  //                     oldCommision + comissionAmount;
+  //                 partyWiseList[index].add(element.smtInvNo);
 
-        for (var i = 0; i < partySet.length; i++) {
-          print('ledgerID: ${i + 1}');
-          var pID = partySet.elementAt(i);
-          print(partySet.elementAt(i));
-          var totalComission = partyTotalComissionSet.elementAt(i);
-          print(partyTotalComissionSet.elementAt(i));
-          var resLedger =
-              await db.into(db.ledger).insert(LedgerCompanion.insert(
-                    type: 'sale commission',
-                    pID: pID,
-                    ledgerDate: DateTime.now(),
-                    drAmount: totalComission,
-                    crAmount: 0,
-                    ledgerNote: Constantdata.defualtNote,
-                  ));
-          print(resLedger);
-          ledgerIDList.add(resLedger);
-        }
+  //                 print(partyWiseList);
+  //                 print(partyTotalComissionSet.toList());
+  //                 // partyTotalComissionSet.add(comissionAmount);
+  //               } else {
+  //                 partySet.add(element.pID);
+  //                 int index = partySet
+  //                     .toList()
+  //                     .indexWhere((item) => item.isEqual(element.pID));
+  //                 print(index);
+  //                 partyTotalComissionSet.insert(index, comissionAmount);
+  //                 List<String> party = [];
+  //                 party.add(element.smtInvNo);
+  //                 partyWiseList.insert(index, party);
+  //                 // partyTotalComissionSet.elementAt(index);
+  //                 print(partyWiseList);
+  //                 print(partyTotalComissionSet.toList());
+  //                 print(partySet);
+  //               }
+  //               var resComissionUpdate = await (db.update(db.inputData)
+  //                     ..where((tbl) => tbl.id.equals(element.id)))
+  //                   .write(InputDataData(
+  //                       id: element.id,
+  //                       documentType: element.documentType,
+  //                       distDocDate: element.distDocDate,
+  //                       distDocNo: element.distDocNo,
+  //                       hospitalID: element.hospitalID,
+  //                       custBillCity: element.custBillCity,
+  //                       matCode: element.matCode,
+  //                       matName: element.matName,
+  //                       mtID: element.mtID,
+  //                       qty: element.qty,
+  //                       doctorName: element.doctorName,
+  //                       techniqalStaff: element.techniqalStaff,
+  //                       saleAmount: element.saleAmount,
+  //                       totalSale: element.totalSale,
+  //                       smtDocDate: element.smtDocDate,
+  //                       smtDocNo: element.smtDocNo,
+  //                       smtInvNo: element.smtInvNo,
+  //                       purchaseTaxableAmount: element.purchaseTaxableAmount,
+  //                       totalPurchaseAmount: element.totalPurchaseAmount,
+  //                       logId: logID,
+  //                       ledgerId: element.ledgerId,
+  //                       comission: comission,
+  //                       comissionAmount: comissionAmount,
+  //                       comissionPaidDate: element.comissionPaidDate,
+  //                       adjustComissionAmount: element.adjustComissionAmount));
+  //               print(resComissionUpdate);
+  //               print('comission(%): $comission');
+  //               print('TotalAmount(%): ${element.totalSale}');
+  //               print('comissionAmount(%): ${comissionAmount}');
+  //               print('************');
+  //             }
+  //           } else {
+  //             comissionAndmatTypeNaNSetData.add(element.smtInvNo.toString());
+  //           }
+  //         } else {
+  //           partyNaNSetData.add(element.smtInvNo.toString());
+  //         }
+  //       }
+  //       print('done');
+  //       List ledgerIDList = [];
 
-        for (var i = 0; i < partyWiseList.length; i++) {
-          var element = partyWiseList[i];
-          for (var j = 0; j < element.length; j++) {
-            var data = await (db.select(db.inputData)
-                  ..where((tbl) => tbl.smtInvNo.equals(element[j])))
-                .get();
-            print(element[j]); //smtInvNo
-            print(data[0]); // smtInvNo-data
-            print(ledgerIDList[i]); //ledgerID
-            var resUpdate = await (db.update(db.inputData)
-                  ..where((tbl) => tbl.smtInvNo.equals(element[j])))
-                .write(InputDataData(
-                    id: data[0].id,
-                    documentType: data[0].documentType,
-                    distDocDate: data[0].distDocDate,
-                    distDocNo: data[0].distDocNo,
-                    pID: data[0].pID,
-                    custBillCity: data[0].custBillCity,
-                    matCode: data[0].matCode,
-                    matName: data[0].matName,
-                    mtID: data[0].mtID,
-                    qty: data[0].qty,
-                    doctorName: data[0].doctorName,
-                    techniqalStaff: data[0].techniqalStaff,
-                    saleAmount: data[0].saleAmount,
-                    totalSale: data[0].totalSale,
-                    smtDocDate: data[0].smtDocDate,
-                    smtDocNo: data[0].smtDocNo,
-                    smtInvNo: data[0].smtInvNo,
-                    purchaseTaxableAmount: data[0].purchaseTaxableAmount,
-                    totalPurchaseAmount: data[0].totalPurchaseAmount,
-                    logId: data[0].logId,
-                    ledgerId: ledgerIDList[i],
-                    comission: data[0].comission,
-                    comissionAmount: data[0].comissionAmount,
-                    comissionPaidDate: data[0].comissionPaidDate,
-                    adjustComissionAmount: data[0].adjustComissionAmount));
-            print(resUpdate);
-            print('update record');
-          }
-        }
+  //       for (var i = 0; i < partySet.length; i++) {
+  //         print('ledgerID: ${i + 1}');
+  //         var pID = partySet.elementAt(i);
+  //         print(partySet.elementAt(i));
+  //         var totalComission = partyTotalComissionSet.elementAt(i);
+  //         print(partyTotalComissionSet.elementAt(i));
+  //         var resLedger =
+  //             await db.into(db.ledger).insert(LedgerCompanion.insert(
+  //                   type: 'sale commission',
+  //                   pID: pID,
+  //                   ledgerDate: DateTime.now(),
+  //                   drAmount: totalComission,
+  //                   crAmount: 0,
+  //                   ledgerNote: Constantdata.defualtNote,
+  //                 ));
+  //         print(resLedger);
+  //         ledgerIDList.add(resLedger);
+  //       }
 
-        // var data = db.select(db.inputData).get();
-        pendingReportData.clear();
-        isLoading.value = false;
-        // 'Generate Report Successfully'.successSnackbar;
-        'Generate Report Successfully'.successDailog;
-        Timer(Duration(seconds: 2), () {
-          Get.back();
-        });
-      } else {
-        isLoading.value = false;
-        'No Data Found'.errorSnackbar;
-      }
-    } catch (e) {
-      printError(info: e.toString());
-      e.toString().errorSnackbar;
-    }
-  }
+  //       for (var i = 0; i < partyWiseList.length; i++) {
+  //         var element = partyWiseList[i];
+  //         for (var j = 0; j < element.length; j++) {
+  //           var data = await (db.select(db.inputData)
+  //                 ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+  //               .get();
+  //           print(element[j]); //smtInvNo
+  //           print(data[0]); // smtInvNo-data
+  //           print(ledgerIDList[i]); //ledgerID
+  //           var resUpdate = await (db.update(db.inputData)
+  //                 ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+  //               .write(InputDataData(
+  //                   id: data[0].id,
+  //                   documentType: data[0].documentType,
+  //                   distDocDate: data[0].distDocDate,
+  //                   distDocNo: data[0].distDocNo,
+  //                   pID: data[0].pID,
+  //                   custBillCity: data[0].custBillCity,
+  //                   matCode: data[0].matCode,
+  //                   matName: data[0].matName,
+  //                   mtID: data[0].mtID,
+  //                   qty: data[0].qty,
+  //                   doctorName: data[0].doctorName,
+  //                   techniqalStaff: data[0].techniqalStaff,
+  //                   saleAmount: data[0].saleAmount,
+  //                   totalSale: data[0].totalSale,
+  //                   smtDocDate: data[0].smtDocDate,
+  //                   smtDocNo: data[0].smtDocNo,
+  //                   smtInvNo: data[0].smtInvNo,
+  //                   purchaseTaxableAmount: data[0].purchaseTaxableAmount,
+  //                   totalPurchaseAmount: data[0].totalPurchaseAmount,
+  //                   logId: data[0].logId,
+  //                   ledgerId: ledgerIDList[i],
+  //                   comission: data[0].comission,
+  //                   comissionAmount: data[0].comissionAmount,
+  //                   comissionPaidDate: data[0].comissionPaidDate,
+  //                   adjustComissionAmount: data[0].adjustComissionAmount));
+  //           print(resUpdate);
+  //           print('update record');
+  //         }
+  //       }
 
-  Future<void> insertData(List<List<dynamic>> data) async {
-    try {
-      print(data.length);
-      partyList = await (db.select(db.partyMaster)).get();
-      materialTypeList = await (db.select(db.materialType)).get();
-      if (materialTypeList!.isNotEmpty) {
-        defualtMaterialType.value = materialTypeList![0];
-      }
-      print(partyList);
-      print(materialTypeList);
-      var tempList = [];
-      // TODO: insert data Duaring check already exist or not
-      List smtInvNoList = [];
-      for (var i = 1; i < data.length; i++) {
-        print(i);
+  //       // var data = db.select(db.inputData).get();
+  //       pendingReportData.clear();
+  //       isLoading.value = false;
+  //       // 'Generate Report Successfully'.successSnackbar;
+  //       'Generate Report Successfully'.successDailog;
+  //       Timer(Duration(seconds: 2), () {
+  //         Get.back();
+  //       });
+  //     } else {
+  //       isLoading.value = false;
+  //       'No Data Found'.errorSnackbar;
+  //     }
+  //   } catch (e) {
+  //     printError(info: e.toString());
+  //     e.toString().errorSnackbar;
+  //   }
+  // }
 
-        String smtInvNo = (data[i][15]).toString();
+  // Future<void> insertData(List<List<dynamic>> data) async {
+  //   try {
+  //     print(data.length);
+  //     partyList = await (db.select(db.partyMaster)).get();
+  //     materialTypeList = await (db.select(db.materialType)).get();
+  //     if (materialTypeList!.isNotEmpty) {
+  //       defualtMaterialType.value = materialTypeList![0];
+  //     }
+  //     print(partyList);
+  //     print(materialTypeList);
+  //     var tempList = [];
+  //     // TODO: insert data Duaring check already exist or not
+  //     List smtInvNoList = [];
+  //     for (var i = 1; i < data.length; i++) {
+  //       print(i);
 
-        var res = await (db.select(db.inputData)
-              ..where((tbl) => tbl.smtInvNo.equals(smtInvNo)))
-            .get();
-        if (res.isNotEmpty) {
-          // 'already exist'.errorSnackbar;
-          print('already exist');
-          smtInvNoList.add(smtInvNo);
-          print(smtInvNo);
-        }
-      }
-      print(smtInvNoList);
-      if (smtInvNoList.length > 1) {
-        String smtInvNoListString = '';
-        for (var i = 0; i < smtInvNoList.length; i++) {
-          smtInvNoListString += smtInvNoList[i].toString() + ', ';
-        }
-        Get.defaultDialog(
-          content: Column(
-            children: [
-              Text(
-                'Duplicate Invoice No',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: Get.height * 0.02,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                child: Container(
-                  color: lCOLOR_PRIMARY.withOpacity(0.1),
-                  child: Text(
-                    smtInvNoListString.toString(),
-                    style: TextStyle(fontSize: Get.height * 0.02),
-                  ),
-                ),
-              ),
-              Text(
-                'Are you want to Remove Duplicate Invoice No',
-                style: TextStyle(fontSize: Get.height * 0.02),
-              ),
-            ],
-          ),
-          textConfirm: 'Ok',
-          confirmTextColor: Colors.white,
-          onConfirm: () async {
-            Get.back();
-            List<List<dynamic>> tempdata = [];
-            // tempdata.addAll(data);
+  //       String smtInvNo = (data[i][15]).toString();
 
-            for (var i = 1; i < data.length; i++) {
-              String smtInvNo = (data[i][15]).toString();
-              if (!smtInvNoList.contains(smtInvNo)) {
-                tempdata.add(data[i]);
-              }
-            }
+  //       var res = await (db.select(db.inputData)
+  //             ..where((tbl) => tbl.smtInvNo.equals(smtInvNo)))
+  //           .get();
+  //       if (res.isNotEmpty) {
+  //         // 'already exist'.errorSnackbar;
+  //         print('already exist');
+  //         smtInvNoList.add(smtInvNo);
+  //         print(smtInvNo);
+  //       }
+  //     }
+  //     print(smtInvNoList);
+  //     if (smtInvNoList.length > 1) {
+  //       String smtInvNoListString = '';
+  //       for (var i = 0; i < smtInvNoList.length; i++) {
+  //         smtInvNoListString += smtInvNoList[i].toString() + ', ';
+  //       }
+  //       Get.defaultDialog(
+  //         content: Column(
+  //           children: [
+  //             Text(
+  //               'Duplicate Invoice No',
+  //               style: TextStyle(
+  //                 color: Colors.black,
+  //                 fontWeight: FontWeight.bold,
+  //                 fontSize: Get.height * 0.02,
+  //               ),
+  //             ),
+  //             const SizedBox(
+  //               height: 10,
+  //             ),
+  //             Padding(
+  //               padding:
+  //                   const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+  //               child: Container(
+  //                 color: lCOLOR_PRIMARY.withOpacity(0.1),
+  //                 child: Text(
+  //                   smtInvNoListString.toString(),
+  //                   style: TextStyle(fontSize: Get.height * 0.02),
+  //                 ),
+  //               ),
+  //             ),
+  //             Text(
+  //               'Are you want to Remove Duplicate Invoice No',
+  //               style: TextStyle(fontSize: Get.height * 0.02),
+  //             ),
+  //           ],
+  //         ),
+  //         textConfirm: 'Ok',
+  //         confirmTextColor: Colors.white,
+  //         onConfirm: () async {
+  //           Get.back();
+  //           List<List<dynamic>> tempdata = [];
+  //           // tempdata.addAll(data);
 
-            print(tempdata);
-            List<dynamic> dataHeader = [];
-            dataHeader.addAll(data[0]);
-            data.clear();
-            data.add(dataHeader);
-            data.addAll(tempdata);
-            print(data);
-            pendingReportData.clear();
-            pendingReportData.addAll(data);
-            if (data.length < 1) {
-              'Duplicate Invoice Number Removed'.successSnackbar;
-              return;
-            } else {
-              for (var i = 1; i < data.length; i++) {
-                String documentType = data[i][0];
-                DateTime distDocDate =
-                    DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
-                String distDocNo = data[i][2];
-                var customer = data[i][3];
-                String custBillCity = data[i][4];
-                String matCode = data[i][5];
-                String matName = data[i][6];
-                String matType = data[i][7];
-                int qty = data[i][8];
-                String doctorName = data[i][9];
-                String techniqalStaff = data[i][10];
-                double saleAmount = double.parse((data[i][11]).toString());
-                double totalSale = double.parse((data[i][12]).toString());
-                DateTime smtDocDate =
-                    DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
-                String smtDocNo = (data[i][14]).toString();
-                String smtInvNo = (data[i][15]).toString();
-                double purchaseTaxableAmount =
-                    double.parse(data[i][16].toString());
-                double totalPurchaseAmount =
-                    double.parse(data[i][17].toString());
-                int logId = 0;
-                int ledgerId = 0;
-                double comission = 0;
-                double comissionAmount = 0;
-                DateTime comissionPaidDate = DateTime(1800, 01, 01);
-                double adjustComissionAmount = 0;
+  //           for (var i = 1; i < data.length; i++) {
+  //             String smtInvNo = (data[i][15]).toString();
+  //             if (!smtInvNoList.contains(smtInvNo)) {
+  //               tempdata.add(data[i]);
+  //             }
+  //           }
 
-                var pID = partyList!
-                    .firstWhere((element) => element.name == customer)
-                    .id;
-                var mtID = materialTypeList!
-                    .firstWhere((element) => element.type == matType)
-                    .id;
+  //           print(tempdata);
+  //           List<dynamic> dataHeader = [];
+  //           dataHeader.addAll(data[0]);
+  //           data.clear();
+  //           data.add(dataHeader);
+  //           data.addAll(tempdata);
+  //           print(data);
+  //           pendingReportData.clear();
+  //           pendingReportData.addAll(data);
+  //           if (data.length < 1) {
+  //             'Duplicate Invoice Number Removed'.successSnackbar;
+  //             return;
+  //           } else {
+  //             for (var i = 1; i < data.length; i++) {
+  //               String documentType = data[i][0];
+  //               DateTime distDocDate =
+  //                   DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
+  //               String distDocNo = data[i][2];
+  //               var customer = data[i][3];
+  //               String custBillCity = data[i][4];
+  //               String matCode = data[i][5];
+  //               String matName = data[i][6];
+  //               String matType = data[i][7];
+  //               int qty = data[i][8];
+  //               String doctorName = data[i][9];
+  //               String techniqalStaff = data[i][10];
+  //               double saleAmount = double.parse((data[i][11]).toString());
+  //               double totalSale = double.parse((data[i][12]).toString());
+  //               DateTime smtDocDate =
+  //                   DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
+  //               String smtDocNo = (data[i][14]).toString();
+  //               String smtInvNo = (data[i][15]).toString();
+  //               double purchaseTaxableAmount =
+  //                   double.parse(data[i][16].toString());
+  //               double totalPurchaseAmount =
+  //                   double.parse(data[i][17].toString());
+  //               int logId = 0;
+  //               int ledgerId = 0;
+  //               double comission = 0;
+  //               double comissionAmount = 0;
+  //               DateTime comissionPaidDate = DateTime(1800, 01, 01);
+  //               double adjustComissionAmount = 0;
 
-                var result = await db.into(db.inputData).insert(
-                      InputDataCompanion.insert(
-                        documentType: documentType,
-                        distDocDate: distDocDate,
-                        distDocNo: distDocNo,
-                        pID: pID,
-                        custBillCity: custBillCity,
-                        matCode: matCode,
-                        matName: matName,
-                        mtID: mtID,
-                        qty: qty,
-                        doctorName: doctorName,
-                        techniqalStaff: techniqalStaff,
-                        saleAmount: saleAmount,
-                        totalSale: totalSale,
-                        smtDocDate: smtDocDate,
-                        smtDocNo: smtDocNo,
-                        smtInvNo: smtInvNo,
-                        purchaseTaxableAmount: purchaseTaxableAmount,
-                        totalPurchaseAmount: totalPurchaseAmount,
-                        logId: logId,
-                        ledgerId: ledgerId,
-                        comission: comission,
-                        comissionAmount: comissionAmount,
-                        comissionPaidDate: comissionPaidDate,
-                        adjustComissionAmount: adjustComissionAmount,
-                      ),
-                    );
-                print(result);
-                // 'data insert Successful'.successSnackbar;
-              }
-              'data insert Successful'.successDailog;
-              Timer(Duration(seconds: 2), () {
-                Get.back();
-              });
-            }
-          },
-          textCancel: 'Cancel',
-          cancelTextColor: lCOLOR_PRIMARY,
-          onCancel: () {
-            Get.back();
-          },
-        );
-      } else {
-        for (var i = 1; i < data.length; i++) {
-          String documentType = data[i][0];
-          DateTime distDocDate =
-              DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
-          String distDocNo = data[i][2];
-          var customer = data[i][3];
-          String custBillCity = data[i][4];
-          String matCode = data[i][5];
-          String matName = data[i][6];
-          String matType = data[i][7];
-          int qty = data[i][8];
-          String doctorName = data[i][9];
-          String techniqalStaff = data[i][10];
-          double saleAmount = double.parse((data[i][11]).toString());
-          double totalSale = double.parse((data[i][12]).toString());
-          DateTime smtDocDate =
-              DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
-          String smtDocNo = (data[i][14]).toString();
-          String smtInvNo = (data[i][15]).toString();
-          double purchaseTaxableAmount = double.parse(data[i][16].toString());
-          double totalPurchaseAmount = double.parse(data[i][17].toString());
-          int logId = 0;
-          int ledgerId = 0;
-          double comission = 0;
-          double comissionAmount = 0;
-          DateTime comissionPaidDate = DateTime(1800, 01, 01);
-          double adjustComissionAmount = 0;
+  //               var pID = partyList!
+  //                   .firstWhere((element) => element.name == customer)
+  //                   .id;
+  //               var mtID = materialTypeList!
+  //                   .firstWhere((element) => element.type == matType)
+  //                   .id;
 
-          var pID =
-              partyList!.firstWhere((element) => element.name == customer).id;
-          var mtID = materialTypeList!
-              .firstWhere((element) => element.type == matType)
-              .id;
+  //               var result = await db.into(db.inputData).insert(
+  //                     InputDataCompanion.insert(
+  //                       documentType: documentType,
+  //                       distDocDate: distDocDate,
+  //                       distDocNo: distDocNo,
+  //                       pID: pID,
+  //                       custBillCity: custBillCity,
+  //                       matCode: matCode,
+  //                       matName: matName,
+  //                       mtID: mtID,
+  //                       qty: qty,
+  //                       doctorName: doctorName,
+  //                       techniqalStaff: techniqalStaff,
+  //                       saleAmount: saleAmount,
+  //                       totalSale: totalSale,
+  //                       smtDocDate: smtDocDate,
+  //                       smtDocNo: smtDocNo,
+  //                       smtInvNo: smtInvNo,
+  //                       purchaseTaxableAmount: purchaseTaxableAmount,
+  //                       totalPurchaseAmount: totalPurchaseAmount,
+  //                       logId: logId,
+  //                       ledgerId: ledgerId,
+  //                       comission: comission,
+  //                       comissionAmount: comissionAmount,
+  //                       comissionPaidDate: comissionPaidDate,
+  //                       adjustComissionAmount: adjustComissionAmount,
+  //                     ),
+  //                   );
+  //               print(result);
+  //               // 'data insert Successful'.successSnackbar;
+  //             }
+  //             'data insert Successful'.successDailog;
+  //             Timer(Duration(seconds: 2), () {
+  //               Get.back();
+  //             });
+  //           }
+  //         },
+  //         textCancel: 'Cancel',
+  //         cancelTextColor: lCOLOR_PRIMARY,
+  //         onCancel: () {
+  //           Get.back();
+  //         },
+  //       );
+  //     } else {
+  //       for (var i = 1; i < data.length; i++) {
+  //         String documentType = data[i][0];
+  //         DateTime distDocDate =
+  //             DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
+  //         String distDocNo = data[i][2];
+  //         var customer = data[i][3];
+  //         String custBillCity = data[i][4];
+  //         String matCode = data[i][5];
+  //         String matName = data[i][6];
+  //         String matType = data[i][7];
+  //         int qty = data[i][8];
+  //         String doctorName = data[i][9];
+  //         String techniqalStaff = data[i][10];
+  //         double saleAmount = double.parse((data[i][11]).toString());
+  //         double totalSale = double.parse((data[i][12]).toString());
+  //         DateTime smtDocDate =
+  //             DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
+  //         String smtDocNo = (data[i][14]).toString();
+  //         String smtInvNo = (data[i][15]).toString();
+  //         double purchaseTaxableAmount = double.parse(data[i][16].toString());
+  //         double totalPurchaseAmount = double.parse(data[i][17].toString());
+  //         int logId = 0;
+  //         int ledgerId = 0;
+  //         double comission = 0;
+  //         double comissionAmount = 0;
+  //         DateTime comissionPaidDate = DateTime(1800, 01, 01);
+  //         double adjustComissionAmount = 0;
 
-          var result = await db.into(db.inputData).insert(
-                InputDataCompanion.insert(
-                  documentType: documentType,
-                  distDocDate: distDocDate,
-                  distDocNo: distDocNo,
-                  pID: pID,
-                  custBillCity: custBillCity,
-                  matCode: matCode,
-                  matName: matName,
-                  mtID: mtID,
-                  qty: qty,
-                  doctorName: doctorName,
-                  techniqalStaff: techniqalStaff,
-                  saleAmount: saleAmount,
-                  totalSale: totalSale,
-                  smtDocDate: smtDocDate,
-                  smtDocNo: smtDocNo,
-                  smtInvNo: smtInvNo,
-                  purchaseTaxableAmount: purchaseTaxableAmount,
-                  totalPurchaseAmount: totalPurchaseAmount,
-                  logId: logId,
-                  ledgerId: ledgerId,
-                  comission: comission,
-                  comissionAmount: comissionAmount,
-                  comissionPaidDate: comissionPaidDate,
-                  adjustComissionAmount: adjustComissionAmount,
-                ),
-              );
-          print(result);
-          // 'data insert Successful'.successSnackbar;
-          'data insert Successful'.successDailog;
-          Timer(Duration(seconds: 2), () {
-            Get.back();
-          });
-        }
-      }
-      // var res = await db.select(db.inputData).get();
+  //         var pID =
+  //             partyList!.firstWhere((element) => element.name == customer).id;
+  //         var mtID = materialTypeList!
+  //             .firstWhere((element) => element.type == matType)
+  //             .id;
 
-      print('done');
+  //         var result = await db.into(db.inputData).insert(
+  //               InputDataCompanion.insert(
+  //                 documentType: documentType,
+  //                 distDocDate: distDocDate,
+  //                 distDocNo: distDocNo,
+  //                 pID: pID,
+  //                 custBillCity: custBillCity,
+  //                 matCode: matCode,
+  //                 matName: matName,
+  //                 mtID: mtID,
+  //                 qty: qty,
+  //                 doctorName: doctorName,
+  //                 techniqalStaff: techniqalStaff,
+  //                 saleAmount: saleAmount,
+  //                 totalSale: totalSale,
+  //                 smtDocDate: smtDocDate,
+  //                 smtDocNo: smtDocNo,
+  //                 smtInvNo: smtInvNo,
+  //                 purchaseTaxableAmount: purchaseTaxableAmount,
+  //                 totalPurchaseAmount: totalPurchaseAmount,
+  //                 logId: logId,
+  //                 ledgerId: ledgerId,
+  //                 comission: comission,
+  //                 comissionAmount: comissionAmount,
+  //                 comissionPaidDate: comissionPaidDate,
+  //                 adjustComissionAmount: adjustComissionAmount,
+  //               ),
+  //             );
+  //         print(result);
+  //         // 'data insert Successful'.successSnackbar;
+  //         'data insert Successful'.successDailog;
+  //         Timer(Duration(seconds: 2), () {
+  //           Get.back();
+  //         });
+  //       }
+  //     }
+  //     // var res = await db.select(db.inputData).get();
 
-      //
-    } catch (e) {
-      printError(info: e.toString());
-      e.toString().errorSnackbar;
-    }
-  }
+  //     print('done');
+
+  //     //
+  //   } catch (e) {
+  //     printError(info: e.toString());
+  //     e.toString().errorSnackbar;
+  //   }
+  // }
 }

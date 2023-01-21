@@ -247,8 +247,9 @@ class ImportReport extends StatelessWidget {
                                                   .isEmpty &&
                                               _homepageController
                                                   .partyNaNSetData.isEmpty) {
-                                            await _homepageController
-                                                .insertData(data);
+                                            // !TODO: Add Data to Database
+                                            // await _homepageController
+                                            //     .insertData(data);
                                           } else {
                                             Get.defaultDialog(
                                               title: 'Error',
@@ -310,10 +311,11 @@ class ImportReport extends StatelessWidget {
                                     text: 'Generate',
                                     onPressed: () async {
                                       print('Generate Report');
-                                      await _homepageController
-                                          .generateComissionReport(
-                                              data: _homepageController
-                                                  .pendingReportData);
+                                      // TODO: Generate Report With Data
+                                      // await _homepageController
+                                      //     .generateComissionReport(
+                                      //         data: _homepageController
+                                      //             .pendingReportData);
                                     }),
                               ),
                             ],
@@ -339,7 +341,7 @@ class ImportReport extends StatelessWidget {
                                   itemBuilder: (_, subIndex) {
                                     return Container(
                                       // color: Colors.red,
-                                      width: subIndex == 3
+                                      width: (subIndex == 3 || subIndex == 9)
                                           ? Get.width * 0.2
                                           : (subIndex == 6 ||
                                                   subIndex == 7 ||
@@ -406,7 +408,7 @@ class ImportReport extends StatelessWidget {
                                         .pendingReportData[index].length,
                                     itemBuilder: (_, subIndex) {
                                       return Container(
-                                        width: subIndex == 3
+                                        width: (subIndex == 3 || subIndex == 9)
                                             ? Get.width * 0.2
                                             : (subIndex == 6 ||
                                                     subIndex == 7 ||
@@ -416,7 +418,8 @@ class ImportReport extends StatelessWidget {
                                         // height: Get.height * 0.05,
                                         padding: const EdgeInsets.all(8.0),
                                         child: Visibility(
-                                          visible: subIndex == 3 &&
+                                          visible: (subIndex == 3 ||
+                                                  subIndex == 9) &&
                                               _homepageController
                                                       .partyNaNSetData
                                                       .contains(_homepageController
@@ -568,27 +571,42 @@ class ImportReport extends StatelessWidget {
                                                 child: ElevatedButton(
                                                   onPressed: () {
                                                     print('new customer add');
-                                                    TextEditingController name =
-                                                        TextEditingController(
-                                                            text: _homepageController
-                                                                .pendingReportData[
-                                                                    index]
-                                                                    [subIndex]
-                                                                .toString());
-                                                    print(name.text);
-                                                    String btnText =
-                                                        'Add New Party';
 
-                                                    Get.bottomSheet(
-                                                      isScrollControlled: true,
-                                                      ignoreSafeArea: false,
-                                                      PartyTypeBottomsheet(
-                                                        name: name,
-                                                        btnText: btnText,
-                                                        homepageController:
-                                                            _homepageController,
-                                                      ),
-                                                    );
+                                                    var pname =
+                                                        _homepageController
+                                                            .pendingReportData[
+                                                                index][subIndex]
+                                                            .toString();
+                                                    var type = subIndex == 3
+                                                        ? 1
+                                                        : subIndex == 9
+                                                            ? 2
+                                                            : 3;
+                                                    _homepageController
+                                                        .partyController
+                                                        .addParty(
+                                                            name: pname,
+                                                            type: type);
+                                                    List<List<dynamic>> data =
+                                                        [];
+
+                                                    data.addAll(
+                                                        _homepageController
+                                                            .pendingReportData);
+                                                    _homepageController
+                                                        .displayData
+                                                        .clear();
+                                                    _homepageController
+                                                        .partyNaNSetData
+                                                        .clear();
+                                                    _homepageController
+                                                        .comissionAndmatTypeNaNSetData
+                                                        .clear();
+                                                    _homepageController
+                                                        .checkInputData(
+                                                            fields: data);
+                                                    print(pname);
+                                                    print(type);
                                                   },
                                                   child: const AutoSizeText(
                                                       "Add",
@@ -620,101 +638,6 @@ class ImportReport extends StatelessWidget {
             ),
           ),
         ),
-
-        //
-        // floatingActionButton: Obx(
-        //   () => Row(
-        //     mainAxisAlignment: MainAxisAlignment.end,
-        //     children: [
-        //       Visibility(
-        //         visible: _homepageController.pendingReportData.isNotEmpty &&
-        //             _homepageController.comissionAndmatTypeNaNSetData.isEmpty,
-        //         child: Button(
-        //             height: Get.height * 0.05,
-        //             width: Get.width * 0.1,
-        //             fontSize: Get.width * 0.012,
-        //             text: 'Generate',
-        //             onPressed: () async {
-        //               print('Generate Report');
-        //               await _homepageController.generateComissionReport(
-        //                   data: _homepageController.pendingReportData);
-        //             }),
-        //       ),
-        //       FloatingActionButton(
-        //         tooltip: _homepageController.pendingReportData.isEmpty ||
-        //                 _homepageController.pendingReportData.length < 2
-        //             ? 'Add CSV'
-        //             : 'Add Data in Database', //child widget inside this button
-        //         onPressed: () async {
-        //           print("Button is pressed.");
-        //           if (_homepageController.isLoading.value == false) {
-        //             if (((_homepageController.pendingReportData.length >= 2) &&
-        //                 _homepageController
-        //                     .comissionAndmatTypeNaNSetData.isEmpty &&
-        //                 _homepageController.partyNaNSetData.isEmpty)) {
-        //               print(_homepageController.pendingReportData);
-        //               List<List<dynamic>> data = [];
-        //               data.addAll(_homepageController.pendingReportData);
-        //               await _homepageController.checkInputData(fields: data);
-        //               if (_homepageController
-        //                       .comissionAndmatTypeNaNSetData.isEmpty &&
-        //                   _homepageController.partyNaNSetData.isEmpty) {
-        //                 await _homepageController.insertData(data);
-        //               } else {
-        //                 Get.defaultDialog(
-        //                   title: 'Error',
-        //                   middleText: 'Please check the data',
-        //                   textConfirm: 'Ok',
-        //                   confirmTextColor: Colors.white,
-        //                   onConfirm: () {
-        //                     Get.back();
-        //                   },
-        //                 );
-        //               }
-        //             } else {
-        //               if (_homepageController.pendingReportData.length < 2 &&
-        //                   _homepageController
-        //                       .comissionAndmatTypeNaNSetData.isEmpty &&
-        //                   _homepageController.partyNaNSetData.isEmpty) {
-        //                 _homepageController.pickFile();
-        //               } else {
-        //                 Get.defaultDialog(
-        //                   title: 'Error',
-        //                   middleText: 'Please check the data',
-        //                   textConfirm: 'Ok',
-        //                   confirmTextColor: Colors.white,
-        //                   onConfirm: () {
-        //                     Get.back();
-        //                   },
-        //                 );
-        //               }
-        //             }
-        //           } else {
-        //             'Data is processing'.infoSnackbar;
-        //           }
-
-        //           //task to execute when this button is pressed
-        //         },
-        //         child: _homepageController.isLoading.value
-        //             ? Center(
-        //                 child: CupertinoActivityIndicator(
-        //                   radius: Get.height * 0.02,
-        //                   color: Colors.white,
-        //                 ),
-        //               )
-        //             : ((_homepageController.pendingReportData.length < 2 ||
-        //                         _homepageController
-        //                             .pendingReportData.isEmpty) &&
-        //                     _homepageController
-        //                         .comissionAndmatTypeNaNSetData.isEmpty &&
-        //                     _homepageController.partyNaNSetData.isEmpty)
-        //                 ? const Icon(Icons.add)
-        //                 : const Icon(Icons.arrow_forward_ios),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // drawer: drawer(),
       ),
     );
   }
