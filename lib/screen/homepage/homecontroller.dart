@@ -28,8 +28,6 @@ class HomepageController extends GetxController {
   RxList<List<dynamic>> pendingReportData = RxList<List<dynamic>>();
   RxList<List<dynamic>> generatedReportData = RxList<List<dynamic>>();
   RxList<LedgerData> ledgerReportData = RxList<LedgerData>();
-  RxList<String> displayData = RxList<String>();
-  RxList<String> partyNaNSetData = RxList<String>();
   RxList<String> durationList = RxList<String>([
     'One Month',
     'Four Month',
@@ -38,6 +36,9 @@ class HomepageController extends GetxController {
     'Custom',
   ]);
   RxSet<String> partyCityList = RxSet<String>();
+  RxList<String> displayData = RxList<String>();
+  RxList<String> partyNaNSetData = RxList<String>();
+  RxList<List<int>> partyNaNSetDetailData = RxList<List<int>>();
   RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
   List<MaterialTypeData>? materialTypeList = [];
   List<PartyMasterData>? partyList = [];
@@ -63,6 +64,7 @@ class HomepageController extends GetxController {
     end: DateTime.now(),
   ).obs;
   List<int> rightalign = [8, 11, 12, 16, 17, 18, 19];
+
   // scrollcon
 
   @override
@@ -1180,8 +1182,157 @@ class HomepageController extends GetxController {
     }
   }
 
+  Future<void> addAllPartyData(
+      {List<List<dynamic>>? fields, int? index}) async {
+    try {
+      isLoading.value = true;
+      List<List<dynamic>> data = [];
+      data.addAll(fields!);
+      // displayData.clear();
+      // partyNaNSetData.clear();
+      // comissionAndmatTypeNaNSetData.clear();
+      fields.clear();
+      fields.addAll(data);
+
+      debugPrint('Start Adding All Party Data ......');
+      print(partyNaNSetData);
+      print(fields);
+      Set<String> partyNameList = {};
+      for (var i = 0; i < fields.length; i++) {
+        if (i != 0) {
+          partyNameList.add(fields[i][index!].toString());
+        }
+      }
+      print(partyNameList);
+      index = index == 3
+          ? 1
+          : index == 9
+              ? 2
+              : 3;
+      var partydata = await (db.select(db.partyMaster)
+            ..where((tbl) =>
+                tbl.name.isIn(partyNameList) & tbl.ptID.equals(index!)))
+          .get();
+      for (var element in partydata) {
+        partyNameList.remove(element.name);
+      }
+      print(partyNameList);
+      print(partyNameList.length);
+      String party = index == 1
+          ? 'Hospital'
+          : index == 2
+              ? 'Doctor'
+              : 'Technician';
+      if (partyNameList.length > 0) {
+        Get.defaultDialog(
+          content: Column(
+            children: [
+              Text(
+                '${partyNameList.length} Party Missing',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Get.height * 0.02,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                child: Container(
+                  height: Get.height * 0.2,
+                  width: Get.width * 0.6,
+                  color: lCOLOR_PRIMARY.withOpacity(0.1),
+                  child: ListView.builder(
+                    itemCount: partyNameList.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                          partyNameList.toList()[index],
+                          style: TextStyle(fontSize: Get.height * 0.02),
+                        ),
+                        leading: Icon(Icons.person),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Text(
+                'Are you want to add All ${party} Party',
+                style: TextStyle(fontSize: Get.height * 0.02),
+              ),
+            ],
+          ),
+          textConfirm: 'Ok',
+          confirmTextColor: Colors.white,
+          onConfirm: () async {
+            if (index == 1) {
+              await db.batch((batch) {
+                for (var element in partyNameList) {
+                  batch.insert(
+                      db.partyMaster,
+                      PartyMasterCompanion.insert(
+                        name: element,
+                        ptID: 1,
+                      ));
+                }
+              });
+              // print(data);
+
+            } else if (index == 2) {
+              await db.batch((batch) {
+                for (var element in partyNameList) {
+                  batch.insert(
+                      db.partyMaster,
+                      PartyMasterCompanion.insert(
+                        name: element,
+                        ptID: 2,
+                      ));
+                }
+              });
+            } else {
+              await db.batch((batch) {
+                for (var element in partyNameList) {
+                  batch.insert(
+                      db.partyMaster,
+                      PartyMasterCompanion.insert(
+                        name: element,
+                        ptID: 3,
+                      ));
+                }
+              });
+            }
+            // print(data);
+            var pdata = await db.select(db.partyMaster).get();
+            print(pdata);
+          },
+          textCancel: 'Cancel',
+          cancelTextColor: lCOLOR_PRIMARY,
+          onCancel: () {
+            Get.back();
+          },
+        );
+      } else {
+        '${party} Party Not Found'.errorSnackbar;
+      }
+
+      isLoading.value = false;
+    } catch (e) {
+      e.toString().errorSnackbar;
+    }
+  }
+
   Future<void> checkInputData({List<List<dynamic>>? fields}) async {
     isLoading.value = true;
+    List<List<dynamic>> data = [];
+    data.addAll(fields!);
+    displayData.clear();
+    partyNaNSetData.clear();
+    comissionAndmatTypeNaNSetData.clear();
+    fields.clear();
+    fields.addAll(data);
     partyList = await db.select(db.partyMaster).get();
     if (partyList!.isNotEmpty) {
       defualtParty.value = partyList![0];
@@ -1190,15 +1341,9 @@ class HomepageController extends GetxController {
     if (materialTypeList!.isNotEmpty) {
       defualtMaterialType.value = materialTypeList![0];
     }
-    // .value = materialTypeList![0];
-
     for (var i = 1; i < fields!.length; i++) {
       await addInputData(fields[i]);
     }
-    // addInputData(fields[1]);
-    // displayData.clear();
-    // partyNaNSetData.clear();
-    // comissionAndmatTypeNaNSetData.clear();
     print('Display Data');
     print(displayData.length);
     print(displayData);
@@ -1211,23 +1356,23 @@ class HomepageController extends GetxController {
     print('data assigend');
     pendingReportData.clear();
     pendingReportData.addAll(fields);
-    print(pendingReportData.length);
+    debugPrint(pendingReportData.length.toString());
     isLoading.value = false;
   }
 
   Future<void> addInputData(List<dynamic> data) async {
     try {
-      print('******************new data******************');
+      debugPrint('******************new data******************');
       var resParty = await (db.select(db.partyMaster)
-            ..where((tbl) => tbl.name.equals(data[3])))
+            ..where((tbl) => tbl.name.isIn([data[3], data[9], data[10]])))
           .get();
 
-      if (resParty.isNotEmpty) {
+      if (resParty.length > 2) {
         materialTypeList?.clear();
         materialTypeList = await (db.select(db.materialType)
-              ..where((tbl) => tbl.type.equals(data[7])))
+              ..where((tbl) => tbl.type.equals("${data[7]}~${data[6]}")))
             .get();
-        print(data[7]);
+        debugPrint("${data[7]}~${data[6]}");
         if (materialTypeList!.isNotEmpty) {
           var resPartyComission = await (db.select(db.partyComissionDetail)
                 ..where((tbl) =>
@@ -1237,41 +1382,29 @@ class HomepageController extends GetxController {
           if (resPartyComission.isNotEmpty) {
             displayData.add(data[15].toString());
             var comission = resPartyComission[0].comission1;
-            print('comission(%): $comission');
-            print('TotalAmount(%): ${data[12]}');
-            print('comissionAmount(%): ${(comission * data[12]) / 100}');
+            debugPrint('comission(%): $comission');
+            debugPrint('TotalAmount(%): ${data[12]}');
+            debugPrint('comissionAmount(%): ${(comission * data[12]) / 100}');
           } else {
-            // print(displyaData.length);
-            // displyaData.remove(data);
-
-            // print(displyaData.length);
             comissionAndmatTypeNaNSetData.add(data[15].toString());
             'Comission Not Found'.errorSnackbar;
-            print('Comission Not Found');
+            debugPrint('Comission Not Found');
           }
         } else {
-          // print(displyaData.length);
-          // displyaData.remove(data);
-          // print(displyaData.length);
           comissionAndmatTypeNaNSetData.add(data[15].toString());
           'Material Type Not Found'.errorSnackbar;
-          print('Material Type Not Found');
+          debugPrint('Material Type Not Found');
         }
       } else {
-        // print(displyaData.length);
-        // displyaData.remove(data);
-        // print(displyaData.length);
         partyNaNSetData.add(data[15].toString());
-        print('${data[3]} Party Not Found');
-        '${data[3]} Party Not Found'.errorSnackbar;
+        debugPrint('${data[3] + data[9] + data[10]} Party Not Found');
+        // '${data[3]} Party Not Found'.errorSnackbar;
       }
     } catch (e) {
       printError(info: e.toString());
       e.toString().errorSnackbar;
     }
   }
-
-  
 
   // Future<void> generateComissionReport(
   //     {List<List<dynamic>>? data, DateTime? start, DateTime? end}) async {
