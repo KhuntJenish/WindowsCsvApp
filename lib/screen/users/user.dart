@@ -61,7 +61,7 @@ class Userspage extends StatelessWidget {
                           leading:
                               CircleAvatar(child: Text((index + 1).toString())),
                           title: Text(
-                              '${(snapshot.data?[index].username).toString()} _ _ ${(snapshot.data?[index].password).toString()}'),
+                              '${(snapshot.data?[index].username).toString()} _ _ ********'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

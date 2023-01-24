@@ -67,7 +67,9 @@ class UserController extends GetxController {
   }) async {
     try {
       // Value<String> username =  Value(username);
-      if (username == 'admin') {
+      var data = GetStorage('box').read('cuser');
+      print(data);
+      if (username == 'admin' && data.username != 'admin') {
         Get.offAllNamed(Dashboard.routeName);
         'Admin can not be updated'.errorSnackbar;
       } else {

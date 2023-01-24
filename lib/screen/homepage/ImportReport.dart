@@ -331,7 +331,7 @@ class ImportReport extends StatelessWidget {
                             margin: const EdgeInsets.all(3),
                             color: lCOLOR_ACCENT,
                             child: SizedBox(
-                              width: Get.width * 1.5,
+                              width: Get.width * 2,
                               height: Get.height * 0.05,
                               child: ListView.builder(
                                   itemCount: _homepageController
@@ -387,11 +387,14 @@ class ImportReport extends StatelessWidget {
                                                 child: ElevatedButton(
                                                   onPressed: () async {
                                                     //Add Party Data According Index like Hospital,Doctor,technician
-                                                    _homepageController
+                                                    print('Add Party Data');
+                                                    await _homepageController
                                                         .addAllPartyData(
                                                             fields: _homepageController
                                                                 .pendingReportData,
                                                             index: subIndex);
+
+                                                    // print('Add Party Data');
                                                   },
                                                   child: const AutoSizeText(
                                                       "Add",
@@ -417,7 +420,7 @@ class ImportReport extends StatelessWidget {
                       width: width,
                       child: SizedBox(
                         height: Get.height * 0.70,
-                        width: Get.width * 1.5,
+                        width: Get.width * 2,
                         child: ListView.builder(
                           // itemCount: _homepageController.data.isEmpty ? 0 : 3,
                           itemCount:
@@ -438,7 +441,7 @@ class ImportReport extends StatelessWidget {
                                     ? Colors.white
                                     : const Color.fromARGB(255, 228, 136, 129),
                                 child: SizedBox(
-                                  width: Get.width * 1.5,
+                                  width: Get.width * 2,
                                   height: Get.height * 0.04,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
@@ -530,130 +533,83 @@ class ImportReport extends StatelessWidget {
                                                         TextOverflow.ellipsis,
                                                   ),
                                                 ),
-                                                // SizedBox(
-                                                //   width: Get.width * 0.03,
-                                                //   height: Get.height * 0.03,
-                                                //   child: ElevatedButton(
-                                                //     onPressed: () async {
-                                                //       print(
-                                                //           'new material Type');
-                                                //       String btnText =
-                                                //           'Add New Comission';
-                                                //       print(_homepageController
-                                                //               .pendingReportData[
-                                                //           index][3]);
-                                                //       var party = await (_homepageController
-                                                //               .db
-                                                //               .select(
-                                                //                   _homepageController
-                                                //                       .db
-                                                //                       .partyMaster)
-                                                //             ..where((tbl) => tbl
-                                                //                 .name
-                                                //                 .equals(_homepageController
-                                                //                         .pendingReportData[
-                                                //                     index][3])))
-                                                //           .get();
+                                                SizedBox(
+                                                  width: Get.width * 0.03,
+                                                  height: Get.height * 0.03,
+                                                  child: ElevatedButton(
+                                                    onPressed: () async {
+                                                      print(
+                                                          'new material Type');
+                                                      String btnText =
+                                                          'Add New Comission';
+                                                      print(_homepageController
+                                                              .pendingReportData[
+                                                          index][3]);
+                                                      var party = await (_homepageController
+                                                              .db
+                                                              .select(
+                                                                  _homepageController
+                                                                      .db
+                                                                      .partyMaster)
+                                                            ..where((tbl) => tbl
+                                                                .name
+                                                                .equals(_homepageController
+                                                                        .pendingReportData[
+                                                                    index][3])))
+                                                          .get();
 
-                                                //       print(party);
+                                                      print(party);
 
-                                                //       Get.bottomSheet(
-                                                //         isScrollControlled:
-                                                //             true,
-                                                //         ignoreSafeArea: false,
-                                                //         PartyComissionBottomSheet(
-                                                //           comissionPercentage:
-                                                //               '',
-                                                //           party: party[0],
-                                                //           btnText: btnText,
-                                                //           isShow: true,
-                                                //           materialType:
-                                                //               TextEditingController(
-                                                //                   text:
-                                                //                       "${_homepageController.pendingReportData[index][7]}~${_homepageController.pendingReportData[index][6]}"),
-                                                //           homepageController:
-                                                //               _homepageController,
-                                                //           // partyTypeIDList: partyTypeIDList,
-                                                //           // id: snapshot.data?[index].id,
-                                                //           // newComission: name,
-                                                //         ),
-                                                //       );
-                                                //     },
-                                                //     child: const AutoSizeText(
-                                                //         "Add",
-                                                //         style: TextStyle(
-                                                //           fontSize: 15,
-                                                //         ),
-                                                //         minFontSize: 10,
-                                                //         maxLines: 1,
-                                                //         overflow: TextOverflow
-                                                //             .ellipsis),
-                                                //   ),
-                                                // )
+                                                      Get.bottomSheet(
+                                                        isScrollControlled:
+                                                            true,
+                                                        ignoreSafeArea: false,
+                                                        PartyComissionBottomSheet(
+                                                          comissionPercentage:
+                                                              '',
+                                                          party: party[0],
+                                                          btnText: btnText,
+                                                          isShow: true,
+                                                          materialType:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      "${_homepageController.pendingReportData[index][7]}~${_homepageController.pendingReportData[index][6]}"),
+                                                          homepageController:
+                                                              _homepageController,
+                                                          // partyTypeIDList: partyTypeIDList,
+                                                          // id: snapshot.data?[index].id,
+                                                          // newComission: name,
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: const AutoSizeText(
+                                                        "Add",
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                        minFontSize: 10,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                  ),
+                                                )
                                               ],
                                             ),
                                           ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              SizedBox(
-                                                width: Get.width * 0.15,
-                                                child: AutoSizeText(
-                                                  _homepageController
-                                                      .pendingReportData[index]
-                                                          [subIndex]
-                                                      .toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.black),
-                                                  minFontSize: 10,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              // SizedBox(
-                                              //   width: Get.width * 0.03,
-                                              //   height: Get.height * 0.03,
-                                              //   child: ElevatedButton(
-                                              //     onPressed: () async {
-                                              //       print('new customer add');
-
-                                              //       var pname =
-                                              //           _homepageController
-                                              //               .pendingReportData[
-                                              //                   index][subIndex]
-                                              //               .toString();
-                                              //       var type = subIndex == 3
-                                              //           ? 1
-                                              //           : subIndex == 9
-                                              //               ? 2
-                                              //               : 3;
-                                              //       debugPrint(pname);
-                                              //       debugPrint(type.toString());
-                                              //       _homepageController
-                                              //           .partyController
-                                              //           .addParty(
-                                              //               name: pname,
-                                              //               type: type);
-
-                                              //       await _homepageController
-                                              //           .checkInputData(
-                                              //               fields: _homepageController
-                                              //                   .pendingReportData);
-                                              //     },
-                                              //     child: const AutoSizeText(
-                                              //         "Add",
-                                              //         style: TextStyle(
-                                              //           fontSize: 15,
-                                              //         ),
-                                              //         minFontSize: 10,
-                                              //         maxLines: 1,
-                                              //         overflow: TextOverflow
-                                              //             .ellipsis),
-                                              //   ),
-                                              // )
-                                            ],
+                                          child: SizedBox(
+                                            width: Get.width * 0.15,
+                                            child: AutoSizeText(
+                                              _homepageController
+                                                  .pendingReportData[index]
+                                                      [subIndex]
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black),
+                                              minFontSize: 10,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                         ),
                                       );

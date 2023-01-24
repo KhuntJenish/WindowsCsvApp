@@ -1199,8 +1199,8 @@ class HomepageController extends GetxController {
       print(fields);
       Set<String> partyNameList = {};
       for (var i = 0; i < fields.length; i++) {
-        if (i != 0) {
-          partyNameList.add(fields[i][index!].toString());
+        if (i != 0 && fields[i][index!].toString().isNotEmpty) {
+          partyNameList.add(fields[i][index].toString());
         }
       }
       print(partyNameList);
@@ -1306,7 +1306,21 @@ class HomepageController extends GetxController {
             }
             // print(data);
             var pdata = await db.select(db.partyMaster).get();
+            partyList?.clear();
+            partyList?.addAll(pdata);
+            defualtParty.value = pdata[0];
+
             print(pdata);
+            Get.back();
+
+            'All ${partyNameList.length} Party Added Successfully'
+                .successDailog;
+            Timer(const Duration(seconds: 2), () {
+              Get.back();
+              checkInputData(
+                fields: pendingReportData,
+              );
+            });
           },
           textCancel: 'Cancel',
           cancelTextColor: lCOLOR_PRIMARY,
@@ -1315,6 +1329,11 @@ class HomepageController extends GetxController {
           },
         );
       } else {
+        if (index == 3) {
+          await checkInputData(
+            fields: pendingReportData,
+          );
+        }
         '${party} Party Not Found'.errorSnackbar;
       }
 
@@ -1341,8 +1360,8 @@ class HomepageController extends GetxController {
     if (materialTypeList!.isNotEmpty) {
       defualtMaterialType.value = materialTypeList![0];
     }
-    for (var i = 1; i < fields!.length; i++) {
-      await addInputData(fields[i]);
+    for (var i = 1; i < data.length; i++) {
+      await addInputData(data[i]);
     }
     print('Display Data');
     print(displayData.length);
@@ -1355,7 +1374,7 @@ class HomepageController extends GetxController {
     print(comissionAndmatTypeNaNSetData);
     print('data assigend');
     pendingReportData.clear();
-    pendingReportData.addAll(fields);
+    pendingReportData.addAll(data);
     debugPrint(pendingReportData.length.toString());
     isLoading.value = false;
   }
@@ -1367,7 +1386,7 @@ class HomepageController extends GetxController {
             ..where((tbl) => tbl.name.isIn([data[3], data[9], data[10]])))
           .get();
 
-      if (resParty.length > 2) {
+      if (resParty.length >= 2) {
         materialTypeList?.clear();
         materialTypeList = await (db.select(db.materialType)
               ..where((tbl) => tbl.type.equals("${data[7]}~${data[6]}")))

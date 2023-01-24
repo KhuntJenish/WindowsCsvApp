@@ -27,7 +27,35 @@ Future<void> main() async {
   //         phone: 9624891105));
   // print(id);
 
-  // var data = await Constantdata.db.select(Constantdata.db.ledger).get();
+  var admin = await (Constantdata.db.select(Constantdata.db.user)
+        ..where((tbl) => tbl.username.equals('admin')))
+      .get();
+  if (admin.isEmpty) {
+    final id = await Constantdata.db
+        .into(Constantdata.db.user)
+        .insert(UserCompanion.insert(
+          username: 'admin',
+          password: 'admin',
+          mail: 'admin@gmail.com',
+          phone: 9624891105,
+        ));
+  }
+
+  var data =
+      await Constantdata.db.select(Constantdata.db.partyTypeMaster).get();
+  if (data.isEmpty) {
+    await Constantdata.db
+        .into(Constantdata.db.partyTypeMaster)
+        .insert(PartyTypeMasterCompanion.insert(type: 'Hospital'));
+    await Constantdata.db
+        .into(Constantdata.db.partyTypeMaster)
+        .insert(PartyTypeMasterCompanion.insert(type: 'Doctor'));
+    await Constantdata.db
+        .into(Constantdata.db.partyTypeMaster)
+        .insert(PartyTypeMasterCompanion.insert(type: 'Technician'));
+  }
+
+  await Constantdata.db.delete(Constantdata.db.partyMaster).go();
 
   // print(data);
   // print('done');
@@ -82,7 +110,7 @@ class MyApp extends StatelessWidget {
     GetStorage('box').write('isSelectedReport', 0);
     if (GetStorage('box').read('cuser') != null) {
       var userData = GetStorage('box').read('cuser');
-      print(userData);
+      // print(userData);
       var user = UserData(
           id: userData['id'],
           username: userData['username'],
