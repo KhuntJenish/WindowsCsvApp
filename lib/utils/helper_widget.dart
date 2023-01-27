@@ -19,7 +19,7 @@ addVerticaleSpace(double i) {
 
 addHorizontalSpace(double i) {
   return SizedBox(
-    height: i,
+    width: i,
   );
 }
 

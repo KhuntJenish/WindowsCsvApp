@@ -16,32 +16,37 @@ class PartyComissionBottomSheet extends StatelessWidget {
     required this.doctorParty,
     required this.technicianParty,
     this.oldComission,
-    this.isShow = false,
+    this.isShowAddMt = false,
     required this.materialType,
     this.homepageController,
     this.comissionPercentage,
+    this.itemAmount = 0.0,
   }) : super(key: key);
 
   // final UserController _userController;
   final String btnText;
+  final double itemAmount;
   final PartyMasterData? hospitalParty;
   final PartyMasterData? doctorParty;
   final PartyMasterData? technicianParty;
   final String? comissionPercentage;
   final PartyComissionDetailData? oldComission;
   // final List<int> partyTypeIDList;
-  final bool? isShow;
+  final bool? isShowAddMt;
   final PartyController _partyController = Get.put(PartyController());
   final HomepageController? homepageController;
   TextEditingController materialType = TextEditingController(text: '');
-  TextEditingController partyNameController = TextEditingController(text: '');
-  TextEditingController newComissionController =
-      TextEditingController(text: '');
-  TextEditingController newComissionAmountController =
-      TextEditingController(text: '');
+  bool? isShowDropDown = true;
+  // TextEditingController partyNameController = TextEditingController(text: '');
+
+  // TextEditingController materialTypeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if (btnText == 'Add New Comission') {
+      isShowDropDown = false;
+    }
+
     // materialType!.text = _partyController.defualtMaterialType.value.type;
     // print(materialType?.text);
     // print(homepageController?.materialTypeList);
@@ -56,8 +61,8 @@ class PartyComissionBottomSheet extends StatelessWidget {
     //   // _partyController.getMaterialTypeList();
     // }
 
-    partyNameController.text = hospitalParty!.name.toString();
-    newComissionController.text = comissionPercentage.toString();
+    // partyNameController.text = hospitalParty!.name.toString();
+    // newComissionController.text = comissionPercentage.toString();
     // print(_partyController.addPartyBtnText.value);
     TextTheme _textTheme = Theme.of(context).textTheme;
     return Container(
@@ -74,27 +79,37 @@ class PartyComissionBottomSheet extends StatelessWidget {
                     fontSize: Get.width * 0.04,
                   )),
               addVerticaleSpace(Get.height * 0.01),
+              Text('Items Amount : ${itemAmount.toStringAsFixed(2)}',
+                  style: GoogleFonts.padauk(
+                    fontSize: Get.width * 0.015,
+                  )),
               // Text(partyName.toString(),
               //     style: GoogleFonts.padauk(
               //       fontSize: Get.height * 0.02,
               //     )),
               addVerticaleSpace(Get.height * 0.01),
               comissionParty(
-                  textTheme: _textTheme,
-                  pType: 'Hopsital',
-                  pname: hospitalParty?.name),
+                textTheme: _textTheme,
+                pType: 'Hopsital',
+                pname: hospitalParty?.name,
+                isShowDropDown: isShowDropDown,
+              ),
 
               addVerticaleSpace(Get.height * 0.01),
               comissionParty(
-                  textTheme: _textTheme,
-                  pType: 'Doctor',
-                  pname: doctorParty?.name),
+                textTheme: _textTheme,
+                pType: 'Doctor',
+                pname: doctorParty?.name,
+                isShowDropDown: isShowDropDown,
+              ),
 
               addVerticaleSpace(Get.height * 0.01),
               comissionParty(
-                  textTheme: _textTheme,
-                  pType: 'Technician',
-                  pname: technicianParty?.name),
+                textTheme: _textTheme,
+                pType: 'Technician',
+                pname: technicianParty?.name,
+                isShowDropDown: isShowDropDown,
+              ),
 
               addVerticaleSpace(Get.height * 0.01),
               Button(
@@ -103,16 +118,16 @@ class PartyComissionBottomSheet extends StatelessWidget {
                 fontSize: Get.width * 0.015,
                 text: 'submit',
                 onPressed: () {
-                  if (partyNameController.text.isNotEmpty &&
-                      newComissionController.text.isNotEmpty &&
+                  if (hospitalParty!.name.isNotEmpty &&
+                      // newComissionController.text.isNotEmpty &&
                       _partyController.defualtMaterialType.value.type != '') {
                     if (btnText == 'Add Comission' ||
                         btnText == 'Add New Comission') {
-                      _partyController.addPartyComission(
-                        pID: hospitalParty?.id,
-                        mtID: _partyController.defualtMaterialType.value.id,
-                        newComission: double.parse(newComissionController.text),
-                      );
+                      // _partyController.addPartyComission(
+                      //   pID: hospitalParty?.id,
+                      //   mtID: _partyController.defualtMaterialType.value.id,
+                      //   newComission: double.parse(newComissionController.text),
+                      // );
                       if (btnText == 'Add New Comission') {
                         List<List<dynamic>> data = [];
 
@@ -124,12 +139,12 @@ class PartyComissionBottomSheet extends StatelessWidget {
                         homepageController!.checkInputData(fields: data);
                       }
                     } else if (btnText == 'Update Comission') {
-                      _partyController.updatePartyComission(
-                        oldComissionData: oldComission!,
-                        pID: hospitalParty?.id,
-                        mtid: _partyController.defualtMaterialType.value.id,
-                        newComission: double.parse(newComissionController.text),
-                      );
+                      // _partyController.updatePartyComission(
+                      //   oldComissionData: oldComission!,
+                      //   pID: hospitalParty?.id,
+                      //   mtid: _partyController.defualtMaterialType.value.id,
+                      //   newComission: double.parse(newComissionController.text),
+                      // );
                     }
                   } else {
                     'Please Enter Party Name or Comission'.errorSnackbar;
@@ -149,7 +164,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
             ),
           ),
           Visibility(
-            visible: isShow!,
+            visible: isShowAddMt!,
             child: Positioned(
               bottom: Get.height * 0.03,
               right: Get.width * 0.03,
@@ -201,8 +216,18 @@ class PartyComissionBottomSheet extends StatelessWidget {
     );
   }
 
-  Column comissionParty({TextTheme? textTheme, String? pType, String? pname}) {
-    partyNameController.text = pname!;
+  Column comissionParty({
+    TextTheme? textTheme,
+    String? pType,
+    String? pname,
+    bool? isShowDropDown = false,
+  }) {
+    TextEditingController partyNameController =
+        TextEditingController(text: pname);
+    TextEditingController newComissionController =
+        TextEditingController(text: '');
+    TextEditingController newComissionAmountController =
+        TextEditingController(text: '');
     print(pname);
     print('-------');
     return Column(
@@ -223,8 +248,6 @@ class PartyComissionBottomSheet extends StatelessWidget {
           children: [
             Container(
               width: Get.width * 0.2,
-              // padding:
-              //     EdgeInsets.symmetric(horizontal: Get.height * 0.28),
               child: TextField(
                 readOnly: true,
                 keyboardType: TextInputType.text,
@@ -242,21 +265,37 @@ class PartyComissionBottomSheet extends StatelessWidget {
               ),
             ),
             addHorizontalSpace(Get.height * 0.01),
-            Container(
-              //  color: Colors.grey[400],
-              width: Get.width * 0.2,
-              // padding:
-              //     EdgeInsets.symmetric(horizontal: Get.height * 0.25),
-              child: MaterialTypeDropDownItems(
-                width: Get.width * 0.9,
-                defualtValue: _partyController.defualtMaterialType,
-                itemList: _partyController.materialTypeList,
+            Visibility(
+              visible: isShowDropDown!,
+              replacement: Container(
+                width: Get.width * 0.2,
+                child: TextField(
+                  readOnly: true,
+                  keyboardType: TextInputType.text,
+                  maxLength: 30,
+                  controller: materialType,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.person),
+                    hintText: 'Enter Username',
+                    counterText: '',
+                    hintStyle: textTheme?.headline6?.copyWith(
+                      color: Colors.grey,
+                      fontSize: Get.height * 0.02,
+                    ),
+                  ),
+                ),
+              ),
+              child: Container(
+                width: Get.width * 0.2,
+                child: MaterialTypeDropDownItems(
+                  width: Get.width * 0.9,
+                  defualtValue: _partyController.defualtMaterialType,
+                  itemList: _partyController.materialTypeList,
+                ),
               ),
             ),
             addHorizontalSpace(Get.height * 0.01),
             Container(
-              // padding:
-              //     EdgeInsets.symmetric(horizontal: Get.height * 0.28),
               width: Get.width * 0.15,
               child: TextField(
                 keyboardType: TextInputType.text,
@@ -271,6 +310,16 @@ class PartyComissionBottomSheet extends StatelessWidget {
                     fontSize: Get.height * 0.02,
                   ),
                 ),
+                onChanged: (value) {
+                  print(value);
+                  if (value.isNotEmpty) {
+                    newComissionAmountController.text =
+                        ((double.parse(value) * itemAmount) / 100)
+                            .toStringAsFixed(2);
+                  } else {
+                    newComissionAmountController.text = '';
+                  }
+                },
               ),
             ),
             // addHorizontalSpace(10),
@@ -278,9 +327,6 @@ class PartyComissionBottomSheet extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Icon(Icons.swap_horiz_outlined, color: Colors.grey[700]),
             ),
-            // addHorizontalSpace(10),
-            // Todo: Add trasalte Icon
-            // addHorizontalSpace(Get.height * 0.01),
 
             Container(
               width: Get.width * 0.15,
@@ -297,6 +343,16 @@ class PartyComissionBottomSheet extends StatelessWidget {
                     fontSize: Get.height * 0.02,
                   ),
                 ),
+                onChanged: (value) {
+                  print(value);
+                  if (value.isNotEmpty) {
+                    newComissionController.text =
+                        ((double.parse(value) * 100) / itemAmount)
+                            .toStringAsFixed(2);
+                  } else {
+                    newComissionController.text = '';
+                  }
+                },
               ),
             ),
           ],

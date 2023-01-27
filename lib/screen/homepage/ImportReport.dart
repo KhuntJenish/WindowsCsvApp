@@ -594,6 +594,7 @@ class ImportReport extends StatelessWidget {
                                                                     element.name
                                                                         .contains(
                                                                             doctor));
+
                                                         var technicianParty =
                                                             _homepageController
                                                                 .partyList!
@@ -601,6 +602,10 @@ class ImportReport extends StatelessWidget {
                                                                     element.name
                                                                         .contains(
                                                                             technician));
+                                                        var itemAmount =
+                                                            _homepageController
+                                                                    .pendingReportData[
+                                                                index][12];
 
                                                         print(hospitalParty);
 
@@ -609,6 +614,8 @@ class ImportReport extends StatelessWidget {
                                                               true,
                                                           ignoreSafeArea: false,
                                                           PartyComissionBottomSheet(
+                                                            itemAmount:
+                                                                itemAmount,
                                                             comissionPercentage:
                                                                 '',
                                                             doctorParty:
@@ -618,7 +625,7 @@ class ImportReport extends StatelessWidget {
                                                             hospitalParty:
                                                                 hospitalParty,
                                                             btnText: btnText,
-                                                            isShow: true,
+                                                            isShowAddMt: true,
                                                             materialType:
                                                                 TextEditingController(
                                                                     text:
