@@ -618,72 +618,6 @@ class PartyPayment extends StatelessWidget {
                                                                         .ellipsis,
                                                               ),
                                                             ),
-                                                            SizedBox(
-                                                              width: Get.width *
-                                                                  0.03,
-                                                              height:
-                                                                  Get.height *
-                                                                      0.03,
-                                                              child:
-                                                                  ElevatedButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  print(
-                                                                      'new material Type');
-                                                                  String
-                                                                      btnText =
-                                                                      'Add New Comission';
-                                                                  print(_homepageController
-                                                                          .generatedReportData[
-                                                                      index][3]);
-                                                                  var party = await (_homepageController
-                                                                          .db
-                                                                          .select(_homepageController
-                                                                              .db
-                                                                              .partyMaster)
-                                                                        ..where((tbl) => tbl
-                                                                            .name
-                                                                            .equals(_homepageController.generatedReportData[index][3])))
-                                                                      .get();
-
-                                                                  print(party);
-
-                                                                  Get.bottomSheet(
-                                                                    isScrollControlled:
-                                                                        true,
-                                                                    ignoreSafeArea:
-                                                                        false,
-                                                                    PartyComissionBottomSheet(
-                                                                      comissionPercentage:
-                                                                          '',
-                                                                      party:
-                                                                          party[
-                                                                              0],
-                                                                      btnText:
-                                                                          btnText,
-                                                                      isShow:
-                                                                          true,
-                                                                      materialType:
-                                                                          TextEditingController(
-                                                                              text: _homepageController.generatedReportData[index][7]),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                child: const AutoSizeText(
-                                                                    "Add",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          15,
-                                                                    ),
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxLines: 1,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis),
-                                                              ),
-                                                            )
                                                           ],
                                                         ),
                                                       ),
@@ -709,55 +643,6 @@ class PartyPayment extends StatelessWidget {
                                                                       .ellipsis,
                                                             ),
                                                           ),
-                                                          SizedBox(
-                                                            width: Get.width *
-                                                                0.03,
-                                                            height: Get.height *
-                                                                0.03,
-                                                            child:
-                                                                ElevatedButton(
-                                                              onPressed: () {
-                                                                print(
-                                                                    'new customer add');
-                                                                TextEditingController name = TextEditingController(
-                                                                    text: _homepageController
-                                                                        .generatedReportData[
-                                                                            index]
-                                                                            [
-                                                                            subIndex]
-                                                                        .toString());
-                                                                print(
-                                                                    name.text);
-                                                                String btnText =
-                                                                    'Add New Party';
-
-                                                                Get.bottomSheet(
-                                                                  isScrollControlled:
-                                                                      true,
-                                                                  ignoreSafeArea:
-                                                                      false,
-                                                                  PartyTypeBottomsheet(
-                                                                    name: name,
-                                                                    btnText:
-                                                                        btnText,
-                                                                  ),
-                                                                );
-                                                              },
-                                                              child: const AutoSizeText(
-                                                                  "Add",
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                  ),
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxLines: 1,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis),
-                                                            ),
-                                                          )
                                                         ],
                                                       ),
                                                     ),

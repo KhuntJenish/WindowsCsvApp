@@ -55,7 +55,7 @@ Future<void> main() async {
         .insert(PartyTypeMasterCompanion.insert(type: 'Technician'));
   }
 
-  await Constantdata.db.delete(Constantdata.db.partyMaster).go();
+  // await Constantdata.db.delete(Constantdata.db.partyMaster).go();
 
   // print(data);
   // print('done');

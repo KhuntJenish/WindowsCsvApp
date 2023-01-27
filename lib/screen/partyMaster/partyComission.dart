@@ -283,22 +283,23 @@ class PartyComission extends StatelessWidget {
                                                                         .data![
                                                                             index]
                                                                         .mtID);
-                                                    Get.bottomSheet(
-                                                      isScrollControlled: true,
-                                                      ignoreSafeArea: false,
-                                                      PartyComissionBottomSheet(
-                                                        materialType:
-                                                            TextEditingController(
-                                                                text: ''),
-                                                        comissionPercentage: '',
-                                                        party: party,
-                                                        btnText: btnText,
-                                                        oldComission: snapshot
-                                                            .data![index],
-                                                        // id: snapshot.data?[index].id,
-                                                        // newComission: name,
-                                                      ),
-                                                    );
+                                                    // Todo: some change
+                                                    // Get.bottomSheet(
+                                                    //   isScrollControlled: true,
+                                                    //   ignoreSafeArea: false,
+                                                    //   PartyComissionBottomSheet(
+                                                    //     materialType:
+                                                    //         TextEditingController(
+                                                    //             text: ''),
+                                                    //     comissionPercentage: '',
+                                                    //     hospitalParty: party,
+                                                    //     btnText: btnText,
+                                                    //     oldComission: snapshot
+                                                    //         .data![index],
+                                                    //     // id: snapshot.data?[index].id,
+                                                    //     // newComission: name,
+                                                    //   ),
+                                                    // );
                                                   },
                                                 ),
                                                 IconButton(
@@ -370,20 +371,21 @@ class PartyComission extends StatelessWidget {
           // Get.toNamed(PartyComission.routeName);
           // print(partyTypeIDList);
           btnText = 'Add Comission';
-          Get.bottomSheet(
-            isScrollControlled: true,
-            ignoreSafeArea: false,
-            PartyComissionBottomSheet(
-              materialType: TextEditingController(text: ''),
-              comissionPercentage: '',
-              party: party,
-              btnText: btnText,
-              isShow: true,
-              // partyTypeIDList: partyTypeIDList,
-              // id: snapshot.data?[index].id,
-              // newComission: name,
-            ),
-          );
+          // Todo: some change
+          // Get.bottomSheet(
+          //   isScrollControlled: true,
+          //   ignoreSafeArea: false,
+          //   PartyComissionBottomSheet(
+          //     materialType: TextEditingController(text: ''),
+          //     comissionPercentage: '',
+          //     hospitalParty: party,
+          //     btnText: btnText,
+          //     isShow: true,
+          //     // partyTypeIDList: partyTypeIDList,
+          //     // id: snapshot.data?[index].id,
+          //     // newComission: name,
+          //   ),
+          // );
         },
         child: const Icon(Icons.add),
       ),
