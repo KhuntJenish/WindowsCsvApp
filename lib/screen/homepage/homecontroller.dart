@@ -545,22 +545,27 @@ class HomepageController extends GetxController {
   }
 
   getPartyCityList() async {
-    partyCityList.clear();
-    var data = await db.select(db.inputData).get();
+    try {
+      partyCityList.clear();
+      List<InputDataData> data = await db.select(db.inputData).get();
 
-    for (var element in data) {
-      partyCityList.add(element.custBillCity);
+      for (var element in data) {
+        partyCityList.add(element.custBillCity);
+      }
+
+      // print(data);
+      if (partyCityList.isNotEmpty) {
+        // print(partyTypeList![0]);
+        var defualt = partyCityList.toList();
+        defualtPartyCity.value = defualt[0];
+        print('defualtParty: ${defualtParty.value}');
+      }
+
+      print(partyCityList);
+    } catch (e) {
+      print(e);
+      e.toString().errorSnackbar;
     }
-
-    // print(data);
-    if (partyCityList.isNotEmpty) {
-      // print(partyTypeList![0]);
-      var defualt = partyCityList.toList();
-      defualtPartyCity.value = defualt[0];
-      print('defualtParty: ${defualtParty.value}');
-    }
-
-    print(partyCityList);
   }
 
   getMaterialTypeList() async {
@@ -1279,8 +1284,6 @@ class HomepageController extends GetxController {
                       ));
                 }
               });
-              // print(data);
-
             } else if (index == 2) {
               await db.batch((batch) {
                 for (var element in partyNameList) {
@@ -1309,6 +1312,7 @@ class HomepageController extends GetxController {
             partyList?.clear();
             partyList?.addAll(pdata);
             defualtParty.value = pdata[0];
+            defualtParty.refresh();
 
             print(pdata);
             Get.back();
@@ -1377,6 +1381,17 @@ class HomepageController extends GetxController {
     pendingReportData.addAll(data);
     debugPrint(pendingReportData.length.toString());
     isLoading.value = false;
+  }
+
+  Future<bool> checkMaterialType(String materialType) async {
+    var res = await (db.select(db.materialType)
+          ..where((tbl) => tbl.type.equals(materialType)))
+        .get();
+    print(res);
+    if (res.isNotEmpty) {
+      return false;
+    }
+    return true;
   }
 
   Future<void> addInputData(List<dynamic> data) async {

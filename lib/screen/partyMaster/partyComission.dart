@@ -27,8 +27,8 @@ class PartyComission extends StatelessWidget {
   Widget build(BuildContext context) {
     // print(party);
     // print(_partyController.addPartyBtnText.value);
-    print(_partyController.partyTypeList);
-    print(_partyController.materialTypeList);
+    print(party);
+    // print(_partyController.materialTypeList);
     List<int> partyTypeIDList = [];
 
     return Scaffold(
@@ -270,20 +270,57 @@ class PartyComission extends StatelessWidget {
                                                     //     id: snapshot.data![index].id);
                                                     btnText =
                                                         'Update Comission';
-                                                    _partyController
-                                                            .defualtMaterialType
-                                                            .value =
-                                                        _partyController
-                                                            .materialTypeList!
-                                                            .firstWhere(
-                                                                (element) =>
-                                                                    element
-                                                                        .id ==
-                                                                    snapshot
-                                                                        .data![
-                                                                            index]
-                                                                        .mtID);
+                                                    var mt = _partyController
+                                                        .materialTypeList!
+                                                        .firstWhere((element) =>
+                                                            element.id ==
+                                                            snapshot
+                                                                .data![index]
+                                                                .mtID)
+                                                        .type;
                                                     // Todo: some change
+                                                    var pid = party.ptID;
+                                                    Get.bottomSheet(
+                                                      isScrollControlled: true,
+                                                      ignoreSafeArea: false,
+                                                      PartyComissionBottomSheet(
+                                                        oldComission: snapshot
+                                                            .data![index],
+                                                        materialType:
+                                                            TextEditingController(
+                                                                text: mt),
+                                                        comissionPercentage:
+                                                            snapshot
+                                                                .data![index]
+                                                                .comission1
+                                                                .toString(),
+                                                        itemAmount: snapshot
+                                                            .data![index]
+                                                            .mprice,
+                                                        hospitalParty: pid == 1
+                                                            ? party
+                                                            : null,
+                                                        doctorParty: pid == 2
+                                                            ? party
+                                                            : null,
+                                                        technicianParty:
+                                                            pid == 3
+                                                                ? party
+                                                                : null,
+                                                        btnText: btnText,
+                                                        isShowAddMt: false.obs,
+                                                        isShowHospital: pid == 1
+                                                            ? true
+                                                            : false,
+                                                        isShowDoctor: pid == 2
+                                                            ? true
+                                                            : false,
+                                                        isShowTechnician:
+                                                            pid == 3
+                                                                ? true
+                                                                : false,
+                                                      ),
+                                                    );
                                                     // Get.bottomSheet(
                                                     //   isScrollControlled: true,
                                                     //   ignoreSafeArea: false,
@@ -370,22 +407,25 @@ class PartyComission extends StatelessWidget {
           // newComission.text = '';
           // Get.toNamed(PartyComission.routeName);
           // print(partyTypeIDList);
+          var pid = party.ptID;
           btnText = 'Add Comission';
           // Todo: some change
-          // Get.bottomSheet(
-          //   isScrollControlled: true,
-          //   ignoreSafeArea: false,
-          //   PartyComissionBottomSheet(
-          //     materialType: TextEditingController(text: ''),
-          //     comissionPercentage: '',
-          //     hospitalParty: party,
-          //     btnText: btnText,
-          //     isShow: true,
-          //     // partyTypeIDList: partyTypeIDList,
-          //     // id: snapshot.data?[index].id,
-          //     // newComission: name,
-          //   ),
-          // );
+          Get.bottomSheet(
+            isScrollControlled: true,
+            ignoreSafeArea: false,
+            PartyComissionBottomSheet(
+              materialType: TextEditingController(text: ''),
+              comissionPercentage: '',
+              hospitalParty: pid == 1 ? party : null,
+              doctorParty: pid == 2 ? party : null,
+              technicianParty: pid == 3 ? party : null,
+              btnText: btnText,
+              isShowAddMt: true.obs,
+              isShowHospital: pid == 1 ? true : false,
+              isShowDoctor: pid == 2 ? true : false,
+              isShowTechnician: pid == 3 ? true : false,
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),

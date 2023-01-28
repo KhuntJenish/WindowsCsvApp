@@ -36,6 +36,7 @@ class PartyComissionDetail extends Table {
   RealColumn get comission1 => real()();
   RealColumn get comission2 => real()();
   RealColumn get comission3 => real()();
+  RealColumn get mprice => real()();
 }
 
 class InputData extends Table {
@@ -128,7 +129,7 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     print('database Created');
-    final dbFolder = '${Directory.current.path}\\backup';
+    final dbFolder = '${Directory.current.path}\\backupData';
     final file = File(p.join(dbFolder, 'backup.sqlite'));
     return NativeDatabase.createInBackground(file);
   });

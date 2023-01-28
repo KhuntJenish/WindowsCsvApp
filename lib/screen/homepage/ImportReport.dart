@@ -565,21 +565,14 @@ class ImportReport extends StatelessWidget {
                                                             _homepageController
                                                                     .pendingReportData[
                                                                 index][10];
-                                                        print(hospital +
-                                                            "-" +
-                                                            doctor +
-                                                            "-" +
-                                                            technician);
-                                                        print(
-                                                            _homepageController
-                                                                .partyList);
+
+                                                        // print(
+                                                        //     _homepageController
+                                                        //         .partyList);
                                                         print(_homepageController
-                                                            .partyList!
-                                                            .firstWhere((element) =>
-                                                                element.name
-                                                                    .contains(
-                                                                        hospital))
-                                                            .name);
+                                                                .pendingReportData[
+                                                            index][10]);
+                                                        print('technician');
                                                         var hospitalParty =
                                                             _homepageController
                                                                 .partyList!
@@ -602,12 +595,19 @@ class ImportReport extends StatelessWidget {
                                                                     element.name
                                                                         .contains(
                                                                             technician));
-                                                        var itemAmount =
+                                                        var itemAmount = double.parse(
                                                             _homepageController
-                                                                    .pendingReportData[
-                                                                index][12];
-
-                                                        print(hospitalParty);
+                                                                .pendingReportData[
+                                                                    index][12]
+                                                                .toString());
+                                                        var materialType =
+                                                            "${_homepageController.pendingReportData[index][7]}~${_homepageController.pendingReportData[index][6]}";
+                                                        var isShowAddMt =
+                                                            await _homepageController
+                                                                .checkMaterialType(
+                                                                    materialType);
+                                                        print(isShowAddMt);
+                                                        // print(hospitalParty);
 
                                                         Get.bottomSheet(
                                                           isScrollControlled:
@@ -625,11 +625,12 @@ class ImportReport extends StatelessWidget {
                                                             hospitalParty:
                                                                 hospitalParty,
                                                             btnText: btnText,
-                                                            isShowAddMt: true,
+                                                            isShowAddMt:
+                                                                isShowAddMt.obs,
                                                             materialType:
                                                                 TextEditingController(
                                                                     text:
-                                                                        "${_homepageController.pendingReportData[index][7]}~${_homepageController.pendingReportData[index][6]}"),
+                                                                        materialType),
                                                             homepageController:
                                                                 _homepageController,
                                                           ),
@@ -637,9 +638,6 @@ class ImportReport extends StatelessWidget {
                                                       },
                                                       child: const AutoSizeText(
                                                           "Add",
-                                                          // style: TextStyle(
-                                                          //   fontSize: 15,
-                                                          // ),
                                                           minFontSize: 10,
                                                           maxLines: 1,
                                                           overflow: TextOverflow

@@ -65,6 +65,21 @@ class PartyController extends GetxController {
     print(materialTypeList);
   }
 
+  Future<bool> checkMaterialType(String mt) async {
+    // materialTypeList?.clear();
+    var data = await (db.select(db.materialType)
+          ..where((tbl) => tbl.type.contains(mt)))
+        .get();
+
+    // materialTypeList?.addAll(data);
+
+    // print(data);
+    if (data.isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
+
   getPartyComissionList({int? pID}) async {
     // partyTypeList?.clear();
     var data = await db.select(db.partyComissionDetail).get();
@@ -155,19 +170,26 @@ class PartyController extends GetxController {
     }
   }
 
-  addPartyComission({int? pID, int? mtID, double? newComission}) async {
+  Future<void> addPartyComission(
+      {int? pID,
+      int? mtID,
+      double? newComission,
+      double? materialPrice}) async {
     var data = await (db.select(db.partyComissionDetail)
           ..where((tbl) => tbl.pID.equals(pID!) & tbl.mtID.equals(mtID!)))
         .get();
     print('comissionDetail');
     if (data.isEmpty) {
-      var data = await db.into(db.partyComissionDetail).insert(
-          PartyComissionDetailCompanion.insert(
-              pID: pID!.toInt(),
-              mtID: mtID!.toInt(),
-              comission1: newComission!.toDouble(),
-              comission2: 0,
-              comission3: 0));
+      var data = await db
+          .into(db.partyComissionDetail)
+          .insert(PartyComissionDetailCompanion.insert(
+            pID: pID!.toInt(),
+            mtID: mtID!.toInt(),
+            comission1: newComission!.toDouble(),
+            comission2: 0,
+            comission3: 0,
+            mprice: materialPrice!,
+          ));
 
       print(data);
       Get.back();
@@ -243,23 +265,25 @@ class PartyController extends GetxController {
     }
   }
 
-  updatePartyComission({
-    required int mtid,
-    required PartyComissionDetailData oldComissionData,
-    required int? pID,
-    required double newComission,
-  }) async {
+  updatePartyComission(
+      {required int? mtid,
+      required PartyComissionDetailData oldComissionData,
+      required int? pID,
+      required double newComission,
+      required double materialPrice}) async {
     try {
       // var data =1;
       var data = await (db.update(db.partyComissionDetail)
             ..where((tbl) => tbl.id.equals(oldComissionData.id)))
           .write(PartyComissionDetailData(
-              id: oldComissionData.id,
-              pID: pID!,
-              mtID: mtid,
-              comission1: newComission,
-              comission2: oldComissionData.comission1,
-              comission3: oldComissionData.comission2));
+        id: oldComissionData.id,
+        pID: pID!,
+        mtID: mtid!,
+        comission1: newComission,
+        comission2: oldComissionData.comission1,
+        comission3: oldComissionData.comission2,
+        mprice: materialPrice,
+      ));
       // print(data.length);
       if (data > 0) {
         Get.back();

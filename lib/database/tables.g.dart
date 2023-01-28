@@ -3,6 +3,110 @@
 part of 'tables.dart';
 
 // ignore_for_file: type=lint
+class $UserTable extends User with TableInfo<$UserTable, UserData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _usernameMeta =
+      const VerificationMeta('username');
+  @override
+  late final GeneratedColumn<String> username = GeneratedColumn<String>(
+      'username', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _passwordMeta =
+      const VerificationMeta('password');
+  @override
+  late final GeneratedColumn<String> password = GeneratedColumn<String>(
+      'password', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
+  @override
+  late final GeneratedColumn<int> phone = GeneratedColumn<int>(
+      'phone', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _mailMeta = const VerificationMeta('mail');
+  @override
+  late final GeneratedColumn<String> mail = GeneratedColumn<String>(
+      'mail', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, username, password, phone, mail];
+  @override
+  String get aliasedName => _alias ?? 'user';
+  @override
+  String get actualTableName => 'user';
+  @override
+  VerificationContext validateIntegrity(Insertable<UserData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('username')) {
+      context.handle(_usernameMeta,
+          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
+    } else if (isInserting) {
+      context.missing(_usernameMeta);
+    }
+    if (data.containsKey('password')) {
+      context.handle(_passwordMeta,
+          password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
+    } else if (isInserting) {
+      context.missing(_passwordMeta);
+    }
+    if (data.containsKey('phone')) {
+      context.handle(
+          _phoneMeta, phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta));
+    } else if (isInserting) {
+      context.missing(_phoneMeta);
+    }
+    if (data.containsKey('mail')) {
+      context.handle(
+          _mailMeta, mail.isAcceptableOrUnknown(data['mail']!, _mailMeta));
+    } else if (isInserting) {
+      context.missing(_mailMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  UserData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      username: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}username'])!,
+      password: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}password'])!,
+      phone: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}phone'])!,
+      mail: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}mail'])!,
+    );
+  }
+
+  @override
+  $UserTable createAlias(String alias) {
+    return $UserTable(attachedDatabase, alias);
+  }
+}
+
 class UserData extends DataClass implements Insertable<UserData> {
   final int id;
   final String username;
@@ -185,11 +289,12 @@ class UserCompanion extends UpdateCompanion<UserData> {
   }
 }
 
-class $UserTable extends User with TableInfo<$UserTable, UserData> {
+class $MaterialTypeTable extends MaterialType
+    with TableInfo<$MaterialTypeTable, MaterialTypeData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UserTable(this.attachedDatabase, [this._alias]);
+  $MaterialTypeTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -199,67 +304,30 @@ class $UserTable extends User with TableInfo<$UserTable, UserData> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _usernameMeta =
-      const VerificationMeta('username');
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<String> username = GeneratedColumn<String>(
-      'username', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 32),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _passwordMeta =
-      const VerificationMeta('password');
-  @override
-  late final GeneratedColumn<String> password = GeneratedColumn<String>(
-      'password', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _phoneMeta = const VerificationMeta('phone');
-  @override
-  late final GeneratedColumn<int> phone = GeneratedColumn<int>(
-      'phone', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _mailMeta = const VerificationMeta('mail');
-  @override
-  late final GeneratedColumn<String> mail = GeneratedColumn<String>(
-      'mail', aliasedName, false,
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, username, password, phone, mail];
+  List<GeneratedColumn> get $columns => [id, type];
   @override
-  String get aliasedName => _alias ?? 'user';
+  String get aliasedName => _alias ?? 'material_type';
   @override
-  String get actualTableName => 'user';
+  String get actualTableName => 'material_type';
   @override
-  VerificationContext validateIntegrity(Insertable<UserData> instance,
+  VerificationContext validateIntegrity(Insertable<MaterialTypeData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('username')) {
-      context.handle(_usernameMeta,
-          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
-    } else if (isInserting) {
-      context.missing(_usernameMeta);
-    }
-    if (data.containsKey('password')) {
-      context.handle(_passwordMeta,
-          password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
-    } else if (isInserting) {
-      context.missing(_passwordMeta);
-    }
-    if (data.containsKey('phone')) {
+    if (data.containsKey('type')) {
       context.handle(
-          _phoneMeta, phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
-      context.missing(_phoneMeta);
-    }
-    if (data.containsKey('mail')) {
-      context.handle(
-          _mailMeta, mail.isAcceptableOrUnknown(data['mail']!, _mailMeta));
-    } else if (isInserting) {
-      context.missing(_mailMeta);
+      context.missing(_typeMeta);
     }
     return context;
   }
@@ -267,25 +335,19 @@ class $UserTable extends User with TableInfo<$UserTable, UserData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  UserData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  MaterialTypeData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserData(
+    return MaterialTypeData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      username: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}username'])!,
-      password: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}password'])!,
-      phone: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}phone'])!,
-      mail: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}mail'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
     );
   }
 
   @override
-  $UserTable createAlias(String alias) {
-    return $UserTable(attachedDatabase, alias);
+  $MaterialTypeTable createAlias(String alias) {
+    return $MaterialTypeTable(attachedDatabase, alias);
   }
 }
 
@@ -399,12 +461,12 @@ class MaterialTypeCompanion extends UpdateCompanion<MaterialTypeData> {
   }
 }
 
-class $MaterialTypeTable extends MaterialType
-    with TableInfo<$MaterialTypeTable, MaterialTypeData> {
+class $PartyTypeMasterTable extends PartyTypeMaster
+    with TableInfo<$PartyTypeMasterTable, PartyTypeMasterData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $MaterialTypeTable(this.attachedDatabase, [this._alias]);
+  $PartyTypeMasterTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -422,11 +484,12 @@ class $MaterialTypeTable extends MaterialType
   @override
   List<GeneratedColumn> get $columns => [id, type];
   @override
-  String get aliasedName => _alias ?? 'material_type';
+  String get aliasedName => _alias ?? 'party_type_master';
   @override
-  String get actualTableName => 'material_type';
+  String get actualTableName => 'party_type_master';
   @override
-  VerificationContext validateIntegrity(Insertable<MaterialTypeData> instance,
+  VerificationContext validateIntegrity(
+      Insertable<PartyTypeMasterData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -445,9 +508,9 @@ class $MaterialTypeTable extends MaterialType
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  MaterialTypeData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  PartyTypeMasterData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return MaterialTypeData(
+    return PartyTypeMasterData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       type: attachedDatabase.typeMapping
@@ -456,8 +519,8 @@ class $MaterialTypeTable extends MaterialType
   }
 
   @override
-  $MaterialTypeTable createAlias(String alias) {
-    return $MaterialTypeTable(attachedDatabase, alias);
+  $PartyTypeMasterTable createAlias(String alias) {
+    return $PartyTypeMasterTable(attachedDatabase, alias);
   }
 }
 
@@ -571,12 +634,12 @@ class PartyTypeMasterCompanion extends UpdateCompanion<PartyTypeMasterData> {
   }
 }
 
-class $PartyTypeMasterTable extends PartyTypeMaster
-    with TableInfo<$PartyTypeMasterTable, PartyTypeMasterData> {
+class $PartyMasterTable extends PartyMaster
+    with TableInfo<$PartyMasterTable, PartyMasterData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PartyTypeMasterTable(this.attachedDatabase, [this._alias]);
+  $PartyMasterTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -586,31 +649,44 @@ class $PartyTypeMasterTable extends PartyTypeMaster
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> type = GeneratedColumn<String>(
-      'type', aliasedName, false,
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _ptIDMeta = const VerificationMeta('ptID');
   @override
-  List<GeneratedColumn> get $columns => [id, type];
+  late final GeneratedColumn<int> ptID = GeneratedColumn<int>(
+      'pt_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES party_type_master (id)'));
   @override
-  String get aliasedName => _alias ?? 'party_type_master';
+  List<GeneratedColumn> get $columns => [id, name, ptID];
   @override
-  String get actualTableName => 'party_type_master';
+  String get aliasedName => _alias ?? 'party_master';
   @override
-  VerificationContext validateIntegrity(
-      Insertable<PartyTypeMasterData> instance,
+  String get actualTableName => 'party_master';
+  @override
+  VerificationContext validateIntegrity(Insertable<PartyMasterData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('type')) {
+    if (data.containsKey('name')) {
       context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_typeMeta);
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('pt_i_d')) {
+      context.handle(
+          _ptIDMeta, ptID.isAcceptableOrUnknown(data['pt_i_d']!, _ptIDMeta));
+    } else if (isInserting) {
+      context.missing(_ptIDMeta);
     }
     return context;
   }
@@ -618,19 +694,21 @@ class $PartyTypeMasterTable extends PartyTypeMaster
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  PartyTypeMasterData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  PartyMasterData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return PartyTypeMasterData(
+    return PartyMasterData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      ptID: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}pt_i_d'])!,
     );
   }
 
   @override
-  $PartyTypeMasterTable createAlias(String alias) {
-    return $PartyTypeMasterTable(attachedDatabase, alias);
+  $PartyMasterTable createAlias(String alias) {
+    return $PartyMasterTable(attachedDatabase, alias);
   }
 }
 
@@ -765,291 +843,6 @@ class PartyMasterCompanion extends UpdateCompanion<PartyMasterData> {
   }
 }
 
-class $PartyMasterTable extends PartyMaster
-    with TableInfo<$PartyMasterTable, PartyMasterData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $PartyMasterTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _ptIDMeta = const VerificationMeta('ptID');
-  @override
-  late final GeneratedColumn<int> ptID = GeneratedColumn<int>(
-      'pt_i_d', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES party_type_master (id)'));
-  @override
-  List<GeneratedColumn> get $columns => [id, name, ptID];
-  @override
-  String get aliasedName => _alias ?? 'party_master';
-  @override
-  String get actualTableName => 'party_master';
-  @override
-  VerificationContext validateIntegrity(Insertable<PartyMasterData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('pt_i_d')) {
-      context.handle(
-          _ptIDMeta, ptID.isAcceptableOrUnknown(data['pt_i_d']!, _ptIDMeta));
-    } else if (isInserting) {
-      context.missing(_ptIDMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  PartyMasterData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return PartyMasterData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      ptID: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}pt_i_d'])!,
-    );
-  }
-
-  @override
-  $PartyMasterTable createAlias(String alias) {
-    return $PartyMasterTable(attachedDatabase, alias);
-  }
-}
-
-class PartyComissionDetailData extends DataClass
-    implements Insertable<PartyComissionDetailData> {
-  final int id;
-  final int pID;
-  final int mtID;
-  final double comission1;
-  final double comission2;
-  final double comission3;
-  const PartyComissionDetailData(
-      {required this.id,
-      required this.pID,
-      required this.mtID,
-      required this.comission1,
-      required this.comission2,
-      required this.comission3});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['p_i_d'] = Variable<int>(pID);
-    map['mt_i_d'] = Variable<int>(mtID);
-    map['comission1'] = Variable<double>(comission1);
-    map['comission2'] = Variable<double>(comission2);
-    map['comission3'] = Variable<double>(comission3);
-    return map;
-  }
-
-  PartyComissionDetailCompanion toCompanion(bool nullToAbsent) {
-    return PartyComissionDetailCompanion(
-      id: Value(id),
-      pID: Value(pID),
-      mtID: Value(mtID),
-      comission1: Value(comission1),
-      comission2: Value(comission2),
-      comission3: Value(comission3),
-    );
-  }
-
-  factory PartyComissionDetailData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return PartyComissionDetailData(
-      id: serializer.fromJson<int>(json['id']),
-      pID: serializer.fromJson<int>(json['pID']),
-      mtID: serializer.fromJson<int>(json['mtID']),
-      comission1: serializer.fromJson<double>(json['comission1']),
-      comission2: serializer.fromJson<double>(json['comission2']),
-      comission3: serializer.fromJson<double>(json['comission3']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'pID': serializer.toJson<int>(pID),
-      'mtID': serializer.toJson<int>(mtID),
-      'comission1': serializer.toJson<double>(comission1),
-      'comission2': serializer.toJson<double>(comission2),
-      'comission3': serializer.toJson<double>(comission3),
-    };
-  }
-
-  PartyComissionDetailData copyWith(
-          {int? id,
-          int? pID,
-          int? mtID,
-          double? comission1,
-          double? comission2,
-          double? comission3}) =>
-      PartyComissionDetailData(
-        id: id ?? this.id,
-        pID: pID ?? this.pID,
-        mtID: mtID ?? this.mtID,
-        comission1: comission1 ?? this.comission1,
-        comission2: comission2 ?? this.comission2,
-        comission3: comission3 ?? this.comission3,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('PartyComissionDetailData(')
-          ..write('id: $id, ')
-          ..write('pID: $pID, ')
-          ..write('mtID: $mtID, ')
-          ..write('comission1: $comission1, ')
-          ..write('comission2: $comission2, ')
-          ..write('comission3: $comission3')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(id, pID, mtID, comission1, comission2, comission3);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is PartyComissionDetailData &&
-          other.id == this.id &&
-          other.pID == this.pID &&
-          other.mtID == this.mtID &&
-          other.comission1 == this.comission1 &&
-          other.comission2 == this.comission2 &&
-          other.comission3 == this.comission3);
-}
-
-class PartyComissionDetailCompanion
-    extends UpdateCompanion<PartyComissionDetailData> {
-  final Value<int> id;
-  final Value<int> pID;
-  final Value<int> mtID;
-  final Value<double> comission1;
-  final Value<double> comission2;
-  final Value<double> comission3;
-  const PartyComissionDetailCompanion({
-    this.id = const Value.absent(),
-    this.pID = const Value.absent(),
-    this.mtID = const Value.absent(),
-    this.comission1 = const Value.absent(),
-    this.comission2 = const Value.absent(),
-    this.comission3 = const Value.absent(),
-  });
-  PartyComissionDetailCompanion.insert({
-    this.id = const Value.absent(),
-    required int pID,
-    required int mtID,
-    required double comission1,
-    required double comission2,
-    required double comission3,
-  })  : pID = Value(pID),
-        mtID = Value(mtID),
-        comission1 = Value(comission1),
-        comission2 = Value(comission2),
-        comission3 = Value(comission3);
-  static Insertable<PartyComissionDetailData> custom({
-    Expression<int>? id,
-    Expression<int>? pID,
-    Expression<int>? mtID,
-    Expression<double>? comission1,
-    Expression<double>? comission2,
-    Expression<double>? comission3,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (pID != null) 'p_i_d': pID,
-      if (mtID != null) 'mt_i_d': mtID,
-      if (comission1 != null) 'comission1': comission1,
-      if (comission2 != null) 'comission2': comission2,
-      if (comission3 != null) 'comission3': comission3,
-    });
-  }
-
-  PartyComissionDetailCompanion copyWith(
-      {Value<int>? id,
-      Value<int>? pID,
-      Value<int>? mtID,
-      Value<double>? comission1,
-      Value<double>? comission2,
-      Value<double>? comission3}) {
-    return PartyComissionDetailCompanion(
-      id: id ?? this.id,
-      pID: pID ?? this.pID,
-      mtID: mtID ?? this.mtID,
-      comission1: comission1 ?? this.comission1,
-      comission2: comission2 ?? this.comission2,
-      comission3: comission3 ?? this.comission3,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (pID.present) {
-      map['p_i_d'] = Variable<int>(pID.value);
-    }
-    if (mtID.present) {
-      map['mt_i_d'] = Variable<int>(mtID.value);
-    }
-    if (comission1.present) {
-      map['comission1'] = Variable<double>(comission1.value);
-    }
-    if (comission2.present) {
-      map['comission2'] = Variable<double>(comission2.value);
-    }
-    if (comission3.present) {
-      map['comission3'] = Variable<double>(comission3.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('PartyComissionDetailCompanion(')
-          ..write('id: $id, ')
-          ..write('pID: $pID, ')
-          ..write('mtID: $mtID, ')
-          ..write('comission1: $comission1, ')
-          ..write('comission2: $comission2, ')
-          ..write('comission3: $comission3')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $PartyComissionDetailTable extends PartyComissionDetail
     with TableInfo<$PartyComissionDetailTable, PartyComissionDetailData> {
   @override
@@ -1099,9 +892,14 @@ class $PartyComissionDetailTable extends PartyComissionDetail
   late final GeneratedColumn<double> comission3 = GeneratedColumn<double>(
       'comission3', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _mpriceMeta = const VerificationMeta('mprice');
+  @override
+  late final GeneratedColumn<double> mprice = GeneratedColumn<double>(
+      'mprice', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, pID, mtID, comission1, comission2, comission3];
+      [id, pID, mtID, comission1, comission2, comission3, mprice];
   @override
   String get aliasedName => _alias ?? 'party_comission_detail';
   @override
@@ -1151,6 +949,12 @@ class $PartyComissionDetailTable extends PartyComissionDetail
     } else if (isInserting) {
       context.missing(_comission3Meta);
     }
+    if (data.containsKey('mprice')) {
+      context.handle(_mpriceMeta,
+          mprice.isAcceptableOrUnknown(data['mprice']!, _mpriceMeta));
+    } else if (isInserting) {
+      context.missing(_mpriceMeta);
+    }
     return context;
   }
 
@@ -1173,12 +977,712 @@ class $PartyComissionDetailTable extends PartyComissionDetail
           .read(DriftSqlType.double, data['${effectivePrefix}comission2'])!,
       comission3: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}comission3'])!,
+      mprice: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}mprice'])!,
     );
   }
 
   @override
   $PartyComissionDetailTable createAlias(String alias) {
     return $PartyComissionDetailTable(attachedDatabase, alias);
+  }
+}
+
+class PartyComissionDetailData extends DataClass
+    implements Insertable<PartyComissionDetailData> {
+  final int id;
+  final int pID;
+  final int mtID;
+  final double comission1;
+  final double comission2;
+  final double comission3;
+  final double mprice;
+  const PartyComissionDetailData(
+      {required this.id,
+      required this.pID,
+      required this.mtID,
+      required this.comission1,
+      required this.comission2,
+      required this.comission3,
+      required this.mprice});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['p_i_d'] = Variable<int>(pID);
+    map['mt_i_d'] = Variable<int>(mtID);
+    map['comission1'] = Variable<double>(comission1);
+    map['comission2'] = Variable<double>(comission2);
+    map['comission3'] = Variable<double>(comission3);
+    map['mprice'] = Variable<double>(mprice);
+    return map;
+  }
+
+  PartyComissionDetailCompanion toCompanion(bool nullToAbsent) {
+    return PartyComissionDetailCompanion(
+      id: Value(id),
+      pID: Value(pID),
+      mtID: Value(mtID),
+      comission1: Value(comission1),
+      comission2: Value(comission2),
+      comission3: Value(comission3),
+      mprice: Value(mprice),
+    );
+  }
+
+  factory PartyComissionDetailData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PartyComissionDetailData(
+      id: serializer.fromJson<int>(json['id']),
+      pID: serializer.fromJson<int>(json['pID']),
+      mtID: serializer.fromJson<int>(json['mtID']),
+      comission1: serializer.fromJson<double>(json['comission1']),
+      comission2: serializer.fromJson<double>(json['comission2']),
+      comission3: serializer.fromJson<double>(json['comission3']),
+      mprice: serializer.fromJson<double>(json['mprice']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'pID': serializer.toJson<int>(pID),
+      'mtID': serializer.toJson<int>(mtID),
+      'comission1': serializer.toJson<double>(comission1),
+      'comission2': serializer.toJson<double>(comission2),
+      'comission3': serializer.toJson<double>(comission3),
+      'mprice': serializer.toJson<double>(mprice),
+    };
+  }
+
+  PartyComissionDetailData copyWith(
+          {int? id,
+          int? pID,
+          int? mtID,
+          double? comission1,
+          double? comission2,
+          double? comission3,
+          double? mprice}) =>
+      PartyComissionDetailData(
+        id: id ?? this.id,
+        pID: pID ?? this.pID,
+        mtID: mtID ?? this.mtID,
+        comission1: comission1 ?? this.comission1,
+        comission2: comission2 ?? this.comission2,
+        comission3: comission3 ?? this.comission3,
+        mprice: mprice ?? this.mprice,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('PartyComissionDetailData(')
+          ..write('id: $id, ')
+          ..write('pID: $pID, ')
+          ..write('mtID: $mtID, ')
+          ..write('comission1: $comission1, ')
+          ..write('comission2: $comission2, ')
+          ..write('comission3: $comission3, ')
+          ..write('mprice: $mprice')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, pID, mtID, comission1, comission2, comission3, mprice);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PartyComissionDetailData &&
+          other.id == this.id &&
+          other.pID == this.pID &&
+          other.mtID == this.mtID &&
+          other.comission1 == this.comission1 &&
+          other.comission2 == this.comission2 &&
+          other.comission3 == this.comission3 &&
+          other.mprice == this.mprice);
+}
+
+class PartyComissionDetailCompanion
+    extends UpdateCompanion<PartyComissionDetailData> {
+  final Value<int> id;
+  final Value<int> pID;
+  final Value<int> mtID;
+  final Value<double> comission1;
+  final Value<double> comission2;
+  final Value<double> comission3;
+  final Value<double> mprice;
+  const PartyComissionDetailCompanion({
+    this.id = const Value.absent(),
+    this.pID = const Value.absent(),
+    this.mtID = const Value.absent(),
+    this.comission1 = const Value.absent(),
+    this.comission2 = const Value.absent(),
+    this.comission3 = const Value.absent(),
+    this.mprice = const Value.absent(),
+  });
+  PartyComissionDetailCompanion.insert({
+    this.id = const Value.absent(),
+    required int pID,
+    required int mtID,
+    required double comission1,
+    required double comission2,
+    required double comission3,
+    required double mprice,
+  })  : pID = Value(pID),
+        mtID = Value(mtID),
+        comission1 = Value(comission1),
+        comission2 = Value(comission2),
+        comission3 = Value(comission3),
+        mprice = Value(mprice);
+  static Insertable<PartyComissionDetailData> custom({
+    Expression<int>? id,
+    Expression<int>? pID,
+    Expression<int>? mtID,
+    Expression<double>? comission1,
+    Expression<double>? comission2,
+    Expression<double>? comission3,
+    Expression<double>? mprice,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (pID != null) 'p_i_d': pID,
+      if (mtID != null) 'mt_i_d': mtID,
+      if (comission1 != null) 'comission1': comission1,
+      if (comission2 != null) 'comission2': comission2,
+      if (comission3 != null) 'comission3': comission3,
+      if (mprice != null) 'mprice': mprice,
+    });
+  }
+
+  PartyComissionDetailCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? pID,
+      Value<int>? mtID,
+      Value<double>? comission1,
+      Value<double>? comission2,
+      Value<double>? comission3,
+      Value<double>? mprice}) {
+    return PartyComissionDetailCompanion(
+      id: id ?? this.id,
+      pID: pID ?? this.pID,
+      mtID: mtID ?? this.mtID,
+      comission1: comission1 ?? this.comission1,
+      comission2: comission2 ?? this.comission2,
+      comission3: comission3 ?? this.comission3,
+      mprice: mprice ?? this.mprice,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (pID.present) {
+      map['p_i_d'] = Variable<int>(pID.value);
+    }
+    if (mtID.present) {
+      map['mt_i_d'] = Variable<int>(mtID.value);
+    }
+    if (comission1.present) {
+      map['comission1'] = Variable<double>(comission1.value);
+    }
+    if (comission2.present) {
+      map['comission2'] = Variable<double>(comission2.value);
+    }
+    if (comission3.present) {
+      map['comission3'] = Variable<double>(comission3.value);
+    }
+    if (mprice.present) {
+      map['mprice'] = Variable<double>(mprice.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PartyComissionDetailCompanion(')
+          ..write('id: $id, ')
+          ..write('pID: $pID, ')
+          ..write('mtID: $mtID, ')
+          ..write('comission1: $comission1, ')
+          ..write('comission2: $comission2, ')
+          ..write('comission3: $comission3, ')
+          ..write('mprice: $mprice')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $InputDataTable extends InputData
+    with TableInfo<$InputDataTable, InputDataData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $InputDataTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _documentTypeMeta =
+      const VerificationMeta('documentType');
+  @override
+  late final GeneratedColumn<String> documentType = GeneratedColumn<String>(
+      'document_type', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _distDocDateMeta =
+      const VerificationMeta('distDocDate');
+  @override
+  late final GeneratedColumn<DateTime> distDocDate = GeneratedColumn<DateTime>(
+      'dist_doc_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _distDocNoMeta =
+      const VerificationMeta('distDocNo');
+  @override
+  late final GeneratedColumn<String> distDocNo = GeneratedColumn<String>(
+      'dist_doc_no', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _hospitalIDMeta =
+      const VerificationMeta('hospitalID');
+  @override
+  late final GeneratedColumn<int> hospitalID = GeneratedColumn<int>(
+      'hospital_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
+  static const VerificationMeta _custBillCityMeta =
+      const VerificationMeta('custBillCity');
+  @override
+  late final GeneratedColumn<String> custBillCity = GeneratedColumn<String>(
+      'cust_bill_city', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _matCodeMeta =
+      const VerificationMeta('matCode');
+  @override
+  late final GeneratedColumn<String> matCode = GeneratedColumn<String>(
+      'mat_code', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _matNameMeta =
+      const VerificationMeta('matName');
+  @override
+  late final GeneratedColumn<String> matName = GeneratedColumn<String>(
+      'mat_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _mtIDMeta = const VerificationMeta('mtID');
+  @override
+  late final GeneratedColumn<int> mtID = GeneratedColumn<int>(
+      'mt_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES material_type (id)'));
+  static const VerificationMeta _qtyMeta = const VerificationMeta('qty');
+  @override
+  late final GeneratedColumn<int> qty = GeneratedColumn<int>(
+      'qty', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _doctorIDMeta =
+      const VerificationMeta('doctorID');
+  @override
+  late final GeneratedColumn<int> doctorID = GeneratedColumn<int>(
+      'doctor_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
+  static const VerificationMeta _techniqalStaffIDMeta =
+      const VerificationMeta('techniqalStaffID');
+  @override
+  late final GeneratedColumn<int> techniqalStaffID = GeneratedColumn<int>(
+      'techniqal_staff_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
+  static const VerificationMeta _saleAmountMeta =
+      const VerificationMeta('saleAmount');
+  @override
+  late final GeneratedColumn<double> saleAmount = GeneratedColumn<double>(
+      'sale_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _totalSaleMeta =
+      const VerificationMeta('totalSale');
+  @override
+  late final GeneratedColumn<double> totalSale = GeneratedColumn<double>(
+      'total_sale', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _smtDocDateMeta =
+      const VerificationMeta('smtDocDate');
+  @override
+  late final GeneratedColumn<DateTime> smtDocDate = GeneratedColumn<DateTime>(
+      'smt_doc_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _smtDocNoMeta =
+      const VerificationMeta('smtDocNo');
+  @override
+  late final GeneratedColumn<String> smtDocNo = GeneratedColumn<String>(
+      'smt_doc_no', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _smtInvNoMeta =
+      const VerificationMeta('smtInvNo');
+  @override
+  late final GeneratedColumn<String> smtInvNo = GeneratedColumn<String>(
+      'smt_inv_no', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _purchaseTaxableAmountMeta =
+      const VerificationMeta('purchaseTaxableAmount');
+  @override
+  late final GeneratedColumn<double> purchaseTaxableAmount =
+      GeneratedColumn<double>('purchase_taxable_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _totalPurchaseAmountMeta =
+      const VerificationMeta('totalPurchaseAmount');
+  @override
+  late final GeneratedColumn<double> totalPurchaseAmount =
+      GeneratedColumn<double>('total_purchase_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _logIdMeta = const VerificationMeta('logId');
+  @override
+  late final GeneratedColumn<int> logId = GeneratedColumn<int>(
+      'log_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _generateLedgerIdMeta =
+      const VerificationMeta('generateLedgerId');
+  @override
+  late final GeneratedColumn<int> generateLedgerId = GeneratedColumn<int>(
+      'generate_ledger_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _paymentLedgerIdMeta =
+      const VerificationMeta('paymentLedgerId');
+  @override
+  late final GeneratedColumn<int> paymentLedgerId = GeneratedColumn<int>(
+      'payment_ledger_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _comissionMeta =
+      const VerificationMeta('comission');
+  @override
+  late final GeneratedColumn<double> comission = GeneratedColumn<double>(
+      'comission', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _comissionAmountMeta =
+      const VerificationMeta('comissionAmount');
+  @override
+  late final GeneratedColumn<double> comissionAmount = GeneratedColumn<double>(
+      'comission_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _comissionPaidDateMeta =
+      const VerificationMeta('comissionPaidDate');
+  @override
+  late final GeneratedColumn<DateTime> comissionPaidDate =
+      GeneratedColumn<DateTime>('comission_paid_date', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _adjustComissionAmountMeta =
+      const VerificationMeta('adjustComissionAmount');
+  @override
+  late final GeneratedColumn<double> adjustComissionAmount =
+      GeneratedColumn<double>('adjust_comission_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        documentType,
+        distDocDate,
+        distDocNo,
+        hospitalID,
+        custBillCity,
+        matCode,
+        matName,
+        mtID,
+        qty,
+        doctorID,
+        techniqalStaffID,
+        saleAmount,
+        totalSale,
+        smtDocDate,
+        smtDocNo,
+        smtInvNo,
+        purchaseTaxableAmount,
+        totalPurchaseAmount,
+        logId,
+        generateLedgerId,
+        paymentLedgerId,
+        comission,
+        comissionAmount,
+        comissionPaidDate,
+        adjustComissionAmount
+      ];
+  @override
+  String get aliasedName => _alias ?? 'input_data';
+  @override
+  String get actualTableName => 'input_data';
+  @override
+  VerificationContext validateIntegrity(Insertable<InputDataData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('document_type')) {
+      context.handle(
+          _documentTypeMeta,
+          documentType.isAcceptableOrUnknown(
+              data['document_type']!, _documentTypeMeta));
+    } else if (isInserting) {
+      context.missing(_documentTypeMeta);
+    }
+    if (data.containsKey('dist_doc_date')) {
+      context.handle(
+          _distDocDateMeta,
+          distDocDate.isAcceptableOrUnknown(
+              data['dist_doc_date']!, _distDocDateMeta));
+    } else if (isInserting) {
+      context.missing(_distDocDateMeta);
+    }
+    if (data.containsKey('dist_doc_no')) {
+      context.handle(
+          _distDocNoMeta,
+          distDocNo.isAcceptableOrUnknown(
+              data['dist_doc_no']!, _distDocNoMeta));
+    } else if (isInserting) {
+      context.missing(_distDocNoMeta);
+    }
+    if (data.containsKey('hospital_i_d')) {
+      context.handle(
+          _hospitalIDMeta,
+          hospitalID.isAcceptableOrUnknown(
+              data['hospital_i_d']!, _hospitalIDMeta));
+    } else if (isInserting) {
+      context.missing(_hospitalIDMeta);
+    }
+    if (data.containsKey('cust_bill_city')) {
+      context.handle(
+          _custBillCityMeta,
+          custBillCity.isAcceptableOrUnknown(
+              data['cust_bill_city']!, _custBillCityMeta));
+    } else if (isInserting) {
+      context.missing(_custBillCityMeta);
+    }
+    if (data.containsKey('mat_code')) {
+      context.handle(_matCodeMeta,
+          matCode.isAcceptableOrUnknown(data['mat_code']!, _matCodeMeta));
+    } else if (isInserting) {
+      context.missing(_matCodeMeta);
+    }
+    if (data.containsKey('mat_name')) {
+      context.handle(_matNameMeta,
+          matName.isAcceptableOrUnknown(data['mat_name']!, _matNameMeta));
+    } else if (isInserting) {
+      context.missing(_matNameMeta);
+    }
+    if (data.containsKey('mt_i_d')) {
+      context.handle(
+          _mtIDMeta, mtID.isAcceptableOrUnknown(data['mt_i_d']!, _mtIDMeta));
+    } else if (isInserting) {
+      context.missing(_mtIDMeta);
+    }
+    if (data.containsKey('qty')) {
+      context.handle(
+          _qtyMeta, qty.isAcceptableOrUnknown(data['qty']!, _qtyMeta));
+    } else if (isInserting) {
+      context.missing(_qtyMeta);
+    }
+    if (data.containsKey('doctor_i_d')) {
+      context.handle(_doctorIDMeta,
+          doctorID.isAcceptableOrUnknown(data['doctor_i_d']!, _doctorIDMeta));
+    } else if (isInserting) {
+      context.missing(_doctorIDMeta);
+    }
+    if (data.containsKey('techniqal_staff_i_d')) {
+      context.handle(
+          _techniqalStaffIDMeta,
+          techniqalStaffID.isAcceptableOrUnknown(
+              data['techniqal_staff_i_d']!, _techniqalStaffIDMeta));
+    } else if (isInserting) {
+      context.missing(_techniqalStaffIDMeta);
+    }
+    if (data.containsKey('sale_amount')) {
+      context.handle(
+          _saleAmountMeta,
+          saleAmount.isAcceptableOrUnknown(
+              data['sale_amount']!, _saleAmountMeta));
+    } else if (isInserting) {
+      context.missing(_saleAmountMeta);
+    }
+    if (data.containsKey('total_sale')) {
+      context.handle(_totalSaleMeta,
+          totalSale.isAcceptableOrUnknown(data['total_sale']!, _totalSaleMeta));
+    } else if (isInserting) {
+      context.missing(_totalSaleMeta);
+    }
+    if (data.containsKey('smt_doc_date')) {
+      context.handle(
+          _smtDocDateMeta,
+          smtDocDate.isAcceptableOrUnknown(
+              data['smt_doc_date']!, _smtDocDateMeta));
+    } else if (isInserting) {
+      context.missing(_smtDocDateMeta);
+    }
+    if (data.containsKey('smt_doc_no')) {
+      context.handle(_smtDocNoMeta,
+          smtDocNo.isAcceptableOrUnknown(data['smt_doc_no']!, _smtDocNoMeta));
+    } else if (isInserting) {
+      context.missing(_smtDocNoMeta);
+    }
+    if (data.containsKey('smt_inv_no')) {
+      context.handle(_smtInvNoMeta,
+          smtInvNo.isAcceptableOrUnknown(data['smt_inv_no']!, _smtInvNoMeta));
+    } else if (isInserting) {
+      context.missing(_smtInvNoMeta);
+    }
+    if (data.containsKey('purchase_taxable_amount')) {
+      context.handle(
+          _purchaseTaxableAmountMeta,
+          purchaseTaxableAmount.isAcceptableOrUnknown(
+              data['purchase_taxable_amount']!, _purchaseTaxableAmountMeta));
+    } else if (isInserting) {
+      context.missing(_purchaseTaxableAmountMeta);
+    }
+    if (data.containsKey('total_purchase_amount')) {
+      context.handle(
+          _totalPurchaseAmountMeta,
+          totalPurchaseAmount.isAcceptableOrUnknown(
+              data['total_purchase_amount']!, _totalPurchaseAmountMeta));
+    } else if (isInserting) {
+      context.missing(_totalPurchaseAmountMeta);
+    }
+    if (data.containsKey('log_id')) {
+      context.handle(
+          _logIdMeta, logId.isAcceptableOrUnknown(data['log_id']!, _logIdMeta));
+    } else if (isInserting) {
+      context.missing(_logIdMeta);
+    }
+    if (data.containsKey('generate_ledger_id')) {
+      context.handle(
+          _generateLedgerIdMeta,
+          generateLedgerId.isAcceptableOrUnknown(
+              data['generate_ledger_id']!, _generateLedgerIdMeta));
+    } else if (isInserting) {
+      context.missing(_generateLedgerIdMeta);
+    }
+    if (data.containsKey('payment_ledger_id')) {
+      context.handle(
+          _paymentLedgerIdMeta,
+          paymentLedgerId.isAcceptableOrUnknown(
+              data['payment_ledger_id']!, _paymentLedgerIdMeta));
+    } else if (isInserting) {
+      context.missing(_paymentLedgerIdMeta);
+    }
+    if (data.containsKey('comission')) {
+      context.handle(_comissionMeta,
+          comission.isAcceptableOrUnknown(data['comission']!, _comissionMeta));
+    } else if (isInserting) {
+      context.missing(_comissionMeta);
+    }
+    if (data.containsKey('comission_amount')) {
+      context.handle(
+          _comissionAmountMeta,
+          comissionAmount.isAcceptableOrUnknown(
+              data['comission_amount']!, _comissionAmountMeta));
+    } else if (isInserting) {
+      context.missing(_comissionAmountMeta);
+    }
+    if (data.containsKey('comission_paid_date')) {
+      context.handle(
+          _comissionPaidDateMeta,
+          comissionPaidDate.isAcceptableOrUnknown(
+              data['comission_paid_date']!, _comissionPaidDateMeta));
+    } else if (isInserting) {
+      context.missing(_comissionPaidDateMeta);
+    }
+    if (data.containsKey('adjust_comission_amount')) {
+      context.handle(
+          _adjustComissionAmountMeta,
+          adjustComissionAmount.isAcceptableOrUnknown(
+              data['adjust_comission_amount']!, _adjustComissionAmountMeta));
+    } else if (isInserting) {
+      context.missing(_adjustComissionAmountMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  InputDataData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return InputDataData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      documentType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}document_type'])!,
+      distDocDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}dist_doc_date'])!,
+      distDocNo: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}dist_doc_no'])!,
+      hospitalID: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}hospital_i_d'])!,
+      custBillCity: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cust_bill_city'])!,
+      matCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}mat_code'])!,
+      matName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}mat_name'])!,
+      mtID: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}mt_i_d'])!,
+      qty: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}qty'])!,
+      doctorID: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}doctor_i_d'])!,
+      techniqalStaffID: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}techniqal_staff_i_d'])!,
+      saleAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}sale_amount'])!,
+      totalSale: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}total_sale'])!,
+      smtDocDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}smt_doc_date'])!,
+      smtDocNo: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}smt_doc_no'])!,
+      smtInvNo: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}smt_inv_no'])!,
+      purchaseTaxableAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}purchase_taxable_amount'])!,
+      totalPurchaseAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}total_purchase_amount'])!,
+      logId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}log_id'])!,
+      generateLedgerId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}generate_ledger_id'])!,
+      paymentLedgerId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}payment_ledger_id'])!,
+      comission: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}comission'])!,
+      comissionAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}comission_amount'])!,
+      comissionPaidDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}comission_paid_date'])!,
+      adjustComissionAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}adjust_comission_amount'])!,
+    );
+  }
+
+  @override
+  $InputDataTable createAlias(String alias) {
+    return $InputDataTable(attachedDatabase, alias);
   }
 }
 
@@ -1867,12 +2371,11 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
   }
 }
 
-class $InputDataTable extends InputData
-    with TableInfo<$InputDataTable, InputDataData> {
+class $LedgerTable extends Ledger with TableInfo<$LedgerTable, LedgerData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $InputDataTable(this.attachedDatabase, [this._alias]);
+  $LedgerTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1882,385 +2385,134 @@ class $InputDataTable extends InputData
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _documentTypeMeta =
-      const VerificationMeta('documentType');
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
-  late final GeneratedColumn<String> documentType = GeneratedColumn<String>(
-      'document_type', aliasedName, false,
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _distDocDateMeta =
-      const VerificationMeta('distDocDate');
+  static const VerificationMeta _pIDMeta = const VerificationMeta('pID');
   @override
-  late final GeneratedColumn<DateTime> distDocDate = GeneratedColumn<DateTime>(
-      'dist_doc_date', aliasedName, false,
+  late final GeneratedColumn<int> pID = GeneratedColumn<int>(
+      'p_i_d', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
+  static const VerificationMeta _ledgerDateMeta =
+      const VerificationMeta('ledgerDate');
+  @override
+  late final GeneratedColumn<DateTime> ledgerDate = GeneratedColumn<DateTime>(
+      'ledger_date', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _distDocNoMeta =
-      const VerificationMeta('distDocNo');
+  static const VerificationMeta _drAmountMeta =
+      const VerificationMeta('drAmount');
   @override
-  late final GeneratedColumn<String> distDocNo = GeneratedColumn<String>(
-      'dist_doc_no', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _hospitalIDMeta =
-      const VerificationMeta('hospitalID');
-  @override
-  late final GeneratedColumn<int> hospitalID = GeneratedColumn<int>(
-      'hospital_i_d', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
-  static const VerificationMeta _custBillCityMeta =
-      const VerificationMeta('custBillCity');
-  @override
-  late final GeneratedColumn<String> custBillCity = GeneratedColumn<String>(
-      'cust_bill_city', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _matCodeMeta =
-      const VerificationMeta('matCode');
-  @override
-  late final GeneratedColumn<String> matCode = GeneratedColumn<String>(
-      'mat_code', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _matNameMeta =
-      const VerificationMeta('matName');
-  @override
-  late final GeneratedColumn<String> matName = GeneratedColumn<String>(
-      'mat_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _mtIDMeta = const VerificationMeta('mtID');
-  @override
-  late final GeneratedColumn<int> mtID = GeneratedColumn<int>(
-      'mt_i_d', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES material_type (id)'));
-  static const VerificationMeta _qtyMeta = const VerificationMeta('qty');
-  @override
-  late final GeneratedColumn<int> qty = GeneratedColumn<int>(
-      'qty', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _doctorIDMeta =
-      const VerificationMeta('doctorID');
-  @override
-  late final GeneratedColumn<int> doctorID = GeneratedColumn<int>(
-      'doctor_i_d', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
-  static const VerificationMeta _techniqalStaffIDMeta =
-      const VerificationMeta('techniqalStaffID');
-  @override
-  late final GeneratedColumn<int> techniqalStaffID = GeneratedColumn<int>(
-      'techniqal_staff_i_d', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
-  static const VerificationMeta _saleAmountMeta =
-      const VerificationMeta('saleAmount');
-  @override
-  late final GeneratedColumn<double> saleAmount = GeneratedColumn<double>(
-      'sale_amount', aliasedName, false,
+  late final GeneratedColumn<double> drAmount = GeneratedColumn<double>(
+      'dr_amount', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _totalSaleMeta =
-      const VerificationMeta('totalSale');
+  static const VerificationMeta _crAmountMeta =
+      const VerificationMeta('crAmount');
   @override
-  late final GeneratedColumn<double> totalSale = GeneratedColumn<double>(
-      'total_sale', aliasedName, false,
+  late final GeneratedColumn<double> crAmount = GeneratedColumn<double>(
+      'cr_amount', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _smtDocDateMeta =
-      const VerificationMeta('smtDocDate');
+  static const VerificationMeta _extradrAmountMeta =
+      const VerificationMeta('extradrAmount');
   @override
-  late final GeneratedColumn<DateTime> smtDocDate = GeneratedColumn<DateTime>(
-      'smt_doc_date', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _smtDocNoMeta =
-      const VerificationMeta('smtDocNo');
+  late final GeneratedColumn<double> extradrAmount = GeneratedColumn<double>(
+      'extradr_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _extracrAmountMeta =
+      const VerificationMeta('extracrAmount');
   @override
-  late final GeneratedColumn<String> smtDocNo = GeneratedColumn<String>(
-      'smt_doc_no', aliasedName, false,
+  late final GeneratedColumn<double> extracrAmount = GeneratedColumn<double>(
+      'extracr_amount', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _ledgerNoteMeta =
+      const VerificationMeta('ledgerNote');
+  @override
+  late final GeneratedColumn<String> ledgerNote = GeneratedColumn<String>(
+      'ledger_note', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _smtInvNoMeta =
-      const VerificationMeta('smtInvNo');
-  @override
-  late final GeneratedColumn<String> smtInvNo = GeneratedColumn<String>(
-      'smt_inv_no', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _purchaseTaxableAmountMeta =
-      const VerificationMeta('purchaseTaxableAmount');
-  @override
-  late final GeneratedColumn<double> purchaseTaxableAmount =
-      GeneratedColumn<double>('purchase_taxable_amount', aliasedName, false,
-          type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _totalPurchaseAmountMeta =
-      const VerificationMeta('totalPurchaseAmount');
-  @override
-  late final GeneratedColumn<double> totalPurchaseAmount =
-      GeneratedColumn<double>('total_purchase_amount', aliasedName, false,
-          type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _logIdMeta = const VerificationMeta('logId');
-  @override
-  late final GeneratedColumn<int> logId = GeneratedColumn<int>(
-      'log_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _generateLedgerIdMeta =
-      const VerificationMeta('generateLedgerId');
-  @override
-  late final GeneratedColumn<int> generateLedgerId = GeneratedColumn<int>(
-      'generate_ledger_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _paymentLedgerIdMeta =
-      const VerificationMeta('paymentLedgerId');
-  @override
-  late final GeneratedColumn<int> paymentLedgerId = GeneratedColumn<int>(
-      'payment_ledger_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _comissionMeta =
-      const VerificationMeta('comission');
-  @override
-  late final GeneratedColumn<double> comission = GeneratedColumn<double>(
-      'comission', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _comissionAmountMeta =
-      const VerificationMeta('comissionAmount');
-  @override
-  late final GeneratedColumn<double> comissionAmount = GeneratedColumn<double>(
-      'comission_amount', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _comissionPaidDateMeta =
-      const VerificationMeta('comissionPaidDate');
-  @override
-  late final GeneratedColumn<DateTime> comissionPaidDate =
-      GeneratedColumn<DateTime>('comission_paid_date', aliasedName, false,
-          type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _adjustComissionAmountMeta =
-      const VerificationMeta('adjustComissionAmount');
-  @override
-  late final GeneratedColumn<double> adjustComissionAmount =
-      GeneratedColumn<double>('adjust_comission_amount', aliasedName, false,
-          type: DriftSqlType.double, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
-        documentType,
-        distDocDate,
-        distDocNo,
-        hospitalID,
-        custBillCity,
-        matCode,
-        matName,
-        mtID,
-        qty,
-        doctorID,
-        techniqalStaffID,
-        saleAmount,
-        totalSale,
-        smtDocDate,
-        smtDocNo,
-        smtInvNo,
-        purchaseTaxableAmount,
-        totalPurchaseAmount,
-        logId,
-        generateLedgerId,
-        paymentLedgerId,
-        comission,
-        comissionAmount,
-        comissionPaidDate,
-        adjustComissionAmount
+        type,
+        pID,
+        ledgerDate,
+        drAmount,
+        crAmount,
+        extradrAmount,
+        extracrAmount,
+        ledgerNote
       ];
   @override
-  String get aliasedName => _alias ?? 'input_data';
+  String get aliasedName => _alias ?? 'ledger';
   @override
-  String get actualTableName => 'input_data';
+  String get actualTableName => 'ledger';
   @override
-  VerificationContext validateIntegrity(Insertable<InputDataData> instance,
+  VerificationContext validateIntegrity(Insertable<LedgerData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('document_type')) {
+    if (data.containsKey('type')) {
       context.handle(
-          _documentTypeMeta,
-          documentType.isAcceptableOrUnknown(
-              data['document_type']!, _documentTypeMeta));
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
     } else if (isInserting) {
-      context.missing(_documentTypeMeta);
+      context.missing(_typeMeta);
     }
-    if (data.containsKey('dist_doc_date')) {
+    if (data.containsKey('p_i_d')) {
       context.handle(
-          _distDocDateMeta,
-          distDocDate.isAcceptableOrUnknown(
-              data['dist_doc_date']!, _distDocDateMeta));
+          _pIDMeta, pID.isAcceptableOrUnknown(data['p_i_d']!, _pIDMeta));
     } else if (isInserting) {
-      context.missing(_distDocDateMeta);
+      context.missing(_pIDMeta);
     }
-    if (data.containsKey('dist_doc_no')) {
+    if (data.containsKey('ledger_date')) {
       context.handle(
-          _distDocNoMeta,
-          distDocNo.isAcceptableOrUnknown(
-              data['dist_doc_no']!, _distDocNoMeta));
+          _ledgerDateMeta,
+          ledgerDate.isAcceptableOrUnknown(
+              data['ledger_date']!, _ledgerDateMeta));
     } else if (isInserting) {
-      context.missing(_distDocNoMeta);
+      context.missing(_ledgerDateMeta);
     }
-    if (data.containsKey('hospital_i_d')) {
+    if (data.containsKey('dr_amount')) {
+      context.handle(_drAmountMeta,
+          drAmount.isAcceptableOrUnknown(data['dr_amount']!, _drAmountMeta));
+    } else if (isInserting) {
+      context.missing(_drAmountMeta);
+    }
+    if (data.containsKey('cr_amount')) {
+      context.handle(_crAmountMeta,
+          crAmount.isAcceptableOrUnknown(data['cr_amount']!, _crAmountMeta));
+    } else if (isInserting) {
+      context.missing(_crAmountMeta);
+    }
+    if (data.containsKey('extradr_amount')) {
       context.handle(
-          _hospitalIDMeta,
-          hospitalID.isAcceptableOrUnknown(
-              data['hospital_i_d']!, _hospitalIDMeta));
+          _extradrAmountMeta,
+          extradrAmount.isAcceptableOrUnknown(
+              data['extradr_amount']!, _extradrAmountMeta));
     } else if (isInserting) {
-      context.missing(_hospitalIDMeta);
+      context.missing(_extradrAmountMeta);
     }
-    if (data.containsKey('cust_bill_city')) {
+    if (data.containsKey('extracr_amount')) {
       context.handle(
-          _custBillCityMeta,
-          custBillCity.isAcceptableOrUnknown(
-              data['cust_bill_city']!, _custBillCityMeta));
+          _extracrAmountMeta,
+          extracrAmount.isAcceptableOrUnknown(
+              data['extracr_amount']!, _extracrAmountMeta));
     } else if (isInserting) {
-      context.missing(_custBillCityMeta);
+      context.missing(_extracrAmountMeta);
     }
-    if (data.containsKey('mat_code')) {
-      context.handle(_matCodeMeta,
-          matCode.isAcceptableOrUnknown(data['mat_code']!, _matCodeMeta));
-    } else if (isInserting) {
-      context.missing(_matCodeMeta);
-    }
-    if (data.containsKey('mat_name')) {
-      context.handle(_matNameMeta,
-          matName.isAcceptableOrUnknown(data['mat_name']!, _matNameMeta));
-    } else if (isInserting) {
-      context.missing(_matNameMeta);
-    }
-    if (data.containsKey('mt_i_d')) {
+    if (data.containsKey('ledger_note')) {
       context.handle(
-          _mtIDMeta, mtID.isAcceptableOrUnknown(data['mt_i_d']!, _mtIDMeta));
+          _ledgerNoteMeta,
+          ledgerNote.isAcceptableOrUnknown(
+              data['ledger_note']!, _ledgerNoteMeta));
     } else if (isInserting) {
-      context.missing(_mtIDMeta);
-    }
-    if (data.containsKey('qty')) {
-      context.handle(
-          _qtyMeta, qty.isAcceptableOrUnknown(data['qty']!, _qtyMeta));
-    } else if (isInserting) {
-      context.missing(_qtyMeta);
-    }
-    if (data.containsKey('doctor_i_d')) {
-      context.handle(_doctorIDMeta,
-          doctorID.isAcceptableOrUnknown(data['doctor_i_d']!, _doctorIDMeta));
-    } else if (isInserting) {
-      context.missing(_doctorIDMeta);
-    }
-    if (data.containsKey('techniqal_staff_i_d')) {
-      context.handle(
-          _techniqalStaffIDMeta,
-          techniqalStaffID.isAcceptableOrUnknown(
-              data['techniqal_staff_i_d']!, _techniqalStaffIDMeta));
-    } else if (isInserting) {
-      context.missing(_techniqalStaffIDMeta);
-    }
-    if (data.containsKey('sale_amount')) {
-      context.handle(
-          _saleAmountMeta,
-          saleAmount.isAcceptableOrUnknown(
-              data['sale_amount']!, _saleAmountMeta));
-    } else if (isInserting) {
-      context.missing(_saleAmountMeta);
-    }
-    if (data.containsKey('total_sale')) {
-      context.handle(_totalSaleMeta,
-          totalSale.isAcceptableOrUnknown(data['total_sale']!, _totalSaleMeta));
-    } else if (isInserting) {
-      context.missing(_totalSaleMeta);
-    }
-    if (data.containsKey('smt_doc_date')) {
-      context.handle(
-          _smtDocDateMeta,
-          smtDocDate.isAcceptableOrUnknown(
-              data['smt_doc_date']!, _smtDocDateMeta));
-    } else if (isInserting) {
-      context.missing(_smtDocDateMeta);
-    }
-    if (data.containsKey('smt_doc_no')) {
-      context.handle(_smtDocNoMeta,
-          smtDocNo.isAcceptableOrUnknown(data['smt_doc_no']!, _smtDocNoMeta));
-    } else if (isInserting) {
-      context.missing(_smtDocNoMeta);
-    }
-    if (data.containsKey('smt_inv_no')) {
-      context.handle(_smtInvNoMeta,
-          smtInvNo.isAcceptableOrUnknown(data['smt_inv_no']!, _smtInvNoMeta));
-    } else if (isInserting) {
-      context.missing(_smtInvNoMeta);
-    }
-    if (data.containsKey('purchase_taxable_amount')) {
-      context.handle(
-          _purchaseTaxableAmountMeta,
-          purchaseTaxableAmount.isAcceptableOrUnknown(
-              data['purchase_taxable_amount']!, _purchaseTaxableAmountMeta));
-    } else if (isInserting) {
-      context.missing(_purchaseTaxableAmountMeta);
-    }
-    if (data.containsKey('total_purchase_amount')) {
-      context.handle(
-          _totalPurchaseAmountMeta,
-          totalPurchaseAmount.isAcceptableOrUnknown(
-              data['total_purchase_amount']!, _totalPurchaseAmountMeta));
-    } else if (isInserting) {
-      context.missing(_totalPurchaseAmountMeta);
-    }
-    if (data.containsKey('log_id')) {
-      context.handle(
-          _logIdMeta, logId.isAcceptableOrUnknown(data['log_id']!, _logIdMeta));
-    } else if (isInserting) {
-      context.missing(_logIdMeta);
-    }
-    if (data.containsKey('generate_ledger_id')) {
-      context.handle(
-          _generateLedgerIdMeta,
-          generateLedgerId.isAcceptableOrUnknown(
-              data['generate_ledger_id']!, _generateLedgerIdMeta));
-    } else if (isInserting) {
-      context.missing(_generateLedgerIdMeta);
-    }
-    if (data.containsKey('payment_ledger_id')) {
-      context.handle(
-          _paymentLedgerIdMeta,
-          paymentLedgerId.isAcceptableOrUnknown(
-              data['payment_ledger_id']!, _paymentLedgerIdMeta));
-    } else if (isInserting) {
-      context.missing(_paymentLedgerIdMeta);
-    }
-    if (data.containsKey('comission')) {
-      context.handle(_comissionMeta,
-          comission.isAcceptableOrUnknown(data['comission']!, _comissionMeta));
-    } else if (isInserting) {
-      context.missing(_comissionMeta);
-    }
-    if (data.containsKey('comission_amount')) {
-      context.handle(
-          _comissionAmountMeta,
-          comissionAmount.isAcceptableOrUnknown(
-              data['comission_amount']!, _comissionAmountMeta));
-    } else if (isInserting) {
-      context.missing(_comissionAmountMeta);
-    }
-    if (data.containsKey('comission_paid_date')) {
-      context.handle(
-          _comissionPaidDateMeta,
-          comissionPaidDate.isAcceptableOrUnknown(
-              data['comission_paid_date']!, _comissionPaidDateMeta));
-    } else if (isInserting) {
-      context.missing(_comissionPaidDateMeta);
-    }
-    if (data.containsKey('adjust_comission_amount')) {
-      context.handle(
-          _adjustComissionAmountMeta,
-          adjustComissionAmount.isAcceptableOrUnknown(
-              data['adjust_comission_amount']!, _adjustComissionAmountMeta));
-    } else if (isInserting) {
-      context.missing(_adjustComissionAmountMeta);
+      context.missing(_ledgerNoteMeta);
     }
     return context;
   }
@@ -2268,71 +2520,33 @@ class $InputDataTable extends InputData
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  InputDataData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  LedgerData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return InputDataData(
+    return LedgerData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      documentType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}document_type'])!,
-      distDocDate: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime, data['${effectivePrefix}dist_doc_date'])!,
-      distDocNo: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}dist_doc_no'])!,
-      hospitalID: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}hospital_i_d'])!,
-      custBillCity: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}cust_bill_city'])!,
-      matCode: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}mat_code'])!,
-      matName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}mat_name'])!,
-      mtID: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}mt_i_d'])!,
-      qty: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}qty'])!,
-      doctorID: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}doctor_i_d'])!,
-      techniqalStaffID: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}techniqal_staff_i_d'])!,
-      saleAmount: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}sale_amount'])!,
-      totalSale: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}total_sale'])!,
-      smtDocDate: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}smt_doc_date'])!,
-      smtDocNo: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}smt_doc_no'])!,
-      smtInvNo: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}smt_inv_no'])!,
-      purchaseTaxableAmount: attachedDatabase.typeMapping.read(
-          DriftSqlType.double,
-          data['${effectivePrefix}purchase_taxable_amount'])!,
-      totalPurchaseAmount: attachedDatabase.typeMapping.read(
-          DriftSqlType.double,
-          data['${effectivePrefix}total_purchase_amount'])!,
-      logId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}log_id'])!,
-      generateLedgerId: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}generate_ledger_id'])!,
-      paymentLedgerId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}payment_ledger_id'])!,
-      comission: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}comission'])!,
-      comissionAmount: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}comission_amount'])!,
-      comissionPaidDate: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime,
-          data['${effectivePrefix}comission_paid_date'])!,
-      adjustComissionAmount: attachedDatabase.typeMapping.read(
-          DriftSqlType.double,
-          data['${effectivePrefix}adjust_comission_amount'])!,
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
+      pID: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}p_i_d'])!,
+      ledgerDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}ledger_date'])!,
+      drAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}dr_amount'])!,
+      crAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}cr_amount'])!,
+      extradrAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}extradr_amount'])!,
+      extracrAmount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}extracr_amount'])!,
+      ledgerNote: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ledger_note'])!,
     );
   }
 
   @override
-  $InputDataTable createAlias(String alias) {
-    return $InputDataTable(attachedDatabase, alias);
+  $LedgerTable createAlias(String alias) {
+    return $LedgerTable(attachedDatabase, alias);
   }
 }
 
@@ -2604,185 +2818,6 @@ class LedgerCompanion extends UpdateCompanion<LedgerData> {
           ..write('ledgerNote: $ledgerNote')
           ..write(')'))
         .toString();
-  }
-}
-
-class $LedgerTable extends Ledger with TableInfo<$LedgerTable, LedgerData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $LedgerTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
-  @override
-  late final GeneratedColumn<String> type = GeneratedColumn<String>(
-      'type', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _pIDMeta = const VerificationMeta('pID');
-  @override
-  late final GeneratedColumn<int> pID = GeneratedColumn<int>(
-      'p_i_d', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES party_master (id)'));
-  static const VerificationMeta _ledgerDateMeta =
-      const VerificationMeta('ledgerDate');
-  @override
-  late final GeneratedColumn<DateTime> ledgerDate = GeneratedColumn<DateTime>(
-      'ledger_date', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _drAmountMeta =
-      const VerificationMeta('drAmount');
-  @override
-  late final GeneratedColumn<double> drAmount = GeneratedColumn<double>(
-      'dr_amount', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _crAmountMeta =
-      const VerificationMeta('crAmount');
-  @override
-  late final GeneratedColumn<double> crAmount = GeneratedColumn<double>(
-      'cr_amount', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _extradrAmountMeta =
-      const VerificationMeta('extradrAmount');
-  @override
-  late final GeneratedColumn<double> extradrAmount = GeneratedColumn<double>(
-      'extradr_amount', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _extracrAmountMeta =
-      const VerificationMeta('extracrAmount');
-  @override
-  late final GeneratedColumn<double> extracrAmount = GeneratedColumn<double>(
-      'extracr_amount', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _ledgerNoteMeta =
-      const VerificationMeta('ledgerNote');
-  @override
-  late final GeneratedColumn<String> ledgerNote = GeneratedColumn<String>(
-      'ledger_note', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        type,
-        pID,
-        ledgerDate,
-        drAmount,
-        crAmount,
-        extradrAmount,
-        extracrAmount,
-        ledgerNote
-      ];
-  @override
-  String get aliasedName => _alias ?? 'ledger';
-  @override
-  String get actualTableName => 'ledger';
-  @override
-  VerificationContext validateIntegrity(Insertable<LedgerData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('type')) {
-      context.handle(
-          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
-    } else if (isInserting) {
-      context.missing(_typeMeta);
-    }
-    if (data.containsKey('p_i_d')) {
-      context.handle(
-          _pIDMeta, pID.isAcceptableOrUnknown(data['p_i_d']!, _pIDMeta));
-    } else if (isInserting) {
-      context.missing(_pIDMeta);
-    }
-    if (data.containsKey('ledger_date')) {
-      context.handle(
-          _ledgerDateMeta,
-          ledgerDate.isAcceptableOrUnknown(
-              data['ledger_date']!, _ledgerDateMeta));
-    } else if (isInserting) {
-      context.missing(_ledgerDateMeta);
-    }
-    if (data.containsKey('dr_amount')) {
-      context.handle(_drAmountMeta,
-          drAmount.isAcceptableOrUnknown(data['dr_amount']!, _drAmountMeta));
-    } else if (isInserting) {
-      context.missing(_drAmountMeta);
-    }
-    if (data.containsKey('cr_amount')) {
-      context.handle(_crAmountMeta,
-          crAmount.isAcceptableOrUnknown(data['cr_amount']!, _crAmountMeta));
-    } else if (isInserting) {
-      context.missing(_crAmountMeta);
-    }
-    if (data.containsKey('extradr_amount')) {
-      context.handle(
-          _extradrAmountMeta,
-          extradrAmount.isAcceptableOrUnknown(
-              data['extradr_amount']!, _extradrAmountMeta));
-    } else if (isInserting) {
-      context.missing(_extradrAmountMeta);
-    }
-    if (data.containsKey('extracr_amount')) {
-      context.handle(
-          _extracrAmountMeta,
-          extracrAmount.isAcceptableOrUnknown(
-              data['extracr_amount']!, _extracrAmountMeta));
-    } else if (isInserting) {
-      context.missing(_extracrAmountMeta);
-    }
-    if (data.containsKey('ledger_note')) {
-      context.handle(
-          _ledgerNoteMeta,
-          ledgerNote.isAcceptableOrUnknown(
-              data['ledger_note']!, _ledgerNoteMeta));
-    } else if (isInserting) {
-      context.missing(_ledgerNoteMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  LedgerData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return LedgerData(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      type: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}type'])!,
-      pID: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}p_i_d'])!,
-      ledgerDate: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}ledger_date'])!,
-      drAmount: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}dr_amount'])!,
-      crAmount: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}cr_amount'])!,
-      extradrAmount: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}extradr_amount'])!,
-      extracrAmount: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}extracr_amount'])!,
-      ledgerNote: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}ledger_note'])!,
-    );
-  }
-
-  @override
-  $LedgerTable createAlias(String alias) {
-    return $LedgerTable(attachedDatabase, alias);
   }
 }
 
