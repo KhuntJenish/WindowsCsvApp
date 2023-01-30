@@ -587,14 +587,16 @@ class ImportReport extends StatelessWidget {
                                                                     element.name
                                                                         .contains(
                                                                             doctor));
-
-                                                        var technicianParty =
-                                                            _homepageController
-                                                                .partyList!
-                                                                .firstWhere((element) =>
-                                                                    element.name
-                                                                        .contains(
-                                                                            technician));
+                                                        var technicianParty;
+                                                        if (technician != "") {
+                                                          technicianParty =
+                                                              _homepageController
+                                                                  .partyList!
+                                                                  .firstWhere((element) => element
+                                                                      .name
+                                                                      .contains(
+                                                                          technician));
+                                                        }
                                                         var itemAmount = double.parse(
                                                             _homepageController
                                                                 .pendingReportData[
@@ -607,6 +609,9 @@ class ImportReport extends StatelessWidget {
                                                                 .checkMaterialType(
                                                                     materialType);
                                                         print(isShowAddMt);
+                                                        print(
+                                                            _homepageController
+                                                                .partyList);
                                                         // print(hospitalParty);
 
                                                         Get.bottomSheet(
@@ -619,11 +624,17 @@ class ImportReport extends StatelessWidget {
                                                             comissionPercentage:
                                                                 '',
                                                             doctorParty:
-                                                                docotrParty,
+                                                                doctor != ""
+                                                                    ? docotrParty
+                                                                    : null,
                                                             technicianParty:
-                                                                technicianParty,
+                                                                technician != ""
+                                                                    ? technicianParty
+                                                                    : null,
                                                             hospitalParty:
-                                                                hospitalParty,
+                                                                hospital != ""
+                                                                    ? hospitalParty
+                                                                    : null,
                                                             btnText: btnText,
                                                             isShowAddMt:
                                                                 isShowAddMt.obs,
@@ -633,6 +644,18 @@ class ImportReport extends StatelessWidget {
                                                                         materialType),
                                                             homepageController:
                                                                 _homepageController,
+                                                            isShowTechnician:
+                                                                technician != ""
+                                                                    ? true
+                                                                    : false,
+                                                            isShowHospital:
+                                                                hospital != ""
+                                                                    ? true
+                                                                    : false,
+                                                            isShowDoctor:
+                                                                doctor != ""
+                                                                    ? true
+                                                                    : false,
                                                           ),
                                                         );
                                                       },

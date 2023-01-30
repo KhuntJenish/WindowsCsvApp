@@ -198,27 +198,55 @@ class PartyComissionBottomSheet extends StatelessWidget {
                             .checkMaterialType(materialType.text);
 
                         if (isMt) {
-                          for (var i = 1; i <= 3; i++) {
-                            partyID = i == 1
-                                ? hospitalParty?.id
-                                : i == 2
-                                    ? doctorParty?.id
-                                    : technicianParty?.id;
-                            var mtID = _partyController.materialTypeList
-                                ?.firstWhere((element) =>
-                                    element.type.contains(materialType.text))
-                                .id;
-                            partyComission = i == 1
-                                ? hospitalComissionController.text
-                                : i == 2
-                                    ? doctorComissionController.text
-                                    : technicianComissionController.text;
-                            await _partyController.addPartyComission(
-                              pID: partyID,
-                              mtID: mtID,
-                              newComission: double.parse(partyComission),
-                              materialPrice: itemAmount,
-                            );
+                          var mtID = _partyController.materialTypeList
+                              ?.firstWhere((element) =>
+                                  element.type.contains(materialType.text))
+                              .id;
+                          if (isShowHospital!) {
+                            if (hospitalComissionController.text != "") {
+                              partyID = hospitalParty?.id;
+
+                              partyComission = hospitalComissionController.text;
+                              await _partyController.addPartyComission(
+                                pID: partyID,
+                                mtID: mtID,
+                                newComission: double.parse(partyComission),
+                                materialPrice: itemAmount,
+                              );
+                            } else {
+                              "Comission not found!".errorSnackbar;
+                            }
+                          }
+                          if (isShowDoctor!) {
+                            if (doctorComissionController.text != "") {
+                              partyID = doctorParty?.id;
+
+                              partyComission = doctorComissionController.text;
+                              await _partyController.addPartyComission(
+                                pID: partyID,
+                                mtID: mtID,
+                                newComission: double.parse(partyComission),
+                                materialPrice: itemAmount,
+                              );
+                            } else {
+                              "Comission not found!".errorSnackbar;
+                            }
+                          }
+                          if (isShowTechnician!) {
+                            if (technicianComissionController.text != "") {
+                              partyID = technicianParty?.id;
+
+                              partyComission =
+                                  technicianComissionController.text;
+                              await _partyController.addPartyComission(
+                                pID: partyID,
+                                mtID: mtID,
+                                newComission: double.parse(partyComission),
+                                materialPrice: itemAmount,
+                              );
+                            } else {
+                              "Comission not found!".errorSnackbar;
+                            }
                           }
 
                           List<List<dynamic>> data = [];

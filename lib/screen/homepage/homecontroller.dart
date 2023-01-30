@@ -36,9 +36,9 @@ class HomepageController extends GetxController {
     'Custom',
   ]);
   RxSet<String> partyCityList = RxSet<String>();
-  RxList<String> displayData = RxList<String>();
-  RxList<String> partyNaNSetData = RxList<String>();
-  RxList<List<int>> partyNaNSetDetailData = RxList<List<int>>();
+  RxSet<String> displayData = RxSet<String>();
+  RxSet<String> partyNaNSetData = RxSet<String>();
+  RxSet<List<int>> partyNaNSetDetailData = RxSet<List<int>>();
   RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
   List<MaterialTypeData>? materialTypeList = [];
   List<PartyMasterData>? partyList = [];
@@ -1397,28 +1397,95 @@ class HomepageController extends GetxController {
   Future<void> addInputData(List<dynamic> data) async {
     try {
       debugPrint('******************new data******************');
-      var resParty = await (db.select(db.partyMaster)
-            ..where((tbl) => tbl.name.isIn([data[3], data[9], data[10]])))
-          .get();
+      var isShowHospital;
+      var isShowDoctor;
+      var isShowTechnician;
 
-      if (resParty.length >= 2) {
+      var resHospitalParty, resDoctorParty, resTechnicianParty;
+      if (data[3] != "") {
+        resHospitalParty = await (db.select(db.partyMaster)
+              ..where((tbl) => tbl.name.equals(data[3]) & tbl.ptID.equals(1)))
+            .get();
+        isShowHospital = resHospitalParty.isNotEmpty ? true : false;
+      } else {
+        isShowHospital = true;
+      }
+      if (data[9] != "") {
+        resDoctorParty = await (db.select(db.partyMaster)
+              ..where((tbl) => tbl.name.equals(data[9]) & tbl.ptID.equals(2)))
+            .get();
+        isShowDoctor = resDoctorParty.isNotEmpty ? true : false;
+      } else {
+        isShowDoctor = true;
+      }
+      if (data[10] != "") {
+        resTechnicianParty = await (db.select(db.partyMaster)
+              ..where((tbl) => tbl.name.equals(data[10]) & tbl.ptID.equals(3)))
+            .get();
+        isShowTechnician = resTechnicianParty.isNotEmpty ? true : false;
+      } else {
+        isShowTechnician = true;
+      }
+
+      if (isShowTechnician && isShowDoctor && isShowHospital) {
         materialTypeList?.clear();
         materialTypeList = await (db.select(db.materialType)
               ..where((tbl) => tbl.type.equals("${data[7]}~${data[6]}")))
             .get();
         debugPrint("${data[7]}~${data[6]}");
         if (materialTypeList!.isNotEmpty) {
-          var resPartyComission = await (db.select(db.partyComissionDetail)
-                ..where((tbl) =>
-                    tbl.pID.equals(resParty[0].id) &
-                    tbl.mtID.equals(materialTypeList![0].id)))
-              .get();
-          if (resPartyComission.isNotEmpty) {
+          isShowDoctor = false;
+          isShowHospital = false;
+          isShowTechnician = false;
+          var resTechnicianPartyComission,
+              resDoctorPartyComission,
+              resHospitalPartyComission;
+          if (data[3] != "") {
+            resHospitalPartyComission =
+                await (db.select(db.partyComissionDetail)
+                      ..where((tbl) =>
+                          tbl.pID.equals(resHospitalParty.id) &
+                          tbl.mtID.equals(materialTypeList![0].id)))
+                    .get();
+            print(resHospitalPartyComission);
+            isShowHospital =
+                resHospitalPartyComission.isNotEmpty ? true : false;
+          } else {
+            isShowHospital = true;
+          }
+          if (data[9] != "") {
+            resDoctorPartyComission = await (db.select(db.partyComissionDetail)
+                  ..where((tbl) =>
+                      tbl.pID.equals(resDoctorParty.id) &
+                      tbl.mtID.equals(materialTypeList![0].id)))
+                .get();
+
+            isShowDoctor = resDoctorPartyComission.isNotEmpty ? true : false;
+          } else {
+            isShowDoctor = true;
+          }
+          if (data[10] != "") {
+            resTechnicianPartyComission =
+                await (db.select(db.partyComissionDetail)
+                      ..where((tbl) =>
+                          tbl.pID.equals(resTechnicianParty.id) &
+                          tbl.mtID.equals(materialTypeList![0].id)))
+                    .get();
+
+            isShowTechnician =
+                resTechnicianPartyComission.isNotEmpty ? true : false;
+          } else {
+            isShowTechnician = true;
+          }
+
+          if (isShowTechnician && isShowDoctor && isShowHospital) {
             displayData.add(data[15].toString());
-            var comission = resPartyComission[0].comission1;
-            debugPrint('comission(%): $comission');
+            var hcomission = resHospitalPartyComission[0].comission1;
+            var dcomission = resHospitalPartyComission[0].comission1;
+            var tcomission = resTechnicianPartyComission[0].comission1;
+            debugPrint('comission(%): $hcomission');
             debugPrint('TotalAmount(%): ${data[12]}');
-            debugPrint('comissionAmount(%): ${(comission * data[12]) / 100}');
+            debugPrint('comissionAmount(%): ${(hcomission * data[12]) / 100}');
           } else {
             comissionAndmatTypeNaNSetData.add(data[15].toString());
             'Comission Not Found'.errorSnackbar;
