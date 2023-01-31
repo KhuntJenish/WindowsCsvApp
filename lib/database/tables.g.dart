@@ -1355,41 +1355,122 @@ class $InputDataTable extends InputData
   late final GeneratedColumn<int> logId = GeneratedColumn<int>(
       'log_id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _generateLedgerIdMeta =
-      const VerificationMeta('generateLedgerId');
+  static const VerificationMeta _hospitalGenerateLedgerIdMeta =
+      const VerificationMeta('hospitalGenerateLedgerId');
   @override
-  late final GeneratedColumn<int> generateLedgerId = GeneratedColumn<int>(
-      'generate_ledger_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _paymentLedgerIdMeta =
-      const VerificationMeta('paymentLedgerId');
+  late final GeneratedColumn<int> hospitalGenerateLedgerId =
+      GeneratedColumn<int>('hospital_generate_ledger_id', aliasedName, false,
+          type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _hospitalPaymentLedgerIdMeta =
+      const VerificationMeta('hospitalPaymentLedgerId');
   @override
-  late final GeneratedColumn<int> paymentLedgerId = GeneratedColumn<int>(
-      'payment_ledger_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _comissionMeta =
-      const VerificationMeta('comission');
+  late final GeneratedColumn<int> hospitalPaymentLedgerId =
+      GeneratedColumn<int>('hospital_payment_ledger_id', aliasedName, false,
+          type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _hospitalComissionMeta =
+      const VerificationMeta('hospitalComission');
   @override
-  late final GeneratedColumn<double> comission = GeneratedColumn<double>(
-      'comission', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _comissionAmountMeta =
-      const VerificationMeta('comissionAmount');
+  late final GeneratedColumn<double> hospitalComission =
+      GeneratedColumn<double>('hospital_comission', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _hospitalComissionAmountMeta =
+      const VerificationMeta('hospitalComissionAmount');
   @override
-  late final GeneratedColumn<double> comissionAmount = GeneratedColumn<double>(
-      'comission_amount', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
-  static const VerificationMeta _comissionPaidDateMeta =
-      const VerificationMeta('comissionPaidDate');
+  late final GeneratedColumn<double> hospitalComissionAmount =
+      GeneratedColumn<double>('hospital_comission_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _hospitalComissionPaidDateMeta =
+      const VerificationMeta('hospitalComissionPaidDate');
   @override
-  late final GeneratedColumn<DateTime> comissionPaidDate =
-      GeneratedColumn<DateTime>('comission_paid_date', aliasedName, false,
+  late final GeneratedColumn<DateTime> hospitalComissionPaidDate =
+      GeneratedColumn<DateTime>(
+          'hospital_comission_paid_date', aliasedName, false,
           type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _adjustComissionAmountMeta =
-      const VerificationMeta('adjustComissionAmount');
+  static const VerificationMeta _hospitalAdjustComissionAmountMeta =
+      const VerificationMeta('hospitalAdjustComissionAmount');
   @override
-  late final GeneratedColumn<double> adjustComissionAmount =
-      GeneratedColumn<double>('adjust_comission_amount', aliasedName, false,
+  late final GeneratedColumn<double> hospitalAdjustComissionAmount =
+      GeneratedColumn<double>(
+          'hospital_adjust_comission_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _doctorGenerateLedgerIdMeta =
+      const VerificationMeta('doctorGenerateLedgerId');
+  @override
+  late final GeneratedColumn<int> doctorGenerateLedgerId = GeneratedColumn<int>(
+      'doctor_generate_ledger_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _doctorPaymentLedgerIdMeta =
+      const VerificationMeta('doctorPaymentLedgerId');
+  @override
+  late final GeneratedColumn<int> doctorPaymentLedgerId = GeneratedColumn<int>(
+      'doctor_payment_ledger_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _doctorComissionMeta =
+      const VerificationMeta('doctorComission');
+  @override
+  late final GeneratedColumn<double> doctorComission = GeneratedColumn<double>(
+      'doctor_comission', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _doctorComissionAmountMeta =
+      const VerificationMeta('doctorComissionAmount');
+  @override
+  late final GeneratedColumn<double> doctorComissionAmount =
+      GeneratedColumn<double>('doctor_comission_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _doctorComissionPaidDateMeta =
+      const VerificationMeta('doctorComissionPaidDate');
+  @override
+  late final GeneratedColumn<DateTime> doctorComissionPaidDate =
+      GeneratedColumn<DateTime>(
+          'doctor_comission_paid_date', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _doctorAdjustComissionAmountMeta =
+      const VerificationMeta('doctorAdjustComissionAmount');
+  @override
+  late final GeneratedColumn<double> doctorAdjustComissionAmount =
+      GeneratedColumn<double>(
+          'doctor_adjust_comission_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _techniqalStaffGenerateLedgerIdMeta =
+      const VerificationMeta('techniqalStaffGenerateLedgerId');
+  @override
+  late final GeneratedColumn<int> techniqalStaffGenerateLedgerId =
+      GeneratedColumn<int>(
+          'techniqal_staff_generate_ledger_id', aliasedName, false,
+          type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _techniqalStaffPaymentLedgerIdMeta =
+      const VerificationMeta('techniqalStaffPaymentLedgerId');
+  @override
+  late final GeneratedColumn<int> techniqalStaffPaymentLedgerId =
+      GeneratedColumn<int>(
+          'techniqal_staff_payment_ledger_id', aliasedName, false,
+          type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _techniqalStaffComissionMeta =
+      const VerificationMeta('techniqalStaffComission');
+  @override
+  late final GeneratedColumn<double> techniqalStaffComission =
+      GeneratedColumn<double>('techniqal_staff_comission', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _techniqalStaffComissionAmountMeta =
+      const VerificationMeta('techniqalStaffComissionAmount');
+  @override
+  late final GeneratedColumn<double> techniqalStaffComissionAmount =
+      GeneratedColumn<double>(
+          'techniqal_staff_comission_amount', aliasedName, false,
+          type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _techniqalStaffComissionPaidDateMeta =
+      const VerificationMeta('techniqalStaffComissionPaidDate');
+  @override
+  late final GeneratedColumn<DateTime> techniqalStaffComissionPaidDate =
+      GeneratedColumn<DateTime>(
+          'techniqal_staff_comission_paid_date', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _techniqalStaffAdjustComissionAmountMeta =
+      const VerificationMeta('techniqalStaffAdjustComissionAmount');
+  @override
+  late final GeneratedColumn<double> techniqalStaffAdjustComissionAmount =
+      GeneratedColumn<double>(
+          'techniqal_staff_adjust_comission_amount', aliasedName, false,
           type: DriftSqlType.double, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
@@ -1413,12 +1494,24 @@ class $InputDataTable extends InputData
         purchaseTaxableAmount,
         totalPurchaseAmount,
         logId,
-        generateLedgerId,
-        paymentLedgerId,
-        comission,
-        comissionAmount,
-        comissionPaidDate,
-        adjustComissionAmount
+        hospitalGenerateLedgerId,
+        hospitalPaymentLedgerId,
+        hospitalComission,
+        hospitalComissionAmount,
+        hospitalComissionPaidDate,
+        hospitalAdjustComissionAmount,
+        doctorGenerateLedgerId,
+        doctorPaymentLedgerId,
+        doctorComission,
+        doctorComissionAmount,
+        doctorComissionPaidDate,
+        doctorAdjustComissionAmount,
+        techniqalStaffGenerateLedgerId,
+        techniqalStaffPaymentLedgerId,
+        techniqalStaffComission,
+        techniqalStaffComissionAmount,
+        techniqalStaffComissionPaidDate,
+        techniqalStaffAdjustComissionAmount
       ];
   @override
   String get aliasedName => _alias ?? 'input_data';
@@ -1566,51 +1659,162 @@ class $InputDataTable extends InputData
     } else if (isInserting) {
       context.missing(_logIdMeta);
     }
-    if (data.containsKey('generate_ledger_id')) {
+    if (data.containsKey('hospital_generate_ledger_id')) {
       context.handle(
-          _generateLedgerIdMeta,
-          generateLedgerId.isAcceptableOrUnknown(
-              data['generate_ledger_id']!, _generateLedgerIdMeta));
+          _hospitalGenerateLedgerIdMeta,
+          hospitalGenerateLedgerId.isAcceptableOrUnknown(
+              data['hospital_generate_ledger_id']!,
+              _hospitalGenerateLedgerIdMeta));
     } else if (isInserting) {
-      context.missing(_generateLedgerIdMeta);
+      context.missing(_hospitalGenerateLedgerIdMeta);
     }
-    if (data.containsKey('payment_ledger_id')) {
+    if (data.containsKey('hospital_payment_ledger_id')) {
       context.handle(
-          _paymentLedgerIdMeta,
-          paymentLedgerId.isAcceptableOrUnknown(
-              data['payment_ledger_id']!, _paymentLedgerIdMeta));
+          _hospitalPaymentLedgerIdMeta,
+          hospitalPaymentLedgerId.isAcceptableOrUnknown(
+              data['hospital_payment_ledger_id']!,
+              _hospitalPaymentLedgerIdMeta));
     } else if (isInserting) {
-      context.missing(_paymentLedgerIdMeta);
+      context.missing(_hospitalPaymentLedgerIdMeta);
     }
-    if (data.containsKey('comission')) {
-      context.handle(_comissionMeta,
-          comission.isAcceptableOrUnknown(data['comission']!, _comissionMeta));
-    } else if (isInserting) {
-      context.missing(_comissionMeta);
-    }
-    if (data.containsKey('comission_amount')) {
+    if (data.containsKey('hospital_comission')) {
       context.handle(
-          _comissionAmountMeta,
-          comissionAmount.isAcceptableOrUnknown(
-              data['comission_amount']!, _comissionAmountMeta));
+          _hospitalComissionMeta,
+          hospitalComission.isAcceptableOrUnknown(
+              data['hospital_comission']!, _hospitalComissionMeta));
     } else if (isInserting) {
-      context.missing(_comissionAmountMeta);
+      context.missing(_hospitalComissionMeta);
     }
-    if (data.containsKey('comission_paid_date')) {
+    if (data.containsKey('hospital_comission_amount')) {
       context.handle(
-          _comissionPaidDateMeta,
-          comissionPaidDate.isAcceptableOrUnknown(
-              data['comission_paid_date']!, _comissionPaidDateMeta));
+          _hospitalComissionAmountMeta,
+          hospitalComissionAmount.isAcceptableOrUnknown(
+              data['hospital_comission_amount']!,
+              _hospitalComissionAmountMeta));
     } else if (isInserting) {
-      context.missing(_comissionPaidDateMeta);
+      context.missing(_hospitalComissionAmountMeta);
     }
-    if (data.containsKey('adjust_comission_amount')) {
+    if (data.containsKey('hospital_comission_paid_date')) {
       context.handle(
-          _adjustComissionAmountMeta,
-          adjustComissionAmount.isAcceptableOrUnknown(
-              data['adjust_comission_amount']!, _adjustComissionAmountMeta));
+          _hospitalComissionPaidDateMeta,
+          hospitalComissionPaidDate.isAcceptableOrUnknown(
+              data['hospital_comission_paid_date']!,
+              _hospitalComissionPaidDateMeta));
     } else if (isInserting) {
-      context.missing(_adjustComissionAmountMeta);
+      context.missing(_hospitalComissionPaidDateMeta);
+    }
+    if (data.containsKey('hospital_adjust_comission_amount')) {
+      context.handle(
+          _hospitalAdjustComissionAmountMeta,
+          hospitalAdjustComissionAmount.isAcceptableOrUnknown(
+              data['hospital_adjust_comission_amount']!,
+              _hospitalAdjustComissionAmountMeta));
+    } else if (isInserting) {
+      context.missing(_hospitalAdjustComissionAmountMeta);
+    }
+    if (data.containsKey('doctor_generate_ledger_id')) {
+      context.handle(
+          _doctorGenerateLedgerIdMeta,
+          doctorGenerateLedgerId.isAcceptableOrUnknown(
+              data['doctor_generate_ledger_id']!, _doctorGenerateLedgerIdMeta));
+    } else if (isInserting) {
+      context.missing(_doctorGenerateLedgerIdMeta);
+    }
+    if (data.containsKey('doctor_payment_ledger_id')) {
+      context.handle(
+          _doctorPaymentLedgerIdMeta,
+          doctorPaymentLedgerId.isAcceptableOrUnknown(
+              data['doctor_payment_ledger_id']!, _doctorPaymentLedgerIdMeta));
+    } else if (isInserting) {
+      context.missing(_doctorPaymentLedgerIdMeta);
+    }
+    if (data.containsKey('doctor_comission')) {
+      context.handle(
+          _doctorComissionMeta,
+          doctorComission.isAcceptableOrUnknown(
+              data['doctor_comission']!, _doctorComissionMeta));
+    } else if (isInserting) {
+      context.missing(_doctorComissionMeta);
+    }
+    if (data.containsKey('doctor_comission_amount')) {
+      context.handle(
+          _doctorComissionAmountMeta,
+          doctorComissionAmount.isAcceptableOrUnknown(
+              data['doctor_comission_amount']!, _doctorComissionAmountMeta));
+    } else if (isInserting) {
+      context.missing(_doctorComissionAmountMeta);
+    }
+    if (data.containsKey('doctor_comission_paid_date')) {
+      context.handle(
+          _doctorComissionPaidDateMeta,
+          doctorComissionPaidDate.isAcceptableOrUnknown(
+              data['doctor_comission_paid_date']!,
+              _doctorComissionPaidDateMeta));
+    } else if (isInserting) {
+      context.missing(_doctorComissionPaidDateMeta);
+    }
+    if (data.containsKey('doctor_adjust_comission_amount')) {
+      context.handle(
+          _doctorAdjustComissionAmountMeta,
+          doctorAdjustComissionAmount.isAcceptableOrUnknown(
+              data['doctor_adjust_comission_amount']!,
+              _doctorAdjustComissionAmountMeta));
+    } else if (isInserting) {
+      context.missing(_doctorAdjustComissionAmountMeta);
+    }
+    if (data.containsKey('techniqal_staff_generate_ledger_id')) {
+      context.handle(
+          _techniqalStaffGenerateLedgerIdMeta,
+          techniqalStaffGenerateLedgerId.isAcceptableOrUnknown(
+              data['techniqal_staff_generate_ledger_id']!,
+              _techniqalStaffGenerateLedgerIdMeta));
+    } else if (isInserting) {
+      context.missing(_techniqalStaffGenerateLedgerIdMeta);
+    }
+    if (data.containsKey('techniqal_staff_payment_ledger_id')) {
+      context.handle(
+          _techniqalStaffPaymentLedgerIdMeta,
+          techniqalStaffPaymentLedgerId.isAcceptableOrUnknown(
+              data['techniqal_staff_payment_ledger_id']!,
+              _techniqalStaffPaymentLedgerIdMeta));
+    } else if (isInserting) {
+      context.missing(_techniqalStaffPaymentLedgerIdMeta);
+    }
+    if (data.containsKey('techniqal_staff_comission')) {
+      context.handle(
+          _techniqalStaffComissionMeta,
+          techniqalStaffComission.isAcceptableOrUnknown(
+              data['techniqal_staff_comission']!,
+              _techniqalStaffComissionMeta));
+    } else if (isInserting) {
+      context.missing(_techniqalStaffComissionMeta);
+    }
+    if (data.containsKey('techniqal_staff_comission_amount')) {
+      context.handle(
+          _techniqalStaffComissionAmountMeta,
+          techniqalStaffComissionAmount.isAcceptableOrUnknown(
+              data['techniqal_staff_comission_amount']!,
+              _techniqalStaffComissionAmountMeta));
+    } else if (isInserting) {
+      context.missing(_techniqalStaffComissionAmountMeta);
+    }
+    if (data.containsKey('techniqal_staff_comission_paid_date')) {
+      context.handle(
+          _techniqalStaffComissionPaidDateMeta,
+          techniqalStaffComissionPaidDate.isAcceptableOrUnknown(
+              data['techniqal_staff_comission_paid_date']!,
+              _techniqalStaffComissionPaidDateMeta));
+    } else if (isInserting) {
+      context.missing(_techniqalStaffComissionPaidDateMeta);
+    }
+    if (data.containsKey('techniqal_staff_adjust_comission_amount')) {
+      context.handle(
+          _techniqalStaffAdjustComissionAmountMeta,
+          techniqalStaffAdjustComissionAmount.isAcceptableOrUnknown(
+              data['techniqal_staff_adjust_comission_amount']!,
+              _techniqalStaffAdjustComissionAmountMeta));
+    } else if (isInserting) {
+      context.missing(_techniqalStaffAdjustComissionAmountMeta);
     }
     return context;
   }
@@ -1663,20 +1867,57 @@ class $InputDataTable extends InputData
           data['${effectivePrefix}total_purchase_amount'])!,
       logId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}log_id'])!,
-      generateLedgerId: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}generate_ledger_id'])!,
-      paymentLedgerId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}payment_ledger_id'])!,
-      comission: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}comission'])!,
-      comissionAmount: attachedDatabase.typeMapping.read(
-          DriftSqlType.double, data['${effectivePrefix}comission_amount'])!,
-      comissionPaidDate: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime,
-          data['${effectivePrefix}comission_paid_date'])!,
-      adjustComissionAmount: attachedDatabase.typeMapping.read(
+      hospitalGenerateLedgerId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}hospital_generate_ledger_id'])!,
+      hospitalPaymentLedgerId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}hospital_payment_ledger_id'])!,
+      hospitalComission: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}hospital_comission'])!,
+      hospitalComissionAmount: attachedDatabase.typeMapping.read(
           DriftSqlType.double,
-          data['${effectivePrefix}adjust_comission_amount'])!,
+          data['${effectivePrefix}hospital_comission_amount'])!,
+      hospitalComissionPaidDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}hospital_comission_paid_date'])!,
+      hospitalAdjustComissionAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}hospital_adjust_comission_amount'])!,
+      doctorGenerateLedgerId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}doctor_generate_ledger_id'])!,
+      doctorPaymentLedgerId: attachedDatabase.typeMapping.read(DriftSqlType.int,
+          data['${effectivePrefix}doctor_payment_ledger_id'])!,
+      doctorComission: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}doctor_comission'])!,
+      doctorComissionAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}doctor_comission_amount'])!,
+      doctorComissionPaidDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}doctor_comission_paid_date'])!,
+      doctorAdjustComissionAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}doctor_adjust_comission_amount'])!,
+      techniqalStaffGenerateLedgerId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}techniqal_staff_generate_ledger_id'])!,
+      techniqalStaffPaymentLedgerId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}techniqal_staff_payment_ledger_id'])!,
+      techniqalStaffComission: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}techniqal_staff_comission'])!,
+      techniqalStaffComissionAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}techniqal_staff_comission_amount'])!,
+      techniqalStaffComissionPaidDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}techniqal_staff_comission_paid_date'])!,
+      techniqalStaffAdjustComissionAmount: attachedDatabase.typeMapping.read(
+          DriftSqlType.double,
+          data['${effectivePrefix}techniqal_staff_adjust_comission_amount'])!,
     );
   }
 
@@ -1707,12 +1948,24 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
   final double purchaseTaxableAmount;
   final double totalPurchaseAmount;
   final int logId;
-  final int generateLedgerId;
-  final int paymentLedgerId;
-  final double comission;
-  final double comissionAmount;
-  final DateTime comissionPaidDate;
-  final double adjustComissionAmount;
+  final int hospitalGenerateLedgerId;
+  final int hospitalPaymentLedgerId;
+  final double hospitalComission;
+  final double hospitalComissionAmount;
+  final DateTime hospitalComissionPaidDate;
+  final double hospitalAdjustComissionAmount;
+  final int doctorGenerateLedgerId;
+  final int doctorPaymentLedgerId;
+  final double doctorComission;
+  final double doctorComissionAmount;
+  final DateTime doctorComissionPaidDate;
+  final double doctorAdjustComissionAmount;
+  final int techniqalStaffGenerateLedgerId;
+  final int techniqalStaffPaymentLedgerId;
+  final double techniqalStaffComission;
+  final double techniqalStaffComissionAmount;
+  final DateTime techniqalStaffComissionPaidDate;
+  final double techniqalStaffAdjustComissionAmount;
   const InputDataData(
       {required this.id,
       required this.documentType,
@@ -1734,12 +1987,24 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       required this.purchaseTaxableAmount,
       required this.totalPurchaseAmount,
       required this.logId,
-      required this.generateLedgerId,
-      required this.paymentLedgerId,
-      required this.comission,
-      required this.comissionAmount,
-      required this.comissionPaidDate,
-      required this.adjustComissionAmount});
+      required this.hospitalGenerateLedgerId,
+      required this.hospitalPaymentLedgerId,
+      required this.hospitalComission,
+      required this.hospitalComissionAmount,
+      required this.hospitalComissionPaidDate,
+      required this.hospitalAdjustComissionAmount,
+      required this.doctorGenerateLedgerId,
+      required this.doctorPaymentLedgerId,
+      required this.doctorComission,
+      required this.doctorComissionAmount,
+      required this.doctorComissionPaidDate,
+      required this.doctorAdjustComissionAmount,
+      required this.techniqalStaffGenerateLedgerId,
+      required this.techniqalStaffPaymentLedgerId,
+      required this.techniqalStaffComission,
+      required this.techniqalStaffComissionAmount,
+      required this.techniqalStaffComissionPaidDate,
+      required this.techniqalStaffAdjustComissionAmount});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1763,12 +2028,36 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
     map['purchase_taxable_amount'] = Variable<double>(purchaseTaxableAmount);
     map['total_purchase_amount'] = Variable<double>(totalPurchaseAmount);
     map['log_id'] = Variable<int>(logId);
-    map['generate_ledger_id'] = Variable<int>(generateLedgerId);
-    map['payment_ledger_id'] = Variable<int>(paymentLedgerId);
-    map['comission'] = Variable<double>(comission);
-    map['comission_amount'] = Variable<double>(comissionAmount);
-    map['comission_paid_date'] = Variable<DateTime>(comissionPaidDate);
-    map['adjust_comission_amount'] = Variable<double>(adjustComissionAmount);
+    map['hospital_generate_ledger_id'] =
+        Variable<int>(hospitalGenerateLedgerId);
+    map['hospital_payment_ledger_id'] = Variable<int>(hospitalPaymentLedgerId);
+    map['hospital_comission'] = Variable<double>(hospitalComission);
+    map['hospital_comission_amount'] =
+        Variable<double>(hospitalComissionAmount);
+    map['hospital_comission_paid_date'] =
+        Variable<DateTime>(hospitalComissionPaidDate);
+    map['hospital_adjust_comission_amount'] =
+        Variable<double>(hospitalAdjustComissionAmount);
+    map['doctor_generate_ledger_id'] = Variable<int>(doctorGenerateLedgerId);
+    map['doctor_payment_ledger_id'] = Variable<int>(doctorPaymentLedgerId);
+    map['doctor_comission'] = Variable<double>(doctorComission);
+    map['doctor_comission_amount'] = Variable<double>(doctorComissionAmount);
+    map['doctor_comission_paid_date'] =
+        Variable<DateTime>(doctorComissionPaidDate);
+    map['doctor_adjust_comission_amount'] =
+        Variable<double>(doctorAdjustComissionAmount);
+    map['techniqal_staff_generate_ledger_id'] =
+        Variable<int>(techniqalStaffGenerateLedgerId);
+    map['techniqal_staff_payment_ledger_id'] =
+        Variable<int>(techniqalStaffPaymentLedgerId);
+    map['techniqal_staff_comission'] =
+        Variable<double>(techniqalStaffComission);
+    map['techniqal_staff_comission_amount'] =
+        Variable<double>(techniqalStaffComissionAmount);
+    map['techniqal_staff_comission_paid_date'] =
+        Variable<DateTime>(techniqalStaffComissionPaidDate);
+    map['techniqal_staff_adjust_comission_amount'] =
+        Variable<double>(techniqalStaffAdjustComissionAmount);
     return map;
   }
 
@@ -1794,12 +2083,25 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       purchaseTaxableAmount: Value(purchaseTaxableAmount),
       totalPurchaseAmount: Value(totalPurchaseAmount),
       logId: Value(logId),
-      generateLedgerId: Value(generateLedgerId),
-      paymentLedgerId: Value(paymentLedgerId),
-      comission: Value(comission),
-      comissionAmount: Value(comissionAmount),
-      comissionPaidDate: Value(comissionPaidDate),
-      adjustComissionAmount: Value(adjustComissionAmount),
+      hospitalGenerateLedgerId: Value(hospitalGenerateLedgerId),
+      hospitalPaymentLedgerId: Value(hospitalPaymentLedgerId),
+      hospitalComission: Value(hospitalComission),
+      hospitalComissionAmount: Value(hospitalComissionAmount),
+      hospitalComissionPaidDate: Value(hospitalComissionPaidDate),
+      hospitalAdjustComissionAmount: Value(hospitalAdjustComissionAmount),
+      doctorGenerateLedgerId: Value(doctorGenerateLedgerId),
+      doctorPaymentLedgerId: Value(doctorPaymentLedgerId),
+      doctorComission: Value(doctorComission),
+      doctorComissionAmount: Value(doctorComissionAmount),
+      doctorComissionPaidDate: Value(doctorComissionPaidDate),
+      doctorAdjustComissionAmount: Value(doctorAdjustComissionAmount),
+      techniqalStaffGenerateLedgerId: Value(techniqalStaffGenerateLedgerId),
+      techniqalStaffPaymentLedgerId: Value(techniqalStaffPaymentLedgerId),
+      techniqalStaffComission: Value(techniqalStaffComission),
+      techniqalStaffComissionAmount: Value(techniqalStaffComissionAmount),
+      techniqalStaffComissionPaidDate: Value(techniqalStaffComissionPaidDate),
+      techniqalStaffAdjustComissionAmount:
+          Value(techniqalStaffAdjustComissionAmount),
     );
   }
 
@@ -1829,14 +2131,40 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       totalPurchaseAmount:
           serializer.fromJson<double>(json['totalPurchaseAmount']),
       logId: serializer.fromJson<int>(json['logId']),
-      generateLedgerId: serializer.fromJson<int>(json['generateLedgerId']),
-      paymentLedgerId: serializer.fromJson<int>(json['paymentLedgerId']),
-      comission: serializer.fromJson<double>(json['comission']),
-      comissionAmount: serializer.fromJson<double>(json['comissionAmount']),
-      comissionPaidDate:
-          serializer.fromJson<DateTime>(json['comissionPaidDate']),
-      adjustComissionAmount:
-          serializer.fromJson<double>(json['adjustComissionAmount']),
+      hospitalGenerateLedgerId:
+          serializer.fromJson<int>(json['hospitalGenerateLedgerId']),
+      hospitalPaymentLedgerId:
+          serializer.fromJson<int>(json['hospitalPaymentLedgerId']),
+      hospitalComission: serializer.fromJson<double>(json['hospitalComission']),
+      hospitalComissionAmount:
+          serializer.fromJson<double>(json['hospitalComissionAmount']),
+      hospitalComissionPaidDate:
+          serializer.fromJson<DateTime>(json['hospitalComissionPaidDate']),
+      hospitalAdjustComissionAmount:
+          serializer.fromJson<double>(json['hospitalAdjustComissionAmount']),
+      doctorGenerateLedgerId:
+          serializer.fromJson<int>(json['doctorGenerateLedgerId']),
+      doctorPaymentLedgerId:
+          serializer.fromJson<int>(json['doctorPaymentLedgerId']),
+      doctorComission: serializer.fromJson<double>(json['doctorComission']),
+      doctorComissionAmount:
+          serializer.fromJson<double>(json['doctorComissionAmount']),
+      doctorComissionPaidDate:
+          serializer.fromJson<DateTime>(json['doctorComissionPaidDate']),
+      doctorAdjustComissionAmount:
+          serializer.fromJson<double>(json['doctorAdjustComissionAmount']),
+      techniqalStaffGenerateLedgerId:
+          serializer.fromJson<int>(json['techniqalStaffGenerateLedgerId']),
+      techniqalStaffPaymentLedgerId:
+          serializer.fromJson<int>(json['techniqalStaffPaymentLedgerId']),
+      techniqalStaffComission:
+          serializer.fromJson<double>(json['techniqalStaffComission']),
+      techniqalStaffComissionAmount:
+          serializer.fromJson<double>(json['techniqalStaffComissionAmount']),
+      techniqalStaffComissionPaidDate: serializer
+          .fromJson<DateTime>(json['techniqalStaffComissionPaidDate']),
+      techniqalStaffAdjustComissionAmount: serializer
+          .fromJson<double>(json['techniqalStaffAdjustComissionAmount']),
     );
   }
   @override
@@ -1863,12 +2191,37 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
       'purchaseTaxableAmount': serializer.toJson<double>(purchaseTaxableAmount),
       'totalPurchaseAmount': serializer.toJson<double>(totalPurchaseAmount),
       'logId': serializer.toJson<int>(logId),
-      'generateLedgerId': serializer.toJson<int>(generateLedgerId),
-      'paymentLedgerId': serializer.toJson<int>(paymentLedgerId),
-      'comission': serializer.toJson<double>(comission),
-      'comissionAmount': serializer.toJson<double>(comissionAmount),
-      'comissionPaidDate': serializer.toJson<DateTime>(comissionPaidDate),
-      'adjustComissionAmount': serializer.toJson<double>(adjustComissionAmount),
+      'hospitalGenerateLedgerId':
+          serializer.toJson<int>(hospitalGenerateLedgerId),
+      'hospitalPaymentLedgerId':
+          serializer.toJson<int>(hospitalPaymentLedgerId),
+      'hospitalComission': serializer.toJson<double>(hospitalComission),
+      'hospitalComissionAmount':
+          serializer.toJson<double>(hospitalComissionAmount),
+      'hospitalComissionPaidDate':
+          serializer.toJson<DateTime>(hospitalComissionPaidDate),
+      'hospitalAdjustComissionAmount':
+          serializer.toJson<double>(hospitalAdjustComissionAmount),
+      'doctorGenerateLedgerId': serializer.toJson<int>(doctorGenerateLedgerId),
+      'doctorPaymentLedgerId': serializer.toJson<int>(doctorPaymentLedgerId),
+      'doctorComission': serializer.toJson<double>(doctorComission),
+      'doctorComissionAmount': serializer.toJson<double>(doctorComissionAmount),
+      'doctorComissionPaidDate':
+          serializer.toJson<DateTime>(doctorComissionPaidDate),
+      'doctorAdjustComissionAmount':
+          serializer.toJson<double>(doctorAdjustComissionAmount),
+      'techniqalStaffGenerateLedgerId':
+          serializer.toJson<int>(techniqalStaffGenerateLedgerId),
+      'techniqalStaffPaymentLedgerId':
+          serializer.toJson<int>(techniqalStaffPaymentLedgerId),
+      'techniqalStaffComission':
+          serializer.toJson<double>(techniqalStaffComission),
+      'techniqalStaffComissionAmount':
+          serializer.toJson<double>(techniqalStaffComissionAmount),
+      'techniqalStaffComissionPaidDate':
+          serializer.toJson<DateTime>(techniqalStaffComissionPaidDate),
+      'techniqalStaffAdjustComissionAmount':
+          serializer.toJson<double>(techniqalStaffAdjustComissionAmount),
     };
   }
 
@@ -1893,12 +2246,24 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           double? purchaseTaxableAmount,
           double? totalPurchaseAmount,
           int? logId,
-          int? generateLedgerId,
-          int? paymentLedgerId,
-          double? comission,
-          double? comissionAmount,
-          DateTime? comissionPaidDate,
-          double? adjustComissionAmount}) =>
+          int? hospitalGenerateLedgerId,
+          int? hospitalPaymentLedgerId,
+          double? hospitalComission,
+          double? hospitalComissionAmount,
+          DateTime? hospitalComissionPaidDate,
+          double? hospitalAdjustComissionAmount,
+          int? doctorGenerateLedgerId,
+          int? doctorPaymentLedgerId,
+          double? doctorComission,
+          double? doctorComissionAmount,
+          DateTime? doctorComissionPaidDate,
+          double? doctorAdjustComissionAmount,
+          int? techniqalStaffGenerateLedgerId,
+          int? techniqalStaffPaymentLedgerId,
+          double? techniqalStaffComission,
+          double? techniqalStaffComissionAmount,
+          DateTime? techniqalStaffComissionPaidDate,
+          double? techniqalStaffAdjustComissionAmount}) =>
       InputDataData(
         id: id ?? this.id,
         documentType: documentType ?? this.documentType,
@@ -1921,13 +2286,41 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
             purchaseTaxableAmount ?? this.purchaseTaxableAmount,
         totalPurchaseAmount: totalPurchaseAmount ?? this.totalPurchaseAmount,
         logId: logId ?? this.logId,
-        generateLedgerId: generateLedgerId ?? this.generateLedgerId,
-        paymentLedgerId: paymentLedgerId ?? this.paymentLedgerId,
-        comission: comission ?? this.comission,
-        comissionAmount: comissionAmount ?? this.comissionAmount,
-        comissionPaidDate: comissionPaidDate ?? this.comissionPaidDate,
-        adjustComissionAmount:
-            adjustComissionAmount ?? this.adjustComissionAmount,
+        hospitalGenerateLedgerId:
+            hospitalGenerateLedgerId ?? this.hospitalGenerateLedgerId,
+        hospitalPaymentLedgerId:
+            hospitalPaymentLedgerId ?? this.hospitalPaymentLedgerId,
+        hospitalComission: hospitalComission ?? this.hospitalComission,
+        hospitalComissionAmount:
+            hospitalComissionAmount ?? this.hospitalComissionAmount,
+        hospitalComissionPaidDate:
+            hospitalComissionPaidDate ?? this.hospitalComissionPaidDate,
+        hospitalAdjustComissionAmount:
+            hospitalAdjustComissionAmount ?? this.hospitalAdjustComissionAmount,
+        doctorGenerateLedgerId:
+            doctorGenerateLedgerId ?? this.doctorGenerateLedgerId,
+        doctorPaymentLedgerId:
+            doctorPaymentLedgerId ?? this.doctorPaymentLedgerId,
+        doctorComission: doctorComission ?? this.doctorComission,
+        doctorComissionAmount:
+            doctorComissionAmount ?? this.doctorComissionAmount,
+        doctorComissionPaidDate:
+            doctorComissionPaidDate ?? this.doctorComissionPaidDate,
+        doctorAdjustComissionAmount:
+            doctorAdjustComissionAmount ?? this.doctorAdjustComissionAmount,
+        techniqalStaffGenerateLedgerId: techniqalStaffGenerateLedgerId ??
+            this.techniqalStaffGenerateLedgerId,
+        techniqalStaffPaymentLedgerId:
+            techniqalStaffPaymentLedgerId ?? this.techniqalStaffPaymentLedgerId,
+        techniqalStaffComission:
+            techniqalStaffComission ?? this.techniqalStaffComission,
+        techniqalStaffComissionAmount:
+            techniqalStaffComissionAmount ?? this.techniqalStaffComissionAmount,
+        techniqalStaffComissionPaidDate: techniqalStaffComissionPaidDate ??
+            this.techniqalStaffComissionPaidDate,
+        techniqalStaffAdjustComissionAmount:
+            techniqalStaffAdjustComissionAmount ??
+                this.techniqalStaffAdjustComissionAmount,
       );
   @override
   String toString() {
@@ -1952,12 +2345,30 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           ..write('purchaseTaxableAmount: $purchaseTaxableAmount, ')
           ..write('totalPurchaseAmount: $totalPurchaseAmount, ')
           ..write('logId: $logId, ')
-          ..write('generateLedgerId: $generateLedgerId, ')
-          ..write('paymentLedgerId: $paymentLedgerId, ')
-          ..write('comission: $comission, ')
-          ..write('comissionAmount: $comissionAmount, ')
-          ..write('comissionPaidDate: $comissionPaidDate, ')
-          ..write('adjustComissionAmount: $adjustComissionAmount')
+          ..write('hospitalGenerateLedgerId: $hospitalGenerateLedgerId, ')
+          ..write('hospitalPaymentLedgerId: $hospitalPaymentLedgerId, ')
+          ..write('hospitalComission: $hospitalComission, ')
+          ..write('hospitalComissionAmount: $hospitalComissionAmount, ')
+          ..write('hospitalComissionPaidDate: $hospitalComissionPaidDate, ')
+          ..write(
+              'hospitalAdjustComissionAmount: $hospitalAdjustComissionAmount, ')
+          ..write('doctorGenerateLedgerId: $doctorGenerateLedgerId, ')
+          ..write('doctorPaymentLedgerId: $doctorPaymentLedgerId, ')
+          ..write('doctorComission: $doctorComission, ')
+          ..write('doctorComissionAmount: $doctorComissionAmount, ')
+          ..write('doctorComissionPaidDate: $doctorComissionPaidDate, ')
+          ..write('doctorAdjustComissionAmount: $doctorAdjustComissionAmount, ')
+          ..write(
+              'techniqalStaffGenerateLedgerId: $techniqalStaffGenerateLedgerId, ')
+          ..write(
+              'techniqalStaffPaymentLedgerId: $techniqalStaffPaymentLedgerId, ')
+          ..write('techniqalStaffComission: $techniqalStaffComission, ')
+          ..write(
+              'techniqalStaffComissionAmount: $techniqalStaffComissionAmount, ')
+          ..write(
+              'techniqalStaffComissionPaidDate: $techniqalStaffComissionPaidDate, ')
+          ..write(
+              'techniqalStaffAdjustComissionAmount: $techniqalStaffAdjustComissionAmount')
           ..write(')'))
         .toString();
   }
@@ -1984,12 +2395,24 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
         purchaseTaxableAmount,
         totalPurchaseAmount,
         logId,
-        generateLedgerId,
-        paymentLedgerId,
-        comission,
-        comissionAmount,
-        comissionPaidDate,
-        adjustComissionAmount
+        hospitalGenerateLedgerId,
+        hospitalPaymentLedgerId,
+        hospitalComission,
+        hospitalComissionAmount,
+        hospitalComissionPaidDate,
+        hospitalAdjustComissionAmount,
+        doctorGenerateLedgerId,
+        doctorPaymentLedgerId,
+        doctorComission,
+        doctorComissionAmount,
+        doctorComissionPaidDate,
+        doctorAdjustComissionAmount,
+        techniqalStaffGenerateLedgerId,
+        techniqalStaffPaymentLedgerId,
+        techniqalStaffComission,
+        techniqalStaffComissionAmount,
+        techniqalStaffComissionPaidDate,
+        techniqalStaffAdjustComissionAmount
       ]);
   @override
   bool operator ==(Object other) =>
@@ -2015,12 +2438,31 @@ class InputDataData extends DataClass implements Insertable<InputDataData> {
           other.purchaseTaxableAmount == this.purchaseTaxableAmount &&
           other.totalPurchaseAmount == this.totalPurchaseAmount &&
           other.logId == this.logId &&
-          other.generateLedgerId == this.generateLedgerId &&
-          other.paymentLedgerId == this.paymentLedgerId &&
-          other.comission == this.comission &&
-          other.comissionAmount == this.comissionAmount &&
-          other.comissionPaidDate == this.comissionPaidDate &&
-          other.adjustComissionAmount == this.adjustComissionAmount);
+          other.hospitalGenerateLedgerId == this.hospitalGenerateLedgerId &&
+          other.hospitalPaymentLedgerId == this.hospitalPaymentLedgerId &&
+          other.hospitalComission == this.hospitalComission &&
+          other.hospitalComissionAmount == this.hospitalComissionAmount &&
+          other.hospitalComissionPaidDate == this.hospitalComissionPaidDate &&
+          other.hospitalAdjustComissionAmount ==
+              this.hospitalAdjustComissionAmount &&
+          other.doctorGenerateLedgerId == this.doctorGenerateLedgerId &&
+          other.doctorPaymentLedgerId == this.doctorPaymentLedgerId &&
+          other.doctorComission == this.doctorComission &&
+          other.doctorComissionAmount == this.doctorComissionAmount &&
+          other.doctorComissionPaidDate == this.doctorComissionPaidDate &&
+          other.doctorAdjustComissionAmount ==
+              this.doctorAdjustComissionAmount &&
+          other.techniqalStaffGenerateLedgerId ==
+              this.techniqalStaffGenerateLedgerId &&
+          other.techniqalStaffPaymentLedgerId ==
+              this.techniqalStaffPaymentLedgerId &&
+          other.techniqalStaffComission == this.techniqalStaffComission &&
+          other.techniqalStaffComissionAmount ==
+              this.techniqalStaffComissionAmount &&
+          other.techniqalStaffComissionPaidDate ==
+              this.techniqalStaffComissionPaidDate &&
+          other.techniqalStaffAdjustComissionAmount ==
+              this.techniqalStaffAdjustComissionAmount);
 }
 
 class InputDataCompanion extends UpdateCompanion<InputDataData> {
@@ -2044,12 +2486,24 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
   final Value<double> purchaseTaxableAmount;
   final Value<double> totalPurchaseAmount;
   final Value<int> logId;
-  final Value<int> generateLedgerId;
-  final Value<int> paymentLedgerId;
-  final Value<double> comission;
-  final Value<double> comissionAmount;
-  final Value<DateTime> comissionPaidDate;
-  final Value<double> adjustComissionAmount;
+  final Value<int> hospitalGenerateLedgerId;
+  final Value<int> hospitalPaymentLedgerId;
+  final Value<double> hospitalComission;
+  final Value<double> hospitalComissionAmount;
+  final Value<DateTime> hospitalComissionPaidDate;
+  final Value<double> hospitalAdjustComissionAmount;
+  final Value<int> doctorGenerateLedgerId;
+  final Value<int> doctorPaymentLedgerId;
+  final Value<double> doctorComission;
+  final Value<double> doctorComissionAmount;
+  final Value<DateTime> doctorComissionPaidDate;
+  final Value<double> doctorAdjustComissionAmount;
+  final Value<int> techniqalStaffGenerateLedgerId;
+  final Value<int> techniqalStaffPaymentLedgerId;
+  final Value<double> techniqalStaffComission;
+  final Value<double> techniqalStaffComissionAmount;
+  final Value<DateTime> techniqalStaffComissionPaidDate;
+  final Value<double> techniqalStaffAdjustComissionAmount;
   const InputDataCompanion({
     this.id = const Value.absent(),
     this.documentType = const Value.absent(),
@@ -2071,12 +2525,24 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     this.purchaseTaxableAmount = const Value.absent(),
     this.totalPurchaseAmount = const Value.absent(),
     this.logId = const Value.absent(),
-    this.generateLedgerId = const Value.absent(),
-    this.paymentLedgerId = const Value.absent(),
-    this.comission = const Value.absent(),
-    this.comissionAmount = const Value.absent(),
-    this.comissionPaidDate = const Value.absent(),
-    this.adjustComissionAmount = const Value.absent(),
+    this.hospitalGenerateLedgerId = const Value.absent(),
+    this.hospitalPaymentLedgerId = const Value.absent(),
+    this.hospitalComission = const Value.absent(),
+    this.hospitalComissionAmount = const Value.absent(),
+    this.hospitalComissionPaidDate = const Value.absent(),
+    this.hospitalAdjustComissionAmount = const Value.absent(),
+    this.doctorGenerateLedgerId = const Value.absent(),
+    this.doctorPaymentLedgerId = const Value.absent(),
+    this.doctorComission = const Value.absent(),
+    this.doctorComissionAmount = const Value.absent(),
+    this.doctorComissionPaidDate = const Value.absent(),
+    this.doctorAdjustComissionAmount = const Value.absent(),
+    this.techniqalStaffGenerateLedgerId = const Value.absent(),
+    this.techniqalStaffPaymentLedgerId = const Value.absent(),
+    this.techniqalStaffComission = const Value.absent(),
+    this.techniqalStaffComissionAmount = const Value.absent(),
+    this.techniqalStaffComissionPaidDate = const Value.absent(),
+    this.techniqalStaffAdjustComissionAmount = const Value.absent(),
   });
   InputDataCompanion.insert({
     this.id = const Value.absent(),
@@ -2099,12 +2565,24 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     required double purchaseTaxableAmount,
     required double totalPurchaseAmount,
     required int logId,
-    required int generateLedgerId,
-    required int paymentLedgerId,
-    required double comission,
-    required double comissionAmount,
-    required DateTime comissionPaidDate,
-    required double adjustComissionAmount,
+    required int hospitalGenerateLedgerId,
+    required int hospitalPaymentLedgerId,
+    required double hospitalComission,
+    required double hospitalComissionAmount,
+    required DateTime hospitalComissionPaidDate,
+    required double hospitalAdjustComissionAmount,
+    required int doctorGenerateLedgerId,
+    required int doctorPaymentLedgerId,
+    required double doctorComission,
+    required double doctorComissionAmount,
+    required DateTime doctorComissionPaidDate,
+    required double doctorAdjustComissionAmount,
+    required int techniqalStaffGenerateLedgerId,
+    required int techniqalStaffPaymentLedgerId,
+    required double techniqalStaffComission,
+    required double techniqalStaffComissionAmount,
+    required DateTime techniqalStaffComissionPaidDate,
+    required double techniqalStaffAdjustComissionAmount,
   })  : documentType = Value(documentType),
         distDocDate = Value(distDocDate),
         distDocNo = Value(distDocNo),
@@ -2124,12 +2602,26 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
         purchaseTaxableAmount = Value(purchaseTaxableAmount),
         totalPurchaseAmount = Value(totalPurchaseAmount),
         logId = Value(logId),
-        generateLedgerId = Value(generateLedgerId),
-        paymentLedgerId = Value(paymentLedgerId),
-        comission = Value(comission),
-        comissionAmount = Value(comissionAmount),
-        comissionPaidDate = Value(comissionPaidDate),
-        adjustComissionAmount = Value(adjustComissionAmount);
+        hospitalGenerateLedgerId = Value(hospitalGenerateLedgerId),
+        hospitalPaymentLedgerId = Value(hospitalPaymentLedgerId),
+        hospitalComission = Value(hospitalComission),
+        hospitalComissionAmount = Value(hospitalComissionAmount),
+        hospitalComissionPaidDate = Value(hospitalComissionPaidDate),
+        hospitalAdjustComissionAmount = Value(hospitalAdjustComissionAmount),
+        doctorGenerateLedgerId = Value(doctorGenerateLedgerId),
+        doctorPaymentLedgerId = Value(doctorPaymentLedgerId),
+        doctorComission = Value(doctorComission),
+        doctorComissionAmount = Value(doctorComissionAmount),
+        doctorComissionPaidDate = Value(doctorComissionPaidDate),
+        doctorAdjustComissionAmount = Value(doctorAdjustComissionAmount),
+        techniqalStaffGenerateLedgerId = Value(techniqalStaffGenerateLedgerId),
+        techniqalStaffPaymentLedgerId = Value(techniqalStaffPaymentLedgerId),
+        techniqalStaffComission = Value(techniqalStaffComission),
+        techniqalStaffComissionAmount = Value(techniqalStaffComissionAmount),
+        techniqalStaffComissionPaidDate =
+            Value(techniqalStaffComissionPaidDate),
+        techniqalStaffAdjustComissionAmount =
+            Value(techniqalStaffAdjustComissionAmount);
   static Insertable<InputDataData> custom({
     Expression<int>? id,
     Expression<String>? documentType,
@@ -2151,12 +2643,24 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     Expression<double>? purchaseTaxableAmount,
     Expression<double>? totalPurchaseAmount,
     Expression<int>? logId,
-    Expression<int>? generateLedgerId,
-    Expression<int>? paymentLedgerId,
-    Expression<double>? comission,
-    Expression<double>? comissionAmount,
-    Expression<DateTime>? comissionPaidDate,
-    Expression<double>? adjustComissionAmount,
+    Expression<int>? hospitalGenerateLedgerId,
+    Expression<int>? hospitalPaymentLedgerId,
+    Expression<double>? hospitalComission,
+    Expression<double>? hospitalComissionAmount,
+    Expression<DateTime>? hospitalComissionPaidDate,
+    Expression<double>? hospitalAdjustComissionAmount,
+    Expression<int>? doctorGenerateLedgerId,
+    Expression<int>? doctorPaymentLedgerId,
+    Expression<double>? doctorComission,
+    Expression<double>? doctorComissionAmount,
+    Expression<DateTime>? doctorComissionPaidDate,
+    Expression<double>? doctorAdjustComissionAmount,
+    Expression<int>? techniqalStaffGenerateLedgerId,
+    Expression<int>? techniqalStaffPaymentLedgerId,
+    Expression<double>? techniqalStaffComission,
+    Expression<double>? techniqalStaffComissionAmount,
+    Expression<DateTime>? techniqalStaffComissionPaidDate,
+    Expression<double>? techniqalStaffAdjustComissionAmount,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2181,13 +2685,41 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
       if (totalPurchaseAmount != null)
         'total_purchase_amount': totalPurchaseAmount,
       if (logId != null) 'log_id': logId,
-      if (generateLedgerId != null) 'generate_ledger_id': generateLedgerId,
-      if (paymentLedgerId != null) 'payment_ledger_id': paymentLedgerId,
-      if (comission != null) 'comission': comission,
-      if (comissionAmount != null) 'comission_amount': comissionAmount,
-      if (comissionPaidDate != null) 'comission_paid_date': comissionPaidDate,
-      if (adjustComissionAmount != null)
-        'adjust_comission_amount': adjustComissionAmount,
+      if (hospitalGenerateLedgerId != null)
+        'hospital_generate_ledger_id': hospitalGenerateLedgerId,
+      if (hospitalPaymentLedgerId != null)
+        'hospital_payment_ledger_id': hospitalPaymentLedgerId,
+      if (hospitalComission != null) 'hospital_comission': hospitalComission,
+      if (hospitalComissionAmount != null)
+        'hospital_comission_amount': hospitalComissionAmount,
+      if (hospitalComissionPaidDate != null)
+        'hospital_comission_paid_date': hospitalComissionPaidDate,
+      if (hospitalAdjustComissionAmount != null)
+        'hospital_adjust_comission_amount': hospitalAdjustComissionAmount,
+      if (doctorGenerateLedgerId != null)
+        'doctor_generate_ledger_id': doctorGenerateLedgerId,
+      if (doctorPaymentLedgerId != null)
+        'doctor_payment_ledger_id': doctorPaymentLedgerId,
+      if (doctorComission != null) 'doctor_comission': doctorComission,
+      if (doctorComissionAmount != null)
+        'doctor_comission_amount': doctorComissionAmount,
+      if (doctorComissionPaidDate != null)
+        'doctor_comission_paid_date': doctorComissionPaidDate,
+      if (doctorAdjustComissionAmount != null)
+        'doctor_adjust_comission_amount': doctorAdjustComissionAmount,
+      if (techniqalStaffGenerateLedgerId != null)
+        'techniqal_staff_generate_ledger_id': techniqalStaffGenerateLedgerId,
+      if (techniqalStaffPaymentLedgerId != null)
+        'techniqal_staff_payment_ledger_id': techniqalStaffPaymentLedgerId,
+      if (techniqalStaffComission != null)
+        'techniqal_staff_comission': techniqalStaffComission,
+      if (techniqalStaffComissionAmount != null)
+        'techniqal_staff_comission_amount': techniqalStaffComissionAmount,
+      if (techniqalStaffComissionPaidDate != null)
+        'techniqal_staff_comission_paid_date': techniqalStaffComissionPaidDate,
+      if (techniqalStaffAdjustComissionAmount != null)
+        'techniqal_staff_adjust_comission_amount':
+            techniqalStaffAdjustComissionAmount,
     });
   }
 
@@ -2212,12 +2744,24 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
       Value<double>? purchaseTaxableAmount,
       Value<double>? totalPurchaseAmount,
       Value<int>? logId,
-      Value<int>? generateLedgerId,
-      Value<int>? paymentLedgerId,
-      Value<double>? comission,
-      Value<double>? comissionAmount,
-      Value<DateTime>? comissionPaidDate,
-      Value<double>? adjustComissionAmount}) {
+      Value<int>? hospitalGenerateLedgerId,
+      Value<int>? hospitalPaymentLedgerId,
+      Value<double>? hospitalComission,
+      Value<double>? hospitalComissionAmount,
+      Value<DateTime>? hospitalComissionPaidDate,
+      Value<double>? hospitalAdjustComissionAmount,
+      Value<int>? doctorGenerateLedgerId,
+      Value<int>? doctorPaymentLedgerId,
+      Value<double>? doctorComission,
+      Value<double>? doctorComissionAmount,
+      Value<DateTime>? doctorComissionPaidDate,
+      Value<double>? doctorAdjustComissionAmount,
+      Value<int>? techniqalStaffGenerateLedgerId,
+      Value<int>? techniqalStaffPaymentLedgerId,
+      Value<double>? techniqalStaffComission,
+      Value<double>? techniqalStaffComissionAmount,
+      Value<DateTime>? techniqalStaffComissionPaidDate,
+      Value<double>? techniqalStaffAdjustComissionAmount}) {
     return InputDataCompanion(
       id: id ?? this.id,
       documentType: documentType ?? this.documentType,
@@ -2240,13 +2784,41 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
           purchaseTaxableAmount ?? this.purchaseTaxableAmount,
       totalPurchaseAmount: totalPurchaseAmount ?? this.totalPurchaseAmount,
       logId: logId ?? this.logId,
-      generateLedgerId: generateLedgerId ?? this.generateLedgerId,
-      paymentLedgerId: paymentLedgerId ?? this.paymentLedgerId,
-      comission: comission ?? this.comission,
-      comissionAmount: comissionAmount ?? this.comissionAmount,
-      comissionPaidDate: comissionPaidDate ?? this.comissionPaidDate,
-      adjustComissionAmount:
-          adjustComissionAmount ?? this.adjustComissionAmount,
+      hospitalGenerateLedgerId:
+          hospitalGenerateLedgerId ?? this.hospitalGenerateLedgerId,
+      hospitalPaymentLedgerId:
+          hospitalPaymentLedgerId ?? this.hospitalPaymentLedgerId,
+      hospitalComission: hospitalComission ?? this.hospitalComission,
+      hospitalComissionAmount:
+          hospitalComissionAmount ?? this.hospitalComissionAmount,
+      hospitalComissionPaidDate:
+          hospitalComissionPaidDate ?? this.hospitalComissionPaidDate,
+      hospitalAdjustComissionAmount:
+          hospitalAdjustComissionAmount ?? this.hospitalAdjustComissionAmount,
+      doctorGenerateLedgerId:
+          doctorGenerateLedgerId ?? this.doctorGenerateLedgerId,
+      doctorPaymentLedgerId:
+          doctorPaymentLedgerId ?? this.doctorPaymentLedgerId,
+      doctorComission: doctorComission ?? this.doctorComission,
+      doctorComissionAmount:
+          doctorComissionAmount ?? this.doctorComissionAmount,
+      doctorComissionPaidDate:
+          doctorComissionPaidDate ?? this.doctorComissionPaidDate,
+      doctorAdjustComissionAmount:
+          doctorAdjustComissionAmount ?? this.doctorAdjustComissionAmount,
+      techniqalStaffGenerateLedgerId:
+          techniqalStaffGenerateLedgerId ?? this.techniqalStaffGenerateLedgerId,
+      techniqalStaffPaymentLedgerId:
+          techniqalStaffPaymentLedgerId ?? this.techniqalStaffPaymentLedgerId,
+      techniqalStaffComission:
+          techniqalStaffComission ?? this.techniqalStaffComission,
+      techniqalStaffComissionAmount:
+          techniqalStaffComissionAmount ?? this.techniqalStaffComissionAmount,
+      techniqalStaffComissionPaidDate: techniqalStaffComissionPaidDate ??
+          this.techniqalStaffComissionPaidDate,
+      techniqalStaffAdjustComissionAmount:
+          techniqalStaffAdjustComissionAmount ??
+              this.techniqalStaffAdjustComissionAmount,
     );
   }
 
@@ -2315,24 +2887,75 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
     if (logId.present) {
       map['log_id'] = Variable<int>(logId.value);
     }
-    if (generateLedgerId.present) {
-      map['generate_ledger_id'] = Variable<int>(generateLedgerId.value);
+    if (hospitalGenerateLedgerId.present) {
+      map['hospital_generate_ledger_id'] =
+          Variable<int>(hospitalGenerateLedgerId.value);
     }
-    if (paymentLedgerId.present) {
-      map['payment_ledger_id'] = Variable<int>(paymentLedgerId.value);
+    if (hospitalPaymentLedgerId.present) {
+      map['hospital_payment_ledger_id'] =
+          Variable<int>(hospitalPaymentLedgerId.value);
     }
-    if (comission.present) {
-      map['comission'] = Variable<double>(comission.value);
+    if (hospitalComission.present) {
+      map['hospital_comission'] = Variable<double>(hospitalComission.value);
     }
-    if (comissionAmount.present) {
-      map['comission_amount'] = Variable<double>(comissionAmount.value);
+    if (hospitalComissionAmount.present) {
+      map['hospital_comission_amount'] =
+          Variable<double>(hospitalComissionAmount.value);
     }
-    if (comissionPaidDate.present) {
-      map['comission_paid_date'] = Variable<DateTime>(comissionPaidDate.value);
+    if (hospitalComissionPaidDate.present) {
+      map['hospital_comission_paid_date'] =
+          Variable<DateTime>(hospitalComissionPaidDate.value);
     }
-    if (adjustComissionAmount.present) {
-      map['adjust_comission_amount'] =
-          Variable<double>(adjustComissionAmount.value);
+    if (hospitalAdjustComissionAmount.present) {
+      map['hospital_adjust_comission_amount'] =
+          Variable<double>(hospitalAdjustComissionAmount.value);
+    }
+    if (doctorGenerateLedgerId.present) {
+      map['doctor_generate_ledger_id'] =
+          Variable<int>(doctorGenerateLedgerId.value);
+    }
+    if (doctorPaymentLedgerId.present) {
+      map['doctor_payment_ledger_id'] =
+          Variable<int>(doctorPaymentLedgerId.value);
+    }
+    if (doctorComission.present) {
+      map['doctor_comission'] = Variable<double>(doctorComission.value);
+    }
+    if (doctorComissionAmount.present) {
+      map['doctor_comission_amount'] =
+          Variable<double>(doctorComissionAmount.value);
+    }
+    if (doctorComissionPaidDate.present) {
+      map['doctor_comission_paid_date'] =
+          Variable<DateTime>(doctorComissionPaidDate.value);
+    }
+    if (doctorAdjustComissionAmount.present) {
+      map['doctor_adjust_comission_amount'] =
+          Variable<double>(doctorAdjustComissionAmount.value);
+    }
+    if (techniqalStaffGenerateLedgerId.present) {
+      map['techniqal_staff_generate_ledger_id'] =
+          Variable<int>(techniqalStaffGenerateLedgerId.value);
+    }
+    if (techniqalStaffPaymentLedgerId.present) {
+      map['techniqal_staff_payment_ledger_id'] =
+          Variable<int>(techniqalStaffPaymentLedgerId.value);
+    }
+    if (techniqalStaffComission.present) {
+      map['techniqal_staff_comission'] =
+          Variable<double>(techniqalStaffComission.value);
+    }
+    if (techniqalStaffComissionAmount.present) {
+      map['techniqal_staff_comission_amount'] =
+          Variable<double>(techniqalStaffComissionAmount.value);
+    }
+    if (techniqalStaffComissionPaidDate.present) {
+      map['techniqal_staff_comission_paid_date'] =
+          Variable<DateTime>(techniqalStaffComissionPaidDate.value);
+    }
+    if (techniqalStaffAdjustComissionAmount.present) {
+      map['techniqal_staff_adjust_comission_amount'] =
+          Variable<double>(techniqalStaffAdjustComissionAmount.value);
     }
     return map;
   }
@@ -2360,12 +2983,30 @@ class InputDataCompanion extends UpdateCompanion<InputDataData> {
           ..write('purchaseTaxableAmount: $purchaseTaxableAmount, ')
           ..write('totalPurchaseAmount: $totalPurchaseAmount, ')
           ..write('logId: $logId, ')
-          ..write('generateLedgerId: $generateLedgerId, ')
-          ..write('paymentLedgerId: $paymentLedgerId, ')
-          ..write('comission: $comission, ')
-          ..write('comissionAmount: $comissionAmount, ')
-          ..write('comissionPaidDate: $comissionPaidDate, ')
-          ..write('adjustComissionAmount: $adjustComissionAmount')
+          ..write('hospitalGenerateLedgerId: $hospitalGenerateLedgerId, ')
+          ..write('hospitalPaymentLedgerId: $hospitalPaymentLedgerId, ')
+          ..write('hospitalComission: $hospitalComission, ')
+          ..write('hospitalComissionAmount: $hospitalComissionAmount, ')
+          ..write('hospitalComissionPaidDate: $hospitalComissionPaidDate, ')
+          ..write(
+              'hospitalAdjustComissionAmount: $hospitalAdjustComissionAmount, ')
+          ..write('doctorGenerateLedgerId: $doctorGenerateLedgerId, ')
+          ..write('doctorPaymentLedgerId: $doctorPaymentLedgerId, ')
+          ..write('doctorComission: $doctorComission, ')
+          ..write('doctorComissionAmount: $doctorComissionAmount, ')
+          ..write('doctorComissionPaidDate: $doctorComissionPaidDate, ')
+          ..write('doctorAdjustComissionAmount: $doctorAdjustComissionAmount, ')
+          ..write(
+              'techniqalStaffGenerateLedgerId: $techniqalStaffGenerateLedgerId, ')
+          ..write(
+              'techniqalStaffPaymentLedgerId: $techniqalStaffPaymentLedgerId, ')
+          ..write('techniqalStaffComission: $techniqalStaffComission, ')
+          ..write(
+              'techniqalStaffComissionAmount: $techniqalStaffComissionAmount, ')
+          ..write(
+              'techniqalStaffComissionPaidDate: $techniqalStaffComissionPaidDate, ')
+          ..write(
+              'techniqalStaffAdjustComissionAmount: $techniqalStaffAdjustComissionAmount')
           ..write(')'))
         .toString();
   }

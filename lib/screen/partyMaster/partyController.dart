@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
@@ -196,6 +197,7 @@ class PartyController extends GetxController {
       "party added".successSnackbar;
     } else {
       Get.back();
+
       "partyComission already exist".errorSnackbar;
     }
   }

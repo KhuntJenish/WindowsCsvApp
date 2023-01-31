@@ -778,19 +778,20 @@ class PartyPayment extends StatelessWidget {
                                                           ),
                                                           onConfirm: () {
                                                             Get.back();
-                                                            _homepageController
-                                                                .reversePaymentProcess(
-                                                              _homepageController
-                                                                  .generatedReportData[
-                                                                      index][15]
-                                                                  .toString(),
-                                                              double.parse(
-                                                                  _homepageController
-                                                                      .generatedReportData[
-                                                                          index]
-                                                                          [19]
-                                                                      .toString()),
-                                                            );
+                                                            // !Todo: Payment Back
+                                                            // _homepageController
+                                                            //     .reversePaymentProcess(
+                                                            //   _homepageController
+                                                            //       .generatedReportData[
+                                                            //           index][15]
+                                                            //       .toString(),
+                                                            //   double.parse(
+                                                            //       _homepageController
+                                                            //           .generatedReportData[
+                                                            //               index]
+                                                            //               [19]
+                                                            //           .toString()),
+                                                            // );
                                                           },
                                                         );
                                                       },
@@ -881,14 +882,15 @@ class PartyPayment extends StatelessWidget {
                                                               .value);
                                                       print(_homepageController
                                                           .defualtParty.value);
-                                                      _homepageController
-                                                          .partyWisePayment(
-                                                              crAmount:
-                                                                  crAmount,
-                                                              selectedParty:
-                                                                  _homepageController
-                                                                      .defualtParty
-                                                                      .value);
+                                                          // !todo: payment
+                                                      // _homepageController
+                                                      //     .partyWisePayment(
+                                                      //         crAmount:
+                                                      //             crAmount,
+                                                      //         selectedParty:
+                                                      //             _homepageController
+                                                      //                 .defualtParty
+                                                      //                 .value);
                                                     },
                                                   );
                                                 } else {

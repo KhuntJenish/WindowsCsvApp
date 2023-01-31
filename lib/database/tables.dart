@@ -60,12 +60,24 @@ class InputData extends Table {
   RealColumn get purchaseTaxableAmount => real()();
   RealColumn get totalPurchaseAmount => real()();
   IntColumn get logId => integer()();
-  IntColumn get generateLedgerId => integer()();
-  IntColumn get paymentLedgerId => integer()();
-  RealColumn get comission => real()();
-  RealColumn get comissionAmount => real()();
-  DateTimeColumn get comissionPaidDate => dateTime()();
-  RealColumn get adjustComissionAmount => real()();
+  IntColumn get hospitalGenerateLedgerId => integer()();
+  IntColumn get hospitalPaymentLedgerId => integer()();
+  RealColumn get hospitalComission => real()();
+  RealColumn get hospitalComissionAmount => real()();
+  DateTimeColumn get hospitalComissionPaidDate => dateTime()();
+  RealColumn get hospitalAdjustComissionAmount => real()();
+  IntColumn get doctorGenerateLedgerId => integer()();
+  IntColumn get doctorPaymentLedgerId => integer()();
+  RealColumn get doctorComission => real()();
+  RealColumn get doctorComissionAmount => real()();
+  DateTimeColumn get doctorComissionPaidDate => dateTime()();
+  RealColumn get doctorAdjustComissionAmount => real()();
+  IntColumn get techniqalStaffGenerateLedgerId => integer()();
+  IntColumn get techniqalStaffPaymentLedgerId => integer()();
+  RealColumn get techniqalStaffComission => real()();
+  RealColumn get techniqalStaffComissionAmount => real()();
+  DateTimeColumn get techniqalStaffComissionPaidDate => dateTime()();
+  RealColumn get techniqalStaffAdjustComissionAmount => real()();
 }
 
 class Ledger extends Table {

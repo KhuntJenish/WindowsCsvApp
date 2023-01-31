@@ -256,8 +256,8 @@ class ImportReport extends StatelessWidget {
                                                 _homepageController
                                                     .partyNaNSetData.isEmpty) {
                                               // !TODO: Add Data to Database
-                                              // await _homepageController
-                                              //     .insertData(data);
+                                              await _homepageController
+                                                  .insertData(data);
                                             } else {
                                               Get.defaultDialog(
                                                 title: 'Error',
@@ -321,10 +321,10 @@ class ImportReport extends StatelessWidget {
                                       onPressed: () async {
                                         print('Generate Report');
                                         // TODO: Generate Report With Data
-                                        // await _homepageController
-                                        //     .generateComissionReport(
-                                        //         data: _homepageController
-                                        //             .pendingReportData);
+                                        await _homepageController
+                                            .generateComissionReport(
+                                                data: _homepageController
+                                                    .pendingReportData);
                                       }),
                                 ),
                               ],
