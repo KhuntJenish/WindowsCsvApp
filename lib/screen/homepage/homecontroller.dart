@@ -1630,12 +1630,12 @@ class HomepageController extends GetxController {
               var checkTechnicianPartyComission,
                   checkDoctorPartyComission,
                   checkHospitalPartyComission;
-              if (data[3] != "") {
+              if (element.hospitalID != 0) {
                 checkHospitalPartyComission =
                     await (db.select(db.partyComissionDetail)
                           ..where((tbl) =>
                               tbl.pID.equals(checkHospitalParty[0].id) &
-                              tbl.mtID.equals(materialTypeList![0].id)))
+                              tbl.mtID.equals(checkMaterialType[0].id)))
                         .get();
                 print(checkHospitalPartyComission);
                 isShowHospital =
@@ -1643,12 +1643,12 @@ class HomepageController extends GetxController {
               } else {
                 isShowHospital = true;
               }
-              if (data[9] != "") {
+              if (element.doctorID != 0) {
                 checkDoctorPartyComission =
                     await (db.select(db.partyComissionDetail)
                           ..where((tbl) =>
                               tbl.pID.equals(checkDoctorParty[0].id) &
-                              tbl.mtID.equals(materialTypeList![0].id)))
+                              tbl.mtID.equals(checkMaterialType[0].id)))
                         .get();
 
                 isShowDoctor =
@@ -1656,12 +1656,12 @@ class HomepageController extends GetxController {
               } else {
                 isShowDoctor = true;
               }
-              if (data[10] != "") {
+              if (element.techniqalStaffID != 0) {
                 checkTechnicianPartyComission =
                     await (db.select(db.partyComissionDetail)
                           ..where((tbl) =>
                               tbl.pID.equals(checkTechnicianParty[0].id) &
-                              tbl.mtID.equals(materialTypeList![0].id)))
+                              tbl.mtID.equals(checkMaterialType[0].id)))
                         .get();
 
                 isShowTechnician =
@@ -1671,77 +1671,177 @@ class HomepageController extends GetxController {
               }
 
               if (isShowTechnician && isShowDoctor && isShowHospital) {
+                isShowDoctor = false;
+                isShowHospital = false;
+                isShowTechnician = false;
                 // displayData.add(data[15].toString());
                 var logID = GetStorage('box').read('logID');
                 print('logID: $logID');
                 //For Hospital
-                var hospitalComission =
-                    checkHospitalPartyComission[0].comission1;
-                var hospitalComissionAmount = double.parse(
-                    ((hospitalComission * element.totalSale) / 100)
-                        .toStringAsFixed(2));
-                print('pname: ${checkHospitalParty[0].name}');
+                var hospitalComission, hospitalComissionAmount;
                 //For Doctor
-                var docotorComission = checkDoctorPartyComission[0].comission1;
-                var docotorComissionAmount = double.parse(
-                    ((docotorComission * element.totalSale) / 100)
-                        .toStringAsFixed(2));
-                print('pname: ${checkDoctorParty[0].name}');
+                var docotorComission, doctorComissionAmount;
                 //For Technician
-                var technicianComission =
-                    checkTechnicianPartyComission[0].comission1;
-                var technicianComissionAmount = double.parse(
-                    ((technicianComission * element.totalSale) / 100)
-                        .toStringAsFixed(2));
-                print('pname: ${checkTechnicianParty[0].name}');
-                if (hospitalPartySet.contains(element.hospitalID)) {
-                  int index = hospitalPartySet
-                      .toList()
-                      .indexWhere((item) => item.isEqual(element.hospitalID));
-                  print(index);
-                  var oldCommision =
-                      hospitalPartyTotalComissionSet.elementAt(index);
-                  print(oldCommision);
-                  hospitalPartyTotalComissionSet[index] =
-                      oldCommision + hospitalComissionAmount;
-                  hospitalPartyWiseList[index].add(element.smtInvNo);
+                var technicianComission, technicianComissionAmount;
+                ;
+                if (element.hospitalID != 0) {
+                  hospitalComission = checkHospitalPartyComission[0].comission1;
+                  hospitalComissionAmount = double.parse(
+                      ((hospitalComission * element.totalSale) / 100)
+                          .toStringAsFixed(2));
+                  print('pname: ${checkHospitalParty[0].name}');
+                  if (hospitalPartySet.contains(element.hospitalID)) {
+                    int index = hospitalPartySet
+                        .toList()
+                        .indexWhere((item) => item.isEqual(element.hospitalID));
+                    print(index);
+                    var oldCommision =
+                        hospitalPartyTotalComissionSet.elementAt(index);
+                    print(oldCommision);
+                    hospitalPartyTotalComissionSet[index] =
+                        oldCommision + hospitalComissionAmount;
+                    hospitalPartyWiseList[index].add(element.smtInvNo);
 
-                  print(hospitalPartyWiseList);
-                  print(hospitalPartyTotalComissionSet.toList());
-                  // partyTotalComissionSet.add(comissionAmount);
+                    print(hospitalPartyWiseList);
+                    print(hospitalPartyTotalComissionSet.toList());
+                    // partyTotalComissionSet.add(comissionAmount);
+                  } else {
+                    hospitalPartySet.add(element.hospitalID);
+                    int index = hospitalPartySet
+                        .toList()
+                        .indexWhere((item) => item.isEqual(element.hospitalID));
+                    print(index);
+                    hospitalPartyTotalComissionSet.insert(
+                        index, hospitalComissionAmount);
+                    List<String> party = [];
+                    party.add(element.smtInvNo);
+                    hospitalPartyWiseList.insert(index, party);
+                    // partyTotalComissionSet.elementAt(index);
+                    print(hospitalPartyWiseList);
+                    print(hospitalPartyTotalComissionSet.toList());
+                    print(hospitalPartySet);
+                  }
+                  isShowHospital = true;
                 } else {
-                  hospitalPartySet.add(element.hospitalID);
-                  int index = hospitalPartySet
-                      .toList()
-                      .indexWhere((item) => item.isEqual(element.hospitalID));
-                  print(index);
-                  hospitalPartyTotalComissionSet.insert(
-                      index, hospitalComissionAmount);
-                  List<String> party = [];
-                  party.add(element.smtInvNo);
-                  hospitalPartyWiseList.insert(index, party);
-                  // partyTotalComissionSet.elementAt(index);
-                  print(hospitalPartyWiseList);
-                  print(hospitalPartyTotalComissionSet.toList());
-                  print(hospitalPartySet);
+                  hospitalComission = 0;
+                  hospitalComissionAmount = 0;
+                  isShowHospital = true;
                 }
-                var resComissionUpdate = await (db.update(db.inputData)
-                      ..where((tbl) => tbl.id.equals(element.id)))
-                    .write(
-                  element.copyWith(
-                      hospitalComission: hospitalComission,
-                      hospitalComissionAmount: hospitalComissionAmount,
-                      // doctorComission: docotorComission,
-                      // doctorComissionAmount: docotorComissionAmount,
-                      // technicianComission: technicianComission,
-                      // technicianComissionAmount: technicianComissionAmount,
-                      logId: logID),
-                );
-                print(resComissionUpdate);
-                print('comission(%): $hospitalComission');
-                print('TotalAmount(%): ${element.totalSale}');
-                print('comissionAmount(%): ${hospitalComissionAmount}');
-                print('************');
+                if (element.doctorID != 0) {
+                  docotorComission = checkDoctorPartyComission[0].comission1;
+                  doctorComissionAmount = double.parse(
+                      ((docotorComission * element.totalSale) / 100)
+                          .toStringAsFixed(2));
+                  print('pname: ${checkDoctorParty[0].name}');
+                  if (doctorPartySet.contains(element.doctorID)) {
+                    int index = doctorPartySet
+                        .toList()
+                        .indexWhere((item) => item.isEqual(element.doctorID));
+                    print(index);
+                    var oldCommision =
+                        doctorPartyTotalComissionSet.elementAt(index);
+                    print(oldCommision);
+                    doctorPartyTotalComissionSet[index] =
+                        oldCommision + doctorComissionAmount;
+                    doctorPartyWiseList[index].add(element.smtInvNo);
+
+                    print(doctorPartyWiseList);
+                    print(doctorPartyTotalComissionSet.toList());
+                    // partyTotalComissionSet.add(comissionAmount);
+                  } else {
+                    doctorPartySet.add(element.doctorID);
+                    int index = doctorPartySet
+                        .toList()
+                        .indexWhere((item) => item.isEqual(element.doctorID));
+                    print(index);
+                    doctorPartyTotalComissionSet.insert(
+                        index, doctorComissionAmount);
+                    List<String> party = [];
+                    party.add(element.smtInvNo);
+                    doctorPartyWiseList.insert(index, party);
+                    // partyTotalComissionSet.elementAt(index);
+                    print(doctorPartyWiseList);
+                    print(doctorPartyTotalComissionSet.toList());
+                    print(doctorPartySet);
+                  }
+                  isShowDoctor = true;
+                } else {
+                  docotorComission = 0;
+                  doctorComissionAmount = 0;
+                  isShowDoctor = true;
+                }
+                if (element.techniqalStaffID != 0) {
+                  technicianComission =
+                      checkTechnicianPartyComission[0].comission1;
+                  technicianComissionAmount = double.parse(
+                      ((technicianComission * element.totalSale) / 100)
+                          .toStringAsFixed(2));
+                  if (technicianPartySet.contains(element.techniqalStaffID)) {
+                    int index = technicianPartySet.toList().indexWhere(
+                        (item) => item.isEqual(element.techniqalStaffID));
+                    print(index);
+                    var oldCommision =
+                        technicianPartyTotalComissionSet.elementAt(index);
+                    print(oldCommision);
+                    technicianPartyTotalComissionSet[index] =
+                        oldCommision + technicianComissionAmount;
+                    technicianPartyWiseList[index].add(element.smtInvNo);
+
+                    print(technicianPartyWiseList);
+                    print(technicianPartyTotalComissionSet.toList());
+                    // partyTotalComissionSet.add(comissionAmount);
+                  } else {
+                    technicianPartySet.add(element.techniqalStaffID);
+                    int index = technicianPartySet.toList().indexWhere(
+                        (item) => item.isEqual(element.techniqalStaffID));
+                    print(index);
+                    technicianPartyTotalComissionSet.insert(
+                        index, technicianComissionAmount);
+                    List<String> party = [];
+                    party.add(element.smtInvNo);
+                    technicianPartyWiseList.insert(index, party);
+                    // partyTotalComissionSet.elementAt(index);
+                    print(technicianPartyWiseList);
+                    print(technicianPartyTotalComissionSet.toList());
+                    print(technicianPartySet);
+                  }
+                  isShowTechnician = true;
+                } else {
+                  technicianComission = 0;
+                  technicianComissionAmount = 0;
+                  isShowTechnician = true;
+                }
+                if (isShowHospital == true &&
+                    isShowDoctor == true &&
+                    isShowTechnician == true) {
+                  print('No Party');
+
+                  var resComissionUpdate = await (db.update(db.inputData)
+                        ..where((tbl) => tbl.id.equals(element.id)))
+                      .write(
+                    element.copyWith(
+                        hospitalComission:
+                            double.parse(hospitalComission.toString()),
+                        hospitalComissionAmount:
+                            double.parse(hospitalComissionAmount.toString()),
+                        doctorComission:
+                            double.parse(docotorComission.toString()),
+                        doctorComissionAmount:
+                            double.parse(doctorComissionAmount.toString()),
+                        techniqalStaffComission:
+                            double.parse(technicianComission.toString()),
+                        techniqalStaffComissionAmount:
+                            double.parse(technicianComissionAmount.toString()),
+                        // technicianComission: technicianComission,
+                        // technicianComissionAmount: technicianComissionAmount,
+                        logId: logID),
+                  );
+                  print(resComissionUpdate);
+                  print('comission(%): $hospitalComission');
+                  print('comissionAmount(%): $hospitalComissionAmount');
+                  print('TotalAmount(%): ${element.totalSale}');
+                  print('************');
+                }
               }
             } else {
               comissionAndmatTypeNaNSetData.add(element.smtInvNo.toString());
@@ -1751,47 +1851,62 @@ class HomepageController extends GetxController {
           }
         }
         print('done');
-        List ledgerIDList = [];
+        // List ledgerIDList = [];
 
-        for (var i = 0; i < hospitalPartySet.length; i++) {
-          print('ledgerID: ${i + 1}');
-          var pID = hospitalPartySet.elementAt(i);
-          print(hospitalPartySet.elementAt(i));
-          var totalComission = hospitalPartyTotalComissionSet.elementAt(i);
-          print(hospitalPartyTotalComissionSet.elementAt(i));
-          var resLedger =
-              await db.into(db.ledger).insert(LedgerCompanion.insert(
-                    type: 'sale commission',
-                    pID: pID,
-                    ledgerDate: DateTime.now(),
-                    drAmount: totalComission,
-                    crAmount: 0,
-                    extracrAmount: 0,
-                    extradrAmount: 0,
-                    ledgerNote: Constantdata.defualtNote,
-                  ));
-          print(resLedger);
-          ledgerIDList.add(resLedger);
-        }
+        // for (var i = 0; i < hospitalPartySet.length; i++) {
+        //   print('ledgerID: ${i + 1}');
+        //   var pID = hospitalPartySet.elementAt(i);
+        //   print(hospitalPartySet.elementAt(i));
+        //   var totalComission = hospitalPartyTotalComissionSet.elementAt(i);
+        //   print(hospitalPartyTotalComissionSet.elementAt(i));
+        //   var resLedger =
+        //       await db.into(db.ledger).insert(LedgerCompanion.insert(
+        //             type: 'sale commission',
+        //             pID: pID,
+        //             ledgerDate: DateTime.now(),
+        //             drAmount: totalComission,
+        //             crAmount: 0,
+        //             extracrAmount: 0,
+        //             extradrAmount: 0,
+        //             ledgerNote: Constantdata.defualtNote,
+        //           ));
+        //   print(resLedger);
+        //   ledgerIDList.add(resLedger);
+        // }
 
-        for (var i = 0; i < hospitalPartyWiseList.length; i++) {
-          var element = hospitalPartyWiseList[i];
-          for (var j = 0; j < element.length; j++) {
-            var data = await (db.select(db.inputData)
-                  ..where((tbl) => tbl.smtInvNo.equals(element[j])))
-                .get();
-            print(element[j]); //smtInvNo
-            print(data[0]); // smtInvNo-data
-            print(ledgerIDList[i]); //ledgerID
-            var resUpdate = await (db.update(db.inputData)
-                  ..where((tbl) => tbl.smtInvNo.equals(element[j])))
-                .write(data[0].copyWith(
-              hospitalGenerateLedgerId: ledgerIDList[i],
-            ));
-            print(resUpdate);
-            print('update record');
-          }
-        }
+        // for (var i = 0; i < hospitalPartyWiseList.length; i++) {
+        //   var element = hospitalPartyWiseList[i];
+        //   for (var j = 0; j < element.length; j++) {
+        //     var data = await (db.select(db.inputData)
+        //           ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+        //         .get();
+        //     print(element[j]); //smtInvNo
+        //     print(data[0]); // smtInvNo-data
+        //     print(ledgerIDList[i]); //ledgerID
+        //     var resUpdate = await (db.update(db.inputData)
+        //           ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+        //         .write(data[0].copyWith(
+        //       hospitalGenerateLedgerId: ledgerIDList[i],
+        //     ));
+        //     print(resUpdate);
+        //     print('update record');
+        //   }
+        // }
+        await generateComission(
+          partySet: doctorPartySet,
+          partyTotalComissionSet: doctorPartyTotalComissionSet,
+          partyWiseList: doctorPartyWiseList,
+        );
+        await generateComission(
+          partySet: hospitalPartySet,
+          partyTotalComissionSet: hospitalPartyTotalComissionSet,
+          partyWiseList: hospitalPartyWiseList,
+        );
+        await generateComission(
+          partySet: technicianPartySet,
+          partyTotalComissionSet: technicianPartyTotalComissionSet,
+          partyWiseList: technicianPartyWiseList,
+        );
 
         // var data = db.select(db.inputData).get();
         pendingReportData.clear();
@@ -1808,6 +1923,52 @@ class HomepageController extends GetxController {
     } catch (e) {
       printError(info: e.toString());
       e.toString().errorSnackbar;
+    }
+  }
+
+  Future<void> generateComission({
+    Set<int>? partySet,
+    List? partyTotalComissionSet,
+    List<List<String>>? partyWiseList,
+  }) async {
+    List ledgerIDList = [];
+    for (var i = 0; i < partySet!.length; i++) {
+      print('ledgerID: ${i + 1}');
+      var pID = partySet.elementAt(i);
+      print(partySet.elementAt(i));
+      var totalComission = partyTotalComissionSet!.elementAt(i);
+      print(partyTotalComissionSet.elementAt(i));
+      var resLedger = await db.into(db.ledger).insert(LedgerCompanion.insert(
+            type: 'sale commission',
+            pID: pID,
+            ledgerDate: DateTime.now(),
+            drAmount: totalComission,
+            crAmount: 0,
+            extracrAmount: 0,
+            extradrAmount: 0,
+            ledgerNote: Constantdata.defualtNote,
+          ));
+      print(resLedger);
+      ledgerIDList.add(resLedger);
+    }
+
+    for (var i = 0; i < partyWiseList!.length; i++) {
+      var element = partyWiseList[i];
+      for (var j = 0; j < element.length; j++) {
+        var data = await (db.select(db.inputData)
+              ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+            .get();
+        print(element[j]); //smtInvNo
+        print(data[0]); // smtInvNo-data
+        print(ledgerIDList[i]); //ledgerID
+        var resUpdate = await (db.update(db.inputData)
+              ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+            .write(data[0].copyWith(
+          hospitalGenerateLedgerId: ledgerIDList[i],
+        ));
+        print(resUpdate);
+        print('update record');
+      }
     }
   }
 
