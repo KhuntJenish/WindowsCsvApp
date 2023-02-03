@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../screen/homepage/ImportReport.dart';
 import '../screen/homepage/generatedReport.dart';
 import '../screen/homepage/homecontroller.dart';
 import '../screen/homepage/partyLedger.dart';
-import '../screen/homepage/ImportReport.dart';
 import '../screen/homepage/partyPayment.dart';
 import '../theam/theam_constants.dart';
 
@@ -194,67 +194,82 @@ class Button extends StatelessWidget {
 
 PreferredSize bottomAppBar({HomepageController? homepageController}) {
   return PreferredSize(
-    preferredSize: Size.fromHeight(Get.width * 0.03),
-    child: SizedBox(
-      width: Get.width,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ReportLabel(
-              index: 1,
-              text: 'Import Report',
-              icon: const Icon(Icons.insert_chart),
-              onTap: () {
-                if (homepageController?.isSelectedReport.value != 1) {
-                  homepageController?.isSelectedReport.value = 1;
-                  GetStorage('box').write('isSelectedReport', 1);
-                  Get.offAndToNamed(ImportReport.routeName);
-                }
-              },
+    preferredSize: Size.fromHeight(Get.width * 0.04),
+    child: Column(
+      children: [
+        SizedBox(
+          width: Get.width,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ReportLabel(
+                  index: 1,
+                  text: 'Import Report',
+                  icon: const Icon(Icons.insert_chart),
+                  onTap: () {
+                    if (homepageController?.isSelectedReport.value != 1) {
+                      homepageController?.isSelectedReport.value = 1;
+                      GetStorage('box').write('isSelectedReport', 1);
+                      Get.offAndToNamed(ImportReport.routeName);
+                    }
+                  },
+                ),
+                ReportLabel(
+                  index: 2,
+                  text: 'Generated Report',
+                  icon: const Icon(Icons.auto_graph),
+                  onTap: () {
+                    if (homepageController?.isSelectedReport.value != 2) {
+                      homepageController?.generatedReportData.clear();
+                      homepageController?.isSelectedReport.value = 2;
+                      GetStorage('box').write('isSelectedReport', 2);
+                      Get.offAndToNamed(GeneratedReport.routeName);
+                    }
+                  },
+                ),
+                ReportLabel(
+                  index: 3,
+                  text: 'Party Payment',
+                  icon: const Icon(Icons.payment),
+                  onTap: () {
+                    if (homepageController?.isSelectedReport.value != 3) {
+                      homepageController?.generatedReportData.clear();
+                      homepageController?.isSelectedReport.value = 3;
+                      GetStorage('box').write('isSelectedReport', 3);
+                      Get.offAndToNamed(PartyPayment.routeName);
+                    }
+                  },
+                ),
+                ReportLabel(
+                  index: 4,
+                  text: 'Party Ledger',
+                  icon: const Icon(Icons.receipt_long),
+                  onTap: () {
+                    if (homepageController?.isSelectedReport.value != 4) {
+                      GetStorage('box').write('isSelectedReport', 4);
+                      homepageController?.isSelectedReport.value = 4;
+                      Get.offAndToNamed(PartyLedger.routeName);
+                    }
+                  },
+                ),
+              ],
             ),
-            ReportLabel(
-              index: 2,
-              text: 'Generated Report',
-              icon: const Icon(Icons.auto_graph),
-              onTap: () {
-                if (homepageController?.isSelectedReport.value != 2) {
-                  homepageController?.generatedReportData.clear();
-                  homepageController?.isSelectedReport.value = 2;
-                  GetStorage('box').write('isSelectedReport', 2);
-                  Get.offAndToNamed(GeneratedReport.routeName);
-                }
-              },
-            ),
-            ReportLabel(
-              index: 3,
-              text: 'Party Payment',
-              icon: const Icon(Icons.payment),
-              onTap: () {
-                if (homepageController?.isSelectedReport.value != 3) {
-                  homepageController?.generatedReportData.clear();
-                  homepageController?.isSelectedReport.value = 3;
-                  GetStorage('box').write('isSelectedReport', 3);
-                  Get.offAndToNamed(PartyPayment.routeName);
-                }
-              },
-            ),
-            ReportLabel(
-              index: 4,
-              text: 'Party Ledger',
-              icon: const Icon(Icons.receipt_long),
-              onTap: () {
-                if (homepageController?.isSelectedReport.value != 4) {
-                  GetStorage('box').write('isSelectedReport', 4);
-                  homepageController?.isSelectedReport.value = 4;
-                  Get.offAndToNamed(PartyLedger.routeName);
-                }
-              },
-            ),
-          ],
+          ),
         ),
-      ),
+        Visibility(
+          visible:
+              homepageController?.isSelectedReport.value == 3 ? true : false,
+          child: const TabBar(
+            tabs: [
+              Tab(text: 'Hospital'),
+              Tab(text: 'Doctor'),
+              Tab(text: 'Technician Staff'),
+            ],
+          ),
+        ),
+      ],
     ),
   );
 }
@@ -274,7 +289,7 @@ class LableWithCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('checkbox : ' + isCheckBoxVisible.toString());
+    print('checkbox : $isCheckBoxVisible');
     final TextTheme textTheme = Theme.of(context).textTheme;
     return SizedBox(
       width: Get.width * 0.20,

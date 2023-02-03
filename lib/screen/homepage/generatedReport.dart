@@ -9,10 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+
 import '../../dashboard.dart';
 import '../../utils/dropDownItem.dart';
-import '../../utils/partyComissionBottomsheet.dart';
-import '../../utils/partyMasterBottomsheet.dart';
 
 class GeneratedReport extends StatelessWidget {
   static const routeName = '/generatedReport';
@@ -394,7 +393,7 @@ class GeneratedReport extends StatelessWidget {
                               margin: const EdgeInsets.all(3),
                               color: lCOLOR_ACCENT,
                               child: SizedBox(
-                                width: Get.width * 1.5,
+                                width: Get.width * 2,
                                 height: Get.height * 0.05,
                                 child: ListView.builder(
                                     itemCount: _homepageController
@@ -458,14 +457,14 @@ class GeneratedReport extends StatelessWidget {
                           width: width,
                           child: SizedBox(
                             height: Get.height * 0.70,
-                            width: Get.width * 1.5,
+                            width: Get.width * 2,
                             child: ListView.builder(
                               itemCount: _homepageController
                                   .generatedReportData.length,
                               itemBuilder: (_, index) {
                                 var date = index != 0
                                     ? _homepageController
-                                        .generatedReportData[index][20]
+                                        .generatedReportData[index][24]
                                     : DateTime.now();
 
                                 return Visibility(
@@ -483,7 +482,7 @@ class GeneratedReport extends StatelessWidget {
                                         : const Color.fromARGB(
                                             255, 228, 136, 129),
                                     child: SizedBox(
-                                      width: Get.width * 1.5,
+                                      width: Get.width * 2,
                                       height: Get.height * 0.04,
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,

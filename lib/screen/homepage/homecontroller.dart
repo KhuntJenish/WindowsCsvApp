@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:csv/csv.dart';
 import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/partyMaster/partyController.dart';
 import 'package:csvapp/theam/theam_constants.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart' as d;
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../utils/constant.dart';
 
 class HomepageController extends GetxController {
@@ -42,7 +43,7 @@ class HomepageController extends GetxController {
   RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
   List<MaterialTypeData>? materialTypeList = [];
   List<PartyMasterData>? partyList = [];
-  Set ledgerPartyWiseSet = Set();
+  Set ledgerPartyWiseSet = {};
   RxSet<String> smtInvNoSet = RxSet<String>();
   Rx<PartyMasterData> defualtParty =
       const PartyMasterData(id: 0, name: '', ptID: 0).obs;
@@ -63,7 +64,7 @@ class HomepageController extends GetxController {
     start: DateTime(DateTime.now().year, DateTime.now().month, 1),
     end: DateTime.now(),
   ).obs;
-  List<int> rightalign = [8, 11, 12, 16, 17, 18, 19];
+  List<int> rightalign = [8, 11, 12, 16, 17, 18, 19, 20, 21, 22, 23];
 
   // scrollcon
 
@@ -319,7 +320,7 @@ class HomepageController extends GetxController {
       print('save');
       // 'pdf Download SuccessFull.😀'.successSnackbar;
       'pdf Download SuccessFull.😀'.successDailog;
-      Timer(Duration(seconds: 2), () {
+      Timer(const Duration(seconds: 2), () {
         Get.back();
       });
       // final String filePath = testFile.absolute.path;
@@ -479,7 +480,7 @@ class HomepageController extends GetxController {
       print('save');
       // 'pdf Download SuccessFull.😀'.successSnackbar;
       'pdf Download SuccessFull.😀'.successDailog;
-      Timer(Duration(seconds: 2), () {
+      Timer(const Duration(seconds: 2), () {
         Get.back();
       });
       final Uri uri = Uri.file(file.path);
@@ -710,11 +711,13 @@ class HomepageController extends GetxController {
         // var checkParty = await (db.select(db.partyMaster)
         //       ..where((tbl) => tbl.id.equals(serachData[i].pID)))
         //     .get();
-        var isShowHospital;
-        var isShowDoctor;
-        var isShowTechnician;
+        bool isShowHospital;
+        bool isShowDoctor;
+        bool isShowTechnician;
 
-        var checkHospitalParty, checkDoctorParty, checkTechnicianParty;
+        List<PartyMasterData>? checkHospitalParty,
+            checkDoctorParty,
+            checkTechnicianParty;
         if (serachData[i].hospitalID != 0) {
           checkHospitalParty = await (db.select(db.partyMaster)
                 ..where((tbl) =>
@@ -758,16 +761,14 @@ class HomepageController extends GetxController {
             sublist.add(
                 DateFormat('dd.MM.yyyy').format(serachData[i].distDocDate));
             sublist.add(serachData[i].distDocNo);
-            sublist.add(checkHospitalParty.first.name);
+            sublist.add(checkHospitalParty?.first.name ?? '');
             sublist.add(serachData[i].custBillCity);
             sublist.add(serachData[i].matCode);
             sublist.add(serachData[i].matName);
             sublist.add(checkMaterialType.first.type);
             sublist.add(serachData[i].qty);
-            sublist.add(checkDoctorParty.first.name);
-            sublist.add(checkTechnicianParty != null
-                ? checkTechnicianParty.first.name
-                : '');
+            sublist.add(checkDoctorParty?.first.name ?? '');
+            sublist.add(checkTechnicianParty?.first.name ?? '');
             sublist.add(serachData[i].saleAmount);
             sublist.add(serachData[i].totalSale);
             sublist
@@ -824,7 +825,7 @@ class HomepageController extends GetxController {
 
       print(ledgerReportData);
       print(ledgerReportData.length);
-      Set ledgerPartySet = Set();
+      Set ledgerPartySet = {};
 
       List<List<double>> drcrAmountList = [];
       double dramount = 0;
@@ -988,7 +989,7 @@ class HomepageController extends GetxController {
             ..where((tbl) =>
                 duration &
                 partyCity &
-                party &
+                // party &
                 materialType &
                 tbl.logId.isBiggerThanValue(0)))
           .get();
@@ -1017,8 +1018,12 @@ class HomepageController extends GetxController {
       sublist.add('SMT Invoice No.');
       sublist.add('Purchase Taxable');
       sublist.add('Total Purchase');
-      sublist.add('Comission(%)');
-      sublist.add('Comission Amount');
+      sublist.add('H-Comission(%)');
+      sublist.add('H-cAmount(₹)');
+      sublist.add('D-Comission(%)');
+      sublist.add('D-cAmount(₹)');
+      sublist.add('T-Comission(%)');
+      sublist.add('T-cAmount(₹)');
       generatedReportData.add(sublist);
       // print(serachData.length);
       // print(generatedReportData.length);
@@ -1029,11 +1034,45 @@ class HomepageController extends GetxController {
       }
 
       for (var i = 0; i < serachData.length; i++) {
-        var checkParty = await (db.select(db.partyMaster)
-              ..where((tbl) => tbl.id.equals(serachData[i].pID)))
-            .get();
+        bool isShowHospital;
+        bool isShowDoctor;
+        bool isShowTechnician;
 
-        if (checkParty.isNotEmpty) {
+        List<PartyMasterData>? checkHospitalParty,
+            checkDoctorParty,
+            checkTechnicianParty;
+
+        if (serachData[i].hospitalID != 0) {
+          checkHospitalParty = await (db.select(db.partyMaster)
+                ..where((tbl) =>
+                    tbl.id.equals(serachData[i].hospitalID) &
+                    tbl.ptID.equals(1)))
+              .get();
+          isShowHospital = checkHospitalParty.isNotEmpty ? true : false;
+        } else {
+          isShowHospital = true;
+        }
+        if (serachData[i].doctorID != 0) {
+          checkDoctorParty = await (db.select(db.partyMaster)
+                ..where((tbl) =>
+                    tbl.id.equals(serachData[i].doctorID) & tbl.ptID.equals(2)))
+              .get();
+          isShowDoctor = checkDoctorParty.isNotEmpty ? true : false;
+        } else {
+          isShowDoctor = true;
+        }
+        if (serachData[i].techniqalStaffID != 0) {
+          checkTechnicianParty = await (db.select(db.partyMaster)
+                ..where((tbl) =>
+                    tbl.id.equals(serachData[i].techniqalStaffID) &
+                    tbl.ptID.equals(3)))
+              .get();
+          isShowTechnician = checkTechnicianParty.isNotEmpty ? true : false;
+        } else {
+          isShowTechnician = true;
+        }
+
+        if (isShowHospital && isShowDoctor && isShowTechnician) {
           var checkMaterialType = await (db.select(db.materialType)
                 ..where((tbl) => tbl.id.equals(serachData[i].mtID)))
               .get();
@@ -1046,14 +1085,14 @@ class HomepageController extends GetxController {
             sublist.add(
                 DateFormat('dd.MM.yyyy').format(serachData[i].distDocDate));
             sublist.add(serachData[i].distDocNo);
-            sublist.add(checkParty.first.name);
+            sublist.add(checkHospitalParty?.first.name ?? "");
             sublist.add(serachData[i].custBillCity);
             sublist.add(serachData[i].matCode);
             sublist.add(serachData[i].matName);
             sublist.add(checkMaterialType.first.type);
             sublist.add(serachData[i].qty);
-            sublist.add(serachData[i].doctorName);
-            sublist.add(serachData[i].techniqalStaff);
+            sublist.add(checkDoctorParty?.first.name ?? "");
+            sublist.add(checkTechnicianParty?.first.name ?? "");
             sublist.add(serachData[i].saleAmount);
             sublist.add(serachData[i].totalSale);
             sublist
@@ -1062,9 +1101,13 @@ class HomepageController extends GetxController {
             sublist.add(serachData[i].smtInvNo);
             sublist.add(serachData[i].purchaseTaxableAmount);
             sublist.add(serachData[i].totalPurchaseAmount);
-            sublist.add(serachData[i].comission);
-            sublist.add(serachData[i].comissionAmount);
-            sublist.add(serachData[i].comissionPaidDate);
+            sublist.add(serachData[i].hospitalComission);
+            sublist.add(serachData[i].hospitalComissionAmount);
+            sublist.add(serachData[i].doctorComission);
+            sublist.add(serachData[i].doctorComissionAmount);
+            sublist.add(serachData[i].techniqalStaffComission);
+            sublist.add(serachData[i].techniqalStaffComissionAmount);
+            sublist.add(serachData[i].hospitalComissionPaidDate);
 
             // print(sublist);
 
@@ -1105,9 +1148,9 @@ class HomepageController extends GetxController {
       isLoading.value = false;
       print('End Searching Generated Report Data ......');
     } catch (e) {
+      debugPrint(e.toString());
+      // e.toString().printError;
       e.toString().errorSnackbar;
-
-      e.toString().printError;
     }
   }
 
@@ -1268,7 +1311,7 @@ class HomepageController extends GetxController {
           : index == 2
               ? 'Doctor'
               : 'Technician';
-      if (partyNameList.length > 0) {
+      if (partyNameList.isNotEmpty) {
         Get.defaultDialog(
           content: Column(
             children: [
@@ -1298,14 +1341,14 @@ class HomepageController extends GetxController {
                           partyNameList.toList()[index],
                           style: TextStyle(fontSize: Get.height * 0.02),
                         ),
-                        leading: Icon(Icons.person),
+                        leading: const Icon(Icons.person),
                       );
                     },
                   ),
                 ),
               ),
               Text(
-                'Are you want to add All ${party} Party',
+                'Are you want to add All $party Party',
                 style: TextStyle(fontSize: Get.height * 0.02),
               ),
             ],
@@ -1378,7 +1421,7 @@ class HomepageController extends GetxController {
             fields: pendingReportData,
           );
         }
-        '${party} Party already added.'.errorSnackbar;
+        '$party Party already added.'.errorSnackbar;
       }
 
       isLoading.value = false;
@@ -1437,11 +1480,13 @@ class HomepageController extends GetxController {
   Future<void> addInputData(List<dynamic> data) async {
     try {
       debugPrint('******************new data******************');
-      var isShowHospital;
-      var isShowDoctor;
-      var isShowTechnician;
+      bool isShowHospital;
+      bool isShowDoctor;
+      bool isShowTechnician;
 
-      var resHospitalParty, resDoctorParty, resTechnicianParty;
+      List<PartyMasterData>? resHospitalParty,
+          resDoctorParty,
+          resTechnicianParty;
       if (data[3] != "") {
         resHospitalParty = await (db.select(db.partyMaster)
               ..where((tbl) => tbl.name.equals(data[3]) & tbl.ptID.equals(1)))
@@ -1477,14 +1522,14 @@ class HomepageController extends GetxController {
           isShowDoctor = false;
           isShowHospital = false;
           isShowTechnician = false;
-          var resTechnicianPartyComission,
+          List<PartyComissionDetailData>? resTechnicianPartyComission,
               resDoctorPartyComission,
               resHospitalPartyComission;
           if (data[3] != "") {
             resHospitalPartyComission =
                 await (db.select(db.partyComissionDetail)
                       ..where((tbl) =>
-                          tbl.pID.equals(resHospitalParty[0].id) &
+                          tbl.pID.equals(resHospitalParty![0].id) &
                           tbl.mtID.equals(materialTypeList![0].id)))
                     .get();
             print(resHospitalPartyComission);
@@ -1496,7 +1541,7 @@ class HomepageController extends GetxController {
           if (data[9] != "") {
             resDoctorPartyComission = await (db.select(db.partyComissionDetail)
                   ..where((tbl) =>
-                      tbl.pID.equals(resDoctorParty[0].id) &
+                      tbl.pID.equals(resDoctorParty![0].id) &
                       tbl.mtID.equals(materialTypeList![0].id)))
                 .get();
 
@@ -1508,7 +1553,7 @@ class HomepageController extends GetxController {
             resTechnicianPartyComission =
                 await (db.select(db.partyComissionDetail)
                       ..where((tbl) =>
-                          tbl.pID.equals(resTechnicianParty[0].id) &
+                          tbl.pID.equals(resTechnicianParty![0].id) &
                           tbl.mtID.equals(materialTypeList![0].id)))
                     .get();
 
@@ -1520,12 +1565,12 @@ class HomepageController extends GetxController {
 
           if (isShowTechnician && isShowDoctor && isShowHospital) {
             displayData.add(data[15].toString());
-            var hcomission = resHospitalPartyComission[0].comission1;
+            var hcomission = resHospitalPartyComission?[0].comission1;
             // var dcomission = resHospitalPartyComission[0].comission1;
             // var tcomission = resTechnicianPartyComission[0].comission1;
             debugPrint('comission(%): $hcomission');
             debugPrint('TotalAmount(%): ${data[12]}');
-            debugPrint('comissionAmount(%): ${(hcomission * data[12]) / 100}');
+            debugPrint('comissionAmount(%): ${(hcomission! * data[12]) / 100}');
           } else {
             comissionAndmatTypeNaNSetData.add(data[15].toString());
             'Comission Not Found'.errorSnackbar;
@@ -1576,7 +1621,7 @@ class HomepageController extends GetxController {
         List<List<String>> technicianPartyWiseList = [];
         // GetStorage('box').write('logID', 0);
         var logID = GetStorage('box').read('logID') ?? 0;
-        print('prevID :' + logID.toString());
+        print('prevID :$logID');
         GetStorage('box').write('logID', logID + 1);
         print(dateRange.value.start);
         print(dateRange.value.end);
@@ -1585,11 +1630,13 @@ class HomepageController extends GetxController {
             .get();
         print(pendingData);
         for (var element in pendingData) {
-          var isShowHospital;
-          var isShowDoctor;
-          var isShowTechnician;
+          bool isShowHospital;
+          bool isShowDoctor;
+          bool isShowTechnician;
 
-          var checkHospitalParty, checkDoctorParty, checkTechnicianParty;
+          List<PartyMasterData>? checkHospitalParty,
+              checkDoctorParty,
+              checkTechnicianParty;
           if (element.hospitalID != 0) {
             checkHospitalParty = await (db.select(db.partyMaster)
                   ..where((tbl) =>
@@ -1627,14 +1674,14 @@ class HomepageController extends GetxController {
               isShowDoctor = false;
               isShowHospital = false;
               isShowTechnician = false;
-              var checkTechnicianPartyComission,
+              List<PartyComissionDetailData>? checkTechnicianPartyComission,
                   checkDoctorPartyComission,
                   checkHospitalPartyComission;
               if (element.hospitalID != 0) {
                 checkHospitalPartyComission =
                     await (db.select(db.partyComissionDetail)
                           ..where((tbl) =>
-                              tbl.pID.equals(checkHospitalParty[0].id) &
+                              tbl.pID.equals(checkHospitalParty![0].id) &
                               tbl.mtID.equals(checkMaterialType[0].id)))
                         .get();
                 print(checkHospitalPartyComission);
@@ -1647,7 +1694,7 @@ class HomepageController extends GetxController {
                 checkDoctorPartyComission =
                     await (db.select(db.partyComissionDetail)
                           ..where((tbl) =>
-                              tbl.pID.equals(checkDoctorParty[0].id) &
+                              tbl.pID.equals(checkDoctorParty![0].id) &
                               tbl.mtID.equals(checkMaterialType[0].id)))
                         .get();
 
@@ -1660,7 +1707,7 @@ class HomepageController extends GetxController {
                 checkTechnicianPartyComission =
                     await (db.select(db.partyComissionDetail)
                           ..where((tbl) =>
-                              tbl.pID.equals(checkTechnicianParty[0].id) &
+                              tbl.pID.equals(checkTechnicianParty![0].id) &
                               tbl.mtID.equals(checkMaterialType[0].id)))
                         .get();
 
@@ -1678,18 +1725,18 @@ class HomepageController extends GetxController {
                 var logID = GetStorage('box').read('logID');
                 print('logID: $logID');
                 //For Hospital
-                var hospitalComission, hospitalComissionAmount;
+                num hospitalComission, hospitalComissionAmount;
                 //For Doctor
-                var docotorComission, doctorComissionAmount;
+                num docotorComission, doctorComissionAmount;
                 //For Technician
-                var technicianComission, technicianComissionAmount;
-                ;
+                num technicianComission, technicianComissionAmount;
                 if (element.hospitalID != 0) {
-                  hospitalComission = checkHospitalPartyComission[0].comission1;
+                  hospitalComission =
+                      checkHospitalPartyComission![0].comission1;
                   hospitalComissionAmount = double.parse(
                       ((hospitalComission * element.totalSale) / 100)
                           .toStringAsFixed(2));
-                  print('pname: ${checkHospitalParty[0].name}');
+                  print('pname: ${checkHospitalParty?[0].name}');
                   if (hospitalPartySet.contains(element.hospitalID)) {
                     int index = hospitalPartySet
                         .toList()
@@ -1728,11 +1775,11 @@ class HomepageController extends GetxController {
                   isShowHospital = true;
                 }
                 if (element.doctorID != 0) {
-                  docotorComission = checkDoctorPartyComission[0].comission1;
+                  docotorComission = checkDoctorPartyComission![0].comission1;
                   doctorComissionAmount = double.parse(
                       ((docotorComission * element.totalSale) / 100)
                           .toStringAsFixed(2));
-                  print('pname: ${checkDoctorParty[0].name}');
+                  print('pname: ${checkDoctorParty?[0].name}');
                   if (doctorPartySet.contains(element.doctorID)) {
                     int index = doctorPartySet
                         .toList()
@@ -1772,7 +1819,7 @@ class HomepageController extends GetxController {
                 }
                 if (element.techniqalStaffID != 0) {
                   technicianComission =
-                      checkTechnicianPartyComission[0].comission1;
+                      checkTechnicianPartyComission![0].comission1;
                   technicianComissionAmount = double.parse(
                       ((technicianComission * element.totalSale) / 100)
                           .toStringAsFixed(2));
@@ -1913,7 +1960,7 @@ class HomepageController extends GetxController {
         isLoading.value = false;
         // 'Generate Report Successfully'.successSnackbar;
         'Generate Report Successfully'.successDailog;
-        Timer(Duration(seconds: 2), () {
+        Timer(const Duration(seconds: 2), () {
           Get.back();
         });
       } else {
@@ -2001,10 +2048,10 @@ class HomepageController extends GetxController {
         }
       }
       print(smtInvNoList);
-      if (smtInvNoList.length >= 1) {
+      if (smtInvNoList.isNotEmpty) {
         String smtInvNoListString = '';
         for (var i = 0; i < smtInvNoList.length; i++) {
-          smtInvNoListString += smtInvNoList[i].toString() + ', ';
+          smtInvNoListString += '${smtInvNoList[i]}, ';
         }
         Get.defaultDialog(
           content: Column(
@@ -2060,7 +2107,7 @@ class HomepageController extends GetxController {
             print(data);
             pendingReportData.clear();
             pendingReportData.addAll(data);
-            if (data.length < 1) {
+            if (data.isEmpty) {
               'Duplicate Invoice Number Removed'.successSnackbar;
               return;
             } else {
@@ -2159,7 +2206,7 @@ class HomepageController extends GetxController {
                 // 'data insert Successful'.successSnackbar;
               }
               'data insert Successful'.successDailog;
-              Timer(Duration(seconds: 2), () {
+              Timer(const Duration(seconds: 2), () {
                 Get.back();
               });
             }
@@ -2260,7 +2307,7 @@ class HomepageController extends GetxController {
           print(result);
           // 'data insert Successful'.successSnackbar;
           'data insert Successful'.successDailog;
-          Timer(Duration(seconds: 2), () {
+          Timer(const Duration(seconds: 2), () {
             Get.back();
           });
         }
