@@ -7,12 +7,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+
 import '../../dashboard.dart';
 import '../../database/tables.dart';
 import '../../theam/theam_constants.dart';
 import '../../utils/dropDownItem.dart';
 import '../../utils/helper_widget.dart';
-import 'generatedReport.dart';
 
 class PartyLedger extends StatelessWidget {
   static const routeName = '/partyLedger';
@@ -42,7 +42,7 @@ class PartyLedger extends StatelessWidget {
         appBar: AppBar(
             title: Text(
               'Ledger Report',
-              style: textTheme.bodyText1?.copyWith(
+              style: textTheme.bodyLarge?.copyWith(
                 color: Colors.white,
                 fontSize: Get.height * 0.03,
               ),
@@ -99,7 +99,7 @@ class PartyLedger extends StatelessWidget {
                                             width: Get.width * 0.20,
                                             child: PartyDropDownItems(
                                               defualtValue: _homepageController
-                                                  .defualtParty,
+                                                  .defaultParty,
                                               itemList:
                                                   _homepageController.partyList,
                                             ),
@@ -116,7 +116,7 @@ class PartyLedger extends StatelessWidget {
                                           children: [
                                             GestureDetector(
                                               onTap: () => _homepageController
-                                                  .defualtDuration
+                                                  .defaultDuration
                                                   .value = 'One Month',
                                               child: Container(
                                                 padding:
@@ -125,7 +125,7 @@ class PartyLedger extends StatelessWidget {
                                                         vertical: 0),
                                                 child: AutoSizeText(
                                                   'Duration:',
-                                                  style: textTheme.bodyText1
+                                                  style: textTheme.bodyLarge
                                                       ?.copyWith(
                                                     fontSize:
                                                         Get.height * 0.015,
@@ -139,7 +139,7 @@ class PartyLedger extends StatelessWidget {
                                             ),
                                             Visibility(
                                               visible: _homepageController
-                                                      .defualtDuration.value !=
+                                                      .defaultDuration.value !=
                                                   'Custom',
                                               replacement: SizedBox(
                                                 child: Container(
@@ -161,7 +161,7 @@ class PartyLedger extends StatelessWidget {
                                                             Text(
                                                               'Start:',
                                                               style: textTheme
-                                                                  .bodyText1
+                                                                  .bodyLarge
                                                                   ?.copyWith(
                                                                 fontSize:
                                                                     Get.height *
@@ -202,7 +202,7 @@ class PartyLedger extends StatelessWidget {
                                                             Text(
                                                               'End:',
                                                               style: textTheme
-                                                                  .bodyText1
+                                                                  .bodyLarge
                                                                   ?.copyWith(
                                                                 fontSize:
                                                                     Get.height *
@@ -230,7 +230,7 @@ class PartyLedger extends StatelessWidget {
                                                       _homepageController,
                                                   defualtValue:
                                                       _homepageController
-                                                          .defualtDuration,
+                                                          .defaultDuration,
                                                   itemList: _homepageController
                                                       .durationList
                                                       .toList(),
@@ -256,22 +256,28 @@ class PartyLedger extends StatelessWidget {
                                 onPressed: () async {
                                   debugPrint('Search Button Pressed');
                                   debugPrint(_homepageController
-                                      .isAllPartySelected.value.toString());
-                                  debugPrint(_homepageController.defualtParty.toString());
-                                  debugPrint(
-                                      _homepageController.defualtDuration.toString());
-                                  debugPrint(
-                                      _homepageController.defualtMaterialType.toString());
-                                  debugPrint(
-                                      _homepageController.defualtPartyCity.toString());
+                                      .isAllPartySelected.value
+                                      .toString());
+                                  debugPrint(_homepageController.defaultParty
+                                      .toString());
+                                  debugPrint(_homepageController.defaultDuration
+                                      .toString());
                                   debugPrint(_homepageController
-                                      .dateRange.value.start.toString());
-                                  debugPrint(
-                                      _homepageController.dateRange.value.end.toString());
+                                      .defaultMaterialType
+                                      .toString());
+                                  debugPrint(_homepageController
+                                      .defaultPartyCity
+                                      .toString());
+                                  debugPrint(_homepageController
+                                      .dateRange.value.start
+                                      .toString());
+                                  debugPrint(_homepageController
+                                      .dateRange.value.end
+                                      .toString());
 
                                   _homepageController.getDurationDateRange(
                                       duration: _homepageController
-                                          .defualtDuration.value);
+                                          .defaultDuration.value);
                                   // debugPrint(
                                   //     _homepageController.dateRange.value.start);
                                   // debugPrint(_homepageController.dateRange.value.end);
@@ -281,7 +287,7 @@ class PartyLedger extends StatelessWidget {
                                     end:
                                         _homepageController.dateRange.value.end,
                                     selectedParty:
-                                        _homepageController.defualtParty.value,
+                                        _homepageController.defaultParty.value,
                                     isAllPartySelected: _homepageController
                                         .isAllPartySelected.value,
                                   );
@@ -307,8 +313,9 @@ class PartyLedger extends StatelessWidget {
                                     return;
                                   }
                                   debugPrint('Create Pdf');
-                                  debugPrint(
-                                      _homepageController.ledgerPartyWiseSet.toString());
+                                  debugPrint(_homepageController
+                                      .ledgerPartyWiseSet
+                                      .toString());
 
                                   await _homepageController.createLedgerPdf(
                                       partyWiseList: _homepageController
@@ -347,7 +354,7 @@ class PartyLedger extends StatelessWidget {
                                       width: Get.width * 0.1,
                                       child: Text(
                                         'Date',
-                                        style: textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyLarge?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Get.height * 0.018,
                                             color: Colors.white),
@@ -357,7 +364,7 @@ class PartyLedger extends StatelessWidget {
                                       width: Get.width * 0.2,
                                       child: Text(
                                         'Type',
-                                        style: textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyLarge?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Get.height * 0.018,
                                             color: Colors.white),
@@ -367,7 +374,7 @@ class PartyLedger extends StatelessWidget {
                                       width: Get.width * 0.1,
                                       child: Text(
                                         'Debit',
-                                        style: textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyLarge?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Get.height * 0.018,
                                             color: Colors.white),
@@ -378,7 +385,7 @@ class PartyLedger extends StatelessWidget {
                                       width: Get.width * 0.1,
                                       child: Text(
                                         'Credit',
-                                        style: textTheme.bodyText1?.copyWith(
+                                        style: textTheme.bodyLarge?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: Get.height * 0.018,
                                             color: Colors.white),
@@ -400,11 +407,11 @@ class PartyLedger extends StatelessWidget {
                                   elements:
                                       _homepageController.ledgerReportData,
                                   groupBy: (element) {
-                                    debugPrint('G : ' + element.pID.toString());
+                                    debugPrint('G : ${element.pID}');
                                     return element.pID.toString();
                                   },
                                   groupSeparatorBuilder: (String groupByValue) {
-                                    debugPrint('GS : ' + groupByValue);
+                                    debugPrint('GS : $groupByValue');
                                     return Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -425,7 +432,7 @@ class PartyLedger extends StatelessWidget {
                                                         item.id ==
                                                         int.parse(groupByValue))
                                                     .name,
-                                                style: textTheme.bodyText1
+                                                style: textTheme.bodyLarge
                                                     ?.copyWith(
                                                   fontSize: Get.height * 0.020,
                                                 ),
@@ -467,7 +474,7 @@ class PartyLedger extends StatelessWidget {
                                                   : DateFormat('dd-MM-yyyy')
                                                       .format(
                                                           element.ledgerDate),
-                                              style: textTheme.bodyText1
+                                              style: textTheme.bodyLarge
                                                   ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.018),
@@ -477,7 +484,7 @@ class PartyLedger extends StatelessWidget {
                                             width: Get.width * 0.2,
                                             child: Text(
                                               element.type,
-                                              style: textTheme.bodyText1
+                                              style: textTheme.bodyLarge
                                                   ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.018),
@@ -490,7 +497,7 @@ class PartyLedger extends StatelessWidget {
                                                   ? ''
                                                   : element.drAmount
                                                       .toStringAsFixed(2),
-                                              style: textTheme.bodyText1
+                                              style: textTheme.bodyLarge
                                                   ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.018),
@@ -504,7 +511,7 @@ class PartyLedger extends StatelessWidget {
                                                   ? ''
                                                   : element.crAmount
                                                       .toStringAsFixed(2),
-                                              style: textTheme.bodyText1
+                                              style: textTheme.bodyLarge
                                                   ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.018),

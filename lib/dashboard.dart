@@ -23,11 +23,11 @@ class Dashboard extends StatelessWidget {
 
     // print(_homepageController.isSelectedReport.value);
     return Scaffold(
-      backgroundColor: Color(0xffFFFFFF),
+      backgroundColor: const Color(0xffFFFFFF),
       appBar: AppBar(
         title: Text(
           'Dashboard',
-          style: textTheme.bodyText1?.copyWith(
+          style: textTheme.bodyLarge?.copyWith(
             color: Colors.white,
             fontSize: Get.height * 0.03,
           ),
@@ -63,47 +63,49 @@ class Dashboard extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
+      body: SizedBox(
         height: Get.height,
         width: Get.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: Get.height * 0.2),
-            Container(
-              height: Get.height * 0.5,
-              width: Get.width * 0.5,
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: Lottie.asset('assets/lottie/dashboard.json'),
-                // Lottie.network(
-                //     'https://assets1.lottiefiles.com/packages/lf20_mKMcjgVTY6.json'),
-              ),
-            ),
-            SizedBox(height: Get.height * 0.13),
-            Container(
-              child: Text(
-                'Developed by Versatile IT Management @2023.',
-                style: textTheme.bodyText1?.copyWith(
-                  color: Colors.grey[700],
-                  fontSize: Get.height * 0.012,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: Get.height * 0.2),
+              SizedBox(
+                height: Get.height * 0.5,
+                width: Get.width * 0.5,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: Lottie.asset('assets/lottie/dashboard.json'),
+                  // Lottie.network(
+                  //     'https://assets1.lottiefiles.com/packages/lf20_mKMcjgVTY6.json'),
                 ),
               ),
-            )
-          ],
+              SizedBox(height: Get.height * 0.13),
+              Container(
+                child: Text(
+                  'Developed by Versatile IT Management @2023.',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: Colors.grey[700],
+                    fontSize: Get.height * 0.012,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.defaultDialog(
-            content: Container(
+            content: SizedBox(
               height: Get.height * 0.5,
               width: Get.width * 0.5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
+                  SizedBox(
                     height: Get.height * 0.15,
                     width: Get.width * 0.15,
                     // color: Colors.red,
@@ -134,7 +136,7 @@ class Dashboard extends StatelessWidget {
           // e-mail: rakesh@versatileitservices.com
           // Web : www.versatileit.in
 
-          Timer(Duration(seconds: 8), () {
+          Timer(const Duration(seconds: 8), () {
             print('done');
             Get.back();
           });
@@ -151,21 +153,21 @@ class Dashboard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             width: Get.width * 0.1,
             child: Text(
               '$title: ',
-              style: textTheme.bodyText1?.copyWith(
+              style: textTheme.bodyLarge?.copyWith(
                 color: Colors.black,
                 fontSize: Get.height * 0.018,
               ),
             ),
           ),
-          Container(
+          SizedBox(
             width: Get.width * 0.2,
             child: Text(
               info.toString(),
-              style: textTheme.bodyText1?.copyWith(
+              style: textTheme.bodyLarge?.copyWith(
                 color: Colors.grey[600],
                 fontSize: Get.height * 0.018,
               ),

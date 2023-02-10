@@ -9,23 +9,27 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 import '../../dashboard.dart';
+import '../../database/tables.dart';
 import '../../theam/theam_constants.dart';
 import '../../utils/dropDownItem.dart';
 
 class PartyPayment extends StatelessWidget {
   static const routeName = '/partyPayment';
-  final HomepageController _homepageController = Get.put(HomepageController());
+  // final HomepageController _homepageController = Get.put(HomepageController());
+  final HomepageController _homepageController = Get.find<HomepageController>();
 
   PartyPayment({super.key});
   @override
   Widget build(BuildContext context) {
-    _homepageController.isAllPartySelected.value = false;
+    // _homepageController.isAllPartySelected.value = false;
     TextTheme textTheme = Theme.of(context).textTheme;
-    final ScrollController horizontalScroll = ScrollController();
-    final ScrollController verticalScroll = ScrollController();
-    const double width = 20;
-    RxBool? isAllPartyChecked = true.obs;
+    // final ScrollController horizontalScroll = ScrollController();
+    // final ScrollController verticalScroll = ScrollController();
+    // const double width = 20;
+    // RxBool? isAllPartyChecked = true.obs;
     // Set smtInvNo = {};
+    print(_homepageController.partyList);
+    // _homepageController.getPartyList();
     return WillPopScope(
       onWillPop: () async {
         _homepageController.isSelectedReport.value = 0;
@@ -36,10 +40,10 @@ class PartyPayment extends StatelessWidget {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            toolbarHeight: Get.width * 0.04,
+            toolbarHeight: Get.width * 0.05,
             title: Text(
               'Party Payment',
-              style: textTheme.bodyText1?.copyWith(
+              style: textTheme.bodyLarge?.copyWith(
                 color: Colors.white,
                 fontSize: Get.height * 0.03,
               ),
@@ -65,874 +69,6 @@ class PartyPayment extends StatelessWidget {
                   homepageController: _homepageController, partyTypeID: 3),
             ],
           ),
-
-          // AdaptiveScrollbar(
-          //   controller: horizontalScroll,
-          //   width: width,
-          //   position: ScrollbarPosition.bottom,
-          //   underSpacing: const EdgeInsets.only(bottom: width),
-          //   child: SingleChildScrollView(
-          //     controller: horizontalScroll,
-          //     scrollDirection: Axis.horizontal,
-          //     child: Obx(
-          //       () => SizedBox(
-          //         // width: Get.width * 1.5,
-          //         child: SingleChildScrollView(
-          //           child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: [
-          //               //**Search Ui Part
-          //               SizedBox(
-          //                 width: Get.width * 1.5,
-          //                 child: SingleChildScrollView(
-          //                   child: Row(
-          //                     mainAxisAlignment: MainAxisAlignment.start,
-          //                     children: [
-          //                       SizedBox(
-          //                         child: Column(
-          //                           crossAxisAlignment: CrossAxisAlignment.start,
-          //                           children: [
-          //                             Row(
-          //                               children: [
-          //                                 //** Select Party menu */
-          //                                 Column(
-          //                                   crossAxisAlignment:
-          //                                       CrossAxisAlignment.start,
-          //                                   children: [
-          //                                     const LableWithCheckbox(
-          //                                       lable: 'Select Party:',
-          //                                       isCheckBoxVisible: false,
-          //                                     ),
-          //                                     SizedBox(
-          //                                       width: Get.width * 0.20,
-          //                                       child: PartyDropDownItems(
-          //                                         defualtValue:
-          //                                             _homepageController
-          //                                                 .defualtParty,
-          //                                         itemList: _homepageController
-          //                                             .partyList,
-          //                                       ),
-          //                                     ),
-          //                                   ],
-          //                                 ),
-          //                                 //** Select Material menu */
-          //                                 Column(
-          //                                   crossAxisAlignment:
-          //                                       CrossAxisAlignment.start,
-          //                                   children: [
-          //                                     LableWithCheckbox(
-          //                                       lable: 'Select Material:',
-          //                                       checkBoxOnchange: (value) =>
-          //                                           _homepageController
-          //                                               .isAllMaterialTypeSelected
-          //                                               .value = value!,
-          //                                       checkBoxValue: _homepageController
-          //                                           .isAllMaterialTypeSelected
-          //                                           .value,
-          //                                       isCheckBoxVisible: true,
-          //                                     ),
-          //                                     SizedBox(
-          //                                       width: Get.width * 0.20,
-          //                                       child: MaterialTypeDropDownItems(
-          //                                         defualtValue:
-          //                                             _homepageController
-          //                                                 .defualtMaterialType,
-          //                                         itemList: _homepageController
-          //                                             .materialTypeList,
-          //                                       ),
-          //                                     ),
-          //                                   ],
-          //                                 ),
-          //                                 //** Select party-City menu */
-          //                                 Column(
-          //                                   crossAxisAlignment:
-          //                                       CrossAxisAlignment.start,
-          //                                   children: [
-          //                                     LableWithCheckbox(
-          //                                       lable: 'Select City:',
-          //                                       checkBoxOnchange: (value) =>
-          //                                           _homepageController
-          //                                               .isAllPartyCitySelected
-          //                                               .value = value!,
-          //                                       checkBoxValue: _homepageController
-          //                                           .isAllPartyCitySelected.value,
-          //                                       isCheckBoxVisible: true,
-          //                                     ),
-          //                                     SizedBox(
-          //                                       width: Get.width * 0.20,
-          //                                       child: StringDropDownItems(
-          //                                         defualtValue:
-          //                                             _homepageController
-          //                                                 .defualtPartyCity,
-          //                                         itemList: _homepageController
-          //                                             .partyCityList
-          //                                             .toList(),
-          //                                       ),
-          //                                     ),
-          //                                   ],
-          //                                 ),
-          //                                 //** Duration menu */
-          //                                 Container(
-          //                                   margin:
-          //                                       const EdgeInsets.only(top: 10),
-          //                                   child: Column(
-          //                                     crossAxisAlignment:
-          //                                         CrossAxisAlignment.start,
-          //                                     children: [
-          //                                       GestureDetector(
-          //                                         onTap: () => _homepageController
-          //                                             .defualtDuration
-          //                                             .value = 'One Month',
-          //                                         child: Container(
-          //                                           padding: const EdgeInsets
-          //                                                   .symmetric(
-          //                                               horizontal: 10,
-          //                                               vertical: 0),
-          //                                           child: AutoSizeText(
-          //                                             'Duration:',
-          //                                             style: textTheme.bodyText1
-          //                                                 ?.copyWith(
-          //                                               fontSize:
-          //                                                   Get.height * 0.015,
-          //                                             ),
-          //                                             maxLines: 1,
-          //                                           ),
-          //                                         ),
-          //                                       ),
-          //                                       const SizedBox(
-          //                                         height: 5,
-          //                                       ),
-          //                                       Visibility(
-          //                                         visible: _homepageController
-          //                                                 .defualtDuration
-          //                                                 .value !=
-          //                                             'Custom',
-          //                                         replacement: SizedBox(
-          //                                           child: Container(
-          //                                             width: Get.width * 0.20,
-          //                                             // color: Colors.amber,
-          //                                             margin:
-          //                                                 const EdgeInsets.only(
-          //                                                     left: 10),
-          //                                             child: Row(
-          //                                               mainAxisAlignment:
-          //                                                   MainAxisAlignment
-          //                                                       .start,
-          //                                               children: [
-          //                                                 SizedBox(
-          //                                                   // width: Get.width * 0.05,
-          //                                                   child: Column(
-          //                                                     crossAxisAlignment:
-          //                                                         CrossAxisAlignment
-          //                                                             .start,
-          //                                                     children: [
-          //                                                       Text(
-          //                                                         'Start:',
-          //                                                         style: textTheme
-          //                                                             .bodyText1
-          //                                                             ?.copyWith(
-          //                                                           fontSize:
-          //                                                               Get.height *
-          //                                                                   0.015,
-          //                                                         ),
-          //                                                       ),
-          //                                                       Text(DateFormat(
-          //                                                               'dd-MM-yyyy')
-          //                                                           .format(_homepageController
-          //                                                               .dateRange
-          //                                                               .value
-          //                                                               .start)),
-          //                                                     ],
-          //                                                   ),
-          //                                                 ),
-          //                                                 SizedBox(
-          //                                                   width:
-          //                                                       Get.width * 0.05,
-          //                                                   child: CircleAvatar(
-          //                                                     child: IconButton(
-          //                                                       onPressed: () {
-          //                                                         _homepageController
-          //                                                             .chooseDateRangePicker();
-          //                                                       },
-          //                                                       icon: const Icon(
-          //                                                           Icons
-          //                                                               .date_range),
-          //                                                     ),
-          //                                                   ),
-          //                                                 ),
-          //                                                 SizedBox(
-          //                                                   // width: Get.width * 0.05,
-          //                                                   child: Column(
-          //                                                     crossAxisAlignment:
-          //                                                         CrossAxisAlignment
-          //                                                             .start,
-          //                                                     children: [
-          //                                                       Text(
-          //                                                         'End:',
-          //                                                         style: textTheme
-          //                                                             .bodyText1
-          //                                                             ?.copyWith(
-          //                                                           fontSize:
-          //                                                               Get.height *
-          //                                                                   0.015,
-          //                                                         ),
-          //                                                       ),
-          //                                                       Text(DateFormat(
-          //                                                               'dd-MM-yyyy')
-          //                                                           .format(_homepageController
-          //                                                               .dateRange
-          //                                                               .value
-          //                                                               .end)),
-          //                                                     ],
-          //                                                   ),
-          //                                                 ),
-          //                                               ],
-          //                                             ),
-          //                                           ),
-          //                                         ),
-          //                                         child: SizedBox(
-          //                                           width: Get.width * 0.20,
-          //                                           child: StringDropDownItems(
-          //                                             homecontroller:
-          //                                                 _homepageController,
-          //                                             defualtValue:
-          //                                                 _homepageController
-          //                                                     .defualtDuration,
-          //                                             itemList:
-          //                                                 _homepageController
-          //                                                     .durationList
-          //                                                     .toList(),
-          //                                           ),
-          //                                         ),
-          //                                       ),
-          //                                     ],
-          //                                   ),
-          //                                 ),
-          //                               ],
-          //                             ),
-          //                           ],
-          //                         ),
-          //                       ),
-          //                       //**  Search button
-          //                       Container(
-          //                         margin: const EdgeInsets.only(top: 30),
-          //                         child: Button(
-          //                           height: Get.height * 0.045,
-          //                           width: Get.width * 0.08,
-          //                           fontSize: Get.width * 0.010,
-          //                           text: 'Search',
-          //                           onPressed: () async {
-          //                             _homepageController.smtInvNoSet.clear();
-          //                             print('Search Button Pressed');
-          //                             print(_homepageController
-          //                                 .isAllPartySelected.value);
-          //                             print(_homepageController.defualtParty);
-          //                             print(_homepageController.defualtDuration);
-          //                             print(_homepageController
-          //                                 .defualtMaterialType);
-          //                             print(_homepageController.defualtPartyCity);
-          //                             print(_homepageController
-          //                                 .dateRange.value.start);
-          //                             print(_homepageController
-          //                                 .dateRange.value.end);
-          //                             _homepageController.getDurationDateRange(
-          //                                 duration: _homepageController
-          //                                     .defualtDuration.value);
-
-          //                             await _homepageController
-          //                                 .getGeneratedSearchData(
-          //                               start: _homepageController
-          //                                   .dateRange.value.start,
-          //                               end: _homepageController
-          //                                   .dateRange.value.end,
-          //                               selectedParty: _homepageController
-          //                                   .defualtParty.value,
-          //                               isAllPartySelected: false,
-          //                               isAllMaterialTypeSelected:
-          //                                   _homepageController
-          //                                       .isAllMaterialTypeSelected.value,
-          //                               isAllPartyCitySelected:
-          //                                   _homepageController
-          //                                       .isAllPartyCitySelected.value,
-          //                               selectedMaterialType: _homepageController
-          //                                   .defualtMaterialType.value,
-          //                               selectedPartyCity: _homepageController
-          //                                   .defualtPartyCity.value,
-          //                             );
-          //                           },
-          //                         ),
-          //                       ),
-          //                       //** pdf button
-          //                       Container(
-          //                         margin: const EdgeInsets.only(top: 30),
-          //                         child: Button(
-          //                           height: Get.height * 0.045,
-          //                           width: Get.width * 0.05,
-          //                           fontSize: Get.width * 0.010,
-          //                           text: 'Pdf',
-          //                           onPressed: () async {
-          //                             if (_homepageController
-          //                                     .generatedReportData.isEmpty ||
-          //                                 _homepageController
-          //                                         .generatedReportData.length <
-          //                                     2) {
-          //                               'No Data Found'.errorSnackbar;
-          //                               return;
-          //                             }
-          //                             print('Create Pdf');
-          //                             print(_homepageController
-          //                                 .generatedReportData);
-
-          //                             await _homepageController.createReportPdf();
-          //                           },
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-
-          //               //**Data Ui Part
-
-          //               _homepageController.generatedReportData.isEmpty
-          //                   ? Container()
-          //                   : Card(
-          //                       margin: const EdgeInsets.all(3),
-          //                       color: lCOLOR_ACCENT,
-          //                       child: SizedBox(
-          //                         width: Get.width * 1.5,
-          //                         height: Get.height * 0.05,
-          //                         child: Row(
-          //                           children: [
-          //                             Flexible(
-          //                               child: ListView.builder(
-          //                                   itemCount: _homepageController
-          //                                       .generatedReportData[0].length,
-          //                                   scrollDirection: Axis.horizontal,
-          //                                   // shrinkWrap: true,
-          //                                   itemBuilder: (_, subIndex) {
-          //                                     return Container(
-          //                                       // color: Colors.red,
-          //                                       width: subIndex == 3
-          //                                           ? Get.width * 0.2
-          //                                           : (subIndex == 6 ||
-          //                                                   subIndex == 7 ||
-          //                                                   subIndex == 9)
-          //                                               ? Get.width * 0.1
-          //                                               : Get.width * 0.06,
-          //                                       decoration: BoxDecoration(
-          //                                         border: Border.all(
-          //                                           color: Colors.black,
-          //                                         ),
-          //                                       ),
-          //                                       // height: Get.height * 0.05,
-          //                                       padding:
-          //                                           const EdgeInsets.all(8.0),
-          //                                       child: FittedBox(
-          //                                         fit: BoxFit.scaleDown,
-          //                                         child: Text(
-          //                                           _homepageController
-          //                                               .generatedReportData[0]
-          //                                                   [subIndex]
-          //                                               .toString(),
-          //                                           style: const TextStyle(
-          //                                               fontSize: 15,
-          //                                               fontWeight:
-          //                                                   FontWeight.bold,
-          //                                               color: Colors.white),
-          //                                           // minFontSize: 10,
-          //                                           maxLines: 1,
-          //                                           overflow:
-          //                                               TextOverflow.ellipsis,
-          //                                         ),
-          //                                       ),
-          //                                     );
-          //                                   }),
-          //                             ),
-          //                             Obx(
-          //                               () => Visibility(
-          //                                 visible: !_homepageController
-          //                                     .isAllPartySelected.value,
-          //                                 child: SizedBox(
-          //                                   width: Get.width * 0.033,
-          //                                   // color: Colors.red,
-          //                                   child: Checkbox(
-          //                                     value: isAllPartyChecked.value,
-          //                                     onChanged: (value) {
-          //                                       isAllPartyChecked.value = value!;
-          //                                       print(value);
-          //                                       // _homepageController.isAllPartySelected.refresh();
-          //                                     },
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                             ),
-          //                           ],
-          //                         ),
-          //                       ),
-          //                     ),
-
-          //               Stack(
-          //                 children: [
-          //                   AdaptiveScrollbar(
-          //                     controller: verticalScroll,
-          //                     width: width,
-          //                     child: SizedBox(
-          //                       height: Get.height * 0.70,
-          //                       width: Get.width * 1.5,
-          //                       child: ListView.builder(
-          //                         itemCount: _homepageController
-          //                             .generatedReportData.length,
-          //                         itemBuilder: (_, index) {
-          //                           var date = index != 0
-          //                               ? _homepageController
-          //                                   .generatedReportData[index][20]
-          //                               : DateTime.now();
-          //                           RxBool? isPartyChecked = true.obs;
-          //                           index != 0
-          //                               ? _homepageController.smtInvNoSet.add(
-          //                                   _homepageController
-          //                                       .generatedReportData[index][15]
-          //                                       .toString())
-          //                               : null;
-          //                           // var isPartyChecked = true;
-          //                           return Visibility(
-          //                             visible: index != 0,
-          //                             replacement: Container(),
-          //                             child: Card(
-          //                               margin: const EdgeInsets.all(3),
-          //                               color: _homepageController.displayData
-          //                                       .contains(_homepageController
-          //                                               .generatedReportData[
-          //                                           index][15])
-          //                                   ? date.isAfter(DateTime(1800, 01, 01))
-          //                                       ? const Color.fromARGB(
-          //                                           255, 121, 192, 124)
-          //                                       : Colors.white
-          //                                   : const Color.fromARGB(
-          //                                       255, 228, 136, 129),
-          //                               child: SizedBox(
-          //                                 width: Get.width * 1.5,
-          //                                 height: Get.height * 0.04,
-          //                                 child: Row(
-          //                                   children: [
-          //                                     Flexible(
-          //                                       child: ListView.builder(
-          //                                         scrollDirection:
-          //                                             Axis.horizontal,
-          //                                         itemCount: _homepageController
-          //                                                 .generatedReportData[
-          //                                                     index]
-          //                                                 .isNotEmpty
-          //                                             ? _homepageController
-          //                                                     .generatedReportData[
-          //                                                         index]
-          //                                                     .length -
-          //                                                 1
-          //                                             : 0,
-          //                                         itemBuilder: (_, subIndex) {
-          //                                           return Container(
-          //                                             width: subIndex == 3
-          //                                                 ? Get.width * 0.2
-          //                                                 : (subIndex == 6 ||
-          //                                                         subIndex == 7 ||
-          //                                                         subIndex == 9)
-          //                                                     ? Get.width * 0.1
-          //                                                     : Get.width * 0.06,
-          //                                             // height: Get.height * 0.05,
-          //                                             decoration: BoxDecoration(
-          //                                               border: Border.all(
-          //                                                 color: Colors.black,
-          //                                               ),
-          //                                             ),
-          //                                             padding:
-          //                                                 const EdgeInsets.all(
-          //                                                     8.0),
-          //                                             child: Visibility(
-          //                                               visible: subIndex == 3 &&
-          //                                                   _homepageController
-          //                                                           .partyNaNSetData
-          //                                                           .contains(_homepageController
-          //                                                                   .generatedReportData[
-          //                                                               index][15]) ==
-          //                                                       true,
-          //                                               replacement: Visibility(
-          //                                                 visible: subIndex ==
-          //                                                         7 &&
-          //                                                     _homepageController
-          //                                                             .comissionAndmatTypeNaNSetData
-          //                                                             .contains(_homepageController
-          //                                                                     .generatedReportData[index]
-          //                                                                 [15]) ==
-          //                                                         true,
-          //                                                 replacement:
-          //                                                     AutoSizeText(
-          //                                                   (index != 0 &&
-          //                                                           (subIndex ==
-          //                                                                   1 ||
-          //                                                               subIndex ==
-          //                                                                   13))
-          //                                                       ? DateFormat(
-          //                                                               "dd-MM-yyyy")
-          //                                                           .format(DateFormat("dd.MM.yyyy").parse(_homepageController
-          //                                                               .generatedReportData[
-          //                                                                   index]
-          //                                                                   [
-          //                                                                   subIndex]
-          //                                                               .toString()))
-          //                                                           .toString()
-          //                                                       : _homepageController
-          //                                                           .generatedReportData[
-          //                                                               index]
-          //                                                               [subIndex]
-          //                                                           .toString(),
-          //                                                   style:
-          //                                                       const TextStyle(
-          //                                                           fontSize: 15,
-          //                                                           color: Colors
-          //                                                               .black),
-          //                                                   textAlign:
-          //                                                       _homepageController
-          //                                                               .rightalign
-          //                                                               .contains(
-          //                                                                   subIndex)
-          //                                                           ? TextAlign
-          //                                                               .right
-          //                                                           : TextAlign
-          //                                                               .left,
-          //                                                   minFontSize: 10,
-          //                                                   maxLines: 1,
-          //                                                   overflow: TextOverflow
-          //                                                       .ellipsis,
-          //                                                 ),
-          //                                                 child: Row(
-          //                                                   children: [
-          //                                                     SizedBox(
-          //                                                       width: Get.width *
-          //                                                           0.06,
-          //                                                       child:
-          //                                                           AutoSizeText(
-          //                                                         _homepageController
-          //                                                             .generatedReportData[
-          //                                                                 index][
-          //                                                                 subIndex]
-          //                                                             .toString(),
-          //                                                         style: const TextStyle(
-          //                                                             fontSize:
-          //                                                                 15,
-          //                                                             color: Colors
-          //                                                                 .black),
-          //                                                         minFontSize: 10,
-          //                                                         maxLines: 1,
-          //                                                         overflow:
-          //                                                             TextOverflow
-          //                                                                 .ellipsis,
-          //                                                       ),
-          //                                                     ),
-          //                                                   ],
-          //                                                 ),
-          //                                               ),
-          //                                               child: Row(
-          //                                                 children: [
-          //                                                   SizedBox(
-          //                                                     width: Get.width *
-          //                                                         0.15,
-          //                                                     child: AutoSizeText(
-          //                                                       _homepageController
-          //                                                           .generatedReportData[
-          //                                                               index]
-          //                                                               [subIndex]
-          //                                                           .toString(),
-          //                                                       style: const TextStyle(
-          //                                                           fontSize: 15,
-          //                                                           color: Colors
-          //                                                               .black),
-          //                                                       minFontSize: 10,
-          //                                                       maxLines: 1,
-          //                                                       overflow:
-          //                                                           TextOverflow
-          //                                                               .ellipsis,
-          //                                                     ),
-          //                                                   ),
-          //                                                 ],
-          //                                               ),
-          //                                             ),
-          //                                           );
-          //                                         },
-          //                                       ),
-          //                                     ),
-          //                                     Obx(
-          //                                       () => Visibility(
-          //                                         visible:
-          //                                             !isAllPartyChecked.value,
-          //                                         child: SizedBox(
-          //                                           width: Get.width * 0.025,
-          //                                           // color: Colors.red,
-          //                                           child: Visibility(
-          //                                             visible: date.isAfter(
-          //                                                 DateTime(1800, 01, 01)),
-          //                                             replacement: Checkbox(
-          //                                               value:
-          //                                                   isPartyChecked.value,
-          //                                               onChanged: (value) {
-          //                                                 isPartyChecked.value =
-          //                                                     value!;
-          //                                                 print(value);
-          //                                                 if (value) {
-          //                                                   _homepageController
-          //                                                       .smtInvNoSet
-          //                                                       .add(_homepageController
-          //                                                           .generatedReportData[
-          //                                                               index][15]
-          //                                                           .toString());
-          //                                                   _homepageController
-          //                                                           .partyWiseTotalAmount
-          //                                                           .value +=
-          //                                                       double.parse(
-          //                                                           _homepageController
-          //                                                               .generatedReportData[
-          //                                                                   index]
-          //                                                                   [19]
-          //                                                               .toString());
-          //                                                   _homepageController
-          //                                                       .partyWisePayableAmount
-          //                                                       .value = _homepageController
-          //                                                           .partyWiseTotalAmount
-          //                                                           .value -
-          //                                                       _homepageController
-          //                                                           .partyWisePaidAmount
-          //                                                           .value;
-          //                                                 } else {
-          //                                                   _homepageController
-          //                                                       .smtInvNoSet
-          //                                                       .remove(_homepageController
-          //                                                           .generatedReportData[
-          //                                                               index][15]
-          //                                                           .toString());
-          //                                                   _homepageController
-          //                                                           .partyWiseTotalAmount
-          //                                                           .value -=
-          //                                                       double.parse(
-          //                                                           _homepageController
-          //                                                               .generatedReportData[
-          //                                                                   index]
-          //                                                                   [19]
-          //                                                               .toString());
-          //                                                   _homepageController
-          //                                                       .partyWisePayableAmount
-          //                                                       .value = _homepageController
-          //                                                           .partyWiseTotalAmount
-          //                                                           .value -
-          //                                                       _homepageController
-          //                                                           .partyWisePaidAmount
-          //                                                           .value;
-          //                                                 }
-          //                                                 print(_homepageController
-          //                                                     .partyWiseTotalAmount
-          //                                                     .value);
-
-          //                                                 print(
-          //                                                     _homepageController
-          //                                                         .smtInvNoSet);
-          //                                                 // _homepageController.isAllPartySelected.refresh();
-          //                                               },
-          //                                             ),
-          //                                             child: IconButton(
-          //                                               onPressed: () {
-          //                                                 print('payment Back');
-          //                                                 print(_homepageController
-          //                                                     .generatedReportData[
-          //                                                         index][15]
-          //                                                     .toString());
-          //                                                 var smtInvNo =
-          //                                                     _homepageController
-          //                                                         .generatedReportData[
-          //                                                             index][15]
-          //                                                         .toString();
-          //                                                 Get.defaultDialog(
-          //                                                   title: 'Payment Back',
-          //                                                   middleText:
-          //                                                       'Are you sure you want to back payment?',
-          //                                                   textConfirm: 'Yes',
-          //                                                   textCancel: 'No',
-          //                                                   confirmTextColor:
-          //                                                       Colors.white,
-          //                                                   content: Container(
-          //                                                     child: Column(
-          //                                                       children: [
-          //                                                         Text(
-          //                                                           'Payment Back',
-          //                                                           style:
-          //                                                               TextStyle(
-          //                                                             color: Colors
-          //                                                                 .black,
-          //                                                             fontWeight:
-          //                                                                 FontWeight
-          //                                                                     .bold,
-          //                                                             fontSize:
-          //                                                                 Get.height *
-          //                                                                     0.02,
-          //                                                           ),
-          //                                                         ),
-          //                                                         const SizedBox(
-          //                                                           height: 10,
-          //                                                         ),
-          //                                                         Text(
-          //                                                           'Are you want to Process $smtInvNo smtInvNo?',
-          //                                                           style: TextStyle(
-          //                                                               fontSize:
-          //                                                                   Get.height *
-          //                                                                       0.02),
-          //                                                         ),
-          //                                                       ],
-          //                                                     ),
-          //                                                   ),
-          //                                                   onConfirm: () {
-          //                                                     Get.back();
-          //                                                     // !Todo: Payment Back
-          //                                                     // _homepageController
-          //                                                     //     .reversePaymentProcess(
-          //                                                     //   _homepageController
-          //                                                     //       .generatedReportData[
-          //                                                     //           index][15]
-          //                                                     //       .toString(),
-          //                                                     //   double.parse(
-          //                                                     //       _homepageController
-          //                                                     //           .generatedReportData[
-          //                                                     //               index]
-          //                                                     //               [19]
-          //                                                     //           .toString()),
-          //                                                     // );
-          //                                                   },
-          //                                                 );
-          //                                               },
-          //                                               icon: const Icon(
-          //                                                   Icons.arrow_back_ios),
-          //                                             ),
-          //                                           ),
-          //                                         ),
-          //                                       ),
-          //                                     ),
-          //                                   ],
-          //                                 ),
-          //                               ),
-          //                             ),
-          //                           );
-          //                         },
-          //                       ),
-          //                     ),
-          //                   ),
-          //                   Obx(
-          //                     () => Visibility(
-          //                       visible: _homepageController
-          //                                       .isAllPartySelected.value ==
-          //                                   false &&
-          //                               _homepageController
-          //                                       .generatedReportData.length >
-          //                                   1
-          //                           ? true
-          //                           : false,
-          //                       child: Positioned(
-          //                         // width: Get.width,
-          //                         bottom: Get.height * 0.03,
-          //                         left: Get.width * 0.20,
-          //                         right: Get.width * 0.70,
-          //                         child: SizedBox(
-          //                           height: Get.height * 0.1,
-          //                           width: Get.width * 0.5,
-          //                           child: Card(
-          //                             // color: lCOLOR_ACCENT.withOpacity(0.1),
-          //                             shape: RoundedRectangleBorder(
-          //                               borderRadius: BorderRadius.circular(15.0),
-          //                             ),
-          //                             child: Row(
-          //                               mainAxisAlignment:
-          //                                   MainAxisAlignment.spaceAround,
-          //                               children: [
-          //                                 LableText(
-          //                                     name: 'Total Amount',
-          //                                     amount: _homepageController
-          //                                         .partyWiseTotalAmount.value
-          //                                         .toString()),
-          //                                 LableText(
-          //                                     name: 'Paid Amount',
-          //                                     amount: _homepageController
-          //                                         .partyWisePaidAmount.value
-          //                                         .toString()),
-          //                                 Row(
-          //                                   mainAxisAlignment:
-          //                                       MainAxisAlignment.spaceEvenly,
-          //                                   children: [
-          //                                     LableText(
-          //                                         name: 'Payable Amount',
-          //                                         amount: _homepageController
-          //                                             .partyWisePayableAmount
-          //                                             .toString()),
-          //                                     Button(
-          //                                       text: 'Pay',
-          //                                       onPressed: () {
-          //                                         print('payment');
-          //                                         if (_homepageController
-          //                                                 .partyWisePayableAmount >
-          //                                             0) {
-          //                                           Get.defaultDialog(
-          //                                             title: 'payment',
-          //                                             middleText:
-          //                                                 'Are you sure you want to pay  ${(_homepageController.partyWiseTotalAmount.value - _homepageController.partyWisePaidAmount.value).toString()}₹ ?',
-          //                                             textConfirm: 'Ok',
-          //                                             confirmTextColor:
-          //                                                 Colors.white,
-          //                                             onConfirm: () {
-          //                                               print('payment');
-          //                                               Get.back();
-          //                                               var crAmount = (_homepageController
-          //                                                       .partyWiseTotalAmount
-          //                                                       .value -
-          //                                                   _homepageController
-          //                                                       .partyWisePaidAmount
-          //                                                       .value);
-          //                                               print(_homepageController
-          //                                                   .defualtParty.value);
-          //                                               // !todo: payment
-          //                                               // _homepageController
-          //                                               //     .partyWisePayment(
-          //                                               //         crAmount:
-          //                                               //             crAmount,
-          //                                               //         selectedParty:
-          //                                               //             _homepageController
-          //                                               //                 .defualtParty
-          //                                               //                 .value);
-          //                                             },
-          //                                           );
-          //                                         } else {
-          //                                           'No amount to pay😀'
-          //                                               .infoSnackbar;
-          //                                         }
-          //                                       },
-          //                                       fontSize: Get.height * 0.02,
-          //                                       height: Get.height * 0.04,
-          //                                       width: Get.width * 0.06,
-          //                                     )
-          //                                   ],
-          //                                 ),
-          //                               ],
-          //                             ),
-          //                           ),
-          //                         ),
-          //                       ),
-          //                     ),
-          //                   ),
-          //                 ],
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
-          // drawer: drawer(),
         ),
       ),
     );
@@ -953,14 +89,14 @@ class LableText extends StatelessWidget {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Text(
         name,
-        style: textTheme.bodyText1?.copyWith(
+        style: textTheme.bodyLarge?.copyWith(
           // color: Colors.white,
           fontSize: Get.height * 0.02,
         ),
       ),
       Text(
         amount,
-        style: textTheme.headline6?.copyWith(
+        style: textTheme.titleLarge?.copyWith(
           // color: Colors.white,
           fontSize: Get.height * 0.015,
         ),
@@ -984,7 +120,22 @@ class PartyPaymentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    homepageController?.isAllPartySelected.value = false;
+    // homepageController?.isAllPartySelected.value = false;
+
+    List<PartyMasterData> partyList = [];
+    // homepageController?.defualtParty.refresh();
+    for (var party in homepageController!.partyList!) {
+      if (party.ptID == partyTypeID) {
+        partyList.add(party);
+      }
+    }
+    if (partyList.isNotEmpty) {
+      // homepageController?.generatedReportData.value = [];
+
+      homepageController?.defaultParty = partyList[0].obs;
+      homepageController?.defaultParty.refresh();
+    }
+    // homepageController?.isAllPartySelected.value = false;
     TextTheme textTheme = Theme.of(context).textTheme;
     return AdaptiveScrollbar(
       controller: horizontalScroll,
@@ -1027,9 +178,8 @@ class PartyPaymentView extends StatelessWidget {
                                           width: Get.width * 0.20,
                                           child: PartyDropDownItems(
                                             defualtValue: homepageController
-                                                ?.defualtParty,
-                                            itemList:
-                                                homepageController?.partyList,
+                                                ?.defaultParty,
+                                            itemList: partyList,
                                           ),
                                         ),
                                       ],
@@ -1053,7 +203,7 @@ class PartyPaymentView extends StatelessWidget {
                                           width: Get.width * 0.20,
                                           child: MaterialTypeDropDownItems(
                                             defualtValue: homepageController
-                                                ?.defualtMaterialType,
+                                                ?.defaultMaterialType,
                                             itemList: homepageController
                                                 ?.materialTypeList,
                                           ),
@@ -1079,7 +229,7 @@ class PartyPaymentView extends StatelessWidget {
                                           width: Get.width * 0.20,
                                           child: StringDropDownItems(
                                             defualtValue: homepageController
-                                                ?.defualtPartyCity,
+                                                ?.defaultPartyCity,
                                             itemList: homepageController
                                                 ?.partyCityList
                                                 .toList(),
@@ -1096,7 +246,7 @@ class PartyPaymentView extends StatelessWidget {
                                         children: [
                                           GestureDetector(
                                             onTap: () => homepageController
-                                                ?.defualtDuration
+                                                ?.defaultDuration
                                                 .value = 'One Month',
                                             child: Container(
                                               padding:
@@ -1105,7 +255,7 @@ class PartyPaymentView extends StatelessWidget {
                                                       vertical: 0),
                                               child: AutoSizeText(
                                                 'Duration:',
-                                                style: textTheme.bodyText1
+                                                style: textTheme.bodyLarge
                                                     ?.copyWith(
                                                   fontSize: Get.height * 0.015,
                                                 ),
@@ -1118,7 +268,7 @@ class PartyPaymentView extends StatelessWidget {
                                           ),
                                           Visibility(
                                             visible: homepageController
-                                                    ?.defualtDuration.value !=
+                                                    ?.defaultDuration.value !=
                                                 'Custom',
                                             replacement: SizedBox(
                                               child: Container(
@@ -1140,7 +290,7 @@ class PartyPaymentView extends StatelessWidget {
                                                           Text(
                                                             'Start:',
                                                             style: textTheme
-                                                                .bodyText1
+                                                                .bodyLarge
                                                                 ?.copyWith(
                                                               fontSize:
                                                                   Get.height *
@@ -1180,7 +330,7 @@ class PartyPaymentView extends StatelessWidget {
                                                           Text(
                                                             'End:',
                                                             style: textTheme
-                                                                .bodyText1
+                                                                .bodyLarge
                                                                 ?.copyWith(
                                                               fontSize:
                                                                   Get.height *
@@ -1207,7 +357,7 @@ class PartyPaymentView extends StatelessWidget {
                                                 homecontroller:
                                                     homepageController,
                                                 defualtValue: homepageController
-                                                    ?.defualtDuration,
+                                                    ?.defaultDuration,
                                                 itemList: homepageController
                                                     ?.durationList
                                                     .toList(),
@@ -1235,16 +385,16 @@ class PartyPaymentView extends StatelessWidget {
                                 print('Search Button Pressed');
                                 print(homepageController
                                     ?.isAllPartySelected.value);
-                                print(homepageController?.defualtParty);
-                                print(homepageController?.defualtDuration);
-                                print(homepageController?.defualtMaterialType);
-                                print(homepageController?.defualtPartyCity);
+                                print(homepageController?.defaultParty);
+                                print(homepageController?.defaultDuration);
+                                print(homepageController?.defaultMaterialType);
+                                print(homepageController?.defaultPartyCity);
                                 print(
                                     homepageController?.dateRange.value.start);
                                 print(homepageController?.dateRange.value.end);
                                 homepageController?.getDurationDateRange(
                                     duration: homepageController
-                                        ?.defualtDuration.value);
+                                        ?.defaultDuration.value);
 
                                 await homepageController
                                     ?.getGeneratedSearchData(
@@ -1252,16 +402,16 @@ class PartyPaymentView extends StatelessWidget {
                                       homepageController?.dateRange.value.start,
                                   end: homepageController?.dateRange.value.end,
                                   selectedParty:
-                                      homepageController?.defualtParty.value,
+                                      homepageController?.defaultParty.value,
                                   isAllPartySelected: false,
                                   isAllMaterialTypeSelected: homepageController
                                       ?.isAllMaterialTypeSelected.value,
                                   isAllPartyCitySelected: homepageController
                                       ?.isAllPartyCitySelected.value,
                                   selectedMaterialType: homepageController
-                                      ?.defualtMaterialType.value,
+                                      ?.defaultMaterialType.value,
                                   selectedPartyCity: homepageController
-                                      ?.defualtPartyCity.value,
+                                      ?.defaultPartyCity.value,
                                 );
                               },
                             ),
@@ -1303,7 +453,7 @@ class PartyPaymentView extends StatelessWidget {
                           margin: const EdgeInsets.all(3),
                           color: lCOLOR_ACCENT,
                           child: SizedBox(
-                            width: Get.width * 1.5,
+                            width: Get.width * 1.8,
                             height: Get.height * 0.05,
                             child: Row(
                               children: [
@@ -1351,8 +501,9 @@ class PartyPaymentView extends StatelessWidget {
                                 ),
                                 Obx(
                                   () => Visibility(
-                                    visible: !homepageController!
-                                        .isAllPartySelected.value,
+                                    // visible: !homepageController!
+                                    //     .isAllPartySelected.value,
+                                    visible: isAllPartyChecked!.value,
                                     child: SizedBox(
                                       width: Get.width * 0.033,
                                       // color: Colors.red,
@@ -1379,14 +530,29 @@ class PartyPaymentView extends StatelessWidget {
                         width: width,
                         child: SizedBox(
                           height: Get.height * 0.70,
-                          width: Get.width * 1.5,
+                          width: Get.width * 1.8,
                           child: ListView.builder(
                             itemCount:
                                 homepageController?.generatedReportData.length,
                             itemBuilder: (_, index) {
-                              var date = index != 0
+                              var hospitalCommissionPaidDate = index != 0
                                   ? homepageController
-                                      ?.generatedReportData[index][20]
+                                      ?.generatedReportData[index][24]
+                                  : null;
+                              var doctorCommissionPaidDate = index != 0
+                                  ? homepageController
+                                      ?.generatedReportData[index][25]
+                                  : null;
+                              var technicianCommissionPaidDate = index != 0
+                                  ? homepageController
+                                      ?.generatedReportData[index][26]
+                                  : null;
+                              var date = index != 0
+                                  ? partyTypeID == 1
+                                      ? hospitalCommissionPaidDate
+                                      : partyTypeID == 2
+                                          ? doctorCommissionPaidDate
+                                          : technicianCommissionPaidDate
                                   : DateTime.now();
                               RxBool? isPartyChecked = true.obs;
                               index != 0
@@ -1411,7 +577,7 @@ class PartyPaymentView extends StatelessWidget {
                                       : const Color.fromARGB(
                                           255, 228, 136, 129),
                                   child: SizedBox(
-                                    width: Get.width * 1.5,
+                                    width: Get.width * 2,
                                     height: Get.height * 0.04,
                                     child: Row(
                                       children: [
@@ -1425,7 +591,7 @@ class PartyPaymentView extends StatelessWidget {
                                                         .generatedReportData[
                                                             index]
                                                         .length -
-                                                    1
+                                                    3
                                                 : 0,
                                             itemBuilder: (_, subIndex) {
                                               return Container(
@@ -1674,19 +840,24 @@ class PartyPaymentView extends StatelessWidget {
                                                       onConfirm: () {
                                                         Get.back();
                                                         // !Todo: Payment Back
-                                                        // homepageController
-                                                        //     .reversePaymentProcess(
-                                                        //   homepageController
-                                                        //       .generatedReportData[
-                                                        //           index][15]
-                                                        //       .toString(),
-                                                        //   double.parse(
-                                                        //       homepageController
-                                                        //           .generatedReportData[
-                                                        //               index]
-                                                        //               [19]
-                                                        //           .toString()),
-                                                        // );
+                                                        homepageController!.reversePaymentProcess(
+                                                            pID: partyTypeID,
+                                                            smtInvNo:
+                                                                homepageController
+                                                                    ?.generatedReportData[
+                                                                        index]
+                                                                        [15]
+                                                                    .toString(),
+                                                            crAmount: double.parse(
+                                                                homepageController!
+                                                                    .generatedReportData[
+                                                                        index]
+                                                                        [19]
+                                                                    .toString()),
+                                                            paymentbackRecord:
+                                                                homepageController!
+                                                                        .generatedReportData[
+                                                                    index]);
                                                       },
                                                     );
                                                   },
@@ -1709,17 +880,13 @@ class PartyPaymentView extends StatelessWidget {
                       Obx(
                         () => Visibility(
                           visible:
-                              homepageController?.isAllPartySelected.value ==
-                                          false &&
-                                      homepageController!
-                                              .generatedReportData.length >
-                                          1
+                              homepageController!.generatedReportData.length > 1
                                   ? true
                                   : false,
                           child: Positioned(
                             // width: Get.width,
-                            bottom: Get.height * 0.03,
-                            left: Get.width * 0.20,
+                            bottom: Get.height * 0.05,
+                            left: Get.width * 0.10,
                             right: Get.width * 0.70,
                             child: SizedBox(
                               height: Get.height * 0.1,
@@ -1775,16 +942,17 @@ class PartyPaymentView extends StatelessWidget {
                                                           .partyWisePaidAmount
                                                           .value);
                                                   print(homepageController!
-                                                      .defualtParty.value);
+                                                      .defaultParty.value);
                                                   // !todo: payment
-                                                  // homepageController
-                                                  //     .partyWisePayment(
-                                                  //         crAmount:
-                                                  //             crAmount,
-                                                  //         selectedParty:
-                                                  //             homepageController
-                                                  //                 .defualtParty
-                                                  //                 .value);
+
+                                                  homepageController!
+                                                      .partyWisePayment(
+                                                          crAmount: crAmount,
+                                                          selectedParty:
+                                                              homepageController!
+                                                                  .defaultParty
+                                                                  .value,
+                                                          ptID: partyTypeID);
                                                 },
                                               );
                                             } else {

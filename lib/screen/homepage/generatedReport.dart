@@ -16,10 +16,13 @@ import '../../utils/dropDownItem.dart';
 class GeneratedReport extends StatelessWidget {
   static const routeName = '/generatedReport';
   final HomepageController _homepageController = Get.put(HomepageController());
+  // final HomepageController _homepageController = Get.find<HomepageController>();
 
   GeneratedReport({super.key});
   @override
   Widget build(BuildContext context) {
+    // _homepageController.isAllPartySelected.value = false;
+
     print(_homepageController.isSelectedReport.value);
     TextTheme textTheme = Theme.of(context).textTheme;
     final ScrollController horizontalScroll = ScrollController();
@@ -36,7 +39,7 @@ class GeneratedReport extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             'Generated Report',
-            style: textTheme.bodyText1?.copyWith(
+            style: textTheme.bodyLarge?.copyWith(
               color: Colors.white,
               fontSize: Get.height * 0.03,
             ),
@@ -100,7 +103,7 @@ class GeneratedReport extends StatelessWidget {
                                               child: PartyDropDownItems(
                                                 defualtValue:
                                                     _homepageController
-                                                        .defualtParty,
+                                                        .defaultParty,
                                                 itemList: _homepageController
                                                     .partyList,
                                               ),
@@ -128,7 +131,7 @@ class GeneratedReport extends StatelessWidget {
                                               child: MaterialTypeDropDownItems(
                                                 defualtValue:
                                                     _homepageController
-                                                        .defualtMaterialType,
+                                                        .defaultMaterialType,
                                                 itemList: _homepageController
                                                     .materialTypeList,
                                               ),
@@ -155,7 +158,7 @@ class GeneratedReport extends StatelessWidget {
                                               child: StringDropDownItems(
                                                 defualtValue:
                                                     _homepageController
-                                                        .defualtPartyCity,
+                                                        .defaultPartyCity,
                                                 itemList: _homepageController
                                                     .partyCityList
                                                     .toList(),
@@ -173,7 +176,7 @@ class GeneratedReport extends StatelessWidget {
                                             children: [
                                               GestureDetector(
                                                 onTap: () => _homepageController
-                                                    .defualtDuration
+                                                    .defaultDuration
                                                     .value = 'One Month',
                                                 child: Container(
                                                   padding: const EdgeInsets
@@ -182,7 +185,7 @@ class GeneratedReport extends StatelessWidget {
                                                       vertical: 0),
                                                   child: AutoSizeText(
                                                     'Duration:',
-                                                    style: textTheme.bodyText1
+                                                    style: textTheme.bodyLarge
                                                         ?.copyWith(
                                                       fontSize:
                                                           Get.height * 0.015,
@@ -196,7 +199,7 @@ class GeneratedReport extends StatelessWidget {
                                               ),
                                               Visibility(
                                                 visible: _homepageController
-                                                        .defualtDuration
+                                                        .defaultDuration
                                                         .value !=
                                                     'Custom',
                                                 replacement: SizedBox(
@@ -221,7 +224,7 @@ class GeneratedReport extends StatelessWidget {
                                                               Text(
                                                                 'Start:',
                                                                 style: textTheme
-                                                                    .bodyText1
+                                                                    .bodyLarge
                                                                     ?.copyWith(
                                                                   fontSize:
                                                                       Get.height *
@@ -262,7 +265,7 @@ class GeneratedReport extends StatelessWidget {
                                                               Text(
                                                                 'End:',
                                                                 style: textTheme
-                                                                    .bodyText1
+                                                                    .bodyLarge
                                                                     ?.copyWith(
                                                                   fontSize:
                                                                       Get.height *
@@ -289,7 +292,7 @@ class GeneratedReport extends StatelessWidget {
                                                         _homepageController,
                                                     defualtValue:
                                                         _homepageController
-                                                            .defualtDuration,
+                                                            .defaultDuration,
                                                     itemList:
                                                         _homepageController
                                                             .durationList
@@ -317,11 +320,11 @@ class GeneratedReport extends StatelessWidget {
                                     print('Search Button Pressed');
                                     print(_homepageController
                                         .isAllPartySelected.value);
-                                    print(_homepageController.defualtParty);
-                                    print(_homepageController.defualtDuration);
+                                    print(_homepageController.defaultParty);
+                                    print(_homepageController.defaultDuration);
                                     print(_homepageController
-                                        .defualtMaterialType);
-                                    print(_homepageController.defualtPartyCity);
+                                        .defaultMaterialType);
+                                    print(_homepageController.defaultPartyCity);
                                     print(_homepageController
                                         .dateRange.value.start);
                                     print(_homepageController
@@ -329,7 +332,7 @@ class GeneratedReport extends StatelessWidget {
 
                                     _homepageController.getDurationDateRange(
                                         duration: _homepageController
-                                            .defualtDuration.value);
+                                            .defaultDuration.value);
 
                                     await _homepageController
                                         .getGeneratedSearchData(
@@ -338,7 +341,7 @@ class GeneratedReport extends StatelessWidget {
                                       end: _homepageController
                                           .dateRange.value.end,
                                       selectedParty: _homepageController
-                                          .defualtParty.value,
+                                          .defaultParty.value,
                                       isAllPartySelected: _homepageController
                                           .isAllPartySelected.value,
                                       isAllMaterialTypeSelected:
@@ -348,9 +351,9 @@ class GeneratedReport extends StatelessWidget {
                                           _homepageController
                                               .isAllPartyCitySelected.value,
                                       selectedMaterialType: _homepageController
-                                          .defualtMaterialType.value,
+                                          .defaultMaterialType.value,
                                       selectedPartyCity: _homepageController
-                                          .defualtPartyCity.value,
+                                          .defaultPartyCity.value,
                                     );
                                   },
                                 ),

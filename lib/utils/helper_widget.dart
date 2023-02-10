@@ -119,7 +119,7 @@ class ReportLabel extends StatelessWidget {
             leading: icon, // Icon(Icons.insert_chart),
             title: Text(
               text, //'Import Report',
-              style: textTheme.bodyText1?.copyWith(
+              style: textTheme.bodyLarge?.copyWith(
                 color: lCOLOR_PRIMARY,
                 fontSize: 15,
               ),
@@ -181,7 +181,7 @@ class Button extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             text,
-            style: textTheme.headline6?.copyWith(
+            style: textTheme.titleLarge?.copyWith(
               color: Get.isDarkMode ? Colors.black : Colors.white,
               fontSize: fontSize,
             ),
@@ -227,6 +227,8 @@ PreferredSize bottomAppBar({HomepageController? homepageController}) {
                       GetStorage('box').write('isSelectedReport', 2);
                       Get.offAndToNamed(GeneratedReport.routeName);
                     }
+                    // WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // });
                   },
                 ),
                 ReportLabel(
@@ -234,6 +236,8 @@ PreferredSize bottomAppBar({HomepageController? homepageController}) {
                   text: 'Party Payment',
                   icon: const Icon(Icons.payment),
                   onTap: () {
+                    // WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // });
                     if (homepageController?.isSelectedReport.value != 3) {
                       homepageController?.generatedReportData.clear();
                       homepageController?.isSelectedReport.value = 3;
@@ -247,6 +251,8 @@ PreferredSize bottomAppBar({HomepageController? homepageController}) {
                   text: 'Party Ledger',
                   icon: const Icon(Icons.receipt_long),
                   onTap: () {
+                    // WidgetsBinding.instance.addPostFrameCallback((_) {
+                    // });
                     if (homepageController?.isSelectedReport.value != 4) {
                       GetStorage('box').write('isSelectedReport', 4);
                       homepageController?.isSelectedReport.value = 4;
@@ -299,7 +305,7 @@ class LableWithCheckbox extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             child: AutoSizeText(
               lable,
-              style: textTheme.bodyText1?.copyWith(
+              style: textTheme.bodyLarge?.copyWith(
                 fontSize: Get.height * 0.015,
               ),
               maxLines: 1,
@@ -307,7 +313,7 @@ class LableWithCheckbox extends StatelessWidget {
           ),
           Visibility(
             visible: isCheckBoxVisible == true ? true : false,
-            replacement: Container(),
+            // replacement: Container(),
             child: Checkbox(
               value: checkBoxValue ?? false,
               onChanged: checkBoxOnchange,

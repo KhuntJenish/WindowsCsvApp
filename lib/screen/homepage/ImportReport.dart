@@ -1,23 +1,24 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/dashboard.dart';
+import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+
 import '../../theam/theam_constants.dart';
 import '../../utils/dropDownItem.dart';
 import '../../utils/helper_widget.dart';
 import '../../utils/partyComissionBottomsheet.dart';
-import '../../utils/partyMasterBottomsheet.dart';
 
 class ImportReport extends StatelessWidget {
   static const routeName = '/importReport';
   final HomepageController _homepageController = Get.put(HomepageController());
+  // final HomepageController _homepageController = Get.find<HomepageController>();
 
   ImportReport({super.key});
   @override
@@ -37,7 +38,7 @@ class ImportReport extends StatelessWidget {
         appBar: AppBar(
             title: Text(
               'Import Report',
-              style: textTheme.bodyText1?.copyWith(
+              style: textTheme.bodyLarge?.copyWith(
                 color: Colors.white,
                 fontSize: Get.height * 0.03,
               ),
@@ -84,7 +85,7 @@ class ImportReport extends StatelessWidget {
                                             horizontal: 20, vertical: 8),
                                         child: AutoSizeText(
                                           'Select All Party:',
-                                          style: textTheme.bodyText1?.copyWith(
+                                          style: textTheme.bodyLarge?.copyWith(
                                             fontSize: Get.height * 0.015,
                                           ),
                                           maxLines: 1,
@@ -103,7 +104,7 @@ class ImportReport extends StatelessWidget {
                                   PartyDropDownItems(
                                     width: Get.width * 0.28,
                                     defualtValue:
-                                        _homepageController.defualtParty,
+                                        _homepageController.defaultParty,
                                     itemList: _homepageController.partyList,
                                   ),
                                 ],
@@ -122,7 +123,7 @@ class ImportReport extends StatelessWidget {
                                       children: [
                                         Text(
                                           'Start:',
-                                          style: textTheme.bodyText1?.copyWith(
+                                          style: textTheme.bodyLarge?.copyWith(
                                             fontSize: Get.height * 0.015,
                                           ),
                                         ),
@@ -130,7 +131,7 @@ class ImportReport extends StatelessWidget {
                                           DateFormat('dd-MM-yyyy').format(
                                               _homepageController
                                                   .dateRange.value.start),
-                                          style: textTheme.bodyText1?.copyWith(
+                                          style: textTheme.bodyLarge?.copyWith(
                                             fontSize: Get.height * 0.020,
                                           ),
                                         ),
@@ -157,7 +158,7 @@ class ImportReport extends StatelessWidget {
                                       children: [
                                         Text(
                                           'End:',
-                                          style: textTheme.bodyText1?.copyWith(
+                                          style: textTheme.bodyLarge?.copyWith(
                                             fontSize: Get.height * 0.015,
                                           ),
                                         ),
@@ -165,7 +166,7 @@ class ImportReport extends StatelessWidget {
                                           DateFormat('dd-MM-yyyy').format(
                                               _homepageController
                                                   .dateRange.value.end),
-                                          style: textTheme.bodyText1?.copyWith(
+                                          style: textTheme.bodyLarge?.copyWith(
                                             fontSize: Get.height * 0.020,
                                           ),
                                         ),
@@ -184,11 +185,11 @@ class ImportReport extends StatelessWidget {
                                 print('Search Button Pressed');
                                 print(_homepageController
                                     .isAllPartySelected.value);
-                                print(_homepageController.defualtParty);
+                                print(_homepageController.defaultParty);
                                 print(
                                     _homepageController.dateRange.value.start);
                                 print(_homepageController.dateRange.value.end);
-                                if (_homepageController.defualtParty.value.id ==
+                                if (_homepageController.defaultParty.value.id ==
                                     0) {
                                   '😀Please Select Party'.errorSnackbar;
                                 } else {
@@ -199,7 +200,7 @@ class ImportReport extends StatelessWidget {
                                           end: _homepageController
                                               .dateRange.value.end,
                                           selectedParty: _homepageController
-                                              .defualtParty.value,
+                                              .defaultParty.value,
                                           isAllPartySelected:
                                               _homepageController
                                                   .isAllPartySelected.value);
@@ -587,7 +588,14 @@ class ImportReport extends StatelessWidget {
                                                                     element.name
                                                                         .contains(
                                                                             doctor));
-                                                        var technicianParty;
+                                                        PartyMasterData
+                                                            technicianParty =
+                                                            _homepageController
+                                                                .partyList!
+                                                                .firstWhere((element) =>
+                                                                    element.name
+                                                                        .contains(
+                                                                            technician));
                                                         if (technician != "") {
                                                           technicianParty =
                                                               _homepageController

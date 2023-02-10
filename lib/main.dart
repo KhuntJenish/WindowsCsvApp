@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
 import 'dashboard.dart';
-import 'screen/homepage/generatedReport.dart';
 import 'screen/homepage/ImportReport.dart';
+import 'screen/homepage/generatedReport.dart';
+import 'screen/homepage/homebinding.dart';
 import 'theam/theam_constants.dart';
 import 'utils/constant.dart';
 
@@ -142,18 +144,22 @@ class MyApp extends StatelessWidget {
             GetPage(
               name: PartyLedger.routeName,
               page: () => PartyLedger(),
+              // binding: HomeBinding(),
             ),
             GetPage(
               name: ImportReport.routeName,
               page: () => ImportReport(),
+              // binding: HomeBinding(),
             ),
             GetPage(
               name: GeneratedReport.routeName,
               page: () => GeneratedReport(),
+              // binding: HomeBinding(),
             ),
             GetPage(
               name: PartyPayment.routeName,
               page: () => PartyPayment(),
+              binding: HomeBinding(),
             ),
             GetPage(
               name: Login.routeName,
@@ -166,15 +172,19 @@ class MyApp extends StatelessWidget {
             GetPage(
               name: PartyMasterPage.routeName,
               page: () => const PartyMasterPage(),
+              // bindings: [HomeBinding(), PartyBinding()],
             ),
             GetPage(
               name: PartyComission.routeName,
               page: () => PartyComission(),
+              // bindings: [HomeBinding(), PartyBinding()],
             ),
             GetPage(
-                name: Dashboard.routeName,
-                page: () => Dashboard(),
-                transition: Transition.native),
+              name: Dashboard.routeName,
+              page: () => Dashboard(),
+              transition: Transition.native,
+              // bindings: [HomeBinding()],
+            ),
             // GetPage(
             //   name: MaterialTypeMasterPage.routeName,
             //   page: () => MaterialTypeMasterPage(),
