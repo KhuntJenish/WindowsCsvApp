@@ -495,7 +495,7 @@ class GeneratedReport extends StatelessWidget {
                                             ? _homepageController
                                                     .generatedReportData[index]
                                                     .length -
-                                                1
+                                                3
                                             : 0,
                                         itemBuilder: (_, subIndex) {
                                           return Container(

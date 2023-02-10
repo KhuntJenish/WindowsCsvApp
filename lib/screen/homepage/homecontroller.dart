@@ -665,56 +665,65 @@ class HomepageController extends GetxController {
           .getSingle();
 
       print('logID : ${data.logId}');
-      var generatedLedgerID = 0;
+      var paymentLedgerID = 0;
       DateTime comissionPaidDate;
       if (pID == 1) {
         crAmount = paymentbackRecord?[19];
-        generatedLedgerID = data.hospitalGenerateLedgerId;
+        paymentLedgerID = data.hospitalPaymentLedgerId;
         comissionPaidDate = data.hospitalComissionPaidDate;
         // data.copyWith();
-        data.copyWith(
-          hospitalComissionPaidDate: DateTime(1800, 01, 01),
+
+        var updateInputData = await (db.update(db.inputData)
+              ..where((tbl) => tbl.id.equals(data.id)))
+            .write(
+          data.copyWith(
+            hospitalComissionPaidDate: DateTime(1800, 01, 01),
+          ),
         );
+        print('updateInputData: $updateInputData');
       } else if (pID == 2) {
         crAmount = paymentbackRecord?[21];
-        generatedLedgerID = data.doctorGenerateLedgerId;
+        paymentLedgerID = data.doctorPaymentLedgerId;
         comissionPaidDate = data.doctorComissionPaidDate;
-        data.copyWith(
+
+        var updateInputData = await (db.update(db.inputData)
+              ..where((tbl) => tbl.id.equals(data.id)))
+            .write(data.copyWith(
           doctorComissionPaidDate: DateTime(1800, 01, 01),
-        );
+        ));
+        print('updateInputData: $updateInputData');
       } else {
         crAmount = paymentbackRecord?[23];
-        generatedLedgerID = data.techniqalStaffGenerateLedgerId;
+        paymentLedgerID = data.techniqalStaffPaymentLedgerId;
         comissionPaidDate = data.techniqalStaffComissionPaidDate;
-        data.copyWith(
+
+        var updateInputData = await (db.update(db.inputData)
+              ..where((tbl) => tbl.id.equals(data.id)))
+            .write(data.copyWith(
           techniqalStaffComissionPaidDate: DateTime(1800, 01, 01),
-        );
+        ));
       }
       // print('ledgerID : ${data.generateLedgerId}');
-      if (generatedLedgerID != 0) {
+      if (paymentLedgerID != 0) {
         var ledgerData = await (db.select(db.ledger)
               ..where((tbl) => tbl.ledgerDate.equals(comissionPaidDate)))
-            .get();
+            .getSingle();
 
         // print('ledgerData: $ledgerData1');
         print('ledgerData: $ledgerData');
-        if (ledgerData[0].crAmount != crAmount) {
+        if (ledgerData.crAmount != crAmount) {
           var updateLedgerData = await (db.update(db.ledger)
-                ..where((tbl) => tbl.id.equals(ledgerData[0].id)))
+                ..where((tbl) => tbl.id.equals(ledgerData.id)))
               .write(
-            ledgerData[0].copyWith(
-              crAmount: ledgerData[0].crAmount - crAmount!.toDouble(),
+            ledgerData.copyWith(
+              crAmount: ledgerData.crAmount - crAmount!.toDouble(),
             ),
           );
         } else {
           var deletePaymentLedger =
-              await db.delete(db.ledger).delete(ledgerData[0]);
+              await db.delete(db.ledger).delete(ledgerData);
           print(deletePaymentLedger);
         }
-        var updateInputData = await (db.update(db.inputData)
-              ..where((tbl) => tbl.id.equals(data.id)))
-            .write(data);
-        print('updateInputData: $updateInputData');
 
         await getGeneratedSearchData(
             start: dateRange.value.start,
@@ -1210,7 +1219,7 @@ class HomepageController extends GetxController {
                       ? serachData[i].doctorComissionPaidDate
                       : serachData[i].techniqalStaffComissionPaidDate;
               var cAmount = ptID == 1
-                  ? serachData[i].doctorComissionAmount
+                  ? serachData[i].hospitalComissionAmount
                   : ptID == 2
                       ? serachData[i].doctorComissionAmount
                       : serachData[i].techniqalStaffComissionAmount;
@@ -1839,11 +1848,11 @@ class HomepageController extends GetxController {
                 var logID = GetStorage('box').read('logID');
                 print('logID: $logID');
                 //For Hospital
-                num hospitalComission, hospitalComissionAmount;
+                double hospitalComission, hospitalComissionAmount;
                 //For Doctor
-                num docotorComission, doctorComissionAmount;
+                double docotorComission, doctorComissionAmount;
                 //For Technician
-                num technicianComission, technicianComissionAmount;
+                double technicianComission, technicianComissionAmount;
                 if (element.hospitalID != 0) {
                   hospitalComission =
                       checkHospitalPartyComission![0].comission1;
@@ -2054,20 +2063,20 @@ class HomepageController extends GetxController {
         //   }
         // }
         await generateComission(
-          partySet: doctorPartySet,
-          partyTotalComissionSet: doctorPartyTotalComissionSet,
-          partyWiseList: doctorPartyWiseList,
-        );
+            partySet: doctorPartySet,
+            partyTotalComissionSet: doctorPartyTotalComissionSet,
+            partyWiseList: doctorPartyWiseList,
+            partyType: 2);
         await generateComission(
-          partySet: hospitalPartySet,
-          partyTotalComissionSet: hospitalPartyTotalComissionSet,
-          partyWiseList: hospitalPartyWiseList,
-        );
+            partySet: hospitalPartySet,
+            partyTotalComissionSet: hospitalPartyTotalComissionSet,
+            partyWiseList: hospitalPartyWiseList,
+            partyType: 1);
         await generateComission(
-          partySet: technicianPartySet,
-          partyTotalComissionSet: technicianPartyTotalComissionSet,
-          partyWiseList: technicianPartyWiseList,
-        );
+            partySet: technicianPartySet,
+            partyTotalComissionSet: technicianPartyTotalComissionSet,
+            partyWiseList: technicianPartyWiseList,
+            partyType: 3);
 
         // var data = db.select(db.inputData).get();
         pendingReportData.clear();
@@ -2091,6 +2100,7 @@ class HomepageController extends GetxController {
     Set<int>? partySet,
     List? partyTotalComissionSet,
     List<List<String>>? partyWiseList,
+    int? partyType,
   }) async {
     List ledgerIDList = [];
     for (var i = 0; i < partySet!.length; i++) {
@@ -2118,15 +2128,27 @@ class HomepageController extends GetxController {
       for (var j = 0; j < element.length; j++) {
         var data = await (db.select(db.inputData)
               ..where((tbl) => tbl.smtInvNo.equals(element[j])))
-            .get();
+            .getSingle();
         print(element[j]); //smtInvNo
-        print(data[0]); // smtInvNo-data
+        print(data); // smtInvNo-data
         print(ledgerIDList[i]); //ledgerID
+
+        if (partyType == 1) {
+          data = data.copyWith(
+            hospitalGenerateLedgerId: ledgerIDList[i],
+          );
+        } else if (partyType == 2) {
+          data = data.copyWith(
+            doctorGenerateLedgerId: ledgerIDList[i],
+          );
+        } else {
+          data = data.copyWith(
+            techniqalStaffGenerateLedgerId: ledgerIDList[i],
+          );
+        }
         var resUpdate = await (db.update(db.inputData)
               ..where((tbl) => tbl.smtInvNo.equals(element[j])))
-            .write(data[0].copyWith(
-          hospitalGenerateLedgerId: ledgerIDList[i],
-        ));
+            .write(data);
         print(resUpdate);
         print('update record');
       }
