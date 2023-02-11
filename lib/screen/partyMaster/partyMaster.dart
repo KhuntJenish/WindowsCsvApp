@@ -2,7 +2,6 @@ import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 import '../../utils/partyMasterBottomsheet.dart';
 import 'partyComission.dart';
@@ -123,7 +122,7 @@ class PartyTabView extends StatelessWidget {
                           Button(
                             height: Get.height * 0.06,
                             width: Get.width * 0.1,
-                            fontSize: Get.width * 0.015,
+                            fontSize: Get.height * 0.018,
                             text: 'Comission',
                             onPressed: () {
                               btnText = 'Add Comission';

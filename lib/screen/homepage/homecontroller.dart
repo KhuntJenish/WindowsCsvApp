@@ -141,19 +141,21 @@ class HomepageController extends GetxController {
       List<List<dynamic>> list = [];
       for (var i = 0; i < generatedReportData.length; i++) {
         List subList = [];
-        subList.add(generatedReportData[i][3].toString());
-        subList.add(generatedReportData[i][4].toString());
-        subList.add(generatedReportData[i][6].toString());
-        subList.add(generatedReportData[i][7].toString());
-        subList.add(generatedReportData[i][12].toString());
-        subList.add(generatedReportData[i][13].toString());
-        subList.add(generatedReportData[i][15].toString());
-        subList.add(generatedReportData[i][18].toString());
-        subList.add(generatedReportData[i][19].toString());
-        subList.add(generatedReportData[i][20].toString());
-        subList.add(generatedReportData[i][21].toString());
-        subList.add(generatedReportData[i][22].toString());
-        subList.add(generatedReportData[i][23].toString());
+        subList.add(generatedReportData[i][13].toString()); //smt Date
+        subList.add(generatedReportData[i][15].toString()); //smt inv no
+        // subList.add(generatedReportData[i][6].toString());//material name
+        subList.add(generatedReportData[i][7].toString()); //material type
+        subList.add(generatedReportData[i][4].toString()); //customer billcity
+        subList.add(generatedReportData[i][12].toString()); //total sale
+        subList.add(generatedReportData[i][3].toString()); //h name
+        subList.add(generatedReportData[i][18].toString()); //h comission
+        subList.add(generatedReportData[i][19].toString()); //h comission amount
+        subList.add(generatedReportData[i][9].toString()); //d name
+        subList.add(generatedReportData[i][20].toString()); //d comission
+        subList.add(generatedReportData[i][21].toString()); //d comission amount
+        subList.add(generatedReportData[i][10].toString()); //t name
+        subList.add(generatedReportData[i][22].toString()); //t comission
+        subList.add(generatedReportData[i][23].toString()); //t comission amount
         // print(subList);
         list.add(subList);
       }
@@ -182,9 +184,9 @@ class HomepageController extends GetxController {
             saletotal = saletotal + double.parse(list[i][4].toString());
             // comissiontotal =
             //     comissiontotal + double.parse(list[i][8].toString());
-            hComissiontotal += double.parse(list[i][8].toString());
+            hComissiontotal += double.parse(list[i][7].toString());
             dComissiontotal += double.parse(list[i][10].toString());
-            tComissiontotal += double.parse(list[i][12].toString());
+            tComissiontotal += double.parse(list[i][13].toString());
             print(saletotal);
             print(hComissiontotal);
             print(dComissiontotal);
@@ -205,10 +207,11 @@ class HomepageController extends GetxController {
               saletotal.toStringAsFixed(2),
               '',
               '',
-              '',
               hComissiontotal.toStringAsFixed(2),
               '',
+              '',
               dComissiontotal.toStringAsFixed(2),
+              '',
               '',
               tComissiontotal.toStringAsFixed(2),
             ]);
@@ -242,10 +245,11 @@ class HomepageController extends GetxController {
             saletotal.toStringAsFixed(2),
             '',
             '',
-            '',
             hComissiontotal.toStringAsFixed(2),
             '',
+            '',
             dComissiontotal.toStringAsFixed(2),
+            '',
             '',
             tComissiontotal.toStringAsFixed(2),
           ]);
@@ -288,10 +292,11 @@ class HomepageController extends GetxController {
           saletotal.toStringAsFixed(2),
           '',
           '',
-          '',
           hComissiontotal.toStringAsFixed(2),
           '',
+          '',
           dComissiontotal.toStringAsFixed(2),
+          '',
           '',
           tComissiontotal.toStringAsFixed(2),
         ]);
@@ -314,19 +319,20 @@ class HomepageController extends GetxController {
                 children: [
                   pw.Table.fromTextArray(
                     columnWidths: {
-                      0: const pw.FlexColumnWidth(2),
+                      0: const pw.FlexColumnWidth(1.2),
                       1: const pw.FlexColumnWidth(1),
                       2: const pw.FlexColumnWidth(1),
                       3: const pw.FlexColumnWidth(1),
                       4: const pw.FlexColumnWidth(1),
-                      5: const pw.FlexColumnWidth(1),
-                      6: const pw.FlexColumnWidth(1.2),
+                      5: const pw.FlexColumnWidth(2),
+                      6: const pw.FlexColumnWidth(1),
                       7: const pw.FlexColumnWidth(1),
-                      8: const pw.FlexColumnWidth(1),
+                      8: const pw.FlexColumnWidth(2),
                       9: const pw.FlexColumnWidth(1),
                       10: const pw.FlexColumnWidth(1),
-                      11: const pw.FlexColumnWidth(1),
+                      11: const pw.FlexColumnWidth(2),
                       12: const pw.FlexColumnWidth(1),
+                      13: const pw.FlexColumnWidth(1),
                     },
                     cellAlignments: {
                       0: pw.Alignment.centerLeft,
@@ -335,13 +341,14 @@ class HomepageController extends GetxController {
                       3: pw.Alignment.centerLeft,
                       4: pw.Alignment.centerRight,
                       5: pw.Alignment.centerLeft,
-                      6: pw.Alignment.centerLeft,
+                      6: pw.Alignment.centerRight,
                       7: pw.Alignment.centerRight,
-                      8: pw.Alignment.centerRight,
+                      8: pw.Alignment.centerLeft,
                       9: pw.Alignment.centerRight,
                       10: pw.Alignment.centerRight,
-                      11: pw.Alignment.centerRight,
+                      11: pw.Alignment.centerLeft,
                       12: pw.Alignment.centerRight,
+                      13: pw.Alignment.centerRight,
                     },
                     headerAlignments: {
                       0: pw.Alignment.center,
@@ -362,7 +369,7 @@ class HomepageController extends GetxController {
                     data: mainList[i],
                     cellStyle: const pw.TextStyle(fontSize: 7),
                     headerStyle: pw.TextStyle(
-                        fontSize: 9, fontWeight: pw.FontWeight.bold),
+                        fontSize: 8, fontWeight: pw.FontWeight.bold),
                   ),
                 ],
               ); // Center
@@ -906,6 +913,7 @@ class HomepageController extends GetxController {
     try {
       isLoading.value = true;
       ledgerReportData.clear();
+      ledgerPartyWiseSet.clear();
       print('ledgerSearchData : ');
       List<LedgerData> ledgerData = [];
       d.Expression<bool> party = isAllPartySelected!
@@ -1115,11 +1123,11 @@ class HomepageController extends GetxController {
       sublist.add('SMT Invoice No.');
       sublist.add('Purchase Taxable');
       sublist.add('Total Purchase');
-      sublist.add('H-Comission(%)');
+      sublist.add('H(%)');
       sublist.add('H-cAmount');
-      sublist.add('D-Comission(%)');
+      sublist.add('D(%)');
       sublist.add('D-cAmount');
-      sublist.add('T-Comission(%)');
+      sublist.add('T(%)');
       sublist.add('T-cAmount');
       generatedReportData.add(sublist);
       // print(serachData.length);
