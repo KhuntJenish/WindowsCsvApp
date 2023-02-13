@@ -423,13 +423,22 @@ class HomepageController extends GetxController {
             ?.firstWhere((element) =>
                 element.id.isEqual(partyWiseList.elementAt(i)[0].pID))
             .name;
+        var ptID = partyList
+            ?.firstWhere((element) =>
+                element.id.isEqual(partyWiseList.elementAt(i)[0].pID))
+            .ptID;
+        var partyType = ptID == 1
+            ? 'Hospital'
+            : ptID == 2
+                ? 'Doctor'
+                : 'Technician';
         print(partyName);
         List newList = [];
         List<List<dynamic>> newsubList = [];
         newList.addAll(partyWiseList.elementAt(i));
         newsubList.add([
+          partyType.toString(),
           '$partyName',
-          '',
           '',
           '',
         ]);
@@ -518,12 +527,13 @@ class HomepageController extends GetxController {
                           2: pw.Alignment.centerRight,
                           3: pw.Alignment.centerRight,
                         },
-                        headerAlignments: {
-                          0: pw.Alignment.center,
-                          1: pw.Alignment.center,
-                          2: pw.Alignment.center,
-                          3: pw.Alignment.center,
-                        },
+                        // headerAlignments: {
+                        //   0: pw.Alignment.center,
+                        //   1: pw.Alignment.center,
+                        //   2: pw.Alignment.center,
+                        //   3: pw.Alignment.center,
+                        // },
+
                         context: context,
                         data: superMainList[i],
                         cellStyle: const pw.TextStyle(fontSize: 10),

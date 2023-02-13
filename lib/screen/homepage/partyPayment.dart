@@ -39,25 +39,28 @@ class PartyPayment extends StatelessWidget {
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: Get.width * 0.05,
-            title: Text(
-              'Party Payment',
-              style: textTheme.bodyLarge?.copyWith(
-                color: Colors.white,
-                fontSize: Get.height * 0.03,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(Get.height * 0.15),
+            child: AppBar(
+              // toolbarHeight: Get.height * 0.08,
+              title: Text(
+                'Party Payment',
+                style: textTheme.bodyLarge?.copyWith(
+                  color: Colors.white,
+                  fontSize: Get.height * 0.03,
+                ),
               ),
+              leading: IconButton(
+                onPressed: () {
+                  _homepageController.isSelectedReport.value = 0;
+                  GetStorage('box').write('isSelectedReport', 0);
+                  Get.offAndToNamed(Dashboard.routeName);
+                },
+                icon: const Icon(Icons.arrow_back),
+              ),
+              centerTitle: true,
+              bottom: bottomAppBar(homepageController: _homepageController),
             ),
-            leading: IconButton(
-              onPressed: () {
-                _homepageController.isSelectedReport.value = 0;
-                GetStorage('box').write('isSelectedReport', 0);
-                Get.offAndToNamed(Dashboard.routeName);
-              },
-              icon: const Icon(Icons.arrow_back),
-            ),
-            centerTitle: true,
-            bottom: bottomAppBar(homepageController: _homepageController),
           ),
           body: TabBarView(
             children: [

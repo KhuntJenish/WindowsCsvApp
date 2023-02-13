@@ -194,7 +194,7 @@ class Button extends StatelessWidget {
 
 PreferredSize bottomAppBar({HomepageController? homepageController}) {
   return PreferredSize(
-    preferredSize: Size.fromHeight(Get.width * 0.04),
+    preferredSize: Size.fromHeight(Get.height * 0.07),
     child: Column(
       children: [
         SizedBox(

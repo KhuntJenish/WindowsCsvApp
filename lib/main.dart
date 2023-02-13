@@ -112,7 +112,7 @@ class MyApp extends StatelessWidget {
     GetStorage('box').write('isSelectedReport', 0);
     if (GetStorage('box').read('cuser') != null) {
       var userData = GetStorage('box').read('cuser');
-      // print(userData);
+      print('userdata : $userData');
       var user = UserData(
           id: userData['id'],
           username: userData['username'],

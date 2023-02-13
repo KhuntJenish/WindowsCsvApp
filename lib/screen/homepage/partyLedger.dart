@@ -412,6 +412,21 @@ class PartyLedger extends StatelessWidget {
                                   },
                                   groupSeparatorBuilder: (String groupByValue) {
                                     debugPrint('GS : $groupByValue');
+                                    var partyName = _homepageController
+                                        .partyList!
+                                        .firstWhere((item) =>
+                                            item.id == int.parse(groupByValue))
+                                        .name;
+                                    var ptID = _homepageController.partyList!
+                                        .firstWhere((item) =>
+                                            item.id == int.parse(groupByValue))
+                                        .ptID;
+                                    var partyType = ptID == 1
+                                        ? 'Hospital'
+                                        : ptID == 2
+                                            ? 'Doctor'
+                                            : 'Technician';
+
                                     return Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -427,11 +442,7 @@ class PartyLedger extends StatelessWidget {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: AutoSizeText(
-                                                _homepageController.partyList!
-                                                    .firstWhere((item) =>
-                                                        item.id ==
-                                                        int.parse(groupByValue))
-                                                    .name,
+                                                '$partyType : $partyName',
                                                 style: textTheme.bodyLarge
                                                     ?.copyWith(
                                                   fontSize: Get.height * 0.020,
