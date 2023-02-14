@@ -516,6 +516,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                 ),
                 onChanged: (value) {
                   print(value);
+
                   if (value.isNotEmpty) {
                     if (btnText == 'Add Comission' &&
                         itemAmountController.text.isNotEmpty) {
@@ -530,6 +531,9 @@ class PartyComissionBottomSheet extends StatelessWidget {
                             .toStringAsFixed(2);
                     print('jenish ---------------------------');
                     print(hospitalComissionController.text);
+                    hospitalComissionController.text != ''
+                        ? 0
+                        : hospitalComissionController.text;
                     totalComission.value =
                         double.parse(hospitalComissionController.text) +
                             double.parse(doctorComissionController.text) +

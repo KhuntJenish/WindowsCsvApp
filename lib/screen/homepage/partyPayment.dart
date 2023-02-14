@@ -126,6 +126,7 @@ class PartyPaymentView extends StatelessWidget {
     // homepageController?.isAllPartySelected.value = false;
 
     List<PartyMasterData> partyList = [];
+    TextEditingController amountController = TextEditingController();
     // homepageController?.defualtParty.refresh();
     for (var party in homepageController!.partyList!) {
       if (party.ptID == partyTypeID) {
@@ -355,7 +356,7 @@ class PartyPaymentView extends StatelessWidget {
                                               ),
                                             ),
                                             child: SizedBox(
-                                              width: Get.width * 0.20,
+                                              width: Get.width * 0.15,
                                               child: StringDropDownItems(
                                                 homecontroller:
                                                     homepageController,
@@ -375,73 +376,105 @@ class PartyPaymentView extends StatelessWidget {
                               ],
                             ),
                           ),
-                          //**  Search button
-                          Container(
-                            margin: const EdgeInsets.only(top: 30),
-                            child: Button(
-                              height: Get.height * 0.045,
-                              width: Get.width * 0.08,
-                              fontSize: Get.width * 0.010,
-                              text: 'Search',
-                              onPressed: () async {
-                                homepageController?.smtInvNoSet.clear();
-                                print('Search Button Pressed');
-                                print(homepageController
-                                    ?.isAllPartySelected.value);
-                                print(homepageController?.defaultParty);
-                                print(homepageController?.defaultDuration);
-                                print(homepageController?.defaultMaterialType);
-                                print(homepageController?.defaultPartyCity);
-                                print(
-                                    homepageController?.dateRange.value.start);
-                                print(homepageController?.dateRange.value.end);
-                                homepageController?.getDurationDateRange(
-                                    duration: homepageController
-                                        ?.defaultDuration.value);
+                          //**  isAll Pending
+                          Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: Get.width * 0.10,
+                                margin: const EdgeInsets.only(left: 10),
+                                child: LableWithCheckbox(
+                                  lable: 'isAll Pending:',
+                                  checkBoxOnchange: (value) =>
+                                      homepageController
+                                          ?.isAllPendingPayement.value = value!,
+                                  checkBoxValue: homepageController
+                                      ?.isAllPendingPayement.value,
+                                  isCheckBoxVisible: true,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              Row(
+                                children: [
+                                  //** Search button
+                                  Container(
+                                    // margin: const EdgeInsets.only(top: 30),
+                                    child: Button(
+                                      height: Get.height * 0.045,
+                                      width: Get.width * 0.08,
+                                      fontSize: Get.width * 0.010,
+                                      text: 'Search',
+                                      onPressed: () async {
+                                        homepageController?.smtInvNoSet.clear();
+                                        print('Search Button Pressed');
 
-                                await homepageController
-                                    ?.getGeneratedSearchData(
-                                  start:
-                                      homepageController?.dateRange.value.start,
-                                  end: homepageController?.dateRange.value.end,
-                                  selectedParty:
-                                      homepageController?.defaultParty.value,
-                                  isAllPartySelected: false,
-                                  isAllMaterialTypeSelected: homepageController
-                                      ?.isAllMaterialTypeSelected.value,
-                                  isAllPartyCitySelected: homepageController
-                                      ?.isAllPartyCitySelected.value,
-                                  selectedMaterialType: homepageController
-                                      ?.defaultMaterialType.value,
-                                  selectedPartyCity: homepageController
-                                      ?.defaultPartyCity.value,
-                                );
-                              },
-                            ),
-                          ),
-                          //** pdf button
-                          Container(
-                            margin: const EdgeInsets.only(top: 30),
-                            child: Button(
-                              height: Get.height * 0.045,
-                              width: Get.width * 0.05,
-                              fontSize: Get.width * 0.010,
-                              text: 'Pdf',
-                              onPressed: () async {
-                                if (homepageController!
-                                        .generatedReportData.isEmpty ||
-                                    homepageController!
-                                            .generatedReportData.length <
-                                        2) {
-                                  'No Data Found'.errorSnackbar;
-                                  return;
-                                }
-                                print('Create Pdf');
-                                print(homepageController?.generatedReportData);
+                                        homepageController
+                                            ?.getDurationDateRange(
+                                                duration: homepageController
+                                                    ?.defaultDuration.value);
 
-                                await homepageController?.createReportPdf();
-                              },
-                            ),
+                                        await homepageController
+                                            ?.getGeneratedSearchData(
+                                          start: homepageController
+                                              ?.dateRange.value.start,
+                                          end: homepageController
+                                              ?.dateRange.value.end,
+                                          selectedParty: homepageController
+                                              ?.defaultParty.value,
+                                          isAllPartySelected: false,
+                                          isAllMaterialTypeSelected:
+                                              homepageController
+                                                  ?.isAllMaterialTypeSelected
+                                                  .value,
+                                          isAllPartyCitySelected:
+                                              homepageController
+                                                  ?.isAllPartyCitySelected
+                                                  .value,
+                                          selectedMaterialType:
+                                              homepageController
+                                                  ?.defaultMaterialType.value,
+                                          selectedPartyCity: homepageController
+                                              ?.defaultPartyCity.value,
+                                          isAllPendingPayement:
+                                              homepageController
+                                                  ?.isAllPendingPayement.value,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  //** pdf button
+                                  Container(
+                                    // margin: const EdgeInsets.only(top: 30),
+                                    child: Button(
+                                      height: Get.height * 0.045,
+                                      width: Get.width * 0.05,
+                                      fontSize: Get.width * 0.010,
+                                      text: 'Pdf',
+                                      onPressed: () async {
+                                        if (homepageController!
+                                                .generatedReportData.isEmpty ||
+                                            homepageController!
+                                                    .generatedReportData
+                                                    .length <
+                                                2) {
+                                          'No Data Found'.errorSnackbar;
+                                          return;
+                                        }
+                                        print('Create Pdf');
+                                        print(homepageController
+                                            ?.generatedReportData);
+
+                                        await homepageController
+                                            ?.createReportPdf();
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -889,11 +922,11 @@ class PartyPaymentView extends StatelessWidget {
                           child: Positioned(
                             // width: Get.width,
                             bottom: Get.height * 0.05,
-                            left: Get.width * 0.10,
-                            right: Get.width * 0.70,
+                            left: Get.width * 0.05,
+                            right: Get.width * 0.85,
                             child: SizedBox(
                               height: Get.height * 0.1,
-                              width: Get.width * 0.5,
+                              // width: Get.width * 0.3,
                               child: Card(
                                 // color: lCOLOR_ACCENT.withOpacity(0.1),
                                 shape: RoundedRectangleBorder(
@@ -903,6 +936,35 @@ class PartyPaymentView extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
+                                    Container(
+                                      width: Get.width * 0.2,
+                                      height: Get.height * 0.1,
+                                      margin: EdgeInsets.only(
+                                          top: Get.height * 0.018),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: Get.width * 0.01),
+                                      child: TextField(
+                                        maxLength: 10,
+                                        controller: amountController,
+                                        decoration: InputDecoration(
+                                          prefixIcon: const Icon(
+                                              Icons.currency_rupee_sharp),
+                                          suffixIcon: IconButton(
+                                            icon: const Icon(Icons.search),
+                                            onPressed: () {
+                                              print(amountController.text);
+                                            },
+                                          ),
+                                          hintText: 'Enter Payment Amount',
+                                          counterText: '',
+                                          hintStyle:
+                                              textTheme.headline6?.copyWith(
+                                            color: Colors.grey[700],
+                                            fontSize: Get.height * 0.02,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                     LableText(
                                         name: 'Total Amount',
                                         amount: homepageController!
@@ -922,6 +984,9 @@ class PartyPaymentView extends StatelessWidget {
                                             amount: homepageController!
                                                 .partyWisePayableAmount
                                                 .toString()),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
                                         Button(
                                           text: 'Pay',
                                           onPressed: () {

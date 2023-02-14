@@ -56,6 +56,7 @@ class HomepageController extends GetxController {
   RxBool isAllPartySelected = true.obs;
   RxBool isAllMaterialTypeSelected = true.obs;
   RxBool isAllPartyCitySelected = true.obs;
+  RxBool isAllPendingPayement = true.obs;
   RxDouble partyWiseTotalAmount = 0.0.obs;
   RxDouble partyWisePaidAmount = 0.0.obs;
   RxDouble partyWisePayableAmount = 0.0.obs;
@@ -1062,6 +1063,7 @@ class HomepageController extends GetxController {
     bool? isAllPartySelected,
     bool? isAllPartyCitySelected,
     bool? isAllMaterialTypeSelected,
+    bool? isAllPendingPayement = false,
     PartyMasterData? selectedParty,
     String? selectedPartyCity,
     MaterialTypeData? selectedMaterialType,
@@ -1076,8 +1078,10 @@ class HomepageController extends GetxController {
       partyNaNSetData.clear();
       var serachData = [];
       ptID = selectedParty?.ptID;
-      d.Expression<bool> duration =
-          db.inputData.smtDocDate.isBetweenValues(start!, end!);
+      d.Expression<bool> duration = isAllPendingPayement!
+          ? db.inputData.hospitalComissionPaidDate
+              .equals(DateTime(1800, 01, 01))
+          : db.inputData.smtDocDate.isBetweenValues(start!, end!);
       d.Expression<bool> partyCity = isAllPartyCitySelected!
           ? db.inputData.custBillCity.isNotNull()
           : db.inputData.custBillCity.equals(selectedPartyCity!);
