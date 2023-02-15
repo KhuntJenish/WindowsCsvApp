@@ -416,6 +416,11 @@ class PartyPaymentView extends StatelessWidget {
                                                 duration: homepageController
                                                     ?.defaultDuration.value);
 
+                                        homepageController
+                                            ?.checkLumpsumPaymentData
+                                            .clear();
+                                        amountController.clear();
+
                                         await homepageController
                                             ?.getGeneratedSearchData(
                                           start: homepageController
@@ -603,15 +608,21 @@ class PartyPaymentView extends StatelessWidget {
                                 replacement: Container(),
                                 child: Card(
                                   margin: const EdgeInsets.all(3),
-                                  color: homepageController!.displayData
+                                  color: homepageController!
+                                          .checkLumpsumPaymentData
                                           .contains(homepageController
                                               ?.generatedReportData[index][15])
-                                      ? date.isAfter(DateTime(1800, 01, 01))
-                                          ? const Color.fromARGB(
-                                              255, 121, 192, 124)
-                                          : Colors.white
-                                      : const Color.fromARGB(
-                                          255, 228, 136, 129),
+                                      ? Colors.amber[100]
+                                      : homepageController!.displayData
+                                              .contains(homepageController
+                                                      ?.generatedReportData[
+                                                  index][15])
+                                          ? date.isAfter(DateTime(1800, 01, 01))
+                                              ? const Color.fromARGB(
+                                                  255, 121, 192, 124)
+                                              : Colors.white
+                                          : const Color.fromARGB(
+                                              255, 228, 136, 129),
                                   child: SizedBox(
                                     width: Get.width * 2,
                                     height: Get.height * 0.04,
@@ -953,6 +964,18 @@ class PartyPaymentView extends StatelessWidget {
                                             icon: const Icon(Icons.search),
                                             onPressed: () {
                                               print(amountController.text);
+                                              homepageController!
+                                                  .checkLumpsumPaymen(
+                                                ptID: partyTypeID,
+                                                generatedReportData:
+                                                    homepageController
+                                                        ?.generatedReportData,
+                                                lumpsumAmount: double.parse(
+                                                    amountController.text),
+                                                selectedParty:
+                                                    homepageController
+                                                        ?.defaultParty.value,
+                                              );
                                             },
                                           ),
                                           hintText: 'Enter Payment Amount',
@@ -997,18 +1020,16 @@ class PartyPaymentView extends StatelessWidget {
                                               Get.defaultDialog(
                                                 title: 'payment',
                                                 middleText:
-                                                    'Are you sure you want to pay  ${(homepageController!.partyWiseTotalAmount.value - homepageController!.partyWisePaidAmount.value).toString()}₹ ?',
+                                                    'Are you sure you want to pay  ${(homepageController!.partyWisePayableAmount).toString()}₹ ?',
                                                 textConfirm: 'Ok',
                                                 confirmTextColor: Colors.white,
                                                 onConfirm: () {
                                                   print('payment');
                                                   Get.back();
-                                                  var crAmount = (homepageController!
-                                                          .partyWiseTotalAmount
-                                                          .value -
+                                                  var crAmount =
                                                       homepageController!
-                                                          .partyWisePaidAmount
-                                                          .value);
+                                                          .partyWisePayableAmount
+                                                          .value;
                                                   print(homepageController!
                                                       .defaultParty.value);
                                                   // !todo: payment

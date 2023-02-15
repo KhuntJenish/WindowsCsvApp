@@ -1081,22 +1081,22 @@ class HomepageController extends GetxController {
         for (var i = 1; i < generatedReportData.length; i++) {
           if (ptID == 1) {
             // isHospital = true;
-            print(generatedReportData[i][3]);
-            print(generatedReportData[i][19]);
+            // print(generatedReportData[i][3]);
+            // print(generatedReportData[i][19]);
             pName = generatedReportData[i][3];
             pCommission = generatedReportData[i][19];
             totalPayAmount += pCommission;
           } else if (ptID == 2) {
             // isDoctor = true;
-            print(generatedReportData[i][9]);
-            print(generatedReportData[i][21]);
+            // print(generatedReportData[i][9]);
+            // print(generatedReportData[i][21]);
             pName = generatedReportData[i][9];
             pCommission = generatedReportData[i][21];
             totalPayAmount += pCommission;
           } else {
             // isTechnician = true;
-            print(generatedReportData[i][10]);
-            print(generatedReportData[i][23]);
+            // print(generatedReportData[i][10]);
+            // print(generatedReportData[i][23]);
             pName = generatedReportData[i][10];
             pCommission = generatedReportData[i][23];
             totalPayAmount += pCommission;
@@ -1112,7 +1112,9 @@ class HomepageController extends GetxController {
         }
         partyWiseTotalAmount.value = totalPayAmount;
 
-        print(totalPayAmount);
+        // print(totalPayAmount);
+        // print(checkLumpsumPaymentData.length);
+        // print(smtInvNoSet);
         // print(partyWisePayableAmount.value);
         // if (!isReturn) {
         //   "amount of lumpsum payment is not enough".errorSnackbar();
