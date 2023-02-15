@@ -8,6 +8,7 @@ import 'package:csvapp/screen/partyMaster/partyController.dart';
 import 'package:csvapp/theam/theam_constants.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart' as d;
+// import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,7 @@ class HomepageController extends GetxController {
   ]);
   RxSet<String> partyCityList = RxSet<String>();
   RxSet<String> displayData = RxSet<String>();
+  RxSet<String> checkLumpsumPaymentData = RxSet<String>();
   RxSet<String> partyNaNSetData = RxSet<String>();
   RxSet<List<int>> partyNaNSetDetailData = RxSet<List<int>>();
   RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
@@ -1057,6 +1059,86 @@ class HomepageController extends GetxController {
     }
   }
 
+  Future<void> checkLumpsumPaymen({
+    PartyMasterData? selectedParty,
+    RxList<List<dynamic>>? generatedReportData,
+    int? ptID,
+    double? lumpsumAmount,
+  }) async {
+    try {
+      print(generatedReportData?.length);
+      if (generatedReportData!.isEmpty) {
+        "Payment not found".errorSnackbar();
+      }
+      var pName, pCommission = 0.0, totalPayAmount = 0.0;
+      bool isReturn = true;
+      smtInvNoSet.clear();
+      // RxList<List<dynamic>>? data ;
+
+      // List list = [];
+      checkLumpsumPaymentData.clear();
+      if (isReturn) {
+        for (var i = 1; i < generatedReportData.length; i++) {
+          if (ptID == 1) {
+            // isHospital = true;
+            print(generatedReportData[i][3]);
+            print(generatedReportData[i][19]);
+            pName = generatedReportData[i][3];
+            pCommission = generatedReportData[i][19];
+            totalPayAmount += pCommission;
+          } else if (ptID == 2) {
+            // isDoctor = true;
+            print(generatedReportData[i][9]);
+            print(generatedReportData[i][21]);
+            pName = generatedReportData[i][9];
+            pCommission = generatedReportData[i][21];
+            totalPayAmount += pCommission;
+          } else {
+            // isTechnician = true;
+            print(generatedReportData[i][10]);
+            print(generatedReportData[i][23]);
+            pName = generatedReportData[i][10];
+            pCommission = generatedReportData[i][23];
+            totalPayAmount += pCommission;
+          }
+          if (totalPayAmount <= lumpsumAmount!) {
+            checkLumpsumPaymentData.add(generatedReportData[i][15]);
+            smtInvNoSet.add(generatedReportData[i][15]);
+            partyWisePayableAmount.value = totalPayAmount;
+          } else {
+            isReturn = false;
+            // generatedReportData.clear();
+          }
+        }
+        partyWiseTotalAmount.value = totalPayAmount;
+
+        print(totalPayAmount);
+        // print(partyWisePayableAmount.value);
+        // if (!isReturn) {
+        //   "amount of lumpsum payment is not enough".errorSnackbar();
+        // }
+      }
+
+      // print(checkLumpsumPaymentData);
+      await getGeneratedSearchData(
+          isAllPendingPayement: true,
+          start: dateRange.value.start,
+          end: dateRange.value.end,
+          selectedParty: defaultParty.value,
+          isAllPartySelected: false,
+          isAllMaterialTypeSelected: isAllMaterialTypeSelected.value,
+          isAllPartyCitySelected: isAllPartyCitySelected.value,
+          selectedMaterialType: defaultMaterialType.value,
+          selectedPartyCity: defaultPartyCity.value,
+          ptID: ptID,
+          isLumpsumPaymentData: false);
+      // print(totalPayAmount);
+    } catch (e) {
+      debugPrint(e.toString());
+      e.toString().errorSnackbar;
+    }
+  }
+
   Future<void> getGeneratedSearchData({
     DateTime? start,
     DateTime? end,
@@ -1068,6 +1150,7 @@ class HomepageController extends GetxController {
     String? selectedPartyCity,
     MaterialTypeData? selectedMaterialType,
     int? ptID,
+    bool? isLumpsumPaymentData = true,
   }) async {
     try {
       print('Searching Generated Report Start....');
@@ -1110,7 +1193,8 @@ class HomepageController extends GetxController {
                 partyCity &
                 party &
                 materialType &
-                tbl.logId.isBiggerThanValue(0)))
+                tbl.logId.isBiggerThanValue(0))
+            ..orderBy([(t) => d.OrderingTerm(expression: t.smtDocDate)]))
           .get();
 
       print(serachData.length);
@@ -1146,10 +1230,10 @@ class HomepageController extends GetxController {
       generatedReportData.add(sublist);
       // print(serachData.length);
       // print(generatedReportData.length);
-      if (!isAllPartySelected) {
+      if (!isAllPartySelected && isLumpsumPaymentData!) {
         partyWiseTotalAmount.value = 0.0;
         partyWisePaidAmount.value = 0.0;
-        partyWiseTotalAmount.value = 0.0;
+        partyWisePayableAmount.value = 0.0;
       }
 
       for (var i = 0; i < serachData.length; i++) {
@@ -1249,21 +1333,23 @@ class HomepageController extends GetxController {
               // var date =ptID == 1 ?serachData[i].hospitalComissionPaidDate: ptID == 2 ? (serachData[i].doctorComissionPaidDate :   serachData[i].techniqalStaffComissionPaidDate) : DateTime(1800, 01, 01);
 
               // date.isAfter(DateTime(1800, 01, 01));
-              print(date.isAfter(DateTime(1800, 01, 01)));
-              print('partyPaidDate: $date');
-              if (date.isAfter(DateTime(1800, 01, 01))) {
-                partyWiseTotalAmount.value = partyWiseTotalAmount.value +
-                    double.parse(cAmount.toString());
-                partyWisePaidAmount.value = partyWisePaidAmount.value +
-                    double.parse(cAmount.toString());
-                partyWisePayableAmount.value =
-                    partyWiseTotalAmount.value - partyWisePaidAmount.value;
-              } else {
-                partyWiseTotalAmount.value = partyWiseTotalAmount.value +
-                    double.parse(cAmount.toString());
+              if (isLumpsumPaymentData!) {
+                print(date.isAfter(DateTime(1800, 01, 01)));
+                print('partyPaidDate: $date');
+                if (date.isAfter(DateTime(1800, 01, 01))) {
+                  partyWiseTotalAmount.value = partyWiseTotalAmount.value +
+                      double.parse(cAmount.toString());
+                  partyWisePaidAmount.value = partyWisePaidAmount.value +
+                      double.parse(cAmount.toString());
+                  partyWisePayableAmount.value =
+                      partyWiseTotalAmount.value - partyWisePaidAmount.value;
+                } else {
+                  partyWiseTotalAmount.value = partyWiseTotalAmount.value +
+                      double.parse(cAmount.toString());
 
-                partyWisePayableAmount.value =
-                    partyWiseTotalAmount.value - partyWisePaidAmount.value;
+                  partyWisePayableAmount.value =
+                      partyWiseTotalAmount.value - partyWisePaidAmount.value;
+                }
               }
             }
           } else {
