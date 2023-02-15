@@ -185,7 +185,8 @@ class PartyComissionBottomSheet extends StatelessWidget {
                       width: Get.width * 0.5,
                     ),
                     Container(
-                      child: Text('Total Comission : ${totalComission.value}',
+                      child: Text(
+                          'Total Comission : ${totalComission.value.toStringAsFixed(2)}',
                           style: GoogleFonts.padauk(
                             fontSize: Get.width * 0.015,
                           )),
@@ -529,15 +530,20 @@ class PartyComissionBottomSheet extends StatelessWidget {
                     newComissionAmountController?.text =
                         ((double.parse(value) * itemAmount) / 100)
                             .toStringAsFixed(2);
-                    print('jenish ---------------------------');
-                    print(hospitalComissionController.text);
-                    hospitalComissionController.text != ''
-                        ? 0
-                        : hospitalComissionController.text;
-                    totalComission.value =
-                        double.parse(hospitalComissionController.text) +
-                            double.parse(doctorComissionController.text) +
-                            double.parse(technicianComissionController.text);
+
+                    double hcomission = hospitalComissionController.text == ''
+                        ? 0.0
+                        : double.parse(hospitalComissionController.text);
+
+                    double dcomission = doctorComissionController.text == ''
+                        ? 0.0
+                        : double.parse(doctorComissionController.text);
+
+                    double tcomission = technicianComissionController.text == ''
+                        ? 0.0
+                        : double.parse(technicianComissionController.text);
+
+                    totalComission.value = hcomission + dcomission + tcomission;
 
                     totalComissionAmount.value +=
                         double.parse(newComissionAmountController!.text);

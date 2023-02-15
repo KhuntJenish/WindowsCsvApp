@@ -596,12 +596,24 @@ class PartyPaymentView extends StatelessWidget {
                                           : technicianCommissionPaidDate
                                   : DateTime.now();
                               RxBool? isPartyChecked = true.obs;
-                              index != 0
-                                  ? homepageController?.smtInvNoSet.add(
-                                      homepageController!
-                                          .generatedReportData[index][15]
-                                          .toString())
-                                  : null;
+                              if (homepageController!
+                                      .isAllPendingPayement.value &&
+                                  homepageController!
+                                      .checkLumpsumPaymentData.isNotEmpty) {
+                                print(homepageController!
+                                    .checkLumpsumPaymentData);
+                                homepageController?.smtInvNoSet.clear();
+                                homepageController?.smtInvNoSet.addAll(
+                                    homepageController!
+                                        .checkLumpsumPaymentData);
+                              } else {
+                                index != 0
+                                    ? homepageController?.smtInvNoSet.add(
+                                        homepageController!
+                                            .generatedReportData[index][15]
+                                            .toString())
+                                    : null;
+                              }
                               // var isPartyChecked = true;
                               return Visibility(
                                 visible: index != 0,
@@ -1036,6 +1048,10 @@ class PartyPaymentView extends StatelessWidget {
 
                                                   homepageController!
                                                       .partyWisePayment(
+                                                          isAllPendingPayement:
+                                                              homepageController
+                                                                  ?.isAllPendingPayement
+                                                                  .value,
                                                           crAmount: crAmount,
                                                           selectedParty:
                                                               homepageController!

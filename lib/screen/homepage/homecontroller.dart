@@ -644,6 +644,7 @@ class HomepageController extends GetxController {
         // print(partyTypeList![0]);
         var defualt = partyCityList.toList();
         defaultPartyCity.value = defualt[0];
+        defaultPartyCity.refresh();
         print('defualtParty: ${defaultParty.value}');
       }
 
@@ -665,6 +666,7 @@ class HomepageController extends GetxController {
       // print(partyTypeList![0]);
 
       defaultMaterialType.value = materialTypeList![0];
+      defaultMaterialType.refresh();
       print('defualtParty: ${defaultMaterialType.value}');
     }
 
@@ -749,11 +751,12 @@ class HomepageController extends GetxController {
             start: dateRange.value.start,
             end: dateRange.value.end,
             selectedParty: defaultParty.value,
-            isAllPartySelected: isAllPartySelected.value,
+            isAllPartySelected: false,
             isAllMaterialTypeSelected: isAllMaterialTypeSelected.value,
             isAllPartyCitySelected: isAllPartyCitySelected.value,
             selectedMaterialType: defaultMaterialType.value,
             selectedPartyCity: defaultPartyCity.value,
+            isAllPendingPayement: isAllPendingPayement.value,
             ptID: pID);
 
         'Payment Rejected Successfully'.successDailog;
@@ -1114,7 +1117,7 @@ class HomepageController extends GetxController {
 
         // print(totalPayAmount);
         // print(checkLumpsumPaymentData.length);
-        // print(smtInvNoSet);
+        print(smtInvNoSet);
         // print(partyWisePayableAmount.value);
         // if (!isReturn) {
         //   "amount of lumpsum payment is not enough".errorSnackbar();
@@ -1133,8 +1136,10 @@ class HomepageController extends GetxController {
           selectedMaterialType: defaultMaterialType.value,
           selectedPartyCity: defaultPartyCity.value,
           ptID: ptID,
-          isLumpsumPaymentData: false);
+          isLumpsumPaymentSearch: true);
       // print(totalPayAmount);
+
+      print(smtInvNoSet);
     } catch (e) {
       debugPrint(e.toString());
       e.toString().errorSnackbar;
@@ -1152,7 +1157,7 @@ class HomepageController extends GetxController {
     String? selectedPartyCity,
     MaterialTypeData? selectedMaterialType,
     int? ptID,
-    bool? isLumpsumPaymentData = true,
+    bool? isLumpsumPaymentSearch = false,
   }) async {
     try {
       print('Searching Generated Report Start....');
@@ -1232,7 +1237,7 @@ class HomepageController extends GetxController {
       generatedReportData.add(sublist);
       // print(serachData.length);
       // print(generatedReportData.length);
-      if (!isAllPartySelected && isLumpsumPaymentData!) {
+      if (!isAllPartySelected && !isLumpsumPaymentSearch!) {
         partyWiseTotalAmount.value = 0.0;
         partyWisePaidAmount.value = 0.0;
         partyWisePayableAmount.value = 0.0;
@@ -1335,7 +1340,7 @@ class HomepageController extends GetxController {
               // var date =ptID == 1 ?serachData[i].hospitalComissionPaidDate: ptID == 2 ? (serachData[i].doctorComissionPaidDate :   serachData[i].techniqalStaffComissionPaidDate) : DateTime(1800, 01, 01);
 
               // date.isAfter(DateTime(1800, 01, 01));
-              if (isLumpsumPaymentData!) {
+              if (!isLumpsumPaymentSearch!) {
                 print(date.isAfter(DateTime(1800, 01, 01)));
                 print('partyPaidDate: $date');
                 if (date.isAfter(DateTime(1800, 01, 01))) {
@@ -1379,7 +1384,7 @@ class HomepageController extends GetxController {
     required PartyMasterData? selectedParty,
     required double? crAmount,
     int? ptID,
-    // String? ledgerNote,
+    bool? isAllPendingPayement = false,
   }) async {
     try {
       isLoading.value = true;
@@ -1438,7 +1443,9 @@ class HomepageController extends GetxController {
         }
         // Get.back();
         // 'Payment Added Successfully'.successSnackbar;
+        checkLumpsumPaymentData.clear();
         await getGeneratedSearchData(
+          isAllPendingPayement: isAllPendingPayement,
           start: dateRange.value.start,
           end: dateRange.value.end,
           selectedParty: defaultParty.value,
