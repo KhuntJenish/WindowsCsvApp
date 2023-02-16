@@ -69,7 +69,7 @@ class PartyLedger extends StatelessWidget {
                   children: [
                     //**Search Ui Part
                     SizedBox(
-                      width: Get.width * 1.5,
+                      width: Get.width,
                       child: SingleChildScrollView(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -392,6 +392,17 @@ class PartyLedger extends StatelessWidget {
                                         textAlign: TextAlign.right,
                                       ),
                                     ),
+                                    SizedBox(
+                                      width: Get.width * 0.1,
+                                      child: Text(
+                                        'Extra Pay',
+                                        style: textTheme.bodyLarge?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Get.height * 0.018,
+                                            color: Colors.white),
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -521,6 +532,20 @@ class PartyLedger extends StatelessWidget {
                                               element.crAmount < 1
                                                   ? ''
                                                   : element.crAmount
+                                                      .toStringAsFixed(2),
+                                              style: textTheme.bodyLarge
+                                                  ?.copyWith(
+                                                      fontSize:
+                                                          Get.height * 0.018),
+                                              textAlign: TextAlign.right,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: Get.width * 0.1,
+                                            child: Text(
+                                              element.extracrAmount < 1
+                                                  ? ''
+                                                  : element.extracrAmount
                                                       .toStringAsFixed(2),
                                               style: textTheme.bodyLarge
                                                   ?.copyWith(

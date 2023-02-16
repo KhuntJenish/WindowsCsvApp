@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
+
 part 'tables.g.dart';
 
 class User extends Table {
@@ -142,7 +143,7 @@ LazyDatabase _openConnection() {
     // for your app.
     print('database Created');
     final dbFolder = '${Directory.current.path}\\backupData';
-    final file = File(p.join(dbFolder, 'backup.sqlite'));
+    final file = File(p.join(dbFolder, 'backupDB.sqlite'));
     return NativeDatabase.createInBackground(file);
   });
 }

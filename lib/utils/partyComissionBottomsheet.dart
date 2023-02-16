@@ -111,7 +111,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                       prefixIcon: const Icon(Icons.currency_rupee_outlined),
                       hintText: 'Add Item Amount',
                       counterText: '',
-                      hintStyle: textTheme.headline6?.copyWith(
+                      hintStyle: textTheme.titleLarge?.copyWith(
                         color: Colors.grey,
                         fontSize: Get.height * 0.02,
                       ),
@@ -379,7 +379,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                           prefixIcon: const Icon(Icons.person),
                           hintText: 'Enter Material Type',
                           counterText: '',
-                          hintStyle: textTheme.headline6?.copyWith(
+                          hintStyle: textTheme.titleLarge?.copyWith(
                             color: Colors.grey,
                             fontSize: Get.height * 0.02,
                           ),
@@ -443,7 +443,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
           padding: EdgeInsets.only(left: Get.width * 0.15),
           child: Text(
             '$pType:',
-            style: textTheme?.headline6?.copyWith(
+            style: textTheme?.titleLarge?.copyWith(
                 // color: Colors.grey,
                 fontSize: Get.height * 0.025,
                 fontWeight: FontWeight.w600),
@@ -463,7 +463,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                   prefixIcon: const Icon(Icons.person),
                   hintText: 'Enter Username',
                   counterText: '',
-                  hintStyle: textTheme?.headline6?.copyWith(
+                  hintStyle: textTheme?.titleLarge?.copyWith(
                     color: Colors.grey,
                     fontSize: Get.height * 0.02,
                   ),
@@ -483,7 +483,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.person),
                     counterText: '',
-                    hintStyle: textTheme?.headline6?.copyWith(
+                    hintStyle: textTheme?.titleLarge?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),
@@ -510,7 +510,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                   prefixIcon: const Icon(Icons.percent),
                   hintText: 'Add Comission',
                   counterText: '',
-                  hintStyle: textTheme?.headline6?.copyWith(
+                  hintStyle: textTheme?.titleLarge?.copyWith(
                     color: Colors.grey,
                     fontSize: Get.height * 0.02,
                   ),
@@ -542,11 +542,28 @@ class PartyComissionBottomSheet extends StatelessWidget {
                     double tcomission = technicianComissionController.text == ''
                         ? 0.0
                         : double.parse(technicianComissionController.text);
+                    double hcomissionAmount = hospitalComissionAmountController
+                                .text ==
+                            ''
+                        ? 0.0
+                        : double.parse(hospitalComissionAmountController.text);
+
+                    double dcomissionAmount = doctorComissionAmountController
+                                .text ==
+                            ''
+                        ? 0.0
+                        : double.parse(doctorComissionAmountController.text);
+
+                    double tcomissionAmount =
+                        technicianComissionAmountController.text == ''
+                            ? 0.0
+                            : double.parse(
+                                technicianComissionAmountController.text);
 
                     totalComission.value = hcomission + dcomission + tcomission;
 
-                    totalComissionAmount.value +=
-                        double.parse(newComissionAmountController!.text);
+                    totalComissionAmount.value =
+                        hcomissionAmount + dcomissionAmount + tcomissionAmount;
                   } else {
                     newComissionAmountController!.text = '';
                     totalComission.value -= 0;
@@ -571,7 +588,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
                   prefixIcon: const Icon(Icons.currency_rupee_outlined),
                   hintText: 'Comission Amount',
                   counterText: '',
-                  hintStyle: textTheme?.headline6?.copyWith(
+                  hintStyle: textTheme?.titleLarge?.copyWith(
                     color: Colors.grey,
                     fontSize: Get.height * 0.02,
                   ),
@@ -590,10 +607,43 @@ class PartyComissionBottomSheet extends StatelessWidget {
                     newComissionController?.text =
                         ((double.parse(value) * 100) / itemAmount)
                             .toStringAsFixed(2);
-                    totalComissionAmount.value +=
-                        double.parse(newComissionAmountController!.text);
-                    totalComission.value +=
-                        double.parse(newComissionController!.text);
+                    // totalComissionAmount.value +=
+                    //     double.parse(newComissionAmountController!.text);
+                    // totalComission.value +=
+                    //     double.parse(newComissionController!.text);
+                    double hcomission = hospitalComissionController.text == ''
+                        ? 0.0
+                        : double.parse(hospitalComissionController.text);
+
+                    double dcomission = doctorComissionController.text == ''
+                        ? 0.0
+                        : double.parse(doctorComissionController.text);
+
+                    double tcomission = technicianComissionController.text == ''
+                        ? 0.0
+                        : double.parse(technicianComissionController.text);
+                    double hcomissionAmount = hospitalComissionAmountController
+                                .text ==
+                            ''
+                        ? 0.0
+                        : double.parse(hospitalComissionAmountController.text);
+
+                    double dcomissionAmount = doctorComissionAmountController
+                                .text ==
+                            ''
+                        ? 0.0
+                        : double.parse(doctorComissionAmountController.text);
+
+                    double tcomissionAmount =
+                        technicianComissionAmountController.text == ''
+                            ? 0.0
+                            : double.parse(
+                                technicianComissionAmountController.text);
+
+                    totalComission.value = hcomission + dcomission + tcomission;
+
+                    totalComissionAmount.value =
+                        hcomissionAmount + dcomissionAmount + tcomissionAmount;
                   } else {
                     newComissionController?.text = '';
                     totalComission.value -= 0;

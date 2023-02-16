@@ -139,19 +139,21 @@ class Button extends StatelessWidget {
     required this.fontSize,
     required this.text,
     required this.onPressed,
+    this.margin = const EdgeInsets.symmetric(horizontal: 20),
   });
 
   double height; //
   double width; //
   double fontSize; //
   String text;
+  EdgeInsetsGeometry? margin;
   void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: margin,
       width: width,
       height: height,
       child: DecoratedBox(

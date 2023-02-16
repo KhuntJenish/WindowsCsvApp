@@ -85,7 +85,7 @@ class Dashboard extends StatelessWidget {
               SizedBox(height: Get.height * 0.13),
               Container(
                 child: Text(
-                  'Developed by Versatile IT Management @2023.',
+                  'Developed by Versatile IT Management @${DateTime.now().year}.',
                   style: textTheme.bodyLarge?.copyWith(
                     color: Colors.grey[700],
                     fontSize: Get.height * 0.012,

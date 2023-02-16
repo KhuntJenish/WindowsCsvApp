@@ -7,5 +7,7 @@ class Constantdata {
   // static var partyTypeMaster = $PartyTypeMasterTable;
   // static var user = $UserTable;
   static var payment = 'payment';
-  static var defualtNote = 'Auto';
+  static var extraPayment = 'ExtraPayment';
+  static var defualtAutoNote = 'Auto';
+  static var defualtmanualNote = 'manual';
 }

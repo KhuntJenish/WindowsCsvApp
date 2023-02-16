@@ -45,6 +45,9 @@ class HomepageController extends GetxController {
   RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
   List<MaterialTypeData>? materialTypeList = [];
   List<PartyMasterData>? partyList = [];
+  List<PartyMasterData>? hpartyList = [];
+  List<PartyMasterData>? dpartyList = [];
+  List<PartyMasterData>? tpartyList = [];
   Set ledgerPartyWiseSet = {};
   RxSet<String> smtInvNoSet = RxSet<String>();
   Rx<PartyMasterData> defaultParty =
@@ -450,12 +453,14 @@ class HomepageController extends GetxController {
           'Type',
           'Dr Amount',
           'Cr Amount',
+          'Extra Pay',
         ]);
         for (var j = 0; j < newList.length; j++) {
           print(newList[j]);
 
           var drAmount = newList[j].drAmount.toDouble();
           var crAmount = newList[j].crAmount.toDouble();
+          var extraCrAmount = newList[j].extracrAmount.toDouble();
           var date = DateTime.parse(newList[j].ledgerDate.toString());
           print(newList[j].drAmount);
           newsubList.add([
@@ -464,7 +469,8 @@ class HomepageController extends GetxController {
                 : DateFormat('dd-MM-yyyy').format(date),
             newList[j].type.toString(),
             drAmount < 1 ? '' : drAmount.toStringAsFixed(2),
-            crAmount < 1 ? '' : crAmount.toStringAsFixed(2)
+            crAmount < 1 ? '' : crAmount.toStringAsFixed(2),
+            extraCrAmount < 1 ? '' : extraCrAmount.toStringAsFixed(2),
           ]);
         }
         print(newsubList);
@@ -523,12 +529,14 @@ class HomepageController extends GetxController {
                           1: const pw.FlexColumnWidth(1.5),
                           2: const pw.FlexColumnWidth(1),
                           3: const pw.FlexColumnWidth(1),
+                          4: const pw.FlexColumnWidth(1),
                         },
                         cellAlignments: {
                           0: pw.Alignment.centerLeft,
                           1: pw.Alignment.centerLeft,
                           2: pw.Alignment.centerRight,
                           3: pw.Alignment.centerRight,
+                          4: pw.Alignment.centerRight,
                         },
                         // headerAlignments: {
                         //   0: pw.Alignment.center,
@@ -620,6 +628,19 @@ class HomepageController extends GetxController {
       var defualt = partyList![0].obs;
       defaultParty.value = defualt.value;
       defaultParty.refresh();
+
+      for (var party in partyList!) {
+        if (party.ptID == 1) {
+          hpartyList?.add(party);
+        } else if (party.ptID == 2) {
+          dpartyList?.add(party);
+        } else {
+          tpartyList?.add(party);
+        }
+      }
+      print(hpartyList);
+      print(dpartyList);
+      print(tpartyList);
 
       print('defualtParty: ${defaultParty.value}');
     }
@@ -950,6 +971,7 @@ class HomepageController extends GetxController {
       List<List<double>> drcrAmountList = [];
       double dramount = 0;
       double cramount = 0;
+      double extraCrAmount = 0;
       for (var element in ledgerReportData) {
         bool data = ledgerPartySet.add(element.pID);
         print(data);
@@ -960,6 +982,7 @@ class HomepageController extends GetxController {
           print(index);
           drcrAmountList[index][0] += element.drAmount;
           drcrAmountList[index][1] += element.crAmount;
+          drcrAmountList[index][2] += element.extracrAmount;
           print(ledgerPartySet.toList().indexOf(element.pID));
           //**add Record at old position */
           List tempPartyList = ledgerPartyWiseSet.toList()[index];
@@ -971,10 +994,13 @@ class HomepageController extends GetxController {
         } else {
           dramount = 0;
           cramount = 0;
+          extraCrAmount = 0;
+
           dramount += element.drAmount;
           cramount += element.crAmount;
+          extraCrAmount += element.extracrAmount;
           List<double> sublist = [];
-          sublist.addAll([dramount, cramount]);
+          sublist.addAll([dramount, cramount, extraCrAmount]);
           drcrAmountList.add(sublist);
           //**add Record at new position */
           List tempPartyList = [];
@@ -1023,6 +1049,7 @@ class HomepageController extends GetxController {
             );
         drAmount = drcrAmountList[i][0] + drAmount;
         crAmount = drcrAmountList[i][1] + crAmount;
+        extraCrAmount = drcrAmountList[i][2];
 
         ledgerReportData.add(
           LedgerData(
@@ -1033,7 +1060,7 @@ class HomepageController extends GetxController {
             type: 'Total',
             drAmount: drAmount,
             crAmount: crAmount,
-            extracrAmount: 0,
+            extracrAmount: extraCrAmount,
             extradrAmount: 0,
           ),
         );
@@ -1046,7 +1073,7 @@ class HomepageController extends GetxController {
                 type: 'Total',
                 drAmount: drAmount,
                 crAmount: crAmount,
-                extracrAmount: 0,
+                extracrAmount: extraCrAmount,
                 extradrAmount: 0,
               ),
             );
@@ -1168,13 +1195,23 @@ class HomepageController extends GetxController {
       partyNaNSetData.clear();
       var serachData = [];
       ptID = selectedParty?.ptID;
-      d.Expression<bool> duration = isAllPendingPayement!
+      //*Duration declaraion/
+      d.Expression<bool> comissionPaidDate = ptID == 1
           ? db.inputData.hospitalComissionPaidDate
               .equals(DateTime(1800, 01, 01))
+          : ptID == 2
+              ? db.inputData.doctorComissionPaidDate
+                  .equals(DateTime(1800, 01, 01))
+              : db.inputData.techniqalStaffComissionPaidDate
+                  .equals(DateTime(1800, 01, 01));
+
+      d.Expression<bool> duration = isAllPendingPayement!
+          ? comissionPaidDate
           : db.inputData.smtDocDate.isBetweenValues(start!, end!);
       d.Expression<bool> partyCity = isAllPartyCitySelected!
           ? db.inputData.custBillCity.isNotNull()
           : db.inputData.custBillCity.equals(selectedPartyCity!);
+      //**party declaration */
       d.Expression<bool> hospitalParty = isAllPartySelected!
           ? db.inputData.hospitalID.isNotNull()
           : db.inputData.hospitalID.equals(selectedParty!.id);
@@ -1184,15 +1221,17 @@ class HomepageController extends GetxController {
       d.Expression<bool> techniqalStaffParty = isAllPartySelected
           ? db.inputData.techniqalStaffID.isNotNull()
           : db.inputData.techniqalStaffID.equals(selectedParty!.id);
-      d.Expression<bool> materialType = isAllMaterialTypeSelected!
-          ? db.inputData.mtID.isNotNull()
-          : db.inputData.mtID.equals(selectedMaterialType!.id);
-      // print('isAllPartySelected: $isAllPartySelected');
+
       d.Expression<bool> party = ptID == 1
           ? hospitalParty
           : ptID == 2
               ? doctorParty
               : techniqalStaffParty;
+      //**material declaration */
+      d.Expression<bool> materialType = isAllMaterialTypeSelected!
+          ? db.inputData.mtID.isNotNull()
+          : db.inputData.mtID.equals(selectedMaterialType!.id);
+      // print('isAllPartySelected: $isAllPartySelected');
 
       serachData = await (db.select(db.inputData)
             ..where((tbl) =>
@@ -1238,9 +1277,11 @@ class HomepageController extends GetxController {
       // print(serachData.length);
       // print(generatedReportData.length);
       if (!isAllPartySelected && !isLumpsumPaymentSearch!) {
-        partyWiseTotalAmount.value = 0.0;
-        partyWisePaidAmount.value = 0.0;
-        partyWisePayableAmount.value = 0.0;
+        Timer(Duration.zero, () {
+          partyWiseTotalAmount.value = 0.0;
+          partyWisePaidAmount.value = 0.0;
+          partyWisePayableAmount.value = 0.0;
+        });
       }
 
       for (var i = 0; i < serachData.length; i++) {
@@ -1337,9 +1378,6 @@ class HomepageController extends GetxController {
                       ? serachData[i].doctorComissionAmount
                       : serachData[i].techniqalStaffComissionAmount;
 
-              // var date =ptID == 1 ?serachData[i].hospitalComissionPaidDate: ptID == 2 ? (serachData[i].doctorComissionPaidDate :   serachData[i].techniqalStaffComissionPaidDate) : DateTime(1800, 01, 01);
-
-              // date.isAfter(DateTime(1800, 01, 01));
               if (!isLumpsumPaymentSearch!) {
                 print(date.isAfter(DateTime(1800, 01, 01)));
                 print('partyPaidDate: $date');
@@ -1395,7 +1433,7 @@ class HomepageController extends GetxController {
             ledgerDate: currentDate,
             drAmount: 0,
             crAmount: crAmount!,
-            ledgerNote: Constantdata.defualtNote,
+            ledgerNote: Constantdata.defualtAutoNote,
             extradrAmount: 0,
             extracrAmount: 0,
             // ledgerNote: ledgerNote
@@ -1456,6 +1494,49 @@ class HomepageController extends GetxController {
           selectedPartyCity: defaultPartyCity.value,
           ptID: ptID,
         );
+        'Payment Added Successfully'.successDailog;
+        Timer(const Duration(seconds: 2), () {
+          Get.back();
+        });
+      } else {
+        // Get.back();
+        'Payment Not Added'.errorSnackbar;
+      }
+
+      isLoading.value = false;
+    } catch (e) {
+      e.toString().errorSnackbar;
+
+      e.toString().printError;
+    }
+  }
+
+  Future<void> partyWiseExtraPayment({
+    required PartyMasterData? selectedParty,
+    required double? crAmount,
+    // int? ptID,
+    required String? ledgerNote,
+  }) async {
+    try {
+      isLoading.value = true;
+      var currentDate = DateTime.now();
+      var ledgerData = await db.into(db.ledger).insert(LedgerCompanion.insert(
+            type: Constantdata.extraPayment,
+            pID: selectedParty!.id,
+            ledgerDate: currentDate,
+            drAmount: 0,
+            crAmount: 0,
+            ledgerNote: ledgerNote!,
+            extradrAmount: 0,
+            extracrAmount: crAmount!,
+
+            // ledgerNote: ledgerNote
+          ));
+      // print('Generated Report Data Length');
+      // print(generatedReportData);
+
+      // print(data);
+      if (ledgerData > 0) {
         'Payment Added Successfully'.successDailog;
         Timer(const Duration(seconds: 2), () {
           Get.back();
@@ -2234,7 +2315,7 @@ class HomepageController extends GetxController {
             crAmount: 0,
             extracrAmount: 0,
             extradrAmount: 0,
-            ledgerNote: Constantdata.defualtNote,
+            ledgerNote: Constantdata.defualtAutoNote,
           ));
       print(resLedger);
       ledgerIDList.add(resLedger);

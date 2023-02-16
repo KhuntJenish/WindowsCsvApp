@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
@@ -125,20 +127,38 @@ class PartyPaymentView extends StatelessWidget {
   Widget build(BuildContext context) {
     // homepageController?.isAllPartySelected.value = false;
 
-    List<PartyMasterData> partyList = [];
+    List<PartyMasterData>? partyList = [];
     TextEditingController amountController = TextEditingController();
+    TextEditingController extraNoteController = TextEditingController();
+    TextEditingController pnameController = TextEditingController();
     // homepageController?.defualtParty.refresh();
-    for (var party in homepageController!.partyList!) {
-      if (party.ptID == partyTypeID) {
-        partyList.add(party);
+    Timer(Duration.zero, () {
+      if (partyTypeID == 1) {
+        partyList = homepageController?.hpartyList;
+      } else if (partyTypeID == 2) {
+        partyList = homepageController?.dpartyList;
+      } else if (partyTypeID == 3) {
+        partyList = homepageController?.tpartyList;
       }
-    }
-    if (partyList.isNotEmpty) {
-      // homepageController?.generatedReportData.value = [];
+      if (partyList!.isNotEmpty) {
+        homepageController?.defaultParty.value = partyList![0];
 
-      homepageController?.defaultParty = partyList[0].obs;
-      homepageController?.defaultParty.refresh();
-    }
+        homepageController?.defaultParty.refresh();
+      }
+
+      // for (var party in homepageController!.partyList!) {
+      //   if (party.ptID == partyTypeID) {
+      //     partyList.add(party);
+      //   }
+      // }
+      // if (partyList.isNotEmpty) {
+      //   // homepageController?.generatedReportData.value = [];
+
+      //   homepageController?.defaultParty = partyList[0].obs;
+      //   homepageController?.defaultParty.refresh();
+      // }
+      homepageController?.generatedReportData.clear();
+    });
     // homepageController?.isAllPartySelected.value = false;
     TextTheme textTheme = Theme.of(context).textTheme;
     return AdaptiveScrollbar(
@@ -403,6 +423,8 @@ class PartyPaymentView extends StatelessWidget {
                                   Container(
                                     // margin: const EdgeInsets.only(top: 30),
                                     child: Button(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
                                       height: Get.height * 0.045,
                                       width: Get.width * 0.08,
                                       fontSize: Get.width * 0.010,
@@ -454,6 +476,8 @@ class PartyPaymentView extends StatelessWidget {
                                   Container(
                                     // margin: const EdgeInsets.only(top: 30),
                                     child: Button(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
                                       height: Get.height * 0.045,
                                       width: Get.width * 0.05,
                                       fontSize: Get.width * 0.010,
@@ -474,6 +498,152 @@ class PartyPaymentView extends StatelessWidget {
 
                                         await homepageController
                                             ?.createReportPdf();
+                                      },
+                                    ),
+                                  ),
+                                  //** pdf button
+                                  Container(
+                                    // margin: const EdgeInsets.all(0),
+                                    child: Button(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      height: Get.height * 0.045,
+                                      width: Get.width * 0.09,
+                                      fontSize: Get.width * 0.010,
+                                      text: 'Extra Pay',
+                                      onPressed: () async {
+                                        amountController.clear();
+                                        pnameController.text =
+                                            homepageController!
+                                                .defaultParty.value.name;
+
+                                        Get.defaultDialog(
+                                          content: SizedBox(
+                                            width: Get.width * 0.3,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  'Extra Payemnt',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: Get.height * 0.03,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                                  child: TextField(
+                                                    controller: pnameController,
+                                                    readOnly: true,
+                                                    decoration: InputDecoration(
+                                                      prefixIcon: const Icon(
+                                                          Icons.person),
+                                                      hintText:
+                                                          'Party Not Found',
+                                                      hintStyle: textTheme
+                                                          .titleLarge
+                                                          ?.copyWith(
+                                                        color: Colors.grey,
+                                                        fontSize:
+                                                            Get.height * 0.02,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                                  child: TextField(
+                                                    maxLength: 30,
+                                                    controller:
+                                                        amountController,
+                                                    decoration: InputDecoration(
+                                                      prefixIcon: const Icon(Icons
+                                                          .currency_rupee_sharp),
+                                                      hintText:
+                                                          'Enter Extra Amount',
+                                                      counterText: '',
+                                                      hintStyle: textTheme
+                                                          .titleLarge
+                                                          ?.copyWith(
+                                                        color: Colors.grey,
+                                                        fontSize:
+                                                            Get.height * 0.02,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 5),
+                                                  child: TextField(
+                                                    maxLength: 30,
+                                                    controller:
+                                                        extraNoteController,
+                                                    decoration: InputDecoration(
+                                                      prefixIcon: const Icon(
+                                                          Icons.note_add),
+                                                      hintText: 'Enter Note...',
+                                                      counterText: '',
+                                                      hintStyle: textTheme
+                                                          .titleLarge
+                                                          ?.copyWith(
+                                                        color: Colors.grey,
+                                                        fontSize:
+                                                            Get.height * 0.02,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Are you want to pay Party',
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          Get.height * 0.02),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          textConfirm: 'Payment',
+                                          confirmTextColor: Colors.white,
+                                          onConfirm: () async {
+                                            Get.back();
+                                            if (amountController
+                                                .text.isNumericOnly) {
+                                              var amount = double.parse(
+                                                  amountController.text);
+
+                                              homepageController
+                                                  ?.partyWiseExtraPayment(
+                                                crAmount: amount,
+                                                ledgerNote:
+                                                    extraNoteController.text,
+                                                selectedParty:
+                                                    homepageController
+                                                        ?.defaultParty.value,
+                                              );
+                                            } else {
+                                              'Enter Valid Amount'
+                                                  .errorSnackbar;
+                                            }
+                                          },
+                                          textCancel: 'Cancel',
+                                          cancelTextColor: lCOLOR_PRIMARY,
+                                          onCancel: () {
+                                            amountController.clear();
+                                            Get.back();
+                                          },
+                                        );
                                       },
                                     ),
                                   ),
@@ -951,7 +1121,7 @@ class PartyPaymentView extends StatelessWidget {
                               height: Get.height * 0.1,
                               // width: Get.width * 0.3,
                               child: Card(
-                                // color: lCOLOR_ACCENT.withOpacity(0.1),
+                                color: lCOLOR_ACCENT.withOpacity(0.1),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0),
                                 ),
@@ -959,43 +1129,47 @@ class PartyPaymentView extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    Container(
-                                      width: Get.width * 0.2,
-                                      height: Get.height * 0.1,
-                                      margin: EdgeInsets.only(
-                                          top: Get.height * 0.018),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: Get.width * 0.01),
-                                      child: TextField(
-                                        maxLength: 10,
-                                        controller: amountController,
-                                        decoration: InputDecoration(
-                                          prefixIcon: const Icon(
-                                              Icons.currency_rupee_sharp),
-                                          suffixIcon: IconButton(
-                                            icon: const Icon(Icons.search),
-                                            onPressed: () {
-                                              print(amountController.text);
-                                              homepageController!
-                                                  .checkLumpsumPaymen(
-                                                ptID: partyTypeID,
-                                                generatedReportData:
-                                                    homepageController
-                                                        ?.generatedReportData,
-                                                lumpsumAmount: double.parse(
-                                                    amountController.text),
-                                                selectedParty:
-                                                    homepageController
-                                                        ?.defaultParty.value,
-                                              );
-                                            },
-                                          ),
-                                          hintText: 'Enter Payment Amount',
-                                          counterText: '',
-                                          hintStyle:
-                                              textTheme.headline6?.copyWith(
-                                            color: Colors.grey[700],
-                                            fontSize: Get.height * 0.02,
+                                    Visibility(
+                                      visible: homepageController!
+                                          .isAllPendingPayement.value,
+                                      child: Container(
+                                        width: Get.width * 0.2,
+                                        height: Get.height * 0.1,
+                                        margin: EdgeInsets.only(
+                                            top: Get.height * 0.018),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: Get.width * 0.01),
+                                        child: TextField(
+                                          maxLength: 10,
+                                          controller: amountController,
+                                          decoration: InputDecoration(
+                                            prefixIcon: const Icon(
+                                                Icons.currency_rupee_sharp),
+                                            suffixIcon: IconButton(
+                                              icon: const Icon(Icons.search),
+                                              onPressed: () {
+                                                print(amountController.text);
+                                                homepageController!
+                                                    .checkLumpsumPaymen(
+                                                  ptID: partyTypeID,
+                                                  generatedReportData:
+                                                      homepageController
+                                                          ?.generatedReportData,
+                                                  lumpsumAmount: double.parse(
+                                                      amountController.text),
+                                                  selectedParty:
+                                                      homepageController
+                                                          ?.defaultParty.value,
+                                                );
+                                              },
+                                            ),
+                                            hintText: 'Enter Payment Amount',
+                                            counterText: '',
+                                            hintStyle:
+                                                textTheme.titleLarge?.copyWith(
+                                              color: Colors.grey[700],
+                                              fontSize: Get.height * 0.02,
+                                            ),
                                           ),
                                         ),
                                       ),
