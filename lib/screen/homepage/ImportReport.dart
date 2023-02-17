@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/dashboard.dart';
 import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
+import 'package:csvapp/utils/constant.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -177,6 +178,8 @@ class ImportReport extends StatelessWidget {
                               ),
                             ),
                             Button(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               height: Get.height * 0.04,
                               width: Get.width * 0.08,
                               fontSize: Get.width * 0.010,
@@ -208,12 +211,36 @@ class ImportReport extends StatelessWidget {
                                 // Get.offAllNamed(Homepage.routeName);
                               },
                             ),
+                            Button(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              height: Get.height * 0.04,
+                              width: Get.width * 0.08,
+                              fontSize: Get.width * 0.010,
+                              text: 'Reset',
+                              onPressed: () async {
+                                print('Reset Button Pressed');
+                                if (_homepageController
+                                    .pendingReportData.isNotEmpty) {
+                                  _homepageController.pendingReportData.clear();
+                                  _homepageController
+                                      .comissionAndmatTypeNaNSetData
+                                      .clear();
+                                  _homepageController.partyNaNSetData.clear();
+                                  _homepageController.displayData.clear();
+                                  _homepageController.isLoading.value = false;
+                                }
+                                // Get.offAllNamed(Homepage.routeName);
+                              },
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Visibility(
                                   visible: _homepageController.isLoading.value,
                                   replacement: Button(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       height: Get.height * 0.04,
                                       width: Get.width * 0.08,
                                       fontSize: Get.width * 0.010,
@@ -315,6 +342,8 @@ class ImportReport extends StatelessWidget {
                                           .comissionAndmatTypeNaNSetData
                                           .isEmpty,
                                   child: Button(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       height: Get.height * 0.04,
                                       width: Get.width * 0.08,
                                       fontSize: Get.width * 0.010,
@@ -351,13 +380,22 @@ class ImportReport extends StatelessWidget {
                                     itemBuilder: (_, subIndex) {
                                       return Container(
                                         // color: Colors.red,
-                                        width: (subIndex == 3 ||
-                                                subIndex == 9 ||
-                                                subIndex == 10)
+                                        width: (subIndex ==
+                                                    Constantdata
+                                                        .customerIndex ||
+                                                subIndex ==
+                                                    Constantdata
+                                                        .doctorNameIndex ||
+                                                subIndex ==
+                                                    Constantdata
+                                                        .technicianStaffIndex)
                                             ? Get.width * 0.2
-                                            : (subIndex == 6 ||
-                                                    subIndex == 7 ||
-                                                    subIndex == 9)
+                                            : (subIndex ==
+                                                        Constantdata
+                                                            .matNameIndex ||
+                                                    subIndex ==
+                                                        Constantdata
+                                                            .matTypeIndex)
                                                 ? Get.width * 0.1
                                                 : Get.width * 0.06,
                                         decoration: BoxDecoration(
@@ -385,9 +423,15 @@ class ImportReport extends StatelessWidget {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               Visibility(
-                                                visible: (subIndex == 3 ||
-                                                        subIndex == 9 ||
-                                                        subIndex == 10) &&
+                                                visible: (subIndex ==
+                                                            Constantdata
+                                                                .customerIndex ||
+                                                        subIndex ==
+                                                            Constantdata
+                                                                .doctorNameIndex ||
+                                                        subIndex ==
+                                                            Constantdata
+                                                                .technicianStaffIndex) &&
                                                     _homepageController
                                                         .partyNaNSetData
                                                         .isNotEmpty,
@@ -460,13 +504,22 @@ class ImportReport extends StatelessWidget {
                                           .pendingReportData[index].length,
                                       itemBuilder: (_, subIndex) {
                                         return Container(
-                                          width: (subIndex == 3 ||
-                                                  subIndex == 9 ||
-                                                  subIndex == 10)
+                                          width: (subIndex ==
+                                                      Constantdata
+                                                          .customerIndex ||
+                                                  subIndex ==
+                                                      Constantdata
+                                                          .doctorNameIndex ||
+                                                  subIndex ==
+                                                      Constantdata
+                                                          .technicianStaffIndex)
                                               ? Get.width * 0.2
-                                              : (subIndex == 6 ||
-                                                      subIndex == 7 ||
-                                                      subIndex == 9)
+                                              : (subIndex ==
+                                                          Constantdata
+                                                              .matNameIndex ||
+                                                      subIndex ==
+                                                          Constantdata
+                                                              .matTypeIndex)
                                                   ? Get.width * 0.1
                                                   : Get.width * 0.06,
                                           decoration: BoxDecoration(
@@ -477,9 +530,13 @@ class ImportReport extends StatelessWidget {
                                           // height: Get.height * 0.05,
                                           padding: const EdgeInsets.all(8.0),
                                           child: Visibility(
-                                            visible: (subIndex == 3 ||
-                                                    subIndex == 9 ||
-                                                    subIndex == 10) &&
+                                            visible: (subIndex == Constantdata.customerIndex ||
+                                                    subIndex ==
+                                                        Constantdata
+                                                            .doctorNameIndex ||
+                                                    subIndex ==
+                                                        Constantdata
+                                                            .technicianStaffIndex) &&
                                                 _homepageController
                                                         .partyNaNSetData
                                                         .contains(
@@ -488,7 +545,9 @@ class ImportReport extends StatelessWidget {
                                                                 index][15]) ==
                                                     true,
                                             replacement: Visibility(
-                                              visible: subIndex == 7 &&
+                                              visible: subIndex ==
+                                                      Constantdata
+                                                          .matTypeIndex &&
                                                   _homepageController
                                                           .comissionAndmatTypeNaNSetData
                                                           .contains(
@@ -497,9 +556,12 @@ class ImportReport extends StatelessWidget {
                                                                   index][15]) ==
                                                       true,
                                               replacement: AutoSizeText(
-                                                (index != 0 &&
-                                                        (subIndex == 1 ||
-                                                            subIndex == 13))
+                                                (subIndex ==
+                                                            Constantdata
+                                                                .smtDocDateIndex ||
+                                                        subIndex ==
+                                                            Constantdata
+                                                                .distDocDateIndex)
                                                     ? DateFormat("dd-MM-yyyy")
                                                         .format(DateFormat(
                                                                 "dd.MM.yyyy")

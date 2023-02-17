@@ -70,7 +70,7 @@ class HomepageController extends GetxController {
     start: DateTime(DateTime.now().year, DateTime.now().month, 1),
     end: DateTime.now(),
   ).obs;
-  List<int> rightalign = [8, 11, 12, 16, 17, 18, 19, 20, 21, 22, 23];
+  List<int> rightalign = [8, 11, 12, 16, 17, 18, 19, 20, 21, 22, 23, 0];
 
   // scrollwork
 
@@ -1583,8 +1583,24 @@ class HomepageController extends GetxController {
       }
       // displyaData.addAll(fields);
       // print(displyaData);
+      List tempList = [];
+      tempList.add("No.");
+      tempList.addAll(fields[0]);
+      fields[0].clear();
+      fields[0].addAll(tempList);
+      for (var i = 1; i < fields.length; i++) {
+        List<dynamic> field = fields[i];
+        tempList.clear();
+        tempList.add(i);
+        tempList.addAll(field);
+        print(tempList);
+        fields[i].clear();
+        fields[i].addAll(tempList);
+      }
+
       await checkInputData(fields: fields);
     } catch (e) {
+      isLoading.value = false;
       'Invalid File'.toString().errorSnackbar;
 
       e.toString().printError;
@@ -1808,25 +1824,31 @@ class HomepageController extends GetxController {
       List<PartyMasterData>? resHospitalParty,
           resDoctorParty,
           resTechnicianParty;
-      if (data[3] != "") {
+      if (data[Constantdata.customerIndex] != "") {
         resHospitalParty = await (db.select(db.partyMaster)
-              ..where((tbl) => tbl.name.equals(data[3]) & tbl.ptID.equals(1)))
+              ..where((tbl) =>
+                  tbl.name.equals(data[Constantdata.customerIndex]) &
+                  tbl.ptID.equals(1)))
             .get();
         isShowHospital = resHospitalParty.isNotEmpty ? true : false;
       } else {
         isShowHospital = true;
       }
-      if (data[9] != "") {
+      if (data[Constantdata.doctorNameIndex] != "") {
         resDoctorParty = await (db.select(db.partyMaster)
-              ..where((tbl) => tbl.name.equals(data[9]) & tbl.ptID.equals(2)))
+              ..where((tbl) =>
+                  tbl.name.equals(data[Constantdata.doctorNameIndex]) &
+                  tbl.ptID.equals(2)))
             .get();
         isShowDoctor = resDoctorParty.isNotEmpty ? true : false;
       } else {
         isShowDoctor = true;
       }
-      if (data[10] != "") {
+      if (data[Constantdata.technicianStaffIndex] != "") {
         resTechnicianParty = await (db.select(db.partyMaster)
-              ..where((tbl) => tbl.name.equals(data[10]) & tbl.ptID.equals(3)))
+              ..where((tbl) =>
+                  tbl.name.equals(data[Constantdata.technicianStaffIndex]) &
+                  tbl.ptID.equals(3)))
             .get();
         isShowTechnician = resTechnicianParty.isNotEmpty ? true : false;
       } else {
@@ -1838,7 +1860,8 @@ class HomepageController extends GetxController {
         materialTypeList = await (db.select(db.materialType)
               ..where((tbl) => tbl.type.equals("${data[7]}~${data[6]}")))
             .get();
-        debugPrint("${data[7]}~${data[6]}");
+        debugPrint(
+            "${data[Constantdata.matTypeIndex]}~${data[Constantdata.matNameIndex]}");
         if (materialTypeList!.isNotEmpty) {
           isShowDoctor = false;
           isShowHospital = false;
@@ -1846,7 +1869,7 @@ class HomepageController extends GetxController {
           List<PartyComissionDetailData>? resTechnicianPartyComission,
               resDoctorPartyComission,
               resHospitalPartyComission;
-          if (data[3] != "") {
+          if (data[Constantdata.customerIndex] != "") {
             resHospitalPartyComission =
                 await (db.select(db.partyComissionDetail)
                       ..where((tbl) =>
@@ -1859,7 +1882,7 @@ class HomepageController extends GetxController {
           } else {
             isShowHospital = true;
           }
-          if (data[9] != "") {
+          if (data[Constantdata.doctorNameIndex] != "") {
             resDoctorPartyComission = await (db.select(db.partyComissionDetail)
                   ..where((tbl) =>
                       tbl.pID.equals(resDoctorParty![0].id) &
@@ -1870,7 +1893,7 @@ class HomepageController extends GetxController {
           } else {
             isShowDoctor = true;
           }
-          if (data[10] != "") {
+          if (data[Constantdata.technicianStaffIndex] != "") {
             resTechnicianPartyComission =
                 await (db.select(db.partyComissionDetail)
                       ..where((tbl) =>
@@ -1890,22 +1913,25 @@ class HomepageController extends GetxController {
             // var dcomission = resHospitalPartyComission[0].comission1;
             // var tcomission = resTechnicianPartyComission[0].comission1;
             debugPrint('comission(%): $hcomission');
-            debugPrint('TotalAmount(%): ${data[12]}');
-            debugPrint('comissionAmount(%): ${(hcomission! * data[12]) / 100}');
+            debugPrint('TotalAmount(%): ${data[Constantdata.totalSalesIndex]}');
+            debugPrint(
+                'comissionAmount(%): ${(hcomission! * data[Constantdata.totalSalesIndex]) / 100}');
           } else {
-            comissionAndmatTypeNaNSetData.add(data[15].toString());
+            comissionAndmatTypeNaNSetData
+                .add(data[Constantdata.smtInvoiceNoIndex].toString());
             'Comission Not Found'.errorSnackbar;
             debugPrint('Comission Not Found');
           }
         } else {
-          comissionAndmatTypeNaNSetData.add(data[15].toString());
+          comissionAndmatTypeNaNSetData
+              .add(data[Constantdata.smtInvoiceNoIndex].toString());
           'Material Type Not Found'.errorSnackbar;
           debugPrint('Material Type Not Found');
         }
       } else {
-        partyNaNSetData.add(data[15].toString());
-        debugPrint('${data[3] + data[9] + data[10]} Party Not Found');
-        // '${data[3]} Party Not Found'.errorSnackbar;
+        partyNaNSetData.add(data[Constantdata.smtInvoiceNoIndex].toString());
+        debugPrint(
+            '${data[Constantdata.customerIndex] + data[Constantdata.doctorNameIndex] + data[Constantdata.technicianStaffIndex]} Party Not Found');
       }
     } catch (e) {
       printError(info: e.toString());
@@ -2450,7 +2476,7 @@ class HomepageController extends GetxController {
                 DateTime distDocDate =
                     DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
                 String distDocNo = data[i][2];
-                var customer = data[i][3];
+                var customer = data[i][Constantdata.customerIndex];
                 String custBillCity = data[i][4];
                 String matCode = data[i][5];
                 String matName = data[i][6];
@@ -2557,7 +2583,7 @@ class HomepageController extends GetxController {
           DateTime distDocDate =
               DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
           String distDocNo = data[i][2];
-          var customer = data[i][3];
+          var customer = data[i][Constantdata.customerIndex];
           String custBillCity = data[i][4];
           String matCode = data[i][5];
           String matName = data[i][6];
