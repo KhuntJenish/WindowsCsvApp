@@ -14,7 +14,7 @@ class Constantdata {
   static var defualtmanualNote = 'manual';
 
   // * Data Index /
-  static var dataNo = 0;
+  static var dataNoIndex = 0;
   static var documentTypeIndex = 1;
   static var distDocDateIndex = 2;
   static var distDocumentNoIndex = 3;
@@ -39,4 +39,7 @@ class Constantdata {
   static var dcAmountIndex = 22;
   static var tcomissionIndex = 23;
   static var tcAmountIndex = 24;
+  static var hcAmountPaidDateIndex = 25;
+  static var dcAmountPaidDateIndex = 26;
+  static var tcAmountPaidDateIndex = 27;
 }

@@ -2,6 +2,7 @@ import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/theam/theam_constants.dart';
+import 'package:csvapp/utils/constant.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:csvapp/utils/helper_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -406,11 +407,22 @@ class GeneratedReport extends StatelessWidget {
                                     itemBuilder: (_, subIndex) {
                                       return Container(
                                         // color: Colors.red,
-                                        width: subIndex == 3
+                                        width: (subIndex ==
+                                                    Constantdata
+                                                        .customerIndex ||
+                                                subIndex ==
+                                                    Constantdata
+                                                        .doctorNameIndex ||
+                                                subIndex ==
+                                                    Constantdata
+                                                        .technicianStaffIndex)
                                             ? Get.width * 0.2
-                                            : (subIndex == 6 ||
-                                                    subIndex == 7 ||
-                                                    subIndex == 9)
+                                            : (subIndex ==
+                                                        Constantdata
+                                                            .matNameIndex ||
+                                                    subIndex ==
+                                                        Constantdata
+                                                            .matTypeIndex)
                                                 ? Get.width * 0.1
                                                 : Get.width * 0.06,
                                         decoration: BoxDecoration(
@@ -465,9 +477,29 @@ class GeneratedReport extends StatelessWidget {
                               itemCount: _homepageController
                                   .generatedReportData.length,
                               itemBuilder: (_, index) {
-                                var date = index != 0
+                                var hospitalCommissionPaidDate = index != 0
                                     ? _homepageController
-                                        .generatedReportData[index][24]
+                                            .generatedReportData[index]
+                                        [Constantdata.hcAmountPaidDateIndex]
+                                    : null;
+                                var doctorCommissionPaidDate = index != 0
+                                    ? _homepageController
+                                            .generatedReportData[index]
+                                        [Constantdata.dcAmountPaidDateIndex]
+                                    : null;
+                                var technicianCommissionPaidDate = index != 0
+                                    ? _homepageController
+                                            .generatedReportData[index]
+                                        [Constantdata.tcAmountPaidDateIndex]
+                                    : null;
+                                var partyTypeID =
+                                    _homepageController.defaultParty.value.ptID;
+                                var date = index != 0
+                                    ? partyTypeID == 1
+                                        ? hospitalCommissionPaidDate
+                                        : partyTypeID == 2
+                                            ? doctorCommissionPaidDate
+                                            : technicianCommissionPaidDate
                                     : DateTime.now();
 
                                 return Visibility(
@@ -477,7 +509,8 @@ class GeneratedReport extends StatelessWidget {
                                     margin: const EdgeInsets.all(3),
                                     color: _homepageController.displayData
                                             .contains(_homepageController
-                                                .generatedReportData[index][15])
+                                                    .generatedReportData[index]
+                                                [Constantdata.dataNoIndex])
                                         ? date.isAfter(DateTime(1800, 01, 01))
                                             ? const Color.fromARGB(
                                                 255, 121, 192, 124)
@@ -499,11 +532,22 @@ class GeneratedReport extends StatelessWidget {
                                             : 0,
                                         itemBuilder: (_, subIndex) {
                                           return Container(
-                                            width: subIndex == 3
+                                            width: (subIndex ==
+                                                        Constantdata
+                                                            .customerIndex ||
+                                                    subIndex ==
+                                                        Constantdata
+                                                            .doctorNameIndex ||
+                                                    subIndex ==
+                                                        Constantdata
+                                                            .technicianStaffIndex)
                                                 ? Get.width * 0.2
-                                                : (subIndex == 6 ||
-                                                        subIndex == 7 ||
-                                                        subIndex == 9)
+                                                : (subIndex ==
+                                                            Constantdata
+                                                                .matNameIndex ||
+                                                        subIndex ==
+                                                            Constantdata
+                                                                .matTypeIndex)
                                                     ? Get.width * 0.1
                                                     : Get.width * 0.06,
                                             // height: Get.height * 0.05,
@@ -514,26 +558,42 @@ class GeneratedReport extends StatelessWidget {
                                             ),
                                             padding: const EdgeInsets.all(8.0),
                                             child: Visibility(
-                                              visible: subIndex == 3 &&
+                                              visible: (subIndex ==
+                                                          Constantdata
+                                                              .customerIndex ||
+                                                      subIndex ==
+                                                          Constantdata
+                                                              .doctorNameIndex ||
+                                                      subIndex ==
+                                                          Constantdata
+                                                              .technicianStaffIndex) &&
                                                   _homepageController
                                                           .partyNaNSetData
-                                                          .contains(
-                                                              _homepageController
+                                                          .contains(_homepageController
                                                                       .generatedReportData[
-                                                                  index][15]) ==
+                                                                  index][
+                                                              Constantdata
+                                                                  .dataNoIndex]) ==
                                                       true,
                                               replacement: Visibility(
-                                                visible: subIndex == 7 &&
+                                                visible: subIndex ==
+                                                        Constantdata
+                                                            .matTypeIndex &&
                                                     _homepageController
                                                             .comissionAndmatTypeNaNSetData
                                                             .contains(_homepageController
-                                                                    .generatedReportData[
-                                                                index][15]) ==
+                                                                        .generatedReportData[
+                                                                    index][
+                                                                Constantdata
+                                                                    .dataNoIndex]) ==
                                                         true,
                                                 replacement: AutoSizeText(
-                                                  (index != 0 &&
-                                                          (subIndex == 1 ||
-                                                              subIndex == 13))
+                                                  (subIndex ==
+                                                              Constantdata
+                                                                  .smtDocDateIndex ||
+                                                          subIndex ==
+                                                              Constantdata
+                                                                  .distDocDateIndex)
                                                       ? DateFormat("dd-MM-yyyy")
                                                           .format(DateFormat(
                                                                   "dd.MM.yyyy")

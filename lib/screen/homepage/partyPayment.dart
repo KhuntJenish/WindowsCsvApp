@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import '../../dashboard.dart';
 import '../../database/tables.dart';
 import '../../theam/theam_constants.dart';
+import '../../utils/constant.dart';
 import '../../utils/dropDownItem.dart';
 
 class PartyPayment extends StatelessWidget {
@@ -677,11 +678,22 @@ class PartyPaymentView extends StatelessWidget {
                                       itemBuilder: (_, subIndex) {
                                         return Container(
                                           // color: Colors.red,
-                                          width: subIndex == 3
+                                          width: (subIndex ==
+                                                      Constantdata
+                                                          .customerIndex ||
+                                                  subIndex ==
+                                                      Constantdata
+                                                          .doctorNameIndex ||
+                                                  subIndex ==
+                                                      Constantdata
+                                                          .technicianStaffIndex)
                                               ? Get.width * 0.2
-                                              : (subIndex == 6 ||
-                                                      subIndex == 7 ||
-                                                      subIndex == 9)
+                                              : (subIndex ==
+                                                          Constantdata
+                                                              .matNameIndex ||
+                                                      subIndex ==
+                                                          Constantdata
+                                                              .matTypeIndex)
                                                   ? Get.width * 0.1
                                                   : Get.width * 0.06,
                                           decoration: BoxDecoration(
@@ -748,15 +760,18 @@ class PartyPaymentView extends StatelessWidget {
                             itemBuilder: (_, index) {
                               var hospitalCommissionPaidDate = index != 0
                                   ? homepageController
-                                      ?.generatedReportData[index][24]
+                                          ?.generatedReportData[index]
+                                      [Constantdata.hcAmountPaidDateIndex]
                                   : null;
                               var doctorCommissionPaidDate = index != 0
                                   ? homepageController
-                                      ?.generatedReportData[index][25]
+                                          ?.generatedReportData[index]
+                                      [Constantdata.dcAmountPaidDateIndex]
                                   : null;
                               var technicianCommissionPaidDate = index != 0
                                   ? homepageController
-                                      ?.generatedReportData[index][26]
+                                          ?.generatedReportData[index]
+                                      [Constantdata.tcAmountPaidDateIndex]
                                   : null;
                               var date = index != 0
                                   ? partyTypeID == 1
@@ -793,12 +808,13 @@ class PartyPaymentView extends StatelessWidget {
                                   color: homepageController!
                                           .checkLumpsumPaymentData
                                           .contains(homepageController
-                                              ?.generatedReportData[index][15])
+                                                  ?.generatedReportData[index]
+                                              [Constantdata.dataNoIndex])
                                       ? Colors.amber[100]
                                       : homepageController!.displayData
                                               .contains(homepageController
-                                                      ?.generatedReportData[
-                                                  index][15])
+                                                      ?.generatedReportData[index]
+                                                  [Constantdata.dataNoIndex])
                                           ? date.isAfter(DateTime(1800, 01, 01))
                                               ? const Color.fromARGB(
                                                   255, 121, 192, 124)
@@ -824,11 +840,20 @@ class PartyPaymentView extends StatelessWidget {
                                                 : 0,
                                             itemBuilder: (_, subIndex) {
                                               return Container(
-                                                width: subIndex == 3
+                                                width: (subIndex == Constantdata.customerIndex ||
+                                                        subIndex ==
+                                                            Constantdata
+                                                                .doctorNameIndex ||
+                                                        subIndex ==
+                                                            Constantdata
+                                                                .technicianStaffIndex)
                                                     ? Get.width * 0.2
-                                                    : (subIndex == 6 ||
-                                                            subIndex == 7 ||
-                                                            subIndex == 9)
+                                                    : (subIndex ==
+                                                                Constantdata
+                                                                    .matNameIndex ||
+                                                            subIndex ==
+                                                                Constantdata
+                                                                    .matTypeIndex)
                                                         ? Get.width * 0.1
                                                         : Get.width * 0.06,
                                                 // height: Get.height * 0.05,
@@ -840,26 +865,42 @@ class PartyPaymentView extends StatelessWidget {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Visibility(
-                                                  visible: subIndex == 3 &&
+                                                  visible: (subIndex ==
+                                                              Constantdata
+                                                                  .customerIndex ||
+                                                          subIndex ==
+                                                              Constantdata
+                                                                  .doctorNameIndex ||
+                                                          subIndex ==
+                                                              Constantdata
+                                                                  .technicianStaffIndex) &&
                                                       homepageController
                                                               ?.partyNaNSetData
                                                               .contains(homepageController
-                                                                      ?.generatedReportData[
-                                                                  index][15]) ==
+                                                                          ?.generatedReportData[
+                                                                      index][
+                                                                  Constantdata
+                                                                      .dataNoIndex]) ==
                                                           true,
                                                   replacement: Visibility(
-                                                    visible: subIndex == 7 &&
+                                                    visible: subIndex ==
+                                                            Constantdata
+                                                                .matTypeIndex &&
                                                         homepageController
                                                                 ?.comissionAndmatTypeNaNSetData
                                                                 .contains(homepageController
-                                                                        ?.generatedReportData[
-                                                                    index][15]) ==
+                                                                            ?.generatedReportData[
+                                                                        index][
+                                                                    Constantdata
+                                                                        .dataNoIndex]) ==
                                                             true,
                                                     replacement: AutoSizeText(
-                                                      (index != 0 &&
-                                                              (subIndex == 1 ||
-                                                                  subIndex ==
-                                                                      13))
+                                                      (subIndex ==
+                                                                  Constantdata
+                                                                      .smtDocDateIndex ||
+                                                              subIndex ==
+                                                                  Constantdata
+                                                                      .distDocDateIndex)
                                                           ? DateFormat(
                                                                   "dd-MM-yyyy")
                                                               .format(DateFormat(
@@ -966,7 +1007,9 @@ class PartyPaymentView extends StatelessWidget {
                                                           ?.smtInvNoSet
                                                           .add(homepageController!
                                                               .generatedReportData[
-                                                                  index][15]
+                                                                  index][
+                                                                  Constantdata
+                                                                      .smtInvoiceNoIndex]
                                                               .toString());
                                                       homepageController
                                                               ?.partyWiseTotalAmount
@@ -989,7 +1032,9 @@ class PartyPaymentView extends StatelessWidget {
                                                           ?.smtInvNoSet
                                                           .remove(homepageController
                                                               ?.generatedReportData[
-                                                                  index][15]
+                                                                  index][
+                                                                  Constantdata
+                                                                      .smtInvoiceNoIndex]
                                                               .toString());
                                                       homepageController
                                                               ?.partyWiseTotalAmount

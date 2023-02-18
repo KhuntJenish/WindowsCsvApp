@@ -38,11 +38,11 @@ class HomepageController extends GetxController {
     'Custom',
   ]);
   RxSet<String> partyCityList = RxSet<String>();
-  RxSet<String> displayData = RxSet<String>();
   RxSet<String> checkLumpsumPaymentData = RxSet<String>();
-  RxSet<String> partyNaNSetData = RxSet<String>();
   RxSet<List<int>> partyNaNSetDetailData = RxSet<List<int>>();
-  RxList<String> comissionAndmatTypeNaNSetData = RxList<String>();
+  RxSet<int> partyNaNSetData = RxSet<int>();
+  RxList<int> comissionAndmatTypeNaNSetData = RxList<int>();
+  RxSet<int> displayData = RxSet<int>();
   List<MaterialTypeData>? materialTypeList = [];
   List<PartyMasterData>? partyList = [];
   List<PartyMasterData>? hpartyList = [];
@@ -70,7 +70,7 @@ class HomepageController extends GetxController {
     start: DateTime(DateTime.now().year, DateTime.now().month, 1),
     end: DateTime.now(),
   ).obs;
-  List<int> rightalign = [8, 11, 12, 16, 17, 18, 19, 20, 21, 22, 23, 0];
+  List<int> rightalign = [8, 11, 12, 16, 17, 18, 19, 20, 21, 22, 23];
 
   // scrollwork
 
@@ -825,6 +825,7 @@ class HomepageController extends GetxController {
 
       pendingReportData.clear();
       List sublist = [];
+      sublist.add('No');
       sublist.add('Document Type');
       sublist.add('Dist Doc. Date');
       sublist.add('Dist. Document No.');
@@ -893,10 +894,11 @@ class HomepageController extends GetxController {
                 ..where((tbl) => tbl.id.equals(serachData[i].mtID)))
               .get();
           if (checkMaterialType.isNotEmpty) {
-            displayData.add(serachData[i].smtInvNo.toString());
+            displayData.add(serachData[i].id);
             List sublist = [];
 
             // print(pendingData[i]);
+            sublist.add(i + 1);
             sublist.add(serachData[i].documentType);
             sublist.add(
                 DateFormat('dd.MM.yyyy').format(serachData[i].distDocDate));
@@ -922,11 +924,10 @@ class HomepageController extends GetxController {
 
             pendingReportData.add(sublist);
           } else {
-            comissionAndmatTypeNaNSetData
-                .add(serachData[i].smtInvNo.toString());
+            comissionAndmatTypeNaNSetData.add(serachData[i].id);
           }
         } else {
-          partyNaNSetData.add(serachData[i].smtInvNo.toString());
+          partyNaNSetData.add(serachData[i].id);
         }
       }
       print('Serch Data');
@@ -1249,6 +1250,7 @@ class HomepageController extends GetxController {
 
       generatedReportData.clear();
       List sublist = [];
+      sublist.add('No');
       sublist.add('Document Type');
       sublist.add('Dist Doc. Date');
       sublist.add('Dist. Document No.');
@@ -1328,10 +1330,11 @@ class HomepageController extends GetxController {
                 ..where((tbl) => tbl.id.equals(serachData[i].mtID)))
               .get();
           if (checkMaterialType.isNotEmpty) {
-            displayData.add(serachData[i].smtInvNo.toString());
+            displayData.add(i + 1);
             List sublist = [];
 
             // print(pendingData[i]);
+            sublist.add(i + 1);
             sublist.add(serachData[i].documentType);
             sublist.add(
                 DateFormat('dd.MM.yyyy').format(serachData[i].distDocDate));
@@ -1398,11 +1401,10 @@ class HomepageController extends GetxController {
               }
             }
           } else {
-            comissionAndmatTypeNaNSetData
-                .add(serachData[i].smtInvNo.toString());
+            comissionAndmatTypeNaNSetData.add(i + 1);
           }
         } else {
-          partyNaNSetData.add(serachData[i].smtInvNo.toString());
+          partyNaNSetData.add(i + 1);
         }
       }
 
@@ -1629,9 +1631,9 @@ class HomepageController extends GetxController {
         }
       }
       print(partyNameList);
-      index = index == 3
+      index = index == Constantdata.customerIndex
           ? 1
-          : index == 9
+          : index == Constantdata.doctorNameIndex
               ? 2
               : 3;
       var partydata = await (db.select(db.partyMaster)
@@ -1858,7 +1860,8 @@ class HomepageController extends GetxController {
       if (isShowTechnician && isShowDoctor && isShowHospital) {
         materialTypeList?.clear();
         materialTypeList = await (db.select(db.materialType)
-              ..where((tbl) => tbl.type.equals("${data[7]}~${data[6]}")))
+              ..where((tbl) => tbl.type.equals(
+                  "${data[Constantdata.matTypeIndex]}~${data[Constantdata.matNameIndex]}")))
             .get();
         debugPrint(
             "${data[Constantdata.matTypeIndex]}~${data[Constantdata.matNameIndex]}");
@@ -1908,7 +1911,7 @@ class HomepageController extends GetxController {
           }
 
           if (isShowTechnician && isShowDoctor && isShowHospital) {
-            displayData.add(data[15].toString());
+            displayData.add(data[Constantdata.dataNoIndex]);
             var hcomission = resHospitalPartyComission?[0].comission1;
             // var dcomission = resHospitalPartyComission[0].comission1;
             // var tcomission = resTechnicianPartyComission[0].comission1;
@@ -1917,19 +1920,17 @@ class HomepageController extends GetxController {
             debugPrint(
                 'comissionAmount(%): ${(hcomission! * data[Constantdata.totalSalesIndex]) / 100}');
           } else {
-            comissionAndmatTypeNaNSetData
-                .add(data[Constantdata.smtInvoiceNoIndex].toString());
+            comissionAndmatTypeNaNSetData.add(data[Constantdata.dataNoIndex]);
             'Comission Not Found'.errorSnackbar;
             debugPrint('Comission Not Found');
           }
         } else {
-          comissionAndmatTypeNaNSetData
-              .add(data[Constantdata.smtInvoiceNoIndex].toString());
+          comissionAndmatTypeNaNSetData.add(data[Constantdata.dataNoIndex]);
           'Material Type Not Found'.errorSnackbar;
           debugPrint('Material Type Not Found');
         }
       } else {
-        partyNaNSetData.add(data[Constantdata.smtInvoiceNoIndex].toString());
+        partyNaNSetData.add(data[Constantdata.dataNoIndex]);
         debugPrint(
             '${data[Constantdata.customerIndex] + data[Constantdata.doctorNameIndex] + data[Constantdata.technicianStaffIndex]} Party Not Found');
       }
@@ -1946,7 +1947,7 @@ class HomepageController extends GetxController {
       List<String> smtInvNoList = [];
 
       for (var i = 1; i < data!.length; i++) {
-        smtInvNoList.add(data[i][15]);
+        smtInvNoList.add(data[i][Constantdata.smtInvoiceNoIndex]);
       }
       print(smtInvNoList);
       var res = await (db.select(db.inputData)
@@ -1959,13 +1960,13 @@ class HomepageController extends GetxController {
         // print(data?.length);
         Set<int> hospitalPartySet = {}; //{1,2,3}
         List hospitalPartyTotalComissionSet = []; //[100,200,300]
-        List<List<String>> hospitalPartyWiseList = [];
+        List<List<int>> hospitalPartyWiseList = [];
         Set<int> doctorPartySet = {}; //{1,2,3}
         List doctorPartyTotalComissionSet = []; //[100,200,300]
-        List<List<String>> doctorPartyWiseList = [];
+        List<List<int>> doctorPartyWiseList = [];
         Set<int> technicianPartySet = {}; //{1,2,3}
         List technicianPartyTotalComissionSet = []; //[100,200,300]
-        List<List<String>> technicianPartyWiseList = [];
+        List<List<int>> technicianPartyWiseList = [];
         // GetStorage('box').write('logID', 0);
         var logID = GetStorage('box').read('logID') ?? 0;
         print('prevID :$logID');
@@ -2094,7 +2095,7 @@ class HomepageController extends GetxController {
                     print(oldCommision);
                     hospitalPartyTotalComissionSet[index] =
                         oldCommision + hospitalComissionAmount;
-                    hospitalPartyWiseList[index].add(element.smtInvNo);
+                    hospitalPartyWiseList[index].add(element.id);
 
                     print(hospitalPartyWiseList);
                     print(hospitalPartyTotalComissionSet.toList());
@@ -2107,8 +2108,8 @@ class HomepageController extends GetxController {
                     print(index);
                     hospitalPartyTotalComissionSet.insert(
                         index, hospitalComissionAmount);
-                    List<String> party = [];
-                    party.add(element.smtInvNo);
+                    List<int> party = [];
+                    party.add(element.id);
                     hospitalPartyWiseList.insert(index, party);
                     // partyTotalComissionSet.elementAt(index);
                     print(hospitalPartyWiseList);
@@ -2137,7 +2138,7 @@ class HomepageController extends GetxController {
                     print(oldCommision);
                     doctorPartyTotalComissionSet[index] =
                         oldCommision + doctorComissionAmount;
-                    doctorPartyWiseList[index].add(element.smtInvNo);
+                    doctorPartyWiseList[index].add(element.id);
 
                     print(doctorPartyWiseList);
                     print(doctorPartyTotalComissionSet.toList());
@@ -2150,8 +2151,8 @@ class HomepageController extends GetxController {
                     print(index);
                     doctorPartyTotalComissionSet.insert(
                         index, doctorComissionAmount);
-                    List<String> party = [];
-                    party.add(element.smtInvNo);
+                    List<int> party = [];
+                    party.add(element.id);
                     doctorPartyWiseList.insert(index, party);
                     // partyTotalComissionSet.elementAt(index);
                     print(doctorPartyWiseList);
@@ -2179,7 +2180,7 @@ class HomepageController extends GetxController {
                     print(oldCommision);
                     technicianPartyTotalComissionSet[index] =
                         oldCommision + technicianComissionAmount;
-                    technicianPartyWiseList[index].add(element.smtInvNo);
+                    technicianPartyWiseList[index].add(element.id);
 
                     print(technicianPartyWiseList);
                     print(technicianPartyTotalComissionSet.toList());
@@ -2191,8 +2192,8 @@ class HomepageController extends GetxController {
                     print(index);
                     technicianPartyTotalComissionSet.insert(
                         index, technicianComissionAmount);
-                    List<String> party = [];
-                    party.add(element.smtInvNo);
+                    List<int> party = [];
+                    party.add(element.id);
                     technicianPartyWiseList.insert(index, party);
                     // partyTotalComissionSet.elementAt(index);
                     print(technicianPartyWiseList);
@@ -2238,10 +2239,10 @@ class HomepageController extends GetxController {
                 }
               }
             } else {
-              comissionAndmatTypeNaNSetData.add(element.smtInvNo.toString());
+              comissionAndmatTypeNaNSetData.add(element.id);
             }
           } else {
-            partyNaNSetData.add(element.smtInvNo.toString());
+            partyNaNSetData.add(element.id);
           }
         }
         print('done');
@@ -2323,7 +2324,7 @@ class HomepageController extends GetxController {
   Future<void> generateComission({
     Set<int>? partySet,
     List? partyTotalComissionSet,
-    List<List<String>>? partyWiseList,
+    List<List<int>>? partyWiseList,
     int? partyType,
   }) async {
     List ledgerIDList = [];
@@ -2351,7 +2352,7 @@ class HomepageController extends GetxController {
       var element = partyWiseList[i];
       for (var j = 0; j < element.length; j++) {
         var data = await (db.select(db.inputData)
-              ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+              ..where((tbl) => tbl.id.equals(element[j])))
             .getSingle();
         print(element[j]); //smtInvNo
         print(data); // smtInvNo-data
@@ -2371,7 +2372,7 @@ class HomepageController extends GetxController {
           );
         }
         var resUpdate = await (db.update(db.inputData)
-              ..where((tbl) => tbl.smtInvNo.equals(element[j])))
+              ..where((tbl) => tbl.id.equals(element[j])))
             .write(data);
         print(resUpdate);
         print('update record');
@@ -2395,7 +2396,8 @@ class HomepageController extends GetxController {
       for (var i = 1; i < data.length; i++) {
         print(i);
 
-        String smtInvNo = (data[i][15]).toString();
+        String smtInvNo = (data[i][Constantdata.smtInvoiceNoIndex]).toString();
+        // String smtDocDateIndex = (data[i][Constantdata.smtDocDateIndex]).toString();
 
         var res = await (db.select(db.inputData)
               ..where((tbl) => tbl.smtInvNo.equals(smtInvNo)))
@@ -2452,7 +2454,8 @@ class HomepageController extends GetxController {
             // tempdata.addAll(data);
 
             for (var i = 1; i < data.length; i++) {
-              String smtInvNo = (data[i][15]).toString();
+              String smtInvNo =
+                  (data[i][Constantdata.smtInvoiceNoIndex]).toString();
               if (!smtInvNoList.contains(smtInvNo)) {
                 tempdata.add(data[i]);
               }
@@ -2472,28 +2475,34 @@ class HomepageController extends GetxController {
               return;
             } else {
               for (var i = 1; i < data.length; i++) {
-                String documentType = data[i][0];
-                DateTime distDocDate =
-                    DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
-                String distDocNo = data[i][2];
+                String documentType = data[i][Constantdata.documentTypeIndex];
+                DateTime distDocDate = DateFormat("dd.MM.yyyy")
+                    .parse(data[i][Constantdata.distDocDateIndex].toString());
+                String distDocNo = data[i][Constantdata.distDocumentNoIndex];
                 var customer = data[i][Constantdata.customerIndex];
-                String custBillCity = data[i][4];
-                String matCode = data[i][5];
-                String matName = data[i][6];
-                String matType = "${data[i][7]}~${data[i][6]}";
-                int qty = data[i][8];
-                String doctorName = data[i][9];
-                String techniqalStaff = data[i][10];
-                double saleAmount = double.parse((data[i][11]).toString());
-                double totalSale = double.parse((data[i][12]).toString());
-                DateTime smtDocDate =
-                    DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
-                String smtDocNo = (data[i][14]).toString();
-                String smtInvNo = (data[i][15]).toString();
-                double purchaseTaxableAmount =
-                    double.parse(data[i][16].toString());
-                double totalPurchaseAmount =
-                    double.parse(data[i][17].toString());
+                String custBillCity = data[i][Constantdata.custBillCityIndex];
+                String matCode = data[i][Constantdata.matCodeIndex];
+                String matName = data[i][Constantdata.matNameIndex];
+                String matType =
+                    "${data[i][Constantdata.matTypeIndex]}~${data[i][Constantdata.matNameIndex]}";
+                int qty = data[i][Constantdata.quantityIndex];
+                String doctorName = data[i][Constantdata.doctorNameIndex];
+                String techniqalStaff =
+                    data[i][Constantdata.technicianStaffIndex];
+                double saleAmount = double.parse(
+                    (data[i][Constantdata.salesAmountIndex]).toString());
+                double totalSale = double.parse(
+                    (data[i][Constantdata.totalSalesIndex]).toString());
+                DateTime smtDocDate = DateFormat("dd.MM.yyyy")
+                    .parse(data[i][Constantdata.smtDocDateIndex].toString());
+                String smtDocNo =
+                    (data[i][Constantdata.smtDocNoIndex]).toString();
+                String smtInvNo =
+                    (data[i][Constantdata.smtInvoiceNoIndex]).toString();
+                double purchaseTaxableAmount = double.parse(
+                    data[i][Constantdata.purchaseTaxableIndex].toString());
+                double totalPurchaseAmount = double.parse(
+                    data[i][Constantdata.totalPurchaseIndex].toString());
                 int logId = 0;
                 int ledgerId = 0;
                 double comission = 0;
@@ -2579,26 +2588,32 @@ class HomepageController extends GetxController {
         );
       } else {
         for (var i = 1; i < data.length; i++) {
-          String documentType = data[i][0];
-          DateTime distDocDate =
-              DateFormat("dd.MM.yyyy").parse(data[i][1].toString());
-          String distDocNo = data[i][2];
+          String documentType = data[i][Constantdata.documentTypeIndex];
+          DateTime distDocDate = DateFormat("dd.MM.yyyy")
+              .parse(data[i][Constantdata.distDocDateIndex].toString());
+          String distDocNo = data[i][Constantdata.distDocumentNoIndex];
           var customer = data[i][Constantdata.customerIndex];
-          String custBillCity = data[i][4];
-          String matCode = data[i][5];
-          String matName = data[i][6];
-          String matType = "${data[i][7]}~${data[i][6]}";
-          int qty = data[i][8];
-          String doctorName = data[i][9];
-          String techniqalStaff = data[i][10];
-          double saleAmount = double.parse((data[i][11]).toString());
-          double totalSale = double.parse((data[i][12]).toString());
-          DateTime smtDocDate =
-              DateFormat("dd.MM.yyyy").parse(data[i][13].toString());
-          String smtDocNo = (data[i][14]).toString();
-          String smtInvNo = (data[i][15]).toString();
-          double purchaseTaxableAmount = double.parse(data[i][16].toString());
-          double totalPurchaseAmount = double.parse(data[i][17].toString());
+          String custBillCity = data[i][Constantdata.custBillCityIndex];
+          String matCode = data[i][Constantdata.matCodeIndex];
+          String matName = data[i][Constantdata.matNameIndex];
+          String matType =
+              "${data[i][Constantdata.matTypeIndex]}~${data[i][Constantdata.matNameIndex]}";
+          int qty = data[i][Constantdata.quantityIndex];
+          String doctorName = data[i][Constantdata.doctorNameIndex];
+          String techniqalStaff = data[i][Constantdata.technicianStaffIndex];
+          double saleAmount =
+              double.parse((data[i][Constantdata.salesAmountIndex]).toString());
+          double totalSale =
+              double.parse((data[i][Constantdata.totalSalesIndex]).toString());
+          DateTime smtDocDate = DateFormat("dd.MM.yyyy")
+              .parse(data[i][Constantdata.smtDocDateIndex].toString());
+          String smtDocNo = (data[i][Constantdata.smtDocNoIndex]).toString();
+          String smtInvNo =
+              (data[i][Constantdata.smtInvoiceNoIndex]).toString();
+          double purchaseTaxableAmount = double.parse(
+              data[i][Constantdata.purchaseTaxableIndex].toString());
+          double totalPurchaseAmount =
+              double.parse(data[i][Constantdata.totalPurchaseIndex].toString());
           int logId = 0;
           int ledgerId = 0;
           double comission = 0;

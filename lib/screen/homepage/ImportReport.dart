@@ -491,7 +491,8 @@ class ImportReport extends StatelessWidget {
                                   margin: const EdgeInsets.all(3),
                                   color: _homepageController.displayData
                                           .contains(_homepageController
-                                              .pendingReportData[index][15])
+                                                  .pendingReportData[index]
+                                              [Constantdata.dataNoIndex])
                                       ? Colors.white
                                       : const Color.fromARGB(
                                           255, 228, 136, 129),
@@ -539,10 +540,11 @@ class ImportReport extends StatelessWidget {
                                                             .technicianStaffIndex) &&
                                                 _homepageController
                                                         .partyNaNSetData
-                                                        .contains(
-                                                            _homepageController
+                                                        .contains(_homepageController
                                                                     .pendingReportData[
-                                                                index][15]) ==
+                                                                index][
+                                                            Constantdata
+                                                                .dataNoIndex]) ==
                                                     true,
                                             replacement: Visibility(
                                               visible: subIndex ==
@@ -550,10 +552,11 @@ class ImportReport extends StatelessWidget {
                                                           .matTypeIndex &&
                                                   _homepageController
                                                           .comissionAndmatTypeNaNSetData
-                                                          .contains(
-                                                              _homepageController
+                                                          .contains(_homepageController
                                                                       .pendingReportData[
-                                                                  index][15]) ==
+                                                                  index][
+                                                              Constantdata
+                                                                  .dataNoIndex]) ==
                                                       true,
                                               replacement: AutoSizeText(
                                                 (subIndex ==
@@ -618,24 +621,29 @@ class ImportReport extends StatelessWidget {
                                                             'Add New Comission';
                                                         var hospital =
                                                             _homepageController
+                                                                        .pendingReportData[
+                                                                    index][
+                                                                Constantdata
+                                                                    .customerIndex];
+                                                        var doctor = _homepageController
                                                                     .pendingReportData[
-                                                                index][3];
-                                                        var doctor =
-                                                            _homepageController
-                                                                    .pendingReportData[
-                                                                index][9];
+                                                                index][
+                                                            Constantdata
+                                                                .doctorNameIndex];
                                                         var technician =
                                                             _homepageController
-                                                                    .pendingReportData[
-                                                                index][10];
+                                                                        .pendingReportData[
+                                                                    index][
+                                                                Constantdata
+                                                                    .technicianStaffIndex];
 
                                                         // print(
                                                         //     _homepageController
                                                         //         .partyList);
-                                                        print(_homepageController
-                                                                .pendingReportData[
-                                                            index][10]);
-                                                        print('technician');
+                                                        // print(_homepageController
+                                                        //         .pendingReportData[
+                                                        //     index][10]);
+                                                        // print('technician');
                                                         var hospitalParty =
                                                             _homepageController
                                                                 .partyList!
@@ -670,10 +678,12 @@ class ImportReport extends StatelessWidget {
                                                         var itemAmount = double.parse(
                                                             _homepageController
                                                                 .pendingReportData[
-                                                                    index][12]
+                                                                    index][
+                                                                    Constantdata
+                                                                        .totalSalesIndex]
                                                                 .toString());
                                                         var materialType =
-                                                            "${_homepageController.pendingReportData[index][7]}~${_homepageController.pendingReportData[index][6]}";
+                                                            "${_homepageController.pendingReportData[index][Constantdata.matTypeIndex]}~${_homepageController.pendingReportData[index][Constantdata.matNameIndex]}";
                                                         var isShowAddMt =
                                                             await _homepageController
                                                                 .checkMaterialType(
