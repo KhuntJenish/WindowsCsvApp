@@ -297,7 +297,7 @@ class PartyPaymentView extends StatelessWidget {
                                                 'Custom',
                                             replacement: SizedBox(
                                               child: Container(
-                                                width: Get.width * 0.20,
+                                                width: Get.width * 0.15,
                                                 // color: Colors.amber,
                                                 margin: const EdgeInsets.only(
                                                     left: 10),
@@ -431,7 +431,7 @@ class PartyPaymentView extends StatelessWidget {
                                       fontSize: Get.width * 0.010,
                                       text: 'Search',
                                       onPressed: () async {
-                                        homepageController?.smtInvNoSet.clear();
+                                        homepageController?.dataNoSet.clear();
                                         print('Search Button Pressed');
 
                                         homepageController
@@ -665,7 +665,7 @@ class PartyPaymentView extends StatelessWidget {
                           margin: const EdgeInsets.all(3),
                           color: lCOLOR_ACCENT,
                           child: SizedBox(
-                            width: Get.width * 1.8,
+                            width: Get.width * 2.05,
                             height: Get.height * 0.05,
                             child: Row(
                               children: [
@@ -753,7 +753,7 @@ class PartyPaymentView extends StatelessWidget {
                         width: width,
                         child: SizedBox(
                           height: Get.height * 0.70,
-                          width: Get.width * 1.8,
+                          width: Get.width * 2.05,
                           child: ListView.builder(
                             itemCount:
                                 homepageController?.generatedReportData.length,
@@ -787,16 +787,16 @@ class PartyPaymentView extends StatelessWidget {
                                       .checkLumpsumPaymentData.isNotEmpty) {
                                 print(homepageController!
                                     .checkLumpsumPaymentData);
-                                homepageController?.smtInvNoSet.clear();
-                                homepageController?.smtInvNoSet.addAll(
+                                homepageController?.dataNoSet.clear();
+                                homepageController?.dataNoSet.addAll(
                                     homepageController!
                                         .checkLumpsumPaymentData);
                               } else {
                                 index != 0
-                                    ? homepageController?.smtInvNoSet.add(
+                                    ? homepageController?.dataNoSet.add(
                                         homepageController!
-                                            .generatedReportData[index][15]
-                                            .toString())
+                                                .generatedReportData[index]
+                                            [Constantdata.dataNoIndex])
                                     : null;
                               }
                               // var isPartyChecked = true;
@@ -1004,13 +1004,12 @@ class PartyPaymentView extends StatelessWidget {
                                                     print(value);
                                                     if (value) {
                                                       homepageController
-                                                          ?.smtInvNoSet
+                                                          ?.dataNoSet
                                                           .add(homepageController!
-                                                              .generatedReportData[
+                                                                      .generatedReportData[
                                                                   index][
-                                                                  Constantdata
-                                                                      .smtInvoiceNoIndex]
-                                                              .toString());
+                                                              Constantdata
+                                                                  .dataNoIndex]);
                                                       homepageController
                                                               ?.partyWiseTotalAmount
                                                               .value +=
@@ -1029,12 +1028,12 @@ class PartyPaymentView extends StatelessWidget {
                                                               .value;
                                                     } else {
                                                       homepageController
-                                                          ?.smtInvNoSet
+                                                          ?.dataNoSet
                                                           .remove(homepageController
                                                               ?.generatedReportData[
                                                                   index][
                                                                   Constantdata
-                                                                      .smtInvoiceNoIndex]
+                                                                      .dataNoIndex]
                                                               .toString());
                                                       homepageController
                                                               ?.partyWiseTotalAmount
@@ -1058,7 +1057,7 @@ class PartyPaymentView extends StatelessWidget {
                                                         .value);
 
                                                     print(homepageController
-                                                        ?.smtInvNoSet);
+                                                        ?.dataNoSet);
                                                     // homepageController?.isAllPartySelected.refresh();
                                                   },
                                                 ),
@@ -1067,13 +1066,14 @@ class PartyPaymentView extends StatelessWidget {
                                                     print('payment Back');
                                                     print(homepageController
                                                         ?.generatedReportData[
-                                                            index][15]
+                                                            index][Constantdata
+                                                                .smtInvoiceNoIndex]
                                                         .toString());
-                                                    var smtInvNo =
-                                                        homepageController
-                                                            ?.generatedReportData[
-                                                                index][15]
-                                                            .toString();
+                                                    var smtInvNo = homepageController
+                                                        ?.generatedReportData[
+                                                            index][Constantdata
+                                                                .smtInvoiceNoIndex]
+                                                        .toString();
                                                     Get.defaultDialog(
                                                       title: 'Payment Back',
                                                       middleText:
@@ -1114,24 +1114,14 @@ class PartyPaymentView extends StatelessWidget {
                                                       onConfirm: () {
                                                         Get.back();
                                                         // !Todo: Payment Back
-                                                        homepageController!.reversePaymentProcess(
-                                                            pID: partyTypeID,
-                                                            smtInvNo:
-                                                                homepageController
-                                                                    ?.generatedReportData[
-                                                                        index]
-                                                                        [15]
-                                                                    .toString(),
-                                                            crAmount: double.parse(
-                                                                homepageController!
-                                                                    .generatedReportData[
-                                                                        index]
-                                                                        [19]
-                                                                    .toString()),
-                                                            paymentbackRecord:
-                                                                homepageController!
-                                                                        .generatedReportData[
-                                                                    index]);
+                                                        homepageController!
+                                                            .reversePaymentProcess(
+                                                                pID:
+                                                                    partyTypeID,
+                                                                paymentbackRecord:
+                                                                    homepageController!
+                                                                            .generatedReportData[
+                                                                        index]);
                                                       },
                                                     );
                                                   },
@@ -1161,10 +1151,10 @@ class PartyPaymentView extends StatelessWidget {
                             // width: Get.width,
                             bottom: Get.height * 0.05,
                             left: Get.width * 0.05,
-                            right: Get.width * 0.85,
+                            right: Get.width * 1.1,
                             child: SizedBox(
                               height: Get.height * 0.1,
-                              // width: Get.width * 0.3,
+                              // width: Get.width * 0.7,
                               child: Card(
                                 color: lCOLOR_ACCENT.withOpacity(0.1),
                                 shape: RoundedRectangleBorder(
@@ -1223,12 +1213,12 @@ class PartyPaymentView extends StatelessWidget {
                                         name: 'Total Amount',
                                         amount: homepageController!
                                             .partyWiseTotalAmount.value
-                                            .toString()),
+                                            .toStringAsFixed(2)),
                                     LableText(
                                         name: 'Paid Amount',
                                         amount: homepageController!
                                             .partyWisePaidAmount.value
-                                            .toString()),
+                                            .toStringAsFixed(2)),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
@@ -1237,7 +1227,7 @@ class PartyPaymentView extends StatelessWidget {
                                             name: 'Payable Amount',
                                             amount: homepageController!
                                                 .partyWisePayableAmount
-                                                .toString()),
+                                                .toStringAsFixed(2)),
                                         const SizedBox(
                                           width: 10,
                                         ),

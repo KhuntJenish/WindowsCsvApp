@@ -38,7 +38,7 @@ class HomepageController extends GetxController {
     'Custom',
   ]);
   RxSet<String> partyCityList = RxSet<String>();
-  RxSet<String> checkLumpsumPaymentData = RxSet<String>();
+  RxSet<int> checkLumpsumPaymentData = RxSet<int>();
   RxSet<List<int>> partyNaNSetDetailData = RxSet<List<int>>();
   RxSet<int> partyNaNSetData = RxSet<int>();
   RxList<int> comissionAndmatTypeNaNSetData = RxList<int>();
@@ -49,7 +49,8 @@ class HomepageController extends GetxController {
   List<PartyMasterData>? dpartyList = [];
   List<PartyMasterData>? tpartyList = [];
   Set ledgerPartyWiseSet = {};
-  RxSet<String> smtInvNoSet = RxSet<String>();
+  RxList<String> smtInvNoSet = RxList<String>();
+  RxSet<int> dataNoSet = RxSet<int>();
   Rx<PartyMasterData> defaultParty =
       const PartyMasterData(id: 0, name: '', ptID: 0).obs;
   Rx<String> defaultPartyCity = ''.obs;
@@ -61,7 +62,7 @@ class HomepageController extends GetxController {
   RxBool isAllPartySelected = true.obs;
   RxBool isAllMaterialTypeSelected = true.obs;
   RxBool isAllPartyCitySelected = true.obs;
-  RxBool isAllPendingPayement = true.obs;
+  RxBool isAllPendingPayement = false.obs;
   RxDouble partyWiseTotalAmount = 0.0.obs;
   RxDouble partyWisePaidAmount = 0.0.obs;
   RxDouble partyWisePayableAmount = 0.0.obs;
@@ -147,21 +148,35 @@ class HomepageController extends GetxController {
       List<List<dynamic>> list = [];
       for (var i = 0; i < generatedReportData.length; i++) {
         List subList = [];
-        subList.add(generatedReportData[i][13].toString()); //smt Date
-        subList.add(generatedReportData[i][15].toString()); //smt inv no
+        subList.add(generatedReportData[i][Constantdata.smtDocDateIndex]
+            .toString()); //smt Date
+        subList.add(generatedReportData[i][Constantdata.smtInvoiceNoIndex]
+            .toString()); //smt inv no
         // subList.add(generatedReportData[i][6].toString());//material name
-        subList.add(generatedReportData[i][7].toString()); //material type
-        subList.add(generatedReportData[i][4].toString()); //customer billcity
-        subList.add(generatedReportData[i][12].toString()); //total sale
-        subList.add(generatedReportData[i][3].toString()); //h name
-        subList.add(generatedReportData[i][18].toString()); //h comission
-        subList.add(generatedReportData[i][19].toString()); //h comission amount
-        subList.add(generatedReportData[i][9].toString()); //d name
-        subList.add(generatedReportData[i][20].toString()); //d comission
-        subList.add(generatedReportData[i][21].toString()); //d comission amount
-        subList.add(generatedReportData[i][10].toString()); //t name
-        subList.add(generatedReportData[i][22].toString()); //t comission
-        subList.add(generatedReportData[i][23].toString()); //t comission amount
+        subList.add(generatedReportData[i][Constantdata.matTypeIndex]
+            .toString()); //material type
+        subList.add(generatedReportData[i][Constantdata.custBillCityIndex]
+            .toString()); //customer billcity
+        subList.add(generatedReportData[i][Constantdata.totalSalesIndex]
+            .toString()); //total sale
+        subList.add(generatedReportData[i][Constantdata.customerIndex]
+            .toString()); //h name
+        subList.add(generatedReportData[i][Constantdata.hcomissionIndex]
+            .toString()); //h comission
+        subList.add(generatedReportData[i][Constantdata.hcAmountIndex]
+            .toString()); //h comission amount
+        subList.add(generatedReportData[i][Constantdata.doctorNameIndex]
+            .toString()); //d name
+        subList.add(generatedReportData[i][Constantdata.dcomissionIndex]
+            .toString()); //d comission
+        subList.add(generatedReportData[i][Constantdata.dcAmountIndex]
+            .toString()); //d comission amount
+        subList.add(generatedReportData[i][Constantdata.technicianStaffIndex]
+            .toString()); //t name
+        subList.add(generatedReportData[i][Constantdata.tcomissionIndex]
+            .toString()); //t comission
+        subList.add(generatedReportData[i][Constantdata.tcAmountIndex]
+            .toString()); //t comission amount
         // print(subList);
         list.add(subList);
       }
@@ -696,22 +711,27 @@ class HomepageController extends GetxController {
   }
 
   reversePaymentProcess(
-      {String? smtInvNo,
-      double? crAmount,
+      {
+      // double? crAmount,
       int? pID,
       List<dynamic>? paymentbackRecord}) async {
     try {
-      print('smtInvNo: $smtInvNo');
-      print('amount: $paymentbackRecord');
+      // print('smtInvNo: $id');
+      double? crAmount;
+      print('record: $paymentbackRecord');
+      var matCode = paymentbackRecord?[Constantdata.matCodeIndex];
+      var smtInvoiceNo = paymentbackRecord?[Constantdata.smtInvoiceNoIndex];
       var data = await (db.select(db.inputData)
-            ..where((tbl) => tbl.smtInvNo.equals(smtInvNo!)))
+            ..where((tbl) =>
+                tbl.smtInvNo.equals(smtInvoiceNo) &
+                tbl.matCode.equals(matCode)))
           .getSingle();
 
       print('logID : ${data.logId}');
       var paymentLedgerID = 0;
       DateTime comissionPaidDate;
       if (pID == 1) {
-        crAmount = paymentbackRecord?[19];
+        crAmount = paymentbackRecord?[Constantdata.hcAmountIndex];
         paymentLedgerID = data.hospitalPaymentLedgerId;
         comissionPaidDate = data.hospitalComissionPaidDate;
         // data.copyWith();
@@ -725,7 +745,7 @@ class HomepageController extends GetxController {
         );
         print('updateInputData: $updateInputData');
       } else if (pID == 2) {
-        crAmount = paymentbackRecord?[21];
+        crAmount = paymentbackRecord?[Constantdata.dcAmountIndex];
         paymentLedgerID = data.doctorPaymentLedgerId;
         comissionPaidDate = data.doctorComissionPaidDate;
 
@@ -736,7 +756,7 @@ class HomepageController extends GetxController {
         ));
         print('updateInputData: $updateInputData');
       } else {
-        crAmount = paymentbackRecord?[23];
+        crAmount = paymentbackRecord?[Constantdata.tcAmountIndex];
         paymentLedgerID = data.techniqalStaffPaymentLedgerId;
         comissionPaidDate = data.techniqalStaffComissionPaidDate;
 
@@ -1104,6 +1124,8 @@ class HomepageController extends GetxController {
       var pName, pCommission = 0.0, totalPayAmount = 0.0;
       bool isReturn = true;
       smtInvNoSet.clear();
+      dataNoSet.clear();
+
       // RxList<List<dynamic>>? data ;
 
       // List list = [];
@@ -1114,30 +1136,34 @@ class HomepageController extends GetxController {
             // isHospital = true;
             // print(generatedReportData[i][3]);
             // print(generatedReportData[i][19]);
-            pName = generatedReportData[i][3];
-            pCommission = generatedReportData[i][19];
+            pName = generatedReportData[i][Constantdata.customerIndex];
+            pCommission = generatedReportData[i][Constantdata.hcAmountIndex];
             totalPayAmount += pCommission;
           } else if (ptID == 2) {
             // isDoctor = true;
             // print(generatedReportData[i][9]);
             // print(generatedReportData[i][21]);
-            pName = generatedReportData[i][9];
-            pCommission = generatedReportData[i][21];
+            pName = generatedReportData[i][Constantdata.doctorNameIndex];
+            pCommission = generatedReportData[i][Constantdata.dcAmountIndex];
             totalPayAmount += pCommission;
           } else {
             // isTechnician = true;
             // print(generatedReportData[i][10]);
             // print(generatedReportData[i][23]);
-            pName = generatedReportData[i][10];
-            pCommission = generatedReportData[i][23];
+            pName = generatedReportData[i][Constantdata.technicianStaffIndex];
+            pCommission = generatedReportData[i][Constantdata.tcAmountIndex];
             totalPayAmount += pCommission;
           }
           if (totalPayAmount <= lumpsumAmount!) {
-            checkLumpsumPaymentData.add(generatedReportData[i][15]);
-            smtInvNoSet.add(generatedReportData[i][15]);
+            checkLumpsumPaymentData
+                .add(generatedReportData[i][Constantdata.dataNoIndex]);
+            smtInvNoSet
+                .add(generatedReportData[i][Constantdata.smtInvoiceNoIndex]);
+            dataNoSet.add(generatedReportData[i][Constantdata.dataNoIndex]);
             partyWisePayableAmount.value = totalPayAmount;
           } else {
             isReturn = false;
+
             // generatedReportData.clear();
           }
         }
@@ -1446,16 +1472,31 @@ class HomepageController extends GetxController {
       // print(data);
       if (ledgerData > 0) {
         List<String> smtInvNoList = [];
-        // for (var i = 1; i < generatedReportData.length; i++) {
-        //   smtInvNoList.add(generatedReportData[i][15].toString());
-        // }
-        smtInvNoList.addAll(smtInvNoSet.toList());
+        List<InputDataData> inputDatadata = [];
+        for (var i = 1; i < generatedReportData.length; i++) {
+          var no = generatedReportData[i][Constantdata.dataNoIndex];
+          if (dataNoSet.contains(no)) {
+            var smtInvoiceNo = generatedReportData[i]
+                    [Constantdata.smtInvoiceNoIndex]
+                .toString();
+            var matCode =
+                generatedReportData[i][Constantdata.matCodeIndex].toString();
+            var inputData = await (db.select(db.inputData)
+                  ..where((tbl) =>
+                      tbl.smtInvNo.equals(smtInvoiceNo) &
+                      tbl.matCode.equals(matCode)))
+                .getSingleOrNull();
+            inputDatadata.add(inputData!);
+          }
+        }
+        // smtInvNoList.addAll(smtInvNoSet.toList());
 
         print(smtInvNoList);
 
-        var inputDatadata = await (db.select(db.inputData)
-              ..where((tbl) => tbl.smtInvNo.isIn(smtInvNoList)))
-            .get();
+        // var inputDatadata = await (db.select(db.inputData)
+        //       ..where((tbl) => tbl.smtInvNo.isIn(smtInvNoList)))
+        //     .get();
+
         print(inputDatadata);
         for (var i = 0; i < inputDatadata.length; i++) {
           var hinputData = inputDatadata[i].copyWith(
