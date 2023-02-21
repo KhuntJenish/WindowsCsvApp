@@ -43,7 +43,7 @@ class PartyPayment extends StatelessWidget {
         length: 3,
         child: Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(Get.height * 0.15),
+            preferredSize: Size.fromHeight(Get.height * 0.18),
             child: AppBar(
               // toolbarHeight: Get.height * 0.08,
               title: Text(
@@ -752,392 +752,432 @@ class PartyPaymentView extends StatelessWidget {
                         controller: verticalScroll,
                         width: width,
                         child: SizedBox(
+                          // color: Colors.red,
                           height: Get.height * 0.70,
                           width: Get.width * 2.05,
-                          child: ListView.builder(
-                            itemCount:
-                                homepageController?.generatedReportData.length,
-                            itemBuilder: (_, index) {
-                              var hospitalCommissionPaidDate = index != 0
-                                  ? homepageController
-                                          ?.generatedReportData[index]
-                                      [Constantdata.hcAmountPaidDateIndex]
-                                  : null;
-                              var doctorCommissionPaidDate = index != 0
-                                  ? homepageController
-                                          ?.generatedReportData[index]
-                                      [Constantdata.dcAmountPaidDateIndex]
-                                  : null;
-                              var technicianCommissionPaidDate = index != 0
-                                  ? homepageController
-                                          ?.generatedReportData[index]
-                                      [Constantdata.tcAmountPaidDateIndex]
-                                  : null;
-                              var date = index != 0
-                                  ? partyTypeID == 1
-                                      ? hospitalCommissionPaidDate
-                                      : partyTypeID == 2
-                                          ? doctorCommissionPaidDate
-                                          : technicianCommissionPaidDate
-                                  : DateTime.now();
-                              RxBool? isPartyChecked = true.obs;
-                              if (homepageController!
-                                      .isAllPendingPayement.value &&
-                                  homepageController!
-                                      .checkLumpsumPaymentData.isNotEmpty) {
-                                print(homepageController!
-                                    .checkLumpsumPaymentData);
-                                homepageController?.dataNoSet.clear();
-                                homepageController?.dataNoSet.addAll(
-                                    homepageController!
-                                        .checkLumpsumPaymentData);
-                              } else {
-                                index != 0
-                                    ? homepageController?.dataNoSet.add(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                // color: Colors.yellow,
+                                height: Get.height * 0.59,
+                                width: Get.width * 2.05,
+                                child: ListView.builder(
+                                  itemCount: homepageController
+                                      ?.generatedReportData.length,
+                                  itemBuilder: (_, index) {
+                                    var hospitalCommissionPaidDate = index != 0
+                                        ? homepageController
+                                                ?.generatedReportData[index]
+                                            [Constantdata.hcAmountPaidDateIndex]
+                                        : null;
+                                    var doctorCommissionPaidDate = index != 0
+                                        ? homepageController
+                                                ?.generatedReportData[index]
+                                            [Constantdata.dcAmountPaidDateIndex]
+                                        : null;
+                                    var technicianCommissionPaidDate = index !=
+                                            0
+                                        ? homepageController
+                                                ?.generatedReportData[index]
+                                            [Constantdata.tcAmountPaidDateIndex]
+                                        : null;
+                                    var date = index != 0
+                                        ? partyTypeID == 1
+                                            ? hospitalCommissionPaidDate
+                                            : partyTypeID == 2
+                                                ? doctorCommissionPaidDate
+                                                : technicianCommissionPaidDate
+                                        : DateTime.now();
+                                    RxBool? isPartyChecked = true.obs;
+                                    if (homepageController!
+                                            .isAllPendingPayement.value &&
                                         homepageController!
-                                                .generatedReportData[index]
-                                            [Constantdata.dataNoIndex])
-                                    : null;
-                              }
-                              // var isPartyChecked = true;
-                              return Visibility(
-                                visible: index != 0,
-                                replacement: Container(),
-                                child: Card(
-                                  margin: const EdgeInsets.all(3),
-                                  color: homepageController!
-                                          .checkLumpsumPaymentData
-                                          .contains(homepageController
-                                                  ?.generatedReportData[index]
-                                              [Constantdata.dataNoIndex])
-                                      ? Colors.amber[100]
-                                      : homepageController!.displayData
-                                              .contains(homepageController
-                                                      ?.generatedReportData[index]
+                                            .checkLumpsumPaymentData
+                                            .isNotEmpty) {
+                                      print(homepageController!
+                                          .checkLumpsumPaymentData);
+                                      homepageController?.dataNoSet.clear();
+                                      homepageController?.dataNoSet.addAll(
+                                          homepageController!
+                                              .checkLumpsumPaymentData);
+                                    } else {
+                                      index != 0
+                                          ? homepageController?.dataNoSet.add(
+                                              homepageController!
+                                                          .generatedReportData[
+                                                      index]
                                                   [Constantdata.dataNoIndex])
-                                          ? date.isAfter(DateTime(1800, 01, 01))
-                                              ? const Color.fromARGB(
-                                                  255, 121, 192, 124)
-                                              : Colors.white
-                                          : const Color.fromARGB(
-                                              255, 228, 136, 129),
-                                  child: SizedBox(
-                                    width: Get.width * 2,
-                                    height: Get.height * 0.04,
-                                    child: Row(
-                                      children: [
-                                        Flexible(
-                                          child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: homepageController!
-                                                    .generatedReportData[index]
-                                                    .isNotEmpty
-                                                ? homepageController!
-                                                        .generatedReportData[
-                                                            index]
-                                                        .length -
-                                                    3
-                                                : 0,
-                                            itemBuilder: (_, subIndex) {
-                                              return Container(
-                                                width: (subIndex == Constantdata.customerIndex ||
-                                                        subIndex ==
-                                                            Constantdata
-                                                                .doctorNameIndex ||
-                                                        subIndex ==
-                                                            Constantdata
-                                                                .technicianStaffIndex)
-                                                    ? Get.width * 0.2
-                                                    : (subIndex ==
-                                                                Constantdata
-                                                                    .matNameIndex ||
-                                                            subIndex ==
-                                                                Constantdata
-                                                                    .matTypeIndex)
-                                                        ? Get.width * 0.1
-                                                        : Get.width * 0.06,
-                                                // height: Get.height * 0.05,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Visibility(
-                                                  visible: (subIndex ==
-                                                              Constantdata
-                                                                  .customerIndex ||
-                                                          subIndex ==
-                                                              Constantdata
-                                                                  .doctorNameIndex ||
-                                                          subIndex ==
-                                                              Constantdata
-                                                                  .technicianStaffIndex) &&
-                                                      homepageController
-                                                              ?.partyNaNSetData
-                                                              .contains(homepageController
-                                                                          ?.generatedReportData[
-                                                                      index][
-                                                                  Constantdata
-                                                                      .dataNoIndex]) ==
-                                                          true,
-                                                  replacement: Visibility(
-                                                    visible: subIndex ==
-                                                            Constantdata
-                                                                .matTypeIndex &&
-                                                        homepageController
-                                                                ?.comissionAndmatTypeNaNSetData
-                                                                .contains(homepageController
-                                                                            ?.generatedReportData[
-                                                                        index][
-                                                                    Constantdata
-                                                                        .dataNoIndex]) ==
-                                                            true,
-                                                    replacement: AutoSizeText(
-                                                      (subIndex ==
-                                                                  Constantdata
-                                                                      .smtDocDateIndex ||
-                                                              subIndex ==
-                                                                  Constantdata
-                                                                      .distDocDateIndex)
-                                                          ? DateFormat(
-                                                                  "dd-MM-yyyy")
-                                                              .format(DateFormat(
-                                                                      "dd.MM.yyyy")
-                                                                  .parse(homepageController!
-                                                                      .generatedReportData[
-                                                                          index]
-                                                                          [
-                                                                          subIndex]
-                                                                      .toString()))
-                                                              .toString()
-                                                          : homepageController!
+                                          : null;
+                                    }
+                                    // var isPartyChecked = true;
+                                    return Visibility(
+                                      visible: index != 0,
+                                      replacement: Container(),
+                                      child: Card(
+                                        margin: const EdgeInsets.all(3),
+                                        color: homepageController!
+                                                .checkLumpsumPaymentData
+                                                .contains(homepageController
+                                                        ?.generatedReportData[index]
+                                                    [Constantdata.dataNoIndex])
+                                            ? Colors.amber[100]
+                                            : homepageController!.displayData
+                                                    .contains(homepageController
+                                                            ?.generatedReportData[index]
+                                                        [Constantdata
+                                                            .dataNoIndex])
+                                                ? date.isAfter(DateTime(1800, 01, 01))
+                                                    ? const Color.fromARGB(255, 121, 192, 124)
+                                                    : Colors.white
+                                                : const Color.fromARGB(255, 228, 136, 129),
+                                        child: SizedBox(
+                                          width: Get.width * 2,
+                                          height: Get.height * 0.04,
+                                          child: Row(
+                                            children: [
+                                              Flexible(
+                                                child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: homepageController!
+                                                          .generatedReportData[
+                                                              index]
+                                                          .isNotEmpty
+                                                      ? homepageController!
                                                               .generatedReportData[
                                                                   index]
-                                                                  [subIndex]
-                                                              .toString(),
-                                                      style: const TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.black),
-                                                      textAlign:
-                                                          homepageController!
-                                                                  .rightalign
-                                                                  .contains(
-                                                                      subIndex)
-                                                              ? TextAlign.right
-                                                              : TextAlign.left,
-                                                      minFontSize: 10,
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          width:
-                                                              Get.width * 0.06,
-                                                          child: AutoSizeText(
-                                                            homepageController!
-                                                                .generatedReportData[
-                                                                    index]
-                                                                    [subIndex]
-                                                                .toString(),
+                                                              .length -
+                                                          3
+                                                      : 0,
+                                                  itemBuilder: (_, subIndex) {
+                                                    return Container(
+                                                      width: (subIndex == Constantdata.customerIndex ||
+                                                              subIndex ==
+                                                                  Constantdata
+                                                                      .doctorNameIndex ||
+                                                              subIndex ==
+                                                                  Constantdata
+                                                                      .technicianStaffIndex)
+                                                          ? Get.width * 0.2
+                                                          : (subIndex ==
+                                                                      Constantdata
+                                                                          .matNameIndex ||
+                                                                  subIndex ==
+                                                                      Constantdata
+                                                                          .matTypeIndex)
+                                                              ? Get.width * 0.1
+                                                              : Get.width *
+                                                                  0.06,
+                                                      // height: Get.height * 0.05,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                          color: Colors.black,
+                                                        ),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Visibility(
+                                                        visible: (subIndex ==
+                                                                    Constantdata
+                                                                        .customerIndex ||
+                                                                subIndex ==
+                                                                    Constantdata
+                                                                        .doctorNameIndex ||
+                                                                subIndex ==
+                                                                    Constantdata
+                                                                        .technicianStaffIndex) &&
+                                                            homepageController
+                                                                    ?.partyNaNSetData
+                                                                    .contains(homepageController
+                                                                            ?.generatedReportData[index]
+                                                                        [
+                                                                        Constantdata
+                                                                            .dataNoIndex]) ==
+                                                                true,
+                                                        replacement: Visibility(
+                                                          visible: subIndex ==
+                                                                  Constantdata
+                                                                      .matTypeIndex &&
+                                                              homepageController
+                                                                      ?.comissionAndmatTypeNaNSetData
+                                                                      .contains(homepageController
+                                                                              ?.generatedReportData[index]
+                                                                          [
+                                                                          Constantdata
+                                                                              .dataNoIndex]) ==
+                                                                  true,
+                                                          replacement:
+                                                              AutoSizeText(
+                                                            (subIndex ==
+                                                                        Constantdata
+                                                                            .smtDocDateIndex ||
+                                                                    subIndex ==
+                                                                        Constantdata
+                                                                            .distDocDateIndex)
+                                                                ? DateFormat(
+                                                                        "dd-MM-yyyy")
+                                                                    .format(DateFormat("dd.MM.yyyy").parse(homepageController!
+                                                                        .generatedReportData[
+                                                                            index]
+                                                                            [
+                                                                            subIndex]
+                                                                        .toString()))
+                                                                    .toString()
+                                                                : homepageController!
+                                                                    .generatedReportData[
+                                                                        index][
+                                                                        subIndex]
+                                                                    .toString(),
                                                             style:
                                                                 const TextStyle(
                                                                     fontSize:
                                                                         15,
                                                                     color: Colors
                                                                         .black),
+                                                            textAlign: homepageController!
+                                                                    .rightalign
+                                                                    .contains(
+                                                                        subIndex)
+                                                                ? TextAlign
+                                                                    .right
+                                                                : homepageController!
+                                                                        .centeralign
+                                                                        .contains(
+                                                                            subIndex)
+                                                                    ? TextAlign
+                                                                        .center
+                                                                    : TextAlign
+                                                                        .left,
                                                             minFontSize: 10,
                                                             maxLines: 1,
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: Get.width * 0.15,
-                                                        child: AutoSizeText(
-                                                          homepageController!
-                                                              .generatedReportData[
-                                                                  index]
-                                                                  [subIndex]
-                                                              .toString(),
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 15,
-                                                                  color: Colors
-                                                                      .black),
-                                                          minFontSize: 10,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        Obx(
-                                          () => Visibility(
-                                            visible: !isAllPartyChecked!.value,
-                                            child: SizedBox(
-                                              width: Get.width * 0.025,
-                                              // color: Colors.red,
-                                              child: Visibility(
-                                                visible: date.isAfter(
-                                                    DateTime(1800, 01, 01)),
-                                                replacement: Checkbox(
-                                                  value: isPartyChecked.value,
-                                                  onChanged: (value) {
-                                                    isPartyChecked.value =
-                                                        value!;
-                                                    print(value);
-                                                    if (value) {
-                                                      homepageController
-                                                          ?.dataNoSet
-                                                          .add(homepageController!
+                                                          child: Row(
+                                                            children: [
+                                                              SizedBox(
+                                                                width:
+                                                                    Get.width *
+                                                                        0.06,
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  homepageController!
                                                                       .generatedReportData[
-                                                                  index][
-                                                              Constantdata
-                                                                  .dataNoIndex]);
-                                                      homepageController
-                                                              ?.partyWiseTotalAmount
-                                                              .value +=
-                                                          double.parse(
-                                                              homepageController!
-                                                                  .generatedReportData[
-                                                                      index][19]
-                                                                  .toString());
-                                                      homepageController
-                                                          ?.partyWisePayableAmount
-                                                          .value = homepageController!
-                                                              .partyWiseTotalAmount
-                                                              .value -
-                                                          homepageController!
-                                                              .partyWisePaidAmount
-                                                              .value;
-                                                    } else {
-                                                      homepageController
-                                                          ?.dataNoSet
-                                                          .remove(homepageController
-                                                              ?.generatedReportData[
-                                                                  index][
-                                                                  Constantdata
-                                                                      .dataNoIndex]
-                                                              .toString());
-                                                      homepageController
-                                                              ?.partyWiseTotalAmount
-                                                              .value -=
-                                                          double.parse(
-                                                              homepageController!
-                                                                  .generatedReportData[
-                                                                      index][19]
-                                                                  .toString());
-                                                      homepageController
-                                                          ?.partyWisePayableAmount
-                                                          .value = homepageController!
-                                                              .partyWiseTotalAmount
-                                                              .value -
-                                                          homepageController!
-                                                              .partyWisePaidAmount
-                                                              .value;
-                                                    }
-                                                    print(homepageController
-                                                        ?.partyWiseTotalAmount
-                                                        .value);
-
-                                                    print(homepageController
-                                                        ?.dataNoSet);
-                                                    // homepageController?.isAllPartySelected.refresh();
-                                                  },
-                                                ),
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    print('payment Back');
-                                                    print(homepageController
-                                                        ?.generatedReportData[
-                                                            index][Constantdata
-                                                                .smtInvoiceNoIndex]
-                                                        .toString());
-                                                    var smtInvNo = homepageController
-                                                        ?.generatedReportData[
-                                                            index][Constantdata
-                                                                .smtInvoiceNoIndex]
-                                                        .toString();
-                                                    Get.defaultDialog(
-                                                      title: 'Payment Back',
-                                                      middleText:
-                                                          'Are you sure you want to back payment?',
-                                                      textConfirm: 'Yes',
-                                                      textCancel: 'No',
-                                                      confirmTextColor:
-                                                          Colors.white,
-                                                      content: Container(
-                                                        child: Column(
-                                                          children: [
-                                                            Text(
-                                                              'Payment Back',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    Get.height *
-                                                                        0.02,
+                                                                          index]
+                                                                          [
+                                                                          subIndex]
+                                                                      .toString(),
+                                                                  style: const TextStyle(
+                                                                      fontSize:
+                                                                          15,
+                                                                      color: Colors
+                                                                          .black),
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxLines: 1,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
                                                               ),
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Text(
-                                                              'Are you want to Process $smtInvNo smtInvNo?',
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      Get.height *
-                                                                          0.02),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            SizedBox(
+                                                              width: Get.width *
+                                                                  0.15,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                homepageController!
+                                                                    .generatedReportData[
+                                                                        index][
+                                                                        subIndex]
+                                                                    .toString(),
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: Colors
+                                                                        .black),
+                                                                minFontSize: 10,
+                                                                maxLines: 1,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
                                                             ),
                                                           ],
                                                         ),
                                                       ),
-                                                      onConfirm: () {
-                                                        Get.back();
-                                                        // !Todo: Payment Back
-                                                        homepageController!
-                                                            .reversePaymentProcess(
-                                                                pID:
-                                                                    partyTypeID,
-                                                                paymentbackRecord:
-                                                                    homepageController!
-                                                                            .generatedReportData[
-                                                                        index]);
-                                                      },
                                                     );
                                                   },
-                                                  icon: const Icon(
-                                                      Icons.arrow_back_ios),
                                                 ),
                                               ),
-                                            ),
+                                              Obx(
+                                                () => Visibility(
+                                                  visible:
+                                                      !isAllPartyChecked!.value,
+                                                  child: SizedBox(
+                                                    width: Get.width * 0.025,
+                                                    // color: Colors.red,
+                                                    child: Visibility(
+                                                      visible: date.isAfter(
+                                                          DateTime(
+                                                              1800, 01, 01)),
+                                                      replacement: Checkbox(
+                                                        value: isPartyChecked
+                                                            .value,
+                                                        onChanged: (value) {
+                                                          isPartyChecked.value =
+                                                              value!;
+                                                          print(value);
+                                                          if (value) {
+                                                            homepageController
+                                                                ?.dataNoSet
+                                                                .add(homepageController!
+                                                                            .generatedReportData[
+                                                                        index][
+                                                                    Constantdata
+                                                                        .dataNoIndex]);
+                                                            homepageController
+                                                                    ?.partyWiseTotalAmount
+                                                                    .value +=
+                                                                double.parse(homepageController!
+                                                                    .generatedReportData[
+                                                                        index]
+                                                                        [19]
+                                                                    .toString());
+                                                            homepageController
+                                                                ?.partyWisePayableAmount
+                                                                .value = homepageController!
+                                                                    .partyWiseTotalAmount
+                                                                    .value -
+                                                                homepageController!
+                                                                    .partyWisePaidAmount
+                                                                    .value;
+                                                          } else {
+                                                            homepageController
+                                                                ?.dataNoSet
+                                                                .remove(homepageController
+                                                                    ?.generatedReportData[
+                                                                        index][
+                                                                        Constantdata
+                                                                            .dataNoIndex]
+                                                                    .toString());
+                                                            homepageController
+                                                                    ?.partyWiseTotalAmount
+                                                                    .value -=
+                                                                double.parse(homepageController!
+                                                                    .generatedReportData[
+                                                                        index]
+                                                                        [19]
+                                                                    .toString());
+                                                            homepageController
+                                                                ?.partyWisePayableAmount
+                                                                .value = homepageController!
+                                                                    .partyWiseTotalAmount
+                                                                    .value -
+                                                                homepageController!
+                                                                    .partyWisePaidAmount
+                                                                    .value;
+                                                          }
+                                                          print(homepageController
+                                                              ?.partyWiseTotalAmount
+                                                              .value);
+
+                                                          print(
+                                                              homepageController
+                                                                  ?.dataNoSet);
+                                                          // homepageController?.isAllPartySelected.refresh();
+                                                        },
+                                                      ),
+                                                      child: IconButton(
+                                                        onPressed: () {
+                                                          print('payment Back');
+                                                          print(homepageController
+                                                              ?.generatedReportData[
+                                                                  index][
+                                                                  Constantdata
+                                                                      .smtInvoiceNoIndex]
+                                                              .toString());
+                                                          var smtInvNo =
+                                                              homepageController
+                                                                  ?.generatedReportData[
+                                                                      index][
+                                                                      Constantdata
+                                                                          .smtInvoiceNoIndex]
+                                                                  .toString();
+                                                          Get.defaultDialog(
+                                                            title:
+                                                                'Payment Back',
+                                                            middleText:
+                                                                'Are you sure you want to back payment?',
+                                                            textConfirm: 'Yes',
+                                                            textCancel: 'No',
+                                                            confirmTextColor:
+                                                                Colors.white,
+                                                            content: Container(
+                                                              child: Column(
+                                                                children: [
+                                                                  Text(
+                                                                    'Payment Back',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          Get.height *
+                                                                              0.02,
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Text(
+                                                                    'Are you want to Process $smtInvNo smtInvNo?',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            Get.height *
+                                                                                0.02),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            onConfirm: () {
+                                                              Get.back();
+                                                              // !Todo: Payment Back
+                                                              homepageController!.reversePaymentProcess(
+                                                                  pID:
+                                                                      partyTypeID,
+                                                                  paymentbackRecord:
+                                                                      homepageController!
+                                                                              .generatedReportData[
+                                                                          index]);
+                                                            },
+                                                          );
+                                                        },
+                                                        icon: const Icon(Icons
+                                                            .arrow_back_ios),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
+                              ),
+                            ],
                           ),
                         ),
                       ),

@@ -71,7 +71,24 @@ class HomepageController extends GetxController {
     start: DateTime(DateTime.now().year, DateTime.now().month, 1),
     end: DateTime.now(),
   ).obs;
-  List<int> rightalign = [8, 11, 12, 16, 17, 18, 19, 20, 21, 22, 23];
+  List<int> rightalign = [
+    Constantdata.salesAmountIndex,
+    Constantdata.totalSalesIndex,
+    Constantdata.totalPurchaseIndex,
+    Constantdata.purchaseTaxableIndex,
+    Constantdata.hcAmountIndex,
+    Constantdata.dcAmountIndex,
+    Constantdata.tcAmountIndex,
+  ];
+  List<int> centeralign = [
+    Constantdata.hcomissionIndex,
+    Constantdata.dcomissionIndex,
+    Constantdata.tcomissionIndex,
+    Constantdata.dataNoIndex,
+    Constantdata.quantityIndex,
+    Constantdata.smtDocDateIndex,
+    Constantdata.distDocDateIndex,
+  ];
 
   // scrollwork
 
@@ -482,7 +499,9 @@ class HomepageController extends GetxController {
             date == DateTime(1800, 01, 01)
                 ? ''
                 : DateFormat('dd-MM-yyyy').format(date),
-            newList[j].type.toString(),
+            newList[j].type == 'ExtraPayment'
+                ? newList[j].ledgerNote.toString()
+                : newList[j].type.toString(),
             drAmount < 1 ? '' : drAmount.toStringAsFixed(2),
             crAmount < 1 ? '' : crAmount.toStringAsFixed(2),
             extraCrAmount < 1 ? '' : extraCrAmount.toStringAsFixed(2),
@@ -2615,7 +2634,7 @@ class HomepageController extends GetxController {
                 print(result);
                 // 'data insert Successful'.successSnackbar;
               }
-              'data insert Successful'.successDailog;
+              'data Updated Successful'.successDailog;
               Timer(const Duration(seconds: 2), () {
                 Get.back();
               });

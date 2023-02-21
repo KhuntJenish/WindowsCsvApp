@@ -397,7 +397,7 @@ class GeneratedReport extends StatelessWidget {
                               margin: const EdgeInsets.all(3),
                               color: lCOLOR_ACCENT,
                               child: SizedBox(
-                                width: Get.width * 2,
+                                width: Get.width * 2.05,
                                 height: Get.height * 0.05,
                                 child: ListView.builder(
                                     itemCount: _homepageController
@@ -471,6 +471,7 @@ class GeneratedReport extends StatelessWidget {
                           controller: verticalScroll,
                           width: width,
                           child: SizedBox(
+                            // color: Colors.red,
                             height: Get.height * 0.70,
                             width: Get.width * 2,
                             child: ListView.builder(
@@ -518,7 +519,7 @@ class GeneratedReport extends StatelessWidget {
                                         : const Color.fromARGB(
                                             255, 228, 136, 129),
                                     child: SizedBox(
-                                      width: Get.width * 2,
+                                      width: Get.width * 2.05,
                                       height: Get.height * 0.04,
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
@@ -614,7 +615,12 @@ class GeneratedReport extends StatelessWidget {
                                                           .rightalign
                                                           .contains(subIndex)
                                                       ? TextAlign.right
-                                                      : TextAlign.left,
+                                                      : _homepageController
+                                                              .centeralign
+                                                              .contains(
+                                                                  subIndex)
+                                                          ? TextAlign.center
+                                                          : TextAlign.left,
                                                   minFontSize: 10,
                                                   maxLines: 1,
                                                   overflow:

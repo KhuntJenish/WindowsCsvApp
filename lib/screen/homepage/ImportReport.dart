@@ -365,7 +365,24 @@ class ImportReport extends StatelessWidget {
 
                       //**Data Ui Part
                       _homepageController.pendingReportData.isEmpty
-                          ? Container()
+                          ? Container(
+                              margin: EdgeInsets.only(
+                                  left: Get.width * 0.25,
+                                  top: Get.width * 0.05),
+                              height: Get.height * 0.5,
+                              width: Get.width * 0.5,
+                              // color: Colors.red,
+                              child: Center(
+                                  child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/suggestion_1.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                  // const Text('Empty Report'),
+                                ],
+                              )),
+                            )
                           : Card(
                               margin: const EdgeInsets.all(3),
                               color: lCOLOR_ACCENT,
@@ -437,7 +454,7 @@ class ImportReport extends StatelessWidget {
                                                         .isNotEmpty,
                                                 child: SizedBox(
                                                   // width: Get.width * 0.03,
-                                                  height: Get.height * 0.03,
+                                                  height: Get.height * 0.035,
                                                   child: ElevatedButton(
                                                     onPressed: () async {
                                                       //Add Party Data According Index like Hospital,Doctor,technician
@@ -455,7 +472,7 @@ class ImportReport extends StatelessWidget {
                                                         style: TextStyle(
                                                           fontSize: 15,
                                                         ),
-                                                        minFontSize: 10,
+                                                        minFontSize: 7,
                                                         maxLines: 1,
                                                         overflow: TextOverflow
                                                             .ellipsis),
@@ -586,7 +603,11 @@ class ImportReport extends StatelessWidget {
                                                         .rightalign
                                                         .contains(subIndex)
                                                     ? TextAlign.right
-                                                    : TextAlign.left,
+                                                    : _homepageController
+                                                            .centeralign
+                                                            .contains(subIndex)
+                                                        ? TextAlign.center
+                                                        : TextAlign.left,
                                                 minFontSize: 10,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,

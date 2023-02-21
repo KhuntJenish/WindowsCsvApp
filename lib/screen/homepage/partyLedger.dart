@@ -505,7 +505,9 @@ class PartyLedger extends StatelessWidget {
                                           SizedBox(
                                             width: Get.width * 0.2,
                                             child: Text(
-                                              element.type,
+                                              element.type == 'ExtraPayment'
+                                                  ? element.ledgerNote
+                                                  : element.type,
                                               style: textTheme.bodyLarge
                                                   ?.copyWith(
                                                       fontSize:

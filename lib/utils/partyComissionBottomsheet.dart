@@ -519,14 +519,6 @@ class PartyComissionBottomSheet extends StatelessWidget {
                   print(value);
 
                   if (value.isNotEmpty) {
-                    if (btnText == 'Add Comission' &&
-                        itemAmountController.text.isNotEmpty) {
-                      itemAmount = double.parse(itemAmountController.text);
-                      totalComission.value +=
-                          double.parse(newComissionController!.text);
-                      totalComissionAmount.value +=
-                          double.parse(newComissionAmountController!.text);
-                    }
                     newComissionAmountController?.text =
                         ((double.parse(value) * itemAmount) / 100)
                             .toStringAsFixed(2);
@@ -559,6 +551,18 @@ class PartyComissionBottomSheet extends StatelessWidget {
                             ? 0.0
                             : double.parse(
                                 technicianComissionAmountController.text);
+
+                    if ((btnText == 'Add Comission' ||
+                            btnText == 'Update Comission') &&
+                        itemAmountController.text.isNotEmpty) {
+                      itemAmount = double.parse(itemAmountController.text);
+                      totalComission.value =
+                          hcomission + dcomission + tcomission;
+
+                      totalComissionAmount.value = hcomissionAmount +
+                          dcomissionAmount +
+                          tcomissionAmount;
+                    }
 
                     totalComission.value = hcomission + dcomission + tcomission;
 
@@ -596,21 +600,10 @@ class PartyComissionBottomSheet extends StatelessWidget {
                 onChanged: (value) {
                   print(value);
                   if (value.isNotEmpty) {
-                    if (btnText == 'Add Comission' &&
-                        itemAmountController.text.isNotEmpty) {
-                      itemAmount = double.parse(itemAmountController.text);
-                      totalComissionAmount.value +=
-                          double.parse(newComissionAmountController!.text);
-                      totalComission.value +=
-                          double.parse(newComissionController!.text);
-                    }
                     newComissionController?.text =
                         ((double.parse(value) * 100) / itemAmount)
                             .toStringAsFixed(2);
-                    // totalComissionAmount.value +=
-                    //     double.parse(newComissionAmountController!.text);
-                    // totalComission.value +=
-                    //     double.parse(newComissionController!.text);
+
                     double hcomission = hospitalComissionController.text == ''
                         ? 0.0
                         : double.parse(hospitalComissionController.text);
@@ -639,6 +632,18 @@ class PartyComissionBottomSheet extends StatelessWidget {
                             ? 0.0
                             : double.parse(
                                 technicianComissionAmountController.text);
+
+                    if ((btnText == 'Add Comission' ||
+                            btnText == 'Update Comission') &&
+                        itemAmountController.text.isNotEmpty) {
+                      itemAmount = double.parse(itemAmountController.text);
+                      totalComission.value =
+                          hcomission + dcomission + tcomission;
+
+                      totalComissionAmount.value = hcomissionAmount +
+                          dcomissionAmount +
+                          tcomissionAmount;
+                    }
 
                     totalComission.value = hcomission + dcomission + tcomission;
 

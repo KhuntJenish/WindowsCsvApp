@@ -94,9 +94,9 @@ class MyApp extends StatelessWidget {
   Future testWindowFunctions() async {
     Size size = await DesktopWindow.getWindowSize();
     print(size);
-    await DesktopWindow.setWindowSize(const Size(1000, 800));
+    await DesktopWindow.setWindowSize(const Size(1800, 1000));
 
-    await DesktopWindow.setMinWindowSize(const Size(1000, 800));
+    await DesktopWindow.setMinWindowSize(const Size(1800, 1000));
     // await DesktopWindow.setMaxWindowSize(Size(800, 800));
 
     // await DesktopWindow.resetMaxWindowSize();
@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget {
 
     print('current User');
     return ScreenUtilInit(
-      designSize: const Size(360, 800),
+      designSize: const Size(1800, 1000),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
