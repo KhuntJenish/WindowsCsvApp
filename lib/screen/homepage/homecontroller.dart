@@ -66,6 +66,7 @@ class HomepageController extends GetxController {
   RxDouble partyWiseTotalAmount = 0.0.obs;
   RxDouble partyWisePaidAmount = 0.0.obs;
   RxDouble partyWisePayableAmount = 0.0.obs;
+  RxDouble partyWisePendingPaidAmount = 0.0.obs;
   var db = Constantdata.db;
   var dateRange = DateTimeRange(
     start: DateTime(DateTime.now().year, DateTime.now().month, 1),
@@ -88,6 +89,18 @@ class HomepageController extends GetxController {
     Constantdata.quantityIndex,
     Constantdata.smtDocDateIndex,
     Constantdata.distDocDateIndex,
+  ];
+  List<int> hospitalComissionList = [
+    Constantdata.hcomissionIndex,
+    Constantdata.hcAmountIndex,
+  ];
+  List<int> doctorComissionList = [
+    Constantdata.dcomissionIndex,
+    Constantdata.dcAmountIndex,
+  ];
+  List<int> technicianComissionList = [
+    Constantdata.tcomissionIndex,
+    Constantdata.tcAmountIndex,
   ];
 
   // scrollwork
@@ -155,6 +168,281 @@ class HomepageController extends GetxController {
         dateRange.value = tempDateRange;
         break;
       default:
+    }
+  }
+
+  createPartyPaymentReportPdf() async {
+    try {
+      isLoading.value = true;
+      final pdf = pw.Document();
+      List<List<dynamic>> list = [];
+      var partyType = defaultParty.value.ptID;
+      for (var i = 0; i < generatedReportData.length; i++) {
+        List subList = [];
+        subList.add(generatedReportData[i][Constantdata.smtDocDateIndex]
+            .toString()); //smt Date
+        subList.add(generatedReportData[i][Constantdata.smtInvoiceNoIndex]
+            .toString()); //smt inv no
+        // subList.add(generatedReportData[i][6].toString());//material name
+        subList.add(generatedReportData[i][Constantdata.matTypeIndex]
+            .toString()); //material type
+        subList.add(generatedReportData[i][Constantdata.custBillCityIndex]
+            .toString()); //customer billcity
+        subList.add(generatedReportData[i][Constantdata.totalSalesIndex]
+            .toString()); //total sale
+
+        if (partyType == 1) {
+          subList.add(generatedReportData[i][Constantdata.customerIndex]
+              .toString()); //h name
+          subList.add(generatedReportData[i][Constantdata.hcomissionIndex]
+              .toString()); //h comission
+          subList.add(generatedReportData[i][Constantdata.hcAmountIndex]
+              .toString()); //h comission amount
+        } else if (partyType == 2) {
+          subList.add(generatedReportData[i][Constantdata.doctorNameIndex]
+              .toString()); //d name
+          subList.add(generatedReportData[i][Constantdata.dcomissionIndex]
+              .toString()); //d comission
+          subList.add(generatedReportData[i][Constantdata.dcAmountIndex]
+              .toString()); //d comission amount
+        } else {
+          subList.add(generatedReportData[i][Constantdata.technicianStaffIndex]
+              .toString()); //t name
+
+          subList.add(generatedReportData[i][Constantdata.tcomissionIndex]
+              .toString()); //t comission
+          subList.add(generatedReportData[i][Constantdata.tcAmountIndex]
+              .toString()); //t comission amount
+        }
+
+        // print(subList);
+        list.add(subList);
+      }
+      print(list);
+      print(list.length);
+
+      int a = 0;
+      List<List<dynamic>> newList = [];
+      List<List<List<dynamic>>> mainList = [];
+      double saletotal = 0;
+      List<double> saletotalList = [];
+
+      double comissiontotal = 0;
+      double hComissiontotal = 0;
+      double dComissiontotal = 0;
+      double tComissiontotal = 0;
+      List<double> comissiontotalList = [];
+      List<double> hComissiontotalList = [];
+      List<double> dComissiontotalList = [];
+      List<double> tComissiontotalList = [];
+
+      for (var i = 0; i < list.length; i++) {
+        if (a < 15) {
+          newList.add(list[i]);
+          if (i > 0) {
+            saletotal = saletotal + double.parse(list[i][4].toString());
+            // comissiontotal =
+            //     comissiontotal + double.parse(list[i][8].toString());
+            if (partyType == 1) {
+              hComissiontotal += double.parse(list[i][7].toString());
+            } else if (partyType == 2) {
+              dComissiontotal += double.parse(list[i][7].toString());
+            } else {
+              tComissiontotal += double.parse(list[i][7].toString());
+            }
+            print(saletotal);
+            print(hComissiontotal);
+            print(dComissiontotal);
+            print(tComissiontotal);
+          }
+          a++;
+          if (a >= list.length) {
+            saletotalList.add(saletotal);
+            // comissiontotalList.add(comissiontotal);
+            hComissiontotalList.add(hComissiontotal);
+            dComissiontotalList.add(dComissiontotal);
+            tComissiontotalList.add(tComissiontotal);
+            newList.add([
+              'Total',
+              '',
+              '',
+              '',
+              saletotal.toStringAsFixed(2),
+              '',
+              '',
+              partyType == 1
+                  ? hComissiontotal.toStringAsFixed(2)
+                  : partyType == 2
+                      ? dComissiontotal.toStringAsFixed(2)
+                      : tComissiontotal.toStringAsFixed(2),
+            ]);
+            print(newList);
+            print(newList.length);
+            mainList.add(newList);
+
+            saletotal = 0;
+            // comissiontotal = 0;
+            hComissiontotal = 0;
+            dComissiontotal = 0;
+            tComissiontotal = 0;
+            saletotalList = [];
+            // comissiontotalList = [];
+            hComissiontotalList = [];
+            dComissiontotalList = [];
+            tComissiontotalList = [];
+            print('half record');
+          }
+        } else {
+          saletotalList.add(saletotal);
+          // comissiontotalList.add(comissiontotal);
+          hComissiontotalList.add(hComissiontotal);
+          dComissiontotalList.add(dComissiontotal);
+          tComissiontotalList.add(tComissiontotal);
+          newList.add([
+            'Total',
+            '',
+            '',
+            '',
+            saletotal.toStringAsFixed(2),
+            '',
+            '',
+            partyType == 1
+                ? hComissiontotal.toStringAsFixed(2)
+                : partyType == 2
+                    ? dComissiontotal.toStringAsFixed(2)
+                    : tComissiontotal.toStringAsFixed(2),
+          ]);
+          print(newList);
+          print(newList.length);
+
+          mainList.add(newList);
+          saletotal = 0;
+          // saletotalList = [];
+          // comissiontotalList = [];
+          // comissiontotal = 0;
+          hComissiontotal = 0;
+          dComissiontotal = 0;
+          tComissiontotal = 0;
+
+          newList = [];
+
+          a = 0;
+        }
+      }
+      if (mainList.length > 1) {
+        print(mainList);
+        List<List<dynamic>> lastList = [];
+        lastList.addAll(mainList.elementAt(mainList.length - 1));
+        print(saletotalList);
+        // print(comissiontotalList);
+        for (var i = 0; i < saletotalList.length; i++) {
+          saletotal += saletotalList[i];
+          // comissiontotal = comissiontotal + comissiontotalList[i];
+          hComissiontotal += hComissiontotalList[i];
+          dComissiontotal += dComissiontotalList[i];
+          tComissiontotal += tComissiontotalList[i];
+        }
+
+        lastList.add([
+          'Grant_Total',
+          '',
+          '',
+          '',
+          saletotal.toStringAsFixed(2),
+          '',
+          '',
+          partyType == 1
+              ? hComissiontotal.toStringAsFixed(2)
+              : partyType == 2
+                  ? dComissiontotal.toStringAsFixed(2)
+                  : tComissiontotal.toStringAsFixed(2),
+        ]);
+        print(mainList);
+        mainList.removeLast();
+        print(mainList);
+        mainList.add(lastList);
+        print(mainList);
+      }
+
+      for (var i = 0; i < mainList.length; i++) {
+        pdf.addPage(
+          pw.Page(
+            orientation: pw.PageOrientation.landscape,
+            margin:
+                const pw.EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            pageFormat: PdfPageFormat.a4,
+            build: (pw.Context context) {
+              return pw.Column(
+                children: [
+                  pw.Table.fromTextArray(
+                    columnWidths: {
+                      0: const pw.FlexColumnWidth(1.2),
+                      1: const pw.FlexColumnWidth(1),
+                      2: const pw.FlexColumnWidth(1),
+                      3: const pw.FlexColumnWidth(1),
+                      4: const pw.FlexColumnWidth(1),
+                      5: const pw.FlexColumnWidth(2),
+                      6: const pw.FlexColumnWidth(1),
+                      7: const pw.FlexColumnWidth(1),
+                    },
+                    cellAlignments: {
+                      0: pw.Alignment.centerLeft,
+                      1: pw.Alignment.centerLeft,
+                      2: pw.Alignment.centerLeft,
+                      3: pw.Alignment.centerLeft,
+                      4: pw.Alignment.centerRight,
+                      5: pw.Alignment.centerLeft,
+                      6: pw.Alignment.centerRight,
+                      7: pw.Alignment.centerRight,
+                    },
+                    headerAlignments: {
+                      0: pw.Alignment.center,
+                      1: pw.Alignment.center,
+                      2: pw.Alignment.center,
+                      3: pw.Alignment.center,
+                      4: pw.Alignment.center,
+                      5: pw.Alignment.center,
+                      6: pw.Alignment.center,
+                      7: pw.Alignment.center,
+                    },
+                    context: context,
+                    data: mainList[i],
+                    cellStyle: const pw.TextStyle(fontSize: 7),
+                    headerStyle: pw.TextStyle(
+                        fontSize: 8, fontWeight: pw.FontWeight.bold),
+                  ),
+                ],
+              ); // Center
+            },
+          ),
+        );
+      }
+
+      final filename = "invoice_${DateTime.now().microsecond}_$isNumber.pdf";
+      final output = await getDownloadsDirectory();
+      final file = File("${output?.path}\\$filename");
+      print(file.path);
+      // final file = File("example.pdf");
+      await file.writeAsBytes(await pdf.save());
+      print('save');
+      // 'pdf Download SuccessFull.😀'.successSnackbar;
+      'pdf Download SuccessFull.😀'.successDailog;
+      Timer(const Duration(seconds: 2), () {
+        Get.back();
+      });
+      // final String filePath = testFile.absolute.path;
+      final Uri uri = Uri.file(file.path);
+      if (await canLaunchUrl(uri)) {
+        // print("launch url : $uri");
+        await launchUrl(uri);
+      } else {
+        print("cannot launch url : $uri");
+      }
+      isNumber.value++;
+      isLoading.value = false;
+    } catch (e) {
+      print(e);
+      e.toString().errorSnackbar;
     }
   }
 
@@ -1180,6 +1468,8 @@ class HomepageController extends GetxController {
                 .add(generatedReportData[i][Constantdata.smtInvoiceNoIndex]);
             dataNoSet.add(generatedReportData[i][Constantdata.dataNoIndex]);
             partyWisePayableAmount.value = totalPayAmount;
+            partyWisePendingPaidAmount.value =
+                (lumpsumAmount - totalPayAmount).abs();
           } else {
             isReturn = false;
 
@@ -1240,6 +1530,8 @@ class HomepageController extends GetxController {
       comissionAndmatTypeNaNSetData.clear();
       partyNaNSetData.clear();
       var serachData = [];
+
+      print(selectedParty);
       ptID = selectedParty?.ptID;
       //*Duration declaraion/
       d.Expression<bool> comissionPaidDate = ptID == 1

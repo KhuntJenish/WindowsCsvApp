@@ -443,33 +443,38 @@ class PartyPaymentView extends StatelessWidget {
                                             ?.checkLumpsumPaymentData
                                             .clear();
                                         amountController.clear();
-
-                                        await homepageController
-                                            ?.getGeneratedSearchData(
-                                          start: homepageController
-                                              ?.dateRange.value.start,
-                                          end: homepageController
-                                              ?.dateRange.value.end,
-                                          selectedParty: homepageController
-                                              ?.defaultParty.value,
-                                          isAllPartySelected: false,
-                                          isAllMaterialTypeSelected:
-                                              homepageController
-                                                  ?.isAllMaterialTypeSelected
-                                                  .value,
-                                          isAllPartyCitySelected:
-                                              homepageController
-                                                  ?.isAllPartyCitySelected
-                                                  .value,
-                                          selectedMaterialType:
-                                              homepageController
-                                                  ?.defaultMaterialType.value,
-                                          selectedPartyCity: homepageController
-                                              ?.defaultPartyCity.value,
-                                          isAllPendingPayement:
-                                              homepageController
-                                                  ?.isAllPendingPayement.value,
-                                        );
+                                        if (partyList!.isNotEmpty) {
+                                          await homepageController
+                                              ?.getGeneratedSearchData(
+                                            start: homepageController
+                                                ?.dateRange.value.start,
+                                            end: homepageController
+                                                ?.dateRange.value.end,
+                                            selectedParty: homepageController
+                                                ?.defaultParty.value,
+                                            isAllPartySelected: false,
+                                            isAllMaterialTypeSelected:
+                                                homepageController
+                                                    ?.isAllMaterialTypeSelected
+                                                    .value,
+                                            isAllPartyCitySelected:
+                                                homepageController
+                                                    ?.isAllPartyCitySelected
+                                                    .value,
+                                            selectedMaterialType:
+                                                homepageController
+                                                    ?.defaultMaterialType.value,
+                                            selectedPartyCity:
+                                                homepageController
+                                                    ?.defaultPartyCity.value,
+                                            isAllPendingPayement:
+                                                homepageController
+                                                    ?.isAllPendingPayement
+                                                    .value,
+                                          );
+                                        } else {
+                                          "No Party Found".errorSnackbar;
+                                        }
                                       },
                                     ),
                                   ),
@@ -498,11 +503,11 @@ class PartyPaymentView extends StatelessWidget {
                                             ?.generatedReportData);
 
                                         await homepageController
-                                            ?.createReportPdf();
+                                            ?.createPartyPaymentReportPdf();
                                       },
                                     ),
                                   ),
-                                  //** pdf button
+                                  //** Extra Pay button
                                   Container(
                                     // margin: const EdgeInsets.all(0),
                                     child: Button(
@@ -665,7 +670,7 @@ class PartyPaymentView extends StatelessWidget {
                           margin: const EdgeInsets.all(3),
                           color: lCOLOR_ACCENT,
                           child: SizedBox(
-                            width: Get.width * 2.05,
+                            width: Get.width * 1.8,
                             height: Get.height * 0.05,
                             child: Row(
                               children: [
@@ -676,50 +681,75 @@ class PartyPaymentView extends StatelessWidget {
                                       scrollDirection: Axis.horizontal,
                                       // shrinkWrap: true,
                                       itemBuilder: (_, subIndex) {
-                                        return Container(
-                                          // color: Colors.red,
-                                          width: (subIndex ==
-                                                      Constantdata
-                                                          .customerIndex ||
-                                                  subIndex ==
-                                                      Constantdata
-                                                          .doctorNameIndex ||
-                                                  subIndex ==
-                                                      Constantdata
-                                                          .technicianStaffIndex)
-                                              ? Get.width * 0.2
-                                              : (subIndex ==
-                                                          Constantdata
-                                                              .matNameIndex ||
-                                                      subIndex ==
-                                                          Constantdata
-                                                              .matTypeIndex)
-                                                  ? Get.width * 0.1
-                                                  : Get.width * 0.06,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          // height: Get.height * 0.05,
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: FittedBox(
-                                            fit: BoxFit.scaleDown,
-                                            child: Text(
-                                              homepageController!
-                                                  .generatedReportData[0]
-                                                      [subIndex]
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white),
-                                              // minFontSize: 10,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        );
+                                        return (partyTypeID == 1
+                                                ? (!homepageController!
+                                                        .doctorComissionList
+                                                        .contains(subIndex) &&
+                                                    !homepageController!
+                                                        .technicianComissionList
+                                                        .contains(subIndex))
+                                                : partyTypeID == 2
+                                                    ? (!homepageController!
+                                                            .hospitalComissionList
+                                                            .contains(
+                                                                subIndex) &&
+                                                        !homepageController!
+                                                            .technicianComissionList
+                                                            .contains(subIndex))
+                                                    : (!homepageController!
+                                                            .hospitalComissionList
+                                                            .contains(
+                                                                subIndex) &&
+                                                        !homepageController!
+                                                            .doctorComissionList
+                                                            .contains(
+                                                                subIndex)))
+                                            ? Container(
+                                                // color: Colors.red,
+                                                width: (subIndex == Constantdata.customerIndex ||
+                                                        subIndex ==
+                                                            Constantdata
+                                                                .doctorNameIndex ||
+                                                        subIndex ==
+                                                            Constantdata
+                                                                .technicianStaffIndex)
+                                                    ? Get.width * 0.2
+                                                    : (subIndex ==
+                                                                Constantdata
+                                                                    .matNameIndex ||
+                                                            subIndex ==
+                                                                Constantdata
+                                                                    .matTypeIndex)
+                                                        ? Get.width * 0.1
+                                                        : Get.width * 0.06,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                // height: Get.height * 0.05,
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text(
+                                                    homepageController!
+                                                        .generatedReportData[0]
+                                                            [subIndex]
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white),
+                                                    // minFontSize: 10,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              )
+                                            : Container();
                                       }),
                                 ),
                                 Obx(
@@ -754,13 +784,13 @@ class PartyPaymentView extends StatelessWidget {
                         child: SizedBox(
                           // color: Colors.red,
                           height: Get.height * 0.70,
-                          width: Get.width * 2.05,
+                          width: Get.width * 1.8,
                           child: Column(
                             children: [
                               SizedBox(
                                 // color: Colors.yellow,
                                 height: Get.height * 0.59,
-                                width: Get.width * 2.05,
+                                width: Get.width * 1.8,
                                 child: ListView.builder(
                                   itemCount: homepageController
                                       ?.generatedReportData.length,
@@ -850,130 +880,121 @@ class PartyPaymentView extends StatelessWidget {
                                                           3
                                                       : 0,
                                                   itemBuilder: (_, subIndex) {
-                                                    return Container(
-                                                      width: (subIndex == Constantdata.customerIndex ||
-                                                              subIndex ==
-                                                                  Constantdata
-                                                                      .doctorNameIndex ||
-                                                              subIndex ==
-                                                                  Constantdata
-                                                                      .technicianStaffIndex)
-                                                          ? Get.width * 0.2
-                                                          : (subIndex ==
-                                                                      Constantdata
-                                                                          .matNameIndex ||
-                                                                  subIndex ==
-                                                                      Constantdata
-                                                                          .matTypeIndex)
-                                                              ? Get.width * 0.1
-                                                              : Get.width *
-                                                                  0.06,
-                                                      // height: Get.height * 0.05,
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Visibility(
-                                                        visible: (subIndex ==
-                                                                    Constantdata
-                                                                        .customerIndex ||
-                                                                subIndex ==
-                                                                    Constantdata
-                                                                        .doctorNameIndex ||
-                                                                subIndex ==
-                                                                    Constantdata
-                                                                        .technicianStaffIndex) &&
-                                                            homepageController
-                                                                    ?.partyNaNSetData
-                                                                    .contains(homepageController
-                                                                            ?.generatedReportData[index]
-                                                                        [
-                                                                        Constantdata
-                                                                            .dataNoIndex]) ==
-                                                                true,
-                                                        replacement: Visibility(
-                                                          visible: subIndex ==
-                                                                  Constantdata
-                                                                      .matTypeIndex &&
-                                                              homepageController
-                                                                      ?.comissionAndmatTypeNaNSetData
-                                                                      .contains(homepageController
-                                                                              ?.generatedReportData[index]
-                                                                          [
-                                                                          Constantdata
-                                                                              .dataNoIndex]) ==
-                                                                  true,
-                                                          replacement:
-                                                              AutoSizeText(
-                                                            (subIndex ==
-                                                                        Constantdata
-                                                                            .smtDocDateIndex ||
+                                                    return (partyTypeID == 1
+                                                            ? (!homepageController!
+                                                                    .doctorComissionList
+                                                                    .contains(
+                                                                        subIndex) &&
+                                                                !homepageController!
+                                                                    .technicianComissionList
+                                                                    .contains(
+                                                                        subIndex))
+                                                            : partyTypeID == 2
+                                                                ? (!homepageController!
+                                                                        .hospitalComissionList
+                                                                        .contains(
+                                                                            subIndex) &&
+                                                                    !homepageController!
+                                                                        .technicianComissionList
+                                                                        .contains(
+                                                                            subIndex))
+                                                                : (!homepageController!
+                                                                        .hospitalComissionList
+                                                                        .contains(
+                                                                            subIndex) &&
+                                                                    !homepageController!
+                                                                        .doctorComissionList
+                                                                        .contains(
+                                                                            subIndex)))
+                                                        ? Container(
+                                                            width: (subIndex == Constantdata.customerIndex ||
                                                                     subIndex ==
                                                                         Constantdata
-                                                                            .distDocDateIndex)
-                                                                ? DateFormat(
-                                                                        "dd-MM-yyyy")
-                                                                    .format(DateFormat("dd.MM.yyyy").parse(homepageController!
-                                                                        .generatedReportData[
-                                                                            index]
-                                                                            [
-                                                                            subIndex]
-                                                                        .toString()))
-                                                                    .toString()
-                                                                : homepageController!
-                                                                    .generatedReportData[
-                                                                        index][
-                                                                        subIndex]
-                                                                    .toString(),
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Colors
-                                                                        .black),
-                                                            textAlign: homepageController!
-                                                                    .rightalign
-                                                                    .contains(
-                                                                        subIndex)
-                                                                ? TextAlign
-                                                                    .right
-                                                                : homepageController!
-                                                                        .centeralign
-                                                                        .contains(
-                                                                            subIndex)
-                                                                    ? TextAlign
-                                                                        .center
-                                                                    : TextAlign
-                                                                        .left,
-                                                            minFontSize: 10,
-                                                            maxLines: 1,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                          child: Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                width:
-                                                                    Get.width *
+                                                                            .doctorNameIndex ||
+                                                                    subIndex ==
+                                                                        Constantdata
+                                                                            .technicianStaffIndex)
+                                                                ? Get.width *
+                                                                    0.2
+                                                                : (subIndex ==
+                                                                            Constantdata
+                                                                                .matNameIndex ||
+                                                                        subIndex ==
+                                                                            Constantdata
+                                                                                .matTypeIndex)
+                                                                    ? Get.width *
+                                                                        0.1
+                                                                    : Get.width *
                                                                         0.06,
-                                                                child:
+                                                            // height: Get.height * 0.05,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border:
+                                                                  Border.all(
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Visibility(
+                                                              visible: (subIndex == Constantdata.customerIndex ||
+                                                                      subIndex ==
+                                                                          Constantdata
+                                                                              .doctorNameIndex ||
+                                                                      subIndex ==
+                                                                          Constantdata
+                                                                              .technicianStaffIndex) &&
+                                                                  homepageController
+                                                                          ?.partyNaNSetData
+                                                                          .contains(homepageController?.generatedReportData[index]
+                                                                              [
+                                                                              Constantdata.dataNoIndex]) ==
+                                                                      true,
+                                                              replacement:
+                                                                  Visibility(
+                                                                visible: subIndex ==
+                                                                        Constantdata
+                                                                            .matTypeIndex &&
+                                                                    homepageController
+                                                                            ?.comissionAndmatTypeNaNSetData
+                                                                            .contains(homepageController?.generatedReportData[index][Constantdata.dataNoIndex]) ==
+                                                                        true,
+                                                                replacement:
                                                                     AutoSizeText(
-                                                                  homepageController!
-                                                                      .generatedReportData[
-                                                                          index]
-                                                                          [
-                                                                          subIndex]
-                                                                      .toString(),
+                                                                  (subIndex == Constantdata.smtDocDateIndex ||
+                                                                          subIndex ==
+                                                                              Constantdata
+                                                                                  .distDocDateIndex)
+                                                                      ? DateFormat(
+                                                                              "dd-MM-yyyy")
+                                                                          .format(DateFormat("dd.MM.yyyy").parse(homepageController!.generatedReportData[index][subIndex]
+                                                                              .toString()))
+                                                                          .toString()
+                                                                      : homepageController!
+                                                                          .generatedReportData[
+                                                                              index]
+                                                                              [
+                                                                              subIndex]
+                                                                          .toString(),
                                                                   style: const TextStyle(
                                                                       fontSize:
                                                                           15,
                                                                       color: Colors
                                                                           .black),
+                                                                  textAlign: homepageController!
+                                                                          .rightalign
+                                                                          .contains(
+                                                                              subIndex)
+                                                                      ? TextAlign
+                                                                          .right
+                                                                      : homepageController!.centeralign.contains(
+                                                                              subIndex)
+                                                                          ? TextAlign
+                                                                              .center
+                                                                          : TextAlign
+                                                                              .left,
                                                                   minFontSize:
                                                                       10,
                                                                   maxLines: 1,
@@ -981,38 +1002,66 @@ class PartyPaymentView extends StatelessWidget {
                                                                       TextOverflow
                                                                           .ellipsis,
                                                                 ),
+                                                                child: Row(
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      width: Get
+                                                                              .width *
+                                                                          0.06,
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        homepageController!
+                                                                            .generatedReportData[index][subIndex]
+                                                                            .toString(),
+                                                                        style: const TextStyle(
+                                                                            fontSize:
+                                                                                15,
+                                                                            color:
+                                                                                Colors.black),
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxLines:
+                                                                            1,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        child: Row(
-                                                          children: [
-                                                            SizedBox(
-                                                              width: Get.width *
-                                                                  0.15,
-                                                              child:
-                                                                  AutoSizeText(
-                                                                homepageController!
-                                                                    .generatedReportData[
-                                                                        index][
-                                                                        subIndex]
-                                                                    .toString(),
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Colors
-                                                                        .black),
-                                                                minFontSize: 10,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
+                                                              child: Row(
+                                                                children: [
+                                                                  SizedBox(
+                                                                    width:
+                                                                        Get.width *
+                                                                            0.15,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      homepageController!
+                                                                          .generatedReportData[
+                                                                              index]
+                                                                              [
+                                                                              subIndex]
+                                                                          .toString(),
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          color:
+                                                                              Colors.black),
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxLines:
+                                                                          1,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
+                                                          )
+                                                        : Container();
                                                   },
                                                 ),
                                               ),
@@ -1191,7 +1240,7 @@ class PartyPaymentView extends StatelessWidget {
                             // width: Get.width,
                             bottom: Get.height * 0.05,
                             left: Get.width * 0.05,
-                            right: Get.width * 1.1,
+                            right: Get.width * 0.9,
                             child: SizedBox(
                               height: Get.height * 0.1,
                               // width: Get.width * 0.7,
@@ -1259,6 +1308,11 @@ class PartyPaymentView extends StatelessWidget {
                                         amount: homepageController!
                                             .partyWisePaidAmount.value
                                             .toStringAsFixed(2)),
+                                    LableText(
+                                        name: 'Pending Paid Amount',
+                                        amount: homepageController!
+                                            .partyWisePendingPaidAmount.value
+                                            .toStringAsFixed(2)),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
@@ -1279,36 +1333,125 @@ class PartyPaymentView extends StatelessWidget {
                                                     .partyWisePayableAmount >
                                                 0) {
                                               Get.defaultDialog(
-                                                title: 'payment',
-                                                middleText:
-                                                    'Are you sure you want to pay  ${(homepageController!.partyWisePayableAmount).toString()}₹ ?',
-                                                textConfirm: 'Ok',
+                                                content: SizedBox(
+                                                  width: Get.width * 0.3,
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        'Total Amount : ${(homepageController!.partyWisePayableAmount.value + homepageController!.partyWisePendingPaidAmount.value).toString()}₹ ',
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize:
+                                                              Get.height * 0.03,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                                .symmetric(
+                                                            horizontal: 10,
+                                                            vertical: 5),
+                                                        child: TextField(
+                                                          maxLength: 30,
+                                                          controller:
+                                                              extraNoteController,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            prefixIcon:
+                                                                const Icon(Icons
+                                                                    .note_add),
+                                                            hintText:
+                                                                'Enter Note...',
+                                                            counterText: '',
+                                                            hintStyle: textTheme
+                                                                .titleLarge
+                                                                ?.copyWith(
+                                                              color:
+                                                                  Colors.grey,
+                                                              fontSize:
+                                                                  Get.height *
+                                                                      0.02,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        'Are you want to pay Party',
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                Get.height *
+                                                                    0.02),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                textConfirm: 'Payment',
                                                 confirmTextColor: Colors.white,
-                                                onConfirm: () {
-                                                  print('payment');
+                                                onConfirm: () async {
                                                   Get.back();
-                                                  var crAmount =
-                                                      homepageController!
-                                                          .partyWisePayableAmount
-                                                          .value;
-                                                  print(homepageController!
-                                                      .defaultParty.value);
-                                                  // !todo: payment
+                                                  if (amountController
+                                                      .text.isNumericOnly) {
+                                                    var amount = double.parse(
+                                                        amountController.text);
 
-                                                  homepageController!
-                                                      .partyWisePayment(
-                                                          isAllPendingPayement:
-                                                              homepageController
-                                                                  ?.isAllPendingPayement
-                                                                  .value,
-                                                          crAmount: crAmount,
-                                                          selectedParty:
-                                                              homepageController!
-                                                                  .defaultParty
-                                                                  .value,
-                                                          ptID: partyTypeID);
+                                                    homepageController
+                                                        ?.partyWiseExtraPayment(
+                                                      crAmount: amount,
+                                                      ledgerNote:
+                                                          extraNoteController
+                                                              .text,
+                                                      selectedParty:
+                                                          homepageController
+                                                              ?.defaultParty
+                                                              .value,
+                                                    );
+                                                  } else {
+                                                    'Enter Valid Amount'
+                                                        .errorSnackbar;
+                                                  }
+                                                },
+                                                textCancel: 'Cancel',
+                                                cancelTextColor: lCOLOR_PRIMARY,
+                                                onCancel: () {
+                                                  amountController.clear();
+                                                  Get.back();
                                                 },
                                               );
+                                              // Get.defaultDialog(
+                                              //   title: 'payment',
+                                              //   middleText:
+                                              //       'Are you sure you want to pay  ${(homepageController!.partyWisePayableAmount).toString()}₹ ?',
+                                              //   textConfirm: 'Ok',
+                                              //   confirmTextColor: Colors.white,
+                                              //   onConfirm: () {
+                                              //     print('payment');
+                                              //     Get.back();
+                                              //     var crAmount =
+                                              //         homepageController!
+                                              //             .partyWisePayableAmount
+                                              //             .value;
+                                              //     print(homepageController!
+                                              //         .defaultParty.value);
+                                              //     // !todo: payment
+
+                                              //     homepageController!
+                                              //         .partyWisePayment(
+                                              //             isAllPendingPayement:
+                                              //                 homepageController
+                                              //                     ?.isAllPendingPayement
+                                              //                     .value,
+                                              //             crAmount: crAmount,
+                                              //             selectedParty:
+                                              //                 homepageController!
+                                              //                     .defaultParty
+                                              //                     .value,
+                                              //             ptID: partyTypeID);
+                                              //   },
+                                              // );
                                             } else {
                                               'No amount to pay😀'.infoSnackbar;
                                             }
