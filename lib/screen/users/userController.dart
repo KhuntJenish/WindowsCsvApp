@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:csvapp/dashboard.dart';
 import 'package:csvapp/database/tables.dart';
-import 'package:csvapp/screen/homepage/ImportReport.dart';
-import 'package:csvapp/screen/users/user.dart';
 import 'package:csvapp/utils/constant.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart';
@@ -34,18 +32,18 @@ class UserController extends GetxController {
             password: password,
             phone: phone ?? 0,
             mail: mail ?? ''));
-        // print(data.length);
+        //
         if (data > 0) {
           Get.back();
 
           // 'User Add Successful'.successSnackbar;
           'User Add Successful'.successDailog;
-          Timer(Duration(seconds: 2), () {
+          Timer(const Duration(seconds: 2), () {
             Get.back();
           });
-          // print('user not exist');
+          //
         } else {
-          // print(data);
+          //
           Get.back();
           'something went wrong!'.errorSnackbar;
         }
@@ -68,7 +66,7 @@ class UserController extends GetxController {
     try {
       // Value<String> username =  Value(username);
       var data = GetStorage('box').read('cuser');
-      print(data);
+
       if (username == 'admin' && data.username != 'admin') {
         Get.offAllNamed(Dashboard.routeName);
         'Admin can not be updated'.errorSnackbar;
@@ -80,7 +78,7 @@ class UserController extends GetxController {
                 password: password,
                 phone: phone ?? 0,
                 mail: mail ?? ''));
-        // print(data.length);
+        //
         if (data > 0) {
           if (GetStorage('box').read('cuser').username != 'admin') {
             var user = UserData(
@@ -90,21 +88,20 @@ class UserController extends GetxController {
                 phone: phone ?? 0,
                 mail: mail ?? '');
             await GetStorage('box').write('cuser', user);
-            print(GetStorage('box').read('cuser'));
+
             Get.offAllNamed(Dashboard.routeName);
           } else {
             Get.back();
           }
           'User update Successful'.successDailog;
 
-          Timer(Duration(seconds: 2), () {
+          Timer(const Duration(seconds: 2), () {
             Get.back();
           });
           // 'User update Successful'.successSnackbar;
-          // print('user not exist');
-
+          //
         } else {
-          // print(data);
+          //
           Get.back();
           'something went wrong!'.errorSnackbar;
         }
@@ -136,20 +133,19 @@ class UserController extends GetxController {
                 password: password,
                 phone: phone ?? 0,
                 mail: mail ?? ''));
-        // print(data.length);
+        //
         if (data > 0) {
           Get.back();
 
           // 'User update Successful'.successSnackbar;
           'User update Successful'.successDailog;
 
-          Timer(Duration(seconds: 2), () {
+          Timer(const Duration(seconds: 2), () {
             Get.back();
           });
-          // print('user not exist');
-
+          //
         } else {
-          // print(data);
+          //
           Get.back();
           'something went wrong!'.errorSnackbar;
         }
@@ -166,12 +162,12 @@ class UserController extends GetxController {
       // Value<String> username =  Value(username);
       var data =
           await (db.delete(db.user)..where((tbl) => tbl.id.equals(id!))).go();
-      // print(data.length);
+      //
       if (data > 0) {
         'User delete Successful'.successSnackbar;
-        // print('user not exist');
+        //
       } else {
-        // print(data);
+        //
         'something went wrong!'.errorSnackbar;
       }
     } catch (e) {

@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:csvapp/screen/homepage/homecontroller.dart';
+import 'package:csvapp/screen/loginpage/logincontroller.dart';
 import 'package:csvapp/screen/loginpage/loginpage.dart';
 import 'package:csvapp/screen/partyMaster/partyMaster.dart';
 import 'package:csvapp/screen/users/user.dart';
@@ -9,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lottie/lottie.dart';
+
+import 'theam/theam_constants.dart';
 
 class Dashboard extends StatelessWidget {
   static const routeName = '/dashboard';
@@ -21,9 +22,9 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    // print(_homepageController.isSelectedReport.value);
+    //
     return Scaffold(
-      backgroundColor: const Color(0xffFFFFFF),
+      backgroundColor: Get.isDarkMode ? Colors.grey[100] : Colors.grey[100],
       appBar: AppBar(
         title: Text(
           'Dashboard',
@@ -53,10 +54,8 @@ class Dashboard extends StatelessWidget {
           IconButton(
             tooltip: 'LogOut',
             onPressed: () {
-              print('logOut');
               GetStorage('box').erase();
-              print('data earased');
-              print(GetStorage('box').read('user'));
+
               Get.offAllNamed(Login.routeName);
             },
             icon: const Icon(Icons.logout),
@@ -85,7 +84,7 @@ class Dashboard extends StatelessWidget {
               SizedBox(height: Get.height * 0.13),
               Container(
                 child: Text(
-                  'Developed by Versatile IT Management @${DateTime.now().year}.',
+                  'Comission System App @${DateTime.now().year}.',
                   style: textTheme.bodyLarge?.copyWith(
                     color: Colors.grey[700],
                     fontSize: Get.height * 0.012,
@@ -96,54 +95,21 @@ class Dashboard extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.defaultDialog(
-            content: SizedBox(
-              height: Get.height * 0.5,
-              width: Get.width * 0.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    height: Get.height * 0.15,
-                    width: Get.width * 0.15,
-                    // color: Colors.red,
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Lottie.asset('assets/lottie/techinfo.json'),
-
-                      // Lottie.network(
-                      //     'https://assets5.lottiefiles.com/packages/lf20_xwmj0hsk.json'),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      infoItem(textTheme, 'Info', 'Versatile IT Management'),
-                      infoItem(textTheme, 'Web', 'www.versatileit.in'),
-                      infoItem(textTheme, 'e-mail',
-                          'rakesh@versatileitservices.com'),
-                      infoItem(textTheme, 'Phone', '+91 70435 49040'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-          // Phone : +91 70435 49040
-          // We make software for you
-          // e-mail: rakesh@versatileitservices.com
-          // Web : www.versatileit.in
-
-          Timer(const Duration(seconds: 8), () {
-            print('done');
-            Get.back();
-          });
-        },
-        child: const Icon(Icons.home),
+      floatingActionButton: Theme(
+        data: Theme.of(context).copyWith(splashColor: Colors.black26),
+        child: FloatingActionButton(
+          onPressed: () {
+            LoginController loginController = Get.put(LoginController());
+            loginController.isDarkMode = !loginController.isDarkMode;
+            Get.changeTheme(
+                loginController.isDarkMode ? darkTheme : lightTheam);
+          },
+          tooltip: 'Theme Change',
+          child: Get.isDarkMode
+              ? const Icon(Icons.light_mode_rounded)
+              : const Icon(Icons.dark_mode_rounded),
+        ),
       ),
-      // drawer: DrawerWidget(),
     );
   }
 

@@ -1,6 +1,6 @@
 import 'package:csvapp/database/tables.dart';
-import 'package:csvapp/screen/homepage/partyLedger.dart';
 import 'package:csvapp/screen/homepage/ImportReport.dart';
+import 'package:csvapp/screen/homepage/partyLedger.dart';
 import 'package:csvapp/screen/loginpage/loginpage.dart';
 import 'package:csvapp/screen/partyMaster/partyController.dart';
 import 'package:csvapp/screen/partyMaster/partyMaster.dart';
@@ -21,9 +21,9 @@ class DrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserData currentUser = GetStorage('box').read('cuser');
-    // print(currentUser);
-    // print(currentUser.username);
-    // print(currentUser.mail);
+    //
+    //
+    //
     return Drawer(
       child: SafeArea(
         child: ListView(
@@ -116,7 +116,7 @@ class DrawerWidget extends StatelessWidget {
                 // var partyTypeList = await _partyController.db
                 //     .select(_partyController.db.partyTypeMaster)
                 //     .get();
-                // print(partyTypeList);
+                //
                 Get.back();
                 Get.toNamed(PartyMasterPage.routeName);
               },
@@ -139,8 +139,7 @@ class DrawerWidget extends StatelessWidget {
               onTap: () {
                 Get.back();
                 GetStorage('box').erase();
-                print('data earased');
-                print(GetStorage('box').read('user'));
+
                 Get.offAllNamed(Login.routeName);
               },
             ),

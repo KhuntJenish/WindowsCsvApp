@@ -88,7 +88,7 @@ class PartyComissionBottomSheet extends StatelessWidget {
 
     TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
-      color: Colors.grey[100],
+      color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[100],
       child: Stack(
         children: [
           Column(
@@ -248,7 +248,6 @@ class PartyComissionBottomSheet extends StatelessWidget {
                         );
                       }
                       if (btnText == 'Add New Comission') {
-                        print(_partyController.materialTypeList);
                         bool isMt = await _partyController
                             .checkMaterialType(materialType.text);
 
@@ -392,7 +391,6 @@ class PartyComissionBottomSheet extends StatelessWidget {
                       fontSize: Get.width * 0.015,
                       text: _partyController.addPartyBtnText.value,
                       onPressed: () {
-                        print(materialType.text);
                         if (materialType.text.isNotEmpty) {
                           _partyController.addMaterialType(
                               materialType: materialType.text);
@@ -516,8 +514,6 @@ class PartyComissionBottomSheet extends StatelessWidget {
                   ),
                 ),
                 onChanged: (value) {
-                  print(value);
-
                   if (value.isNotEmpty) {
                     newComissionAmountController?.text =
                         ((double.parse(value) * itemAmount) / 100)
@@ -598,7 +594,6 @@ class PartyComissionBottomSheet extends StatelessWidget {
                   ),
                 ),
                 onChanged: (value) {
-                  print(value);
                   if (value.isNotEmpty) {
                     newComissionController?.text =
                         ((double.parse(value) * 100) / itemAmount)

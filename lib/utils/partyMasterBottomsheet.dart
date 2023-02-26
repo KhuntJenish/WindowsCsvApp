@@ -4,6 +4,7 @@ import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'dropDownItem.dart';
 import 'helper_widget.dart';
 
@@ -26,10 +27,10 @@ class PartyTypeBottomsheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(_partyController.addPartyBtnText.value);
+    //
     TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
-      color: Colors.grey[100],
+      color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[100],
       // width:  Get.width * 0.5 ,
       // height: Get.height * 0.8,
       child: Stack(
@@ -52,7 +53,7 @@ class PartyTypeBottomsheet extends StatelessWidget {
                     prefixIcon: const Icon(Icons.person),
                     hintText: 'Enter Username',
                     counterText: '',
-                    hintStyle: textTheme.headline6?.copyWith(
+                    hintStyle: textTheme.titleLarge?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),

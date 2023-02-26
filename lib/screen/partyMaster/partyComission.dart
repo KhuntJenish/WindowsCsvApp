@@ -4,6 +4,7 @@ import 'package:csvapp/screen/partyMaster/partyController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../utils/helper_widget.dart';
 import '../../utils/partyComissionBottomsheet.dart';
 
@@ -25,15 +26,11 @@ class PartyComission extends StatelessWidget {
   PartyComission({super.key});
   @override
   Widget build(BuildContext context) {
-    // print(party);
-    // print(_partyController.addPartyBtnText.value);
-    print(party);
-    // print(_partyController.materialTypeList);
     List<int> partyTypeIDList = [];
 
     return Scaffold(
       body: Container(
-        color: Colors.grey[100],
+        color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[100],
         // width:  Get.width * 0.5 ,
         // height: Get.height * 0.8,
         child: Stack(
@@ -176,7 +173,6 @@ class PartyComission extends StatelessWidget {
                                             .type;
                                         partyTypeIDList
                                             .add(snapshot.data![index].mtID);
-                                        print(materialType);
                                         return ListTile(
                                           leading: Container(
                                             width: Get.width * 0.08,
@@ -402,11 +398,6 @@ class PartyComission extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // _partyController.addPartyBtnText.value = 'Add Party';
-          // _partyController.defualtParty.value = PartyType(id: 1, name: 'Buyer');
-          // newComission.text = '';
-          // Get.toNamed(PartyComission.routeName);
-          // print(partyTypeIDList);
           var pid = party.ptID;
           btnText = 'Add Comission';
           // Todo: some change

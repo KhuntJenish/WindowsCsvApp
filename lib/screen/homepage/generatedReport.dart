@@ -24,7 +24,6 @@ class GeneratedReport extends StatelessWidget {
   Widget build(BuildContext context) {
     // _homepageController.isAllPartySelected.value = false;
 
-    print(_homepageController.isSelectedReport.value);
     TextTheme textTheme = Theme.of(context).textTheme;
     final ScrollController horizontalScroll = ScrollController();
     final ScrollController verticalScroll = ScrollController();
@@ -318,19 +317,6 @@ class GeneratedReport extends StatelessWidget {
                                   fontSize: Get.width * 0.010,
                                   text: 'Search',
                                   onPressed: () async {
-                                    print('Search Button Pressed');
-                                    print(_homepageController
-                                        .isAllPartySelected.value);
-                                    print(_homepageController.defaultParty);
-                                    print(_homepageController.defaultDuration);
-                                    print(_homepageController
-                                        .defaultMaterialType);
-                                    print(_homepageController.defaultPartyCity);
-                                    print(_homepageController
-                                        .dateRange.value.start);
-                                    print(_homepageController
-                                        .dateRange.value.end);
-
                                     _homepageController.getDurationDateRange(
                                         duration: _homepageController
                                             .defaultDuration.value);
@@ -376,9 +362,6 @@ class GeneratedReport extends StatelessWidget {
                                       'No Data Found'.errorSnackbar;
                                       return;
                                     }
-                                    print('Create Pdf');
-                                    print(_homepageController
-                                        .generatedReportData);
 
                                     await _homepageController.createReportPdf();
                                   },

@@ -26,7 +26,7 @@ class PartyMasterPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             'Party Master',
-            style: textTheme.bodyText1?.copyWith(
+            style: textTheme.bodyLarge?.copyWith(
               color: Colors.white,
               fontSize: Get.height * 0.03,
             ),
@@ -98,11 +98,11 @@ class PartyTabView extends StatelessWidget {
               child: ListView.builder(
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
-                  // print(snapshot.data?[index].ptID);
+                  //
 
                   var data = partyController.partyTypeList?.firstWhere(
                       (element) => element.id == snapshot.data?[index].ptID);
-                  // print(data?.type);
+                  //
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),

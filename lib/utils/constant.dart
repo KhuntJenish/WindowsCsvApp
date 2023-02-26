@@ -8,10 +8,12 @@ class Constantdata {
   // static var user = $UserTable;
 
   // * Party Payment Type & Note /
+  static var generateComission = "sale commission";
   static var payment = 'payment';
   static var extraPayment = 'ExtraPayment';
   static var defualtAutoNote = 'Auto';
   static var defualtmanualNote = 'manual';
+  static var pendingPaymentNote = 'PendingPaidAmount';
 
   // * Data Index /
   static var dataNoIndex = 0;

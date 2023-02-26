@@ -297,7 +297,7 @@ class LableWithCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('checkbox : $isCheckBoxVisible');
+    ('checkbox : $isCheckBoxVisible');
     final TextTheme textTheme = Theme.of(context).textTheme;
     return SizedBox(
       width: Get.width * 0.20,

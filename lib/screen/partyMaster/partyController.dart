@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../database/tables.dart';
 import '../../utils/constant.dart';
 
@@ -31,22 +31,12 @@ class PartyController extends GetxController {
   getPartyTypeList() async {
     partyTypeList?.clear();
     var data = await db.select(db.partyTypeMaster).get();
-    // .then((value) {
-    //   value.forEach((element) {
-    //     partyList?.add(element);
-    //   });
-    // });
+
     partyTypeList?.addAll(data);
 
-    // print(data);
     if (partyTypeList!.isNotEmpty) {
-      // print(partyTypeList![0]);
-      // var defualt = .obs;
       defualtPartyType.value = partyTypeList![0];
-      print('defualtParty: ${defualtPartyType.value}');
     }
-
-    print(partyTypeList);
   }
 
   getMaterialTypeList() async {
@@ -55,15 +45,9 @@ class PartyController extends GetxController {
 
     materialTypeList?.addAll(data);
 
-    // print(data);
     if (materialTypeList!.isNotEmpty) {
-      // print(materialTypeList![0]);
       defualtMaterialType.value = materialTypeList![0];
-      //  = defualt.value;
-      print('defualtMaterialType: ${defualtMaterialType.value}');
     }
-
-    print(materialTypeList);
   }
 
   Future<bool> checkMaterialType(String mt) async {
@@ -74,7 +58,6 @@ class PartyController extends GetxController {
 
     // materialTypeList?.addAll(data);
 
-    // print(data);
     if (data.isNotEmpty) {
       return true;
     }
@@ -100,7 +83,6 @@ class PartyController extends GetxController {
         dataRowList.add(dataRow);
       }
     }
-    print(dataRowList);
     // return list;
   }
 
@@ -115,15 +97,13 @@ class PartyController extends GetxController {
     var data = await db.into(db.partyTypeMaster).insert(
           PartyTypeMasterCompanion.insert(type: partyType.toString()),
         );
-    print(data);
     // partyList?.add(partyType!);
     await getPartyTypeList();
     // "party type added".successSnackbar;
-    print(partyTypeList);
     defualtPartyType.refresh();
     'party type added.'.successDailog;
     // "party added".successSnackbar;.
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       Get.back();
     });
   }
@@ -140,11 +120,9 @@ class PartyController extends GetxController {
           MaterialTypeCompanion.insert(type: materialType.toString()),
         );
 
-    print(data);
     // partyList?.add(partyType!);
     await getMaterialTypeList();
 
-    // print(materialTypeList);
     defualtMaterialType.refresh();
 
     "Material type added".successSnackbar;
@@ -158,11 +136,11 @@ class PartyController extends GetxController {
       var data = await db.into(db.partyMaster).insert(
           PartyMasterCompanion.insert(
               name: name.toString(), ptID: type!.toInt()));
-      print(data);
+
       Get.back();
       'party Added.'.successDailog;
       // "party added".successSnackbar;.
-      Timer(Duration(seconds: 2), () {
+      Timer(const Duration(seconds: 2), () {
         Get.back();
       });
     } else {
@@ -179,7 +157,7 @@ class PartyController extends GetxController {
     var data = await (db.select(db.partyComissionDetail)
           ..where((tbl) => tbl.pID.equals(pID!) & tbl.mtID.equals(mtID!)))
         .get();
-    print('comissionDetail');
+
     if (data.isEmpty) {
       var data = await db
           .into(db.partyComissionDetail)
@@ -192,7 +170,6 @@ class PartyController extends GetxController {
             mprice: materialPrice!,
           ));
 
-      print(data);
       Get.back();
       "party added".successSnackbar;
     } else {
@@ -210,9 +187,9 @@ class PartyController extends GetxController {
     if (data > 0) {
       Get.back();
       'Party delete Successful'.successSnackbar;
-      // print('user not exist');
+      //
     } else {
-      // print(data);
+      //
       'something went wrong!'.errorSnackbar;
     }
   }
@@ -225,9 +202,9 @@ class PartyController extends GetxController {
     if (data > 0) {
       Get.back();
       'PartyComission delete Successful'.successSnackbar;
-      // print('user not exist');
+      //
     } else {
-      // print(data);
+      //
       Get.back();
       'something went wrong!'.errorSnackbar;
     }
@@ -246,19 +223,18 @@ class PartyController extends GetxController {
           .write(
         PartyMasterData(id: id, name: name, ptID: ptID),
       );
-      // print(data.length);
+      //
       if (data > 0) {
         Get.back();
         'User update Successful.'.successDailog;
         // "party added".successSnackbar;.
-        Timer(Duration(seconds: 2), () {
+        Timer(const Duration(seconds: 2), () {
           Get.back();
         });
         // 'User update Successful'.successSnackbar;
-        // print('user not exist');
-
+        //
       } else {
-        // print(data);
+        //
         Get.back();
         'something went wrong!'.errorSnackbar;
       }
@@ -286,14 +262,13 @@ class PartyController extends GetxController {
         comission3: oldComissionData.comission2,
         mprice: materialPrice,
       ));
-      // print(data.length);
+      //
       if (data > 0) {
         Get.back();
         'PartyComission update Successful'.successSnackbar;
-        // print('user not exist');
-
+        //
       } else {
-        // print(data);
+        //
         Get.back();
         'something went wrong!'.errorSnackbar;
       }

@@ -1,6 +1,7 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
+import 'package:csvapp/utils/constant.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -254,33 +255,10 @@ class PartyLedger extends StatelessWidget {
                                 fontSize: Get.width * 0.010,
                                 text: 'Search',
                                 onPressed: () async {
-                                  debugPrint('Search Button Pressed');
-                                  debugPrint(_homepageController
-                                      .isAllPartySelected.value
-                                      .toString());
-                                  debugPrint(_homepageController.defaultParty
-                                      .toString());
-                                  debugPrint(_homepageController.defaultDuration
-                                      .toString());
-                                  debugPrint(_homepageController
-                                      .defaultMaterialType
-                                      .toString());
-                                  debugPrint(_homepageController
-                                      .defaultPartyCity
-                                      .toString());
-                                  debugPrint(_homepageController
-                                      .dateRange.value.start
-                                      .toString());
-                                  debugPrint(_homepageController
-                                      .dateRange.value.end
-                                      .toString());
-
                                   _homepageController.getDurationDateRange(
                                       duration: _homepageController
                                           .defaultDuration.value);
-                                  // debugPrint(
-                                  //     _homepageController.dateRange.value.start);
-                                  // debugPrint(_homepageController.dateRange.value.end);
+
                                   await _homepageController.getLedgerSearchData(
                                     start: _homepageController
                                         .dateRange.value.start,
@@ -312,10 +290,6 @@ class PartyLedger extends StatelessWidget {
                                     'No Data Found'.errorSnackbar;
                                     return;
                                   }
-                                  debugPrint('Create Pdf');
-                                  debugPrint(_homepageController
-                                      .ledgerPartyWiseSet
-                                      .toString());
 
                                   await _homepageController.createLedgerPdf(
                                       partyWiseList: _homepageController
@@ -418,11 +392,9 @@ class PartyLedger extends StatelessWidget {
                                   elements:
                                       _homepageController.ledgerReportData,
                                   groupBy: (element) {
-                                    debugPrint('G : ${element.pID}');
                                     return element.pID.toString();
                                   },
                                   groupSeparatorBuilder: (String groupByValue) {
-                                    debugPrint('GS : $groupByValue');
                                     var partyName = _homepageController
                                         .partyList!
                                         .firstWhere((item) =>
@@ -470,9 +442,6 @@ class PartyLedger extends StatelessWidget {
                                   },
                                   indexedItemBuilder:
                                       ((context, element, index) {
-                                    // debugPrint('element: ${element}');
-                                    // debugPrint('index: ${index}');
-
                                     return Container(
                                       height: Get.height * 0.04,
                                       margin: const EdgeInsets.symmetric(
@@ -505,9 +474,13 @@ class PartyLedger extends StatelessWidget {
                                           SizedBox(
                                             width: Get.width * 0.2,
                                             child: Text(
-                                              element.type == 'ExtraPayment'
-                                                  ? element.ledgerNote
-                                                  : element.type,
+                                              element.type ==
+                                                      Constantdata.extraPayment
+                                                  ? "${element.type.substring(0, 8)}-${element.ledgerNote}"
+                                                  : element.type ==
+                                                          Constantdata.payment
+                                                      ? "${element.type.substring(0, 3)}-${element.ledgerNote}"
+                                                      : element.type,
                                               style: textTheme.bodyLarge
                                                   ?.copyWith(
                                                       fontSize:

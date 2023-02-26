@@ -141,7 +141,7 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
-    print('database Created');
+    // ('database Created'.toString());
     final dbFolder = '${Directory.current.path}\\backupData';
     final file = File(p.join(dbFolder, 'backupDB.sqlite'));
     return NativeDatabase.createInBackground(file);

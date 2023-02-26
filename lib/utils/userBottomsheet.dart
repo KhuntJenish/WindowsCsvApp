@@ -32,7 +32,7 @@ class UserBottomsheet extends StatelessWidget {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
-      color: Colors.grey[100],
+      color: Get.isDarkMode ? Colors.grey[800] : Colors.grey[100],
       // width:  Get.width * 0.5 ,
       // height: Get.height * 0.8,
       child: Stack(
@@ -56,7 +56,7 @@ class UserBottomsheet extends StatelessWidget {
                     prefixIcon: const Icon(Icons.person),
                     hintText: 'Enter Username',
                     counterText: '',
-                    hintStyle: textTheme.headline6?.copyWith(
+                    hintStyle: textTheme.titleLarge?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),
@@ -87,7 +87,7 @@ class UserBottomsheet extends StatelessWidget {
                       prefixIcon: const Icon(Icons.password),
                       hintText: 'Enter password',
                       counterText: '',
-                      hintStyle: textTheme.headline6?.copyWith(
+                      hintStyle: textTheme.titleLarge?.copyWith(
                         color: Colors.grey,
                         fontSize: Get.height * 0.02,
                       ),
@@ -106,7 +106,7 @@ class UserBottomsheet extends StatelessWidget {
                     prefixIcon: const Icon(Icons.email),
                     hintText: 'Enter Email',
                     counterText: '',
-                    hintStyle: textTheme.headline6?.copyWith(
+                    hintStyle: textTheme.titleLarge?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),
@@ -130,7 +130,7 @@ class UserBottomsheet extends StatelessWidget {
                     prefixIcon: const Icon(Icons.phone),
                     hintText: 'Enter Phone number',
                     counterText: '',
-                    hintStyle: textTheme.headline6?.copyWith(
+                    hintStyle: textTheme.titleLarge?.copyWith(
                       color: Colors.grey,
                       fontSize: Get.height * 0.02,
                     ),
@@ -189,7 +189,7 @@ class UserBottomsheet extends StatelessWidget {
                   onPressed: () {
                     Get.back();
                   },
-                  icon: Icon(Icons.arrow_back))),
+                  icon: const Icon(Icons.arrow_back))),
         ],
       ),
     );

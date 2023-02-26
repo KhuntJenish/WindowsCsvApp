@@ -4,8 +4,9 @@ import 'package:csvapp/utils/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../utils/userBottomsheet.dart';
+
 import '../../utils/constant.dart';
+import '../../utils/userBottomsheet.dart';
 
 class Userspage extends StatelessWidget {
   static const routeName = '/users';
@@ -16,6 +17,8 @@ class Userspage extends StatelessWidget {
   final TextEditingController email = TextEditingController(text: '');
   final UserController _userController = Get.put(UserController());
   late String btnText = 'Add User';
+
+  Userspage({super.key});
   @override
   Widget build(BuildContext context) {
     UserData currentUser = GetStorage('box').read('cuser');
@@ -24,7 +27,7 @@ class Userspage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Users',
-          style: textTheme.bodyText1?.copyWith(
+          style: textTheme.bodyLarge?.copyWith(
             color: Colors.white,
             fontSize: Get.height * 0.03,
           ),
@@ -41,13 +44,13 @@ class Userspage extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }
-              // print(snapshot.data);
+              //
               return SizedBox(
                 height: Get.height * 0.8,
                 child: ListView.builder(
                   itemCount: snapshot.data?.length,
                   itemBuilder: (context, index) {
-                    // print(snapshot.data?[index].username);
+                    //
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Visibility(
@@ -130,7 +133,6 @@ class Userspage extends StatelessWidget {
                                     'You can not delete admin user'
                                         .errorSnackbar;
 
-                                    print('You can not delete admin user');
                                     // Get.snackbar('don`t do', 'You can not delete admin user');
                                   }
                                 }),

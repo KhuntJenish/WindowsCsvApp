@@ -31,7 +31,7 @@ class PartyPayment extends StatelessWidget {
     // const double width = 20;
     // RxBool? isAllPartyChecked = true.obs;
     // Set smtInvNo = {};
-    print(_homepageController.partyList);
+
     // _homepageController.getPartyList();
     return WillPopScope(
       onWillPop: () async {
@@ -432,7 +432,6 @@ class PartyPaymentView extends StatelessWidget {
                                       text: 'Search',
                                       onPressed: () async {
                                         homepageController?.dataNoSet.clear();
-                                        print('Search Button Pressed');
 
                                         homepageController
                                             ?.getDurationDateRange(
@@ -498,9 +497,6 @@ class PartyPaymentView extends StatelessWidget {
                                           'No Data Found'.errorSnackbar;
                                           return;
                                         }
-                                        print('Create Pdf');
-                                        print(homepageController
-                                            ?.generatedReportData);
 
                                         await homepageController
                                             ?.createPartyPaymentReportPdf();
@@ -519,6 +515,7 @@ class PartyPaymentView extends StatelessWidget {
                                       text: 'Extra Pay',
                                       onPressed: () async {
                                         amountController.clear();
+                                        extraNoteController.clear();
                                         pnameController.text =
                                             homepageController!
                                                 .defaultParty.value.name;
@@ -764,7 +761,7 @@ class PartyPaymentView extends StatelessWidget {
                                         value: isAllPartyChecked?.value,
                                         onChanged: (value) {
                                           isAllPartyChecked?.value = value!;
-                                          print(value);
+
                                           // homepageController?.isAllPartySelected.refresh();
                                         },
                                       ),
@@ -824,12 +821,6 @@ class PartyPaymentView extends StatelessWidget {
                                         homepageController!
                                             .checkLumpsumPaymentData
                                             .isNotEmpty) {
-                                      print(homepageController!
-                                          .checkLumpsumPaymentData);
-                                      homepageController?.dataNoSet.clear();
-                                      homepageController?.dataNoSet.addAll(
-                                          homepageController!
-                                              .checkLumpsumPaymentData);
                                     } else {
                                       index != 0
                                           ? homepageController?.dataNoSet.add(
@@ -1082,7 +1073,6 @@ class PartyPaymentView extends StatelessWidget {
                                                         onChanged: (value) {
                                                           isPartyChecked.value =
                                                               value!;
-                                                          print(value);
                                                           if (value) {
                                                             homepageController
                                                                 ?.dataNoSet
@@ -1133,25 +1123,12 @@ class PartyPaymentView extends StatelessWidget {
                                                                     .partyWisePaidAmount
                                                                     .value;
                                                           }
-                                                          print(homepageController
-                                                              ?.partyWiseTotalAmount
-                                                              .value);
 
-                                                          print(
-                                                              homepageController
-                                                                  ?.dataNoSet);
                                                           // homepageController?.isAllPartySelected.refresh();
                                                         },
                                                       ),
                                                       child: IconButton(
                                                         onPressed: () {
-                                                          print('payment Back');
-                                                          print(homepageController
-                                                              ?.generatedReportData[
-                                                                  index][
-                                                                  Constantdata
-                                                                      .smtInvoiceNoIndex]
-                                                              .toString());
                                                           var smtInvNo =
                                                               homepageController
                                                                   ?.generatedReportData[
@@ -1272,7 +1249,6 @@ class PartyPaymentView extends StatelessWidget {
                                             suffixIcon: IconButton(
                                               icon: const Icon(Icons.search),
                                               onPressed: () {
-                                                print(amountController.text);
                                                 homepageController!
                                                     .checkLumpsumPaymen(
                                                   ptID: partyTypeID,
@@ -1280,7 +1256,11 @@ class PartyPaymentView extends StatelessWidget {
                                                       homepageController
                                                           ?.generatedReportData,
                                                   lumpsumAmount: double.parse(
-                                                      amountController.text),
+                                                          amountController
+                                                              .text) +
+                                                      homepageController!
+                                                          .partyWisePendingPaidAmount
+                                                          .value,
                                                   selectedParty:
                                                       homepageController
                                                           ?.defaultParty.value,
@@ -1325,140 +1305,149 @@ class PartyPaymentView extends StatelessWidget {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        Button(
-                                          text: 'Pay',
-                                          onPressed: () {
-                                            print('payment');
-                                            if (homepageController!
-                                                    .partyWisePayableAmount >
-                                                0) {
-                                              Get.defaultDialog(
-                                                content: SizedBox(
-                                                  width: Get.width * 0.3,
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                        'Total Amount : ${(homepageController!.partyWisePayableAmount.value + homepageController!.partyWisePendingPaidAmount.value).toString()}₹ ',
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize:
-                                                              Get.height * 0.03,
+                                        Visibility(
+                                          visible: homepageController!
+                                              .isAllPendingPayement.value,
+                                          child: Button(
+                                            text: 'Pay',
+                                            onPressed: () {
+                                              if (homepageController!
+                                                      .partyWisePayableAmount >
+                                                  0) {
+                                                extraNoteController.clear();
+                                                var totolAmount = (homepageController!
+                                                        .partyWisePayableAmount
+                                                        .value +
+                                                    homepageController!
+                                                        .partyWisePendingPaidAmount
+                                                        .value);
+                                                var pendingAmount =
+                                                    (totolAmount -
+                                                        double.parse(
+                                                            amountController
+                                                                .text));
+                                                Get.defaultDialog(
+                                                  content: SizedBox(
+                                                    width: Get.width * 0.3,
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          'Old PendingPaid Amount : ${pendingAmount.toString()}₹ ',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                Get.height *
+                                                                    0.03,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Container(
-                                                        margin: const EdgeInsets
-                                                                .symmetric(
-                                                            horizontal: 10,
-                                                            vertical: 5),
-                                                        child: TextField(
-                                                          maxLength: 30,
-                                                          controller:
-                                                              extraNoteController,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            prefixIcon:
-                                                                const Icon(Icons
-                                                                    .note_add),
-                                                            hintText:
-                                                                'Enter Note...',
-                                                            counterText: '',
-                                                            hintStyle: textTheme
-                                                                .titleLarge
-                                                                ?.copyWith(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontSize:
-                                                                  Get.height *
-                                                                      0.02,
+                                                        Text(
+                                                          'Total Amount : ${totolAmount.toString()}₹ ',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize:
+                                                                Get.height *
+                                                                    0.03,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 5),
+                                                          child: TextField(
+                                                            maxLength: 30,
+                                                            controller:
+                                                                extraNoteController,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              prefixIcon:
+                                                                  const Icon(Icons
+                                                                      .note_add),
+                                                              hintText:
+                                                                  'Enter Note...',
+                                                              counterText: '',
+                                                              hintStyle: textTheme
+                                                                  .titleLarge
+                                                                  ?.copyWith(
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontSize:
+                                                                    Get.height *
+                                                                        0.02,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        'Are you want to pay Party',
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                Get.height *
-                                                                    0.02),
-                                                      ),
-                                                    ],
+                                                        Text(
+                                                          'Are you want to pay Party',
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  Get.height *
+                                                                      0.02),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                                textConfirm: 'Payment',
-                                                confirmTextColor: Colors.white,
-                                                onConfirm: () async {
-                                                  Get.back();
-                                                  if (amountController
-                                                      .text.isNumericOnly) {
-                                                    var amount = double.parse(
-                                                        amountController.text);
+                                                  textConfirm: 'Payment',
+                                                  confirmTextColor:
+                                                      Colors.white,
+                                                  onConfirm: () async {
+                                                    Get.back();
+                                                    if (amountController
+                                                        .text.isNumericOnly) {
+                                                      var crAmount =
+                                                          homepageController!
+                                                              .partyWisePayableAmount
+                                                              .value;
 
-                                                    homepageController
-                                                        ?.partyWiseExtraPayment(
-                                                      crAmount: amount,
-                                                      ledgerNote:
-                                                          extraNoteController
-                                                              .text,
-                                                      selectedParty:
-                                                          homepageController
-                                                              ?.defaultParty
-                                                              .value,
-                                                    );
-                                                  } else {
-                                                    'Enter Valid Amount'
-                                                        .errorSnackbar;
-                                                  }
-                                                },
-                                                textCancel: 'Cancel',
-                                                cancelTextColor: lCOLOR_PRIMARY,
-                                                onCancel: () {
-                                                  amountController.clear();
-                                                  Get.back();
-                                                },
-                                              );
-                                              // Get.defaultDialog(
-                                              //   title: 'payment',
-                                              //   middleText:
-                                              //       'Are you sure you want to pay  ${(homepageController!.partyWisePayableAmount).toString()}₹ ?',
-                                              //   textConfirm: 'Ok',
-                                              //   confirmTextColor: Colors.white,
-                                              //   onConfirm: () {
-                                              //     print('payment');
-                                              //     Get.back();
-                                              //     var crAmount =
-                                              //         homepageController!
-                                              //             .partyWisePayableAmount
-                                              //             .value;
-                                              //     print(homepageController!
-                                              //         .defaultParty.value);
-                                              //     // !todo: payment
-
-                                              //     homepageController!
-                                              //         .partyWisePayment(
-                                              //             isAllPendingPayement:
-                                              //                 homepageController
-                                              //                     ?.isAllPendingPayement
-                                              //                     .value,
-                                              //             crAmount: crAmount,
-                                              //             selectedParty:
-                                              //                 homepageController!
-                                              //                     .defaultParty
-                                              //                     .value,
-                                              //             ptID: partyTypeID);
-                                              //   },
-                                              // );
-                                            } else {
-                                              'No amount to pay😀'.infoSnackbar;
-                                            }
-                                          },
-                                          fontSize: Get.height * 0.02,
-                                          height: Get.height * 0.04,
-                                          width: Get.width * 0.06,
+                                                      homepageController!.partyWisePayment(
+                                                          pendingPaidAmount:
+                                                              homepageController
+                                                                  ?.partyWisePendingPaidAmount
+                                                                  .value,
+                                                          ledgerNote:
+                                                              extraNoteController
+                                                                  .text,
+                                                          isAllPendingPayement:
+                                                              homepageController
+                                                                  ?.isAllPendingPayement
+                                                                  .value,
+                                                          crAmount: crAmount,
+                                                          selectedParty:
+                                                              homepageController!
+                                                                  .defaultParty
+                                                                  .value,
+                                                          ptID: partyTypeID);
+                                                    } else {
+                                                      'Enter Valid Amount'
+                                                          .errorSnackbar;
+                                                    }
+                                                  },
+                                                  textCancel: 'Cancel',
+                                                  cancelTextColor:
+                                                      lCOLOR_PRIMARY,
+                                                  onCancel: () {
+                                                    Get.back();
+                                                  },
+                                                );
+                                              } else {
+                                                'No amount to pay😀'
+                                                    .infoSnackbar;
+                                              }
+                                            },
+                                            fontSize: Get.height * 0.02,
+                                            height: Get.height * 0.04,
+                                            width: Get.width * 0.06,
+                                          ),
                                         )
                                       ],
                                     ),

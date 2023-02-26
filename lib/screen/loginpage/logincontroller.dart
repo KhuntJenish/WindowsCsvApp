@@ -1,5 +1,5 @@
-import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/dashboard.dart';
+import 'package:csvapp/database/tables.dart';
 import 'package:csvapp/utils/constant.dart';
 import 'package:csvapp/utils/extensions.dart';
 import 'package:drift/drift.dart';
@@ -21,18 +21,15 @@ class LoginController extends GetxController {
                   tbl.password.equals(password));
             }))
           .get();
-      // print(data[0]);
 
       if (data.isEmpty) {
         'User not found'.errorSnackbar;
-        // print('user not exist');
       } else {
         UserData user = data[0];
         GetStorage('box').write('cuser', user);
-        print('current User');
+
         UserData currentUser = GetStorage('box').read('cuser');
-        print(currentUser.username);
-        // print(data);
+
         Get.offAllNamed(Dashboard.routeName);
       }
     } catch (e) {

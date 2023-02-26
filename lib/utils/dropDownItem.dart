@@ -1,7 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:csvapp/screen/homepage/homecontroller.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../database/tables.dart';
@@ -13,11 +11,11 @@ class PartyTypeDropDownItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       height: 50,
       width: Get.width * 0.9,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.grey[400],
           borderRadius: BorderRadius.circular(10),
@@ -39,7 +37,6 @@ class PartyTypeDropDownItems extends StatelessWidget {
               }).toList(),
               onChanged: (PartyTypeMasterData? newValue) {
                 defualtValue?.value = newValue!;
-                print(defualtValue?.value);
               },
             ),
           ),
@@ -93,7 +90,6 @@ class PartyDropDownItems extends StatelessWidget {
             }).toList(),
             onChanged: (PartyMasterData? newValue) {
               defualtValue?.value = newValue!;
-              print(defualtValue?.value);
             },
           ),
         ),
@@ -148,13 +144,12 @@ class StringDropDownItems extends StatelessWidget {
             }).toList(),
             onChanged: (String? newValue) {
               defualtValue?.value = newValue!;
-              print(defualtValue?.value);
+
               if (defualtValue?.value == 'Custom') {
                 homecontroller?.dateRange.value = DateTimeRange(
                   start: DateTime(DateTime.now().year, DateTime.now().month, 1),
                   end: DateTime.now(),
                 );
-                print('jenish');
               }
             },
           ),
@@ -208,7 +203,6 @@ class MaterialTypeDropDownItems extends StatelessWidget {
             }).toList(),
             onChanged: (MaterialTypeData? newValue) {
               defualtValue?.value = newValue!;
-              print(defualtValue?.value);
             },
           ),
         ),

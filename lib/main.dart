@@ -21,13 +21,7 @@ import 'utils/constant.dart';
 Future<void> main() async {
   //  static final db = MyDatabase();
 
-  // final id = await Constantdata.db.into(Constantdata.db.user).insert(
-  //     UserCompanion.insert(
-  //         username: 'admin',
-  //         password: 'admin',
-  //         mail: 'admin@gmail.com',
-  //         phone: 9624891105));
-  // print(id);
+  //
 
   var admin = await (Constantdata.db.select(Constantdata.db.user)
         ..where((tbl) => tbl.username.equals('admin')))
@@ -39,7 +33,7 @@ Future<void> main() async {
           username: 'admin',
           password: 'admin',
           mail: 'admin@gmail.com',
-          phone: 9624891105,
+          phone: 9999999999,
         ));
   }
 
@@ -59,25 +53,25 @@ Future<void> main() async {
 
   // await Constantdata.db.delete(Constantdata.db.partyMaster).go();
 
-  // print(data);
-  // print('done');
+  //
+  //
 
   // final id = await (Constantdata.db.delete(Constantdata.db.materialType)
   //       ..where((tbl) => tbl.id.equals(2)))
   //     .go();
-  // print(id);
+  //
 
 // await db
 //       .into(db.partyMaster)
 //       .insert(PartyMasterCompanion.insert(name: 'brijal patel',ptID: id));
-//   print(id);
+//
   // (await db.select(db.partyTypeMaster).get()).forEach((element) {
-  //   print(element);
+  //
   // });
   // (await db.select(db.partyMaster).get()).forEach((element) {
-  //   print(element);
+  //
   // });
-  // print( (db.delete(db.partyTypeMaster)..where((tbl) => tbl.id.isSmallerThanValue(7))).go());
+  //
   await GetStorage.init('box');
   WidgetsFlutterBinding.ensureInitialized();
   // if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -93,7 +87,7 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   Future testWindowFunctions() async {
     Size size = await DesktopWindow.getWindowSize();
-    print(size);
+
     await DesktopWindow.setWindowSize(const Size(1800, 1000));
 
     await DesktopWindow.setMinWindowSize(const Size(1800, 1000));
@@ -112,18 +106,17 @@ class MyApp extends StatelessWidget {
     GetStorage('box').write('isSelectedReport', 0);
     if (GetStorage('box').read('cuser') != null) {
       var userData = GetStorage('box').read('cuser');
-      print('userdata : $userData');
+
       var user = UserData(
           id: userData['id'],
           username: userData['username'],
           password: userData['password'],
           phone: userData['phone'],
           mail: userData['mail']);
-      // print(user);
+      //
       GetStorage('box').write('cuser', user);
     }
 
-    print('current User');
     return ScreenUtilInit(
       designSize: const Size(1800, 1000),
       minTextAdapt: true,

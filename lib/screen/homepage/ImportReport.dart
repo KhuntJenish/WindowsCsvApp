@@ -28,7 +28,7 @@ class ImportReport extends StatelessWidget {
     final ScrollController horizontalScroll = ScrollController();
     final ScrollController verticalScroll = ScrollController();
     const double width = 20;
-    // print(_homepageController.isSelectedReport.value);
+    //
     return WillPopScope(
       onWillPop: () async {
         _homepageController.isSelectedReport.value = 0;
@@ -185,13 +185,6 @@ class ImportReport extends StatelessWidget {
                               fontSize: Get.width * 0.010,
                               text: 'Search',
                               onPressed: () async {
-                                print('Search Button Pressed');
-                                print(_homepageController
-                                    .isAllPartySelected.value);
-                                print(_homepageController.defaultParty);
-                                print(
-                                    _homepageController.dateRange.value.start);
-                                print(_homepageController.dateRange.value.end);
                                 if (_homepageController.defaultParty.value.id ==
                                     0) {
                                   '😀Please Select Party'.errorSnackbar;
@@ -219,7 +212,6 @@ class ImportReport extends StatelessWidget {
                               fontSize: Get.width * 0.010,
                               text: 'Reset',
                               onPressed: () async {
-                                print('Reset Button Pressed');
                                 if (_homepageController
                                     .pendingReportData.isNotEmpty) {
                                   _homepageController.pendingReportData.clear();
@@ -259,7 +251,6 @@ class ImportReport extends StatelessWidget {
                                           ? 'Add CSV'
                                           : 'Add Data',
                                       onPressed: () async {
-                                        print("Button is pressed.");
                                         if (_homepageController
                                                 .isLoading.value ==
                                             false) {
@@ -271,8 +262,6 @@ class ImportReport extends StatelessWidget {
                                                   .isEmpty &&
                                               _homepageController
                                                   .partyNaNSetData.isEmpty)) {
-                                            print(_homepageController
-                                                .pendingReportData);
                                             List<List<dynamic>> data = [];
                                             data.addAll(_homepageController
                                                 .pendingReportData);
@@ -349,7 +338,6 @@ class ImportReport extends StatelessWidget {
                                       fontSize: Get.width * 0.010,
                                       text: 'Generate',
                                       onPressed: () async {
-                                        print('Generate Report');
                                         // TODO: Generate Report With Data
                                         await _homepageController
                                             .generateComissionReport(
@@ -458,14 +446,14 @@ class ImportReport extends StatelessWidget {
                                                   child: ElevatedButton(
                                                     onPressed: () async {
                                                       //Add Party Data According Index like Hospital,Doctor,technician
-                                                      print('Add Party Data');
+
                                                       await _homepageController
                                                           .addAllPartyData(
                                                               fields: _homepageController
                                                                   .pendingReportData,
                                                               index: subIndex);
 
-                                                      // print('Add Party Data');
+                                                      //
                                                     },
                                                     child: const AutoSizeText(
                                                         "Add",
@@ -499,7 +487,7 @@ class ImportReport extends StatelessWidget {
                             // scrollDirection: Axis.vertical,
                             // shrinkWrap: true,
                             itemBuilder: (_, index) {
-                              // print(_homepageController.displayData
+                              //
                               //     .contains(_homepageController.data[index][15]));
                               return Visibility(
                                 visible: index != 0,
@@ -636,8 +624,6 @@ class ImportReport extends StatelessWidget {
                                                     height: Get.height * 0.03,
                                                     child: ElevatedButton(
                                                       onPressed: () async {
-                                                        print(
-                                                            'new material Type');
                                                         String btnText =
                                                             'Add New Comission';
                                                         var hospital =
@@ -658,13 +644,13 @@ class ImportReport extends StatelessWidget {
                                                                 Constantdata
                                                                     .technicianStaffIndex];
 
-                                                        // print(
+                                                        //
                                                         //     _homepageController
                                                         //         .partyList);
-                                                        // print(_homepageController
+                                                        //
                                                         //         .pendingReportData[
                                                         //     index][10]);
-                                                        // print('technician');
+                                                        //
                                                         var hospitalParty =
                                                             _homepageController
                                                                 .partyList!
@@ -709,11 +695,8 @@ class ImportReport extends StatelessWidget {
                                                             await _homepageController
                                                                 .checkMaterialType(
                                                                     materialType);
-                                                        print(isShowAddMt);
-                                                        print(
-                                                            _homepageController
-                                                                .partyList);
-                                                        // print(hospitalParty);
+
+                                                        //
 
                                                         Get.bottomSheet(
                                                           isScrollControlled:

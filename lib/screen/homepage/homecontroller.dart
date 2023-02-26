@@ -113,14 +113,14 @@ class HomepageController extends GetxController {
     getPartyList();
     // getMaterialTypeList();
     // getPartyCityList();
-    print('Report val: ${GetStorage('box').read('isSelectedReport')}');
+
     if (GetStorage('box').read('isSelectedReport') != null) {
       isSelectedReport.value = GetStorage('box').read('isSelectedReport');
     } else {
       isSelectedReport.value = 0;
       GetStorage('box').write('isSelectedReport', 0);
     }
-    // print('Homecontroller onInit');
+    //
   }
 
   getDurationDateRange({required String? duration}) {
@@ -132,7 +132,7 @@ class HomepageController extends GetxController {
           start: DateTime(last.year, last.month, 1),
           end: last,
         );
-        print(tempDateRange);
+
         dateRange.value = tempDateRange;
         break;
       case 'Four Month':
@@ -142,7 +142,7 @@ class HomepageController extends GetxController {
           start: DateTime(last.year, last.month - 3, 1),
           end: last,
         );
-        print(tempDateRange);
+
         dateRange.value = tempDateRange;
         break;
       case 'Six Month':
@@ -152,7 +152,7 @@ class HomepageController extends GetxController {
           start: DateTime(last.year, last.month - 5, 1),
           end: last,
         );
-        print(tempDateRange);
+
         dateRange.value = tempDateRange;
         break;
       case 'One Year':
@@ -164,7 +164,7 @@ class HomepageController extends GetxController {
               : DateTime(last.year - 1, last.month, 1),
           end: last,
         );
-        print(tempDateRange);
+
         dateRange.value = tempDateRange;
         break;
       default:
@@ -215,11 +215,9 @@ class HomepageController extends GetxController {
               .toString()); //t comission amount
         }
 
-        // print(subList);
+        //
         list.add(subList);
       }
-      print(list);
-      print(list.length);
 
       int a = 0;
       List<List<dynamic>> newList = [];
@@ -250,10 +248,6 @@ class HomepageController extends GetxController {
             } else {
               tComissiontotal += double.parse(list[i][7].toString());
             }
-            print(saletotal);
-            print(hComissiontotal);
-            print(dComissiontotal);
-            print(tComissiontotal);
           }
           a++;
           if (a >= list.length) {
@@ -276,8 +270,7 @@ class HomepageController extends GetxController {
                       ? dComissiontotal.toStringAsFixed(2)
                       : tComissiontotal.toStringAsFixed(2),
             ]);
-            print(newList);
-            print(newList.length);
+
             mainList.add(newList);
 
             saletotal = 0;
@@ -290,7 +283,6 @@ class HomepageController extends GetxController {
             hComissiontotalList = [];
             dComissiontotalList = [];
             tComissiontotalList = [];
-            print('half record');
           }
         } else {
           saletotalList.add(saletotal);
@@ -312,8 +304,6 @@ class HomepageController extends GetxController {
                     ? dComissiontotal.toStringAsFixed(2)
                     : tComissiontotal.toStringAsFixed(2),
           ]);
-          print(newList);
-          print(newList.length);
 
           mainList.add(newList);
           saletotal = 0;
@@ -330,11 +320,10 @@ class HomepageController extends GetxController {
         }
       }
       if (mainList.length > 1) {
-        print(mainList);
         List<List<dynamic>> lastList = [];
         lastList.addAll(mainList.elementAt(mainList.length - 1));
-        print(saletotalList);
-        // print(comissiontotalList);
+
+        //
         for (var i = 0; i < saletotalList.length; i++) {
           saletotal += saletotalList[i];
           // comissiontotal = comissiontotal + comissiontotalList[i];
@@ -357,11 +346,10 @@ class HomepageController extends GetxController {
                   ? dComissiontotal.toStringAsFixed(2)
                   : tComissiontotal.toStringAsFixed(2),
         ]);
-        print(mainList);
+
         mainList.removeLast();
-        print(mainList);
+
         mainList.add(lastList);
-        print(mainList);
       }
 
       for (var i = 0; i < mainList.length; i++) {
@@ -421,10 +409,10 @@ class HomepageController extends GetxController {
       final filename = "invoice_${DateTime.now().microsecond}_$isNumber.pdf";
       final output = await getDownloadsDirectory();
       final file = File("${output?.path}\\$filename");
-      print(file.path);
+
       // final file = File("example.pdf");
       await file.writeAsBytes(await pdf.save());
-      print('save');
+
       // 'pdf Download SuccessFull.😀'.successSnackbar;
       'pdf Download SuccessFull.😀'.successDailog;
       Timer(const Duration(seconds: 2), () {
@@ -433,15 +421,12 @@ class HomepageController extends GetxController {
       // final String filePath = testFile.absolute.path;
       final Uri uri = Uri.file(file.path);
       if (await canLaunchUrl(uri)) {
-        // print("launch url : $uri");
+        //
         await launchUrl(uri);
-      } else {
-        print("cannot launch url : $uri");
-      }
+      } else {}
       isNumber.value++;
       isLoading.value = false;
     } catch (e) {
-      print(e);
       e.toString().errorSnackbar;
     }
   }
@@ -482,11 +467,9 @@ class HomepageController extends GetxController {
             .toString()); //t comission
         subList.add(generatedReportData[i][Constantdata.tcAmountIndex]
             .toString()); //t comission amount
-        // print(subList);
+        //
         list.add(subList);
       }
-      print(list);
-      print(list.length);
 
       int a = 0;
       List<List<dynamic>> newList = [];
@@ -513,10 +496,6 @@ class HomepageController extends GetxController {
             hComissiontotal += double.parse(list[i][7].toString());
             dComissiontotal += double.parse(list[i][10].toString());
             tComissiontotal += double.parse(list[i][13].toString());
-            print(saletotal);
-            print(hComissiontotal);
-            print(dComissiontotal);
-            print(tComissiontotal);
           }
           a++;
           if (a >= list.length) {
@@ -541,8 +520,7 @@ class HomepageController extends GetxController {
               '',
               tComissiontotal.toStringAsFixed(2),
             ]);
-            print(newList);
-            print(newList.length);
+
             mainList.add(newList);
 
             saletotal = 0;
@@ -555,7 +533,6 @@ class HomepageController extends GetxController {
             hComissiontotalList = [];
             dComissiontotalList = [];
             tComissiontotalList = [];
-            print('half record');
           }
         } else {
           saletotalList.add(saletotal);
@@ -579,8 +556,6 @@ class HomepageController extends GetxController {
             '',
             tComissiontotal.toStringAsFixed(2),
           ]);
-          print(newList);
-          print(newList.length);
 
           mainList.add(newList);
           saletotal = 0;
@@ -597,11 +572,10 @@ class HomepageController extends GetxController {
         }
       }
       if (mainList.length > 1) {
-        print(mainList);
         List<List<dynamic>> lastList = [];
         lastList.addAll(mainList.elementAt(mainList.length - 1));
-        print(saletotalList);
-        // print(comissiontotalList);
+
+        //
         for (var i = 0; i < saletotalList.length; i++) {
           saletotal += saletotalList[i];
           // comissiontotal = comissiontotal + comissiontotalList[i];
@@ -626,11 +600,10 @@ class HomepageController extends GetxController {
           '',
           tComissiontotal.toStringAsFixed(2),
         ]);
-        print(mainList);
+
         mainList.removeLast();
-        print(mainList);
+
         mainList.add(lastList);
-        print(mainList);
       }
 
       for (var i = 0; i < mainList.length; i++) {
@@ -707,10 +680,10 @@ class HomepageController extends GetxController {
       final filename = "invoice_${DateTime.now().microsecond}_$isNumber.pdf";
       final output = await getDownloadsDirectory();
       final file = File("${output?.path}\\$filename");
-      print(file.path);
+
       // final file = File("example.pdf");
       await file.writeAsBytes(await pdf.save());
-      print('save');
+
       // 'pdf Download SuccessFull.😀'.successSnackbar;
       'pdf Download SuccessFull.😀'.successDailog;
       Timer(const Duration(seconds: 2), () {
@@ -719,15 +692,12 @@ class HomepageController extends GetxController {
       // final String filePath = testFile.absolute.path;
       final Uri uri = Uri.file(file.path);
       if (await canLaunchUrl(uri)) {
-        // print("launch url : $uri");
+        //
         await launchUrl(uri);
-      } else {
-        print("cannot launch url : $uri");
-      }
+      } else {}
       isNumber.value++;
       isLoading.value = false;
     } catch (e) {
-      print(e);
       e.toString().errorSnackbar;
     }
   }
@@ -736,15 +706,12 @@ class HomepageController extends GetxController {
     try {
       isLoading.value = true;
       final pdf = pw.Document();
-      print(partyWiseList);
-      debugPrint(partyWiseList.length.toString());
+
       List<List<List<dynamic>>> superMainList = [];
       List<List<dynamic>> newMainList = [];
       List<List<dynamic>> tempMainList = [];
       for (var i = 0; i < partyWiseList.length; i++) {
-        print(partyWiseList.elementAt(i));
-        print(partyWiseList.elementAt(i)[0].pID);
-        // print(partyList);
+        //
         var partyName = partyList
             ?.firstWhere((element) =>
                 element.id.isEqual(partyWiseList.elementAt(i)[0].pID))
@@ -758,7 +725,7 @@ class HomepageController extends GetxController {
             : ptID == 2
                 ? 'Doctor'
                 : 'Technician';
-        print(partyName);
+
         List newList = [];
         List<List<dynamic>> newsubList = [];
         newList.addAll(partyWiseList.elementAt(i));
@@ -776,46 +743,43 @@ class HomepageController extends GetxController {
           'Extra Pay',
         ]);
         for (var j = 0; j < newList.length; j++) {
-          print(newList[j]);
-
           var drAmount = newList[j].drAmount.toDouble();
           var crAmount = newList[j].crAmount.toDouble();
           var extraCrAmount = newList[j].extracrAmount.toDouble();
           var date = DateTime.parse(newList[j].ledgerDate.toString());
-          print(newList[j].drAmount);
+
           newsubList.add([
             date == DateTime(1800, 01, 01)
                 ? ''
                 : DateFormat('dd-MM-yyyy').format(date),
-            newList[j].type == 'ExtraPayment'
-                ? newList[j].ledgerNote.toString()
-                : newList[j].type.toString(),
+            newList[j].type == Constantdata.extraPayment
+                ? "${newList[j].type.substring(0, 8)}-${newList[j].ledgerNote.toString()}"
+                : newList[j].type == Constantdata.payment
+                    ? "${newList[j].type.substring(0, 3)}-${newList[j].ledgerNote.toString()}"
+                    : newList[j].type.toString(),
             drAmount < 1 ? '' : drAmount.toStringAsFixed(2),
             crAmount < 1 ? '' : crAmount.toStringAsFixed(2),
             extraCrAmount < 1 ? '' : extraCrAmount.toStringAsFixed(2),
           ]);
         }
-        print(newsubList);
+
         newList.clear();
         newMainList.addAll(newsubList);
       }
-      print(newMainList);
+
       tempMainList.addAll(newMainList);
       int a = 0;
       newMainList.clear();
       for (var i = 0; i < tempMainList.length; i++) {
         if (((i + 1) % 26) == 0) {
           // a++;
-          print(i);
+
           newMainList.add(tempMainList[i]);
 
-          print(newMainList.length);
           List<List<dynamic>> temp = [];
           temp.addAll(newMainList);
           superMainList.add(temp);
           newMainList.clear();
-
-          print('hello');
         } else {
           newMainList.add(tempMainList[i]);
           if (i == (tempMainList.length - 1)) {
@@ -824,10 +788,9 @@ class HomepageController extends GetxController {
             superMainList.add(temp);
             newMainList.clear();
           }
-          print('$i --');
         }
       }
-      print(superMainList);
+
       for (var i = 0; i < superMainList.length; i++) {
         pdf.addPage(
           pw.Page(
@@ -884,10 +847,10 @@ class HomepageController extends GetxController {
       final output = await getDownloadsDirectory();
       final file = File(
           "${output?.path}\\ledgerReport_${DateTime.now().microsecond}_$isNumber.pdf");
-      print(file.path);
+
       // final file = File("example.pdf");
       await file.writeAsBytes(await pdf.save());
-      print('save');
+
       // 'pdf Download SuccessFull.😀'.successSnackbar;
       'pdf Download SuccessFull.😀'.successDailog;
       Timer(const Duration(seconds: 2), () {
@@ -895,15 +858,12 @@ class HomepageController extends GetxController {
       });
       final Uri uri = Uri.file(file.path);
       if (await canLaunchUrl(uri)) {
-        // print("launch url : $uri");
+        //
         await launchUrl(uri);
-      } else {
-        print("cannot launch url : $uri");
-      }
+      } else {}
       isNumber.value++;
       isLoading.value = false;
     } catch (e) {
-      print(e);
       e.toString().errorSnackbar;
     }
   }
@@ -933,7 +893,7 @@ class HomepageController extends GetxController {
 
     if (picked != null) {
       dateRange.value = picked;
-      print(dateRange.value);
+
       // getPendingData();
     }
   }
@@ -944,9 +904,9 @@ class HomepageController extends GetxController {
 
     partyList?.addAll(data);
 
-    // print(data);
+    //
     if (partyList!.isNotEmpty) {
-      // print(partyTypeList![0]);
+      //
       var defualt = partyList![0].obs;
       defaultParty.value = defualt.value;
       defaultParty.refresh();
@@ -960,14 +920,9 @@ class HomepageController extends GetxController {
           tpartyList?.add(party);
         }
       }
-      print(hpartyList);
-      print(dpartyList);
-      print(tpartyList);
-
-      print('defualtParty: ${defaultParty.value}');
     }
 
-    // print(partyList);
+    //
     await getMaterialTypeList();
   }
 
@@ -976,24 +931,22 @@ class HomepageController extends GetxController {
       partyCityList.clear();
       // List<InputDataData> data = await db.select(db.inputData).get();
       var res = await db.select(db.inputData).get();
-      // print(res);
+      //
 
       for (var element in res) {
         partyCityList.add(element.custBillCity);
       }
 
-      // print(data);
+      //
       if (partyCityList.isNotEmpty) {
-        // print(partyTypeList![0]);
+        //
         var defualt = partyCityList.toList();
         defaultPartyCity.value = defualt[0];
         defaultPartyCity.refresh();
-        print('defualtParty: ${defaultParty.value}');
       }
 
-      // print(partyCityList);
+      //
     } catch (e) {
-      print(e);
       e.toString().errorSnackbar;
     }
   }
@@ -1004,16 +957,15 @@ class HomepageController extends GetxController {
 
     materialTypeList?.addAll(data);
 
-    // print(data);
+    //
     if (materialTypeList!.isNotEmpty) {
-      // print(partyTypeList![0]);
+      //
 
       defaultMaterialType.value = materialTypeList![0];
       defaultMaterialType.refresh();
-      print('defualtParty: ${defaultMaterialType.value}');
     }
 
-    // print(materialTypeList);
+    //
     await getPartyCityList();
   }
 
@@ -1023,9 +975,9 @@ class HomepageController extends GetxController {
       int? pID,
       List<dynamic>? paymentbackRecord}) async {
     try {
-      // print('smtInvNo: $id');
+      //
       double? crAmount;
-      print('record: $paymentbackRecord');
+
       var matCode = paymentbackRecord?[Constantdata.matCodeIndex];
       var smtInvoiceNo = paymentbackRecord?[Constantdata.smtInvoiceNoIndex];
       var data = await (db.select(db.inputData)
@@ -1034,7 +986,6 @@ class HomepageController extends GetxController {
                 tbl.matCode.equals(matCode)))
           .getSingle();
 
-      print('logID : ${data.logId}');
       var paymentLedgerID = 0;
       DateTime comissionPaidDate;
       if (pID == 1) {
@@ -1050,7 +1001,6 @@ class HomepageController extends GetxController {
             hospitalComissionPaidDate: DateTime(1800, 01, 01),
           ),
         );
-        print('updateInputData: $updateInputData');
       } else if (pID == 2) {
         crAmount = paymentbackRecord?[Constantdata.dcAmountIndex];
         paymentLedgerID = data.doctorPaymentLedgerId;
@@ -1061,7 +1011,6 @@ class HomepageController extends GetxController {
             .write(data.copyWith(
           doctorComissionPaidDate: DateTime(1800, 01, 01),
         ));
-        print('updateInputData: $updateInputData');
       } else {
         crAmount = paymentbackRecord?[Constantdata.tcAmountIndex];
         paymentLedgerID = data.techniqalStaffPaymentLedgerId;
@@ -1073,14 +1022,14 @@ class HomepageController extends GetxController {
           techniqalStaffComissionPaidDate: DateTime(1800, 01, 01),
         ));
       }
-      // print('ledgerID : ${data.generateLedgerId}');
+      //
       if (paymentLedgerID != 0) {
         var ledgerData = await (db.select(db.ledger)
               ..where((tbl) => tbl.ledgerDate.equals(comissionPaidDate)))
             .getSingle();
 
-        // print('ledgerData: $ledgerData1');
-        print('ledgerData: $ledgerData');
+        //
+
         if (ledgerData.crAmount != crAmount) {
           var updateLedgerData = await (db.update(db.ledger)
                 ..where((tbl) => tbl.id.equals(ledgerData.id)))
@@ -1092,7 +1041,6 @@ class HomepageController extends GetxController {
         } else {
           var deletePaymentLedger =
               await db.delete(db.ledger).delete(ledgerData);
-          print(deletePaymentLedger);
         }
 
         await getGeneratedSearchData(
@@ -1132,14 +1080,14 @@ class HomepageController extends GetxController {
       comissionAndmatTypeNaNSetData.clear();
       partyNaNSetData.clear();
       List<InputDataData> serachData = [];
-      print('isAllPartySelected: $isAllPartySelected');
+
       if (isAllPartySelected!) {
         serachData = await (db.select(db.inputData)
               ..where((tbl) =>
                   tbl.smtDocDate.isBetweenValues(start!, end!) &
                   tbl.logId.equals(0)))
             .get();
-        // print(serachData);
+        //
       } else {
         serachData = await (db.select(db.inputData)
               ..where((tbl) =>
@@ -1148,7 +1096,6 @@ class HomepageController extends GetxController {
                   tbl.logId.equals(0)))
             .get();
       }
-      print('Pending searchData length');
 
       pendingReportData.clear();
       List sublist = [];
@@ -1172,8 +1119,6 @@ class HomepageController extends GetxController {
       sublist.add('Purchase Taxable');
       sublist.add('Total Purchase');
       pendingReportData.add(sublist);
-      print(serachData.length);
-      print(pendingReportData.length);
 
       for (var i = 0; i < serachData.length; i++) {
         // var checkParty = await (db.select(db.partyMaster)
@@ -1224,7 +1169,7 @@ class HomepageController extends GetxController {
             displayData.add(serachData[i].id);
             List sublist = [];
 
-            // print(pendingData[i]);
+            //
             sublist.add(i + 1);
             sublist.add(serachData[i].documentType);
             sublist.add(
@@ -1247,7 +1192,7 @@ class HomepageController extends GetxController {
             sublist.add(serachData[i].purchaseTaxableAmount);
             sublist.add(serachData[i].totalPurchaseAmount);
 
-            // print(sublist);
+            //
 
             pendingReportData.add(sublist);
           } else {
@@ -1257,10 +1202,7 @@ class HomepageController extends GetxController {
           partyNaNSetData.add(serachData[i].id);
         }
       }
-      print('Serch Data');
-      print(displayData);
-      print(partyNaNSetData);
-      print(comissionAndmatTypeNaNSetData);
+
       isLoading.value = false;
     } catch (e) {
       e.toString().errorSnackbar;
@@ -1279,7 +1221,7 @@ class HomepageController extends GetxController {
       isLoading.value = true;
       ledgerReportData.clear();
       ledgerPartyWiseSet.clear();
-      print('ledgerSearchData : ');
+
       List<LedgerData> ledgerData = [];
       d.Expression<bool> party = isAllPartySelected!
           ? db.ledger.pID.isNotNull()
@@ -1292,8 +1234,6 @@ class HomepageController extends GetxController {
 
       ledgerReportData.addAll(ledgerData);
 
-      print(ledgerReportData);
-      print(ledgerReportData.length);
       Set ledgerPartySet = {};
 
       List<List<double>> drcrAmountList = [];
@@ -1302,22 +1242,21 @@ class HomepageController extends GetxController {
       double extraCrAmount = 0;
       for (var element in ledgerReportData) {
         bool data = ledgerPartySet.add(element.pID);
-        print(data);
+
         if (data == false) {
-          print('Duplicate Party ID : $data');
           var index =
               ledgerPartySet.toList().indexWhere((pid) => pid == element.pID);
-          print(index);
+
           drcrAmountList[index][0] += element.drAmount;
           drcrAmountList[index][1] += element.crAmount;
           drcrAmountList[index][2] += element.extracrAmount;
-          print(ledgerPartySet.toList().indexOf(element.pID));
+
           //**add Record at old position */
           List tempPartyList = ledgerPartyWiseSet.toList()[index];
-          print(tempPartyList);
+
           // tempPartyList.add(element);
           ledgerPartyWiseSet.toList()[index].add(element);
-          print(ledgerPartyWiseSet.toList()[index]);
+
           // ledgerPartyWiseSet.add(element);
         } else {
           dramount = 0;
@@ -1334,14 +1273,9 @@ class HomepageController extends GetxController {
           List tempPartyList = [];
           tempPartyList.add(element);
           ledgerPartyWiseSet.add(tempPartyList);
-
-          print('Unique Party ID : $data');
         }
       }
-      print(ledgerPartySet);
-      print(drcrAmountList);
-      print(ledgerPartyWiseSet);
-      print(ledgerPartyWiseSet.length);
+
       for (var i = 0; i < ledgerPartySet.length; i++) {
         double drAmount = (drcrAmountList[i][0] < drcrAmountList[i][1])
             ? drcrAmountList[i][1] - drcrAmountList[i][0]
@@ -1407,8 +1341,6 @@ class HomepageController extends GetxController {
             );
       }
 
-      print(ledgerReportData);
-      print(ledgerPartyWiseSet);
       isLoading.value = false;
     } catch (e) {
       e.toString().errorSnackbar;
@@ -1424,7 +1356,6 @@ class HomepageController extends GetxController {
     double? lumpsumAmount,
   }) async {
     try {
-      print(generatedReportData?.length);
       if (generatedReportData!.isEmpty) {
         "Payment not found".errorSnackbar();
       }
@@ -1441,22 +1372,22 @@ class HomepageController extends GetxController {
         for (var i = 1; i < generatedReportData.length; i++) {
           if (ptID == 1) {
             // isHospital = true;
-            // print(generatedReportData[i][3]);
-            // print(generatedReportData[i][19]);
+            //
+            //
             pName = generatedReportData[i][Constantdata.customerIndex];
             pCommission = generatedReportData[i][Constantdata.hcAmountIndex];
             totalPayAmount += pCommission;
           } else if (ptID == 2) {
             // isDoctor = true;
-            // print(generatedReportData[i][9]);
-            // print(generatedReportData[i][21]);
+            //
+            //
             pName = generatedReportData[i][Constantdata.doctorNameIndex];
             pCommission = generatedReportData[i][Constantdata.dcAmountIndex];
             totalPayAmount += pCommission;
           } else {
             // isTechnician = true;
-            // print(generatedReportData[i][10]);
-            // print(generatedReportData[i][23]);
+            //
+            //
             pName = generatedReportData[i][Constantdata.technicianStaffIndex];
             pCommission = generatedReportData[i][Constantdata.tcAmountIndex];
             totalPayAmount += pCommission;
@@ -1478,16 +1409,16 @@ class HomepageController extends GetxController {
         }
         partyWiseTotalAmount.value = totalPayAmount;
 
-        // print(totalPayAmount);
-        // print(checkLumpsumPaymentData.length);
-        print(smtInvNoSet);
-        // print(partyWisePayableAmount.value);
+        //
+        //
+
+        //
         // if (!isReturn) {
         //   "amount of lumpsum payment is not enough".errorSnackbar();
         // }
       }
 
-      // print(checkLumpsumPaymentData);
+      //
       await getGeneratedSearchData(
           isAllPendingPayement: true,
           start: dateRange.value.start,
@@ -1500,11 +1431,8 @@ class HomepageController extends GetxController {
           selectedPartyCity: defaultPartyCity.value,
           ptID: ptID,
           isLumpsumPaymentSearch: true);
-      // print(totalPayAmount);
-
-      print(smtInvNoSet);
+      //
     } catch (e) {
-      debugPrint(e.toString());
       e.toString().errorSnackbar;
     }
   }
@@ -1523,7 +1451,6 @@ class HomepageController extends GetxController {
     bool? isLumpsumPaymentSearch = false,
   }) async {
     try {
-      print('Searching Generated Report Start....');
       isLoading.value = true;
 
       displayData.clear();
@@ -1531,8 +1458,8 @@ class HomepageController extends GetxController {
       partyNaNSetData.clear();
       var serachData = [];
 
-      print(selectedParty);
       ptID = selectedParty?.ptID;
+
       //*Duration declaraion/
       d.Expression<bool> comissionPaidDate = ptID == 1
           ? db.inputData.hospitalComissionPaidDate
@@ -1565,11 +1492,30 @@ class HomepageController extends GetxController {
           : ptID == 2
               ? doctorParty
               : techniqalStaffParty;
+
+      //**LedgerParty declaration */
+      // d.Expression<bool> ledgerParty = !isAllPartySelected
+      //     ? db.ledger.pID.equals(selectedParty!.id)
+      //     : db.ledger.pID.isNotNull();
+      if (partyList!.isNotEmpty && !isLumpsumPaymentSearch!) {
+        var ledgerdata = await (db.select(db.ledger)
+              ..where((tbl) =>
+                  tbl.pID.equals(selectedParty!.id) &
+                  tbl.ledgerNote.equals(Constantdata.pendingPaymentNote)))
+            .get();
+
+        if (ledgerdata.isNotEmpty) {
+          partyWisePendingPaidAmount.value = ledgerdata[0].crAmount;
+        } else {
+          partyWisePendingPaidAmount.value = 0;
+        }
+      }
+
       //**material declaration */
       d.Expression<bool> materialType = isAllMaterialTypeSelected!
           ? db.inputData.mtID.isNotNull()
           : db.inputData.mtID.equals(selectedMaterialType!.id);
-      // print('isAllPartySelected: $isAllPartySelected');
+      //
 
       serachData = await (db.select(db.inputData)
             ..where((tbl) =>
@@ -1581,9 +1527,7 @@ class HomepageController extends GetxController {
             ..orderBy([(t) => d.OrderingTerm(expression: t.smtDocDate)]))
           .get();
 
-      print(serachData.length);
-
-      // print('Generated searchData length');
+      //
 
       generatedReportData.clear();
       List sublist = [];
@@ -1613,8 +1557,8 @@ class HomepageController extends GetxController {
       sublist.add('T(%)');
       sublist.add('T-cAmount');
       generatedReportData.add(sublist);
-      // print(serachData.length);
-      // print(generatedReportData.length);
+      //
+      //
       if (!isAllPartySelected && !isLumpsumPaymentSearch!) {
         Timer(Duration.zero, () {
           partyWiseTotalAmount.value = 0.0;
@@ -1670,7 +1614,7 @@ class HomepageController extends GetxController {
             displayData.add(i + 1);
             List sublist = [];
 
-            // print(pendingData[i]);
+            //
             sublist.add(i + 1);
             sublist.add(serachData[i].documentType);
             sublist.add(
@@ -1702,7 +1646,7 @@ class HomepageController extends GetxController {
             sublist.add(serachData[i].doctorComissionPaidDate);
             sublist.add(serachData[i].techniqalStaffComissionPaidDate);
 
-            // print(sublist);
+            //
 
             generatedReportData.add(sublist);
 
@@ -1719,8 +1663,6 @@ class HomepageController extends GetxController {
                       : serachData[i].techniqalStaffComissionAmount;
 
               if (!isLumpsumPaymentSearch!) {
-                print(date.isAfter(DateTime(1800, 01, 01)));
-                print('partyPaidDate: $date');
                 if (date.isAfter(DateTime(1800, 01, 01))) {
                   partyWiseTotalAmount.value = partyWiseTotalAmount.value +
                       double.parse(cAmount.toString());
@@ -1745,13 +1687,11 @@ class HomepageController extends GetxController {
         }
       }
 
-      // print(displayData);
-      // print(partyNaNSetData);
-      // print(comissionAndmatTypeNaNSetData);
+      //
+      //
+      //
       isLoading.value = false;
-      print('End Searching Generated Report Data ......');
     } catch (e) {
-      debugPrint(e.toString());
       // e.toString().printError;
       e.toString().errorSnackbar;
     }
@@ -1760,27 +1700,50 @@ class HomepageController extends GetxController {
   Future<void> partyWisePayment({
     required PartyMasterData? selectedParty,
     required double? crAmount,
+    required double? pendingPaidAmount,
     int? ptID,
     bool? isAllPendingPayement = false,
+    String ledgerNote = "",
   }) async {
     try {
       isLoading.value = true;
       var currentDate = DateTime.now();
+
       var ledgerData = await db.into(db.ledger).insert(LedgerCompanion.insert(
             type: Constantdata.payment,
             pID: selectedParty!.id,
             ledgerDate: currentDate,
             drAmount: 0,
             crAmount: crAmount!,
-            ledgerNote: Constantdata.defualtAutoNote,
+            ledgerNote: ledgerNote,
             extradrAmount: 0,
             extracrAmount: 0,
             // ledgerNote: ledgerNote
           ));
-      print('Generated Report Data Length');
-      print(generatedReportData);
 
-      // print(data);
+      //
+
+      var oldpendingPaidPayemntRemove = await (db.delete(db.ledger)
+            ..where((tbl) =>
+                tbl.pID.equals(selectedParty.id) &
+                tbl.ledgerNote.equals(Constantdata.pendingPaymentNote)))
+          .go();
+      if (oldpendingPaidPayemntRemove != 0) {
+        var pendingPaidPayment =
+            await db.into(db.ledger).insert(LedgerCompanion.insert(
+                  type: Constantdata.payment,
+                  pID: selectedParty.id,
+                  ledgerDate: currentDate,
+                  drAmount: 0,
+                  crAmount: pendingPaidAmount!,
+                  ledgerNote: Constantdata.pendingPaymentNote,
+                  extradrAmount: 0,
+                  extracrAmount: 0,
+                  // ledgerNote: ledgerNote
+                ));
+      }
+
+      //
       if (ledgerData > 0) {
         List<String> smtInvNoList = [];
         List<InputDataData> inputDatadata = [];
@@ -1802,13 +1765,10 @@ class HomepageController extends GetxController {
         }
         // smtInvNoList.addAll(smtInvNoSet.toList());
 
-        print(smtInvNoList);
-
         // var inputDatadata = await (db.select(db.inputData)
         //       ..where((tbl) => tbl.smtInvNo.isIn(smtInvNoList)))
         //     .get();
 
-        print(inputDatadata);
         for (var i = 0; i < inputDatadata.length; i++) {
           var hinputData = inputDatadata[i].copyWith(
             hospitalComissionPaidDate: currentDate,
@@ -1827,11 +1787,9 @@ class HomepageController extends GetxController {
                   ? dinputData
                   : tinputData;
 
-          print(inputDatadata[i].smtInvNo);
           var updateRes = await (db.update(db.inputData)
                 ..where((tbl) => tbl.id.equals(inputDatadata[i].id)))
               .write(inputData);
-          print(updateRes);
         }
         // Get.back();
         // 'Payment Added Successfully'.successSnackbar;
@@ -1886,10 +1844,10 @@ class HomepageController extends GetxController {
 
             // ledgerNote: ledgerNote
           ));
-      // print('Generated Report Data Length');
-      // print(generatedReportData);
+      //
+      //
 
-      // print(data);
+      //
       if (ledgerData > 0) {
         'Payment Added Successfully'.successDailog;
         Timer(const Duration(seconds: 2), () {
@@ -1920,7 +1878,7 @@ class HomepageController extends GetxController {
       }
       // we will log the name, size and path of the
       // first picked file (if multiple are selected)
-      print(result.files.first.name);
+
       filePath = result.files.first.path!;
 
       final input = File(filePath!).openRead();
@@ -1928,15 +1886,15 @@ class HomepageController extends GetxController {
           .transform(utf8.decoder)
           .transform(const CsvToListConverter())
           .toList();
-      // print(fields[0].length);
-      print(fields.length);
+      //
+
       if (fields[0].length != 18) {
         'Invalid File'.errorSnackbar;
         isLoading.value = false;
         return;
       }
       // displyaData.addAll(fields);
-      // print(displyaData);
+      //
       List tempList = [];
       tempList.add("No.");
       tempList.addAll(fields[0]);
@@ -1947,7 +1905,7 @@ class HomepageController extends GetxController {
         tempList.clear();
         tempList.add(i);
         tempList.addAll(field);
-        print(tempList);
+
         fields[i].clear();
         fields[i].addAll(tempList);
       }
@@ -1973,16 +1931,13 @@ class HomepageController extends GetxController {
       fields.clear();
       fields.addAll(data);
 
-      debugPrint('Start Adding All Party Data ......');
-      print(partyNaNSetData);
-      print(fields);
       Set<String> partyNameList = {};
       for (var i = 0; i < fields.length; i++) {
         if (i != 0 && fields[i][index!].toString().isNotEmpty) {
           partyNameList.add(fields[i][index].toString());
         }
       }
-      print(partyNameList);
+
       index = index == Constantdata.customerIndex
           ? 1
           : index == Constantdata.doctorNameIndex
@@ -1995,8 +1950,7 @@ class HomepageController extends GetxController {
       for (var element in partydata) {
         partyNameList.remove(element.name);
       }
-      print(partyNameList);
-      print(partyNameList.length);
+
       String party = index == 1
           ? 'Hospital'
           : index == 2
@@ -2081,14 +2035,13 @@ class HomepageController extends GetxController {
                 }
               });
             }
-            // print(data);
+            //
             var pdata = await db.select(db.partyMaster).get();
             partyList?.clear();
             partyList?.addAll(pdata);
             defaultParty.value = pdata[0];
             defaultParty.refresh();
 
-            print(pdata);
             Get.back();
 
             'All ${partyNameList.length} Party Added Successfully'
@@ -2141,19 +2094,10 @@ class HomepageController extends GetxController {
     for (var i = 1; i < data.length; i++) {
       await addInputData(data[i]);
     }
-    print('Display Data');
-    print(displayData.length);
-    print(displayData);
-    print('Party NaN Data');
-    print(partyNaNSetData.length);
-    print(partyNaNSetData);
-    print('comission & matType Data');
-    print(comissionAndmatTypeNaNSetData.length);
-    print(comissionAndmatTypeNaNSetData);
-    print('data assigend');
+
     pendingReportData.clear();
     pendingReportData.addAll(data);
-    debugPrint(pendingReportData.length.toString());
+
     isLoading.value = false;
   }
 
@@ -2161,7 +2105,7 @@ class HomepageController extends GetxController {
     var res = await (db.select(db.materialType)
           ..where((tbl) => tbl.type.equals(materialType)))
         .get();
-    print(res);
+
     if (res.isNotEmpty) {
       return false;
     }
@@ -2170,7 +2114,6 @@ class HomepageController extends GetxController {
 
   Future<void> addInputData(List<dynamic> data) async {
     try {
-      debugPrint('******************new data******************');
       bool isShowHospital;
       bool isShowDoctor;
       bool isShowTechnician;
@@ -2215,8 +2158,7 @@ class HomepageController extends GetxController {
               ..where((tbl) => tbl.type.equals(
                   "${data[Constantdata.matTypeIndex]}~${data[Constantdata.matNameIndex]}")))
             .get();
-        debugPrint(
-            "${data[Constantdata.matTypeIndex]}~${data[Constantdata.matNameIndex]}");
+
         if (materialTypeList!.isNotEmpty) {
           isShowDoctor = false;
           isShowHospital = false;
@@ -2231,7 +2173,7 @@ class HomepageController extends GetxController {
                           tbl.pID.equals(resHospitalParty![0].id) &
                           tbl.mtID.equals(materialTypeList![0].id)))
                     .get();
-            print(resHospitalPartyComission);
+
             isShowHospital =
                 resHospitalPartyComission.isNotEmpty ? true : false;
           } else {
@@ -2267,24 +2209,16 @@ class HomepageController extends GetxController {
             var hcomission = resHospitalPartyComission?[0].comission1;
             // var dcomission = resHospitalPartyComission[0].comission1;
             // var tcomission = resTechnicianPartyComission[0].comission1;
-            debugPrint('comission(%): $hcomission');
-            debugPrint('TotalAmount(%): ${data[Constantdata.totalSalesIndex]}');
-            debugPrint(
-                'comissionAmount(%): ${(hcomission! * data[Constantdata.totalSalesIndex]) / 100}');
           } else {
             comissionAndmatTypeNaNSetData.add(data[Constantdata.dataNoIndex]);
             'Comission Not Found'.errorSnackbar;
-            debugPrint('Comission Not Found');
           }
         } else {
           comissionAndmatTypeNaNSetData.add(data[Constantdata.dataNoIndex]);
           'Material Type Not Found'.errorSnackbar;
-          debugPrint('Material Type Not Found');
         }
       } else {
         partyNaNSetData.add(data[Constantdata.dataNoIndex]);
-        debugPrint(
-            '${data[Constantdata.customerIndex] + data[Constantdata.doctorNameIndex] + data[Constantdata.technicianStaffIndex]} Party Not Found');
       }
     } catch (e) {
       printError(info: e.toString());
@@ -2301,15 +2235,13 @@ class HomepageController extends GetxController {
       for (var i = 1; i < data!.length; i++) {
         smtInvNoList.add(data[i][Constantdata.smtInvoiceNoIndex]);
       }
-      print(smtInvNoList);
+
       var res = await (db.select(db.inputData)
             ..where(
                 (tbl) => tbl.smtInvNo.isIn(smtInvNoList) & tbl.logId.equals(0)))
           .get();
       if (res.isNotEmpty) {
-        print('generateComissionReport');
-        print(data);
-        // print(data?.length);
+        //
         Set<int> hospitalPartySet = {}; //{1,2,3}
         List hospitalPartyTotalComissionSet = []; //[100,200,300]
         List<List<int>> hospitalPartyWiseList = [];
@@ -2321,14 +2253,13 @@ class HomepageController extends GetxController {
         List<List<int>> technicianPartyWiseList = [];
         // GetStorage('box').write('logID', 0);
         var logID = GetStorage('box').read('logID') ?? 0;
-        print('prevID :$logID');
+
         GetStorage('box').write('logID', logID + 1);
-        print(dateRange.value.start);
-        print(dateRange.value.end);
+
         var pendingData = await (db.select(db.inputData)
               ..where((tbl) => tbl.logId.equals(0)))
             .get();
-        print(pendingData);
+
         for (var element in pendingData) {
           bool isShowHospital;
           bool isShowDoctor;
@@ -2384,7 +2315,7 @@ class HomepageController extends GetxController {
                               tbl.pID.equals(checkHospitalParty![0].id) &
                               tbl.mtID.equals(checkMaterialType[0].id)))
                         .get();
-                print(checkHospitalPartyComission);
+
                 isShowHospital =
                     checkHospitalPartyComission.isNotEmpty ? true : false;
               } else {
@@ -2423,7 +2354,7 @@ class HomepageController extends GetxController {
                 isShowTechnician = false;
                 // displayData.add(data[15].toString());
                 var logID = GetStorage('box').read('logID');
-                print('logID: $logID');
+
                 //For Hospital
                 double hospitalComission, hospitalComissionAmount;
                 //For Doctor
@@ -2436,37 +2367,32 @@ class HomepageController extends GetxController {
                   hospitalComissionAmount = double.parse(
                       ((hospitalComission * element.totalSale) / 100)
                           .toStringAsFixed(2));
-                  print('pname: ${checkHospitalParty?[0].name}');
+
                   if (hospitalPartySet.contains(element.hospitalID)) {
                     int index = hospitalPartySet
                         .toList()
                         .indexWhere((item) => item.isEqual(element.hospitalID));
-                    print(index);
+
                     var oldCommision =
                         hospitalPartyTotalComissionSet.elementAt(index);
-                    print(oldCommision);
+
                     hospitalPartyTotalComissionSet[index] =
                         oldCommision + hospitalComissionAmount;
                     hospitalPartyWiseList[index].add(element.id);
 
-                    print(hospitalPartyWiseList);
-                    print(hospitalPartyTotalComissionSet.toList());
                     // partyTotalComissionSet.add(comissionAmount);
                   } else {
                     hospitalPartySet.add(element.hospitalID);
                     int index = hospitalPartySet
                         .toList()
                         .indexWhere((item) => item.isEqual(element.hospitalID));
-                    print(index);
+
                     hospitalPartyTotalComissionSet.insert(
                         index, hospitalComissionAmount);
                     List<int> party = [];
                     party.add(element.id);
                     hospitalPartyWiseList.insert(index, party);
                     // partyTotalComissionSet.elementAt(index);
-                    print(hospitalPartyWiseList);
-                    print(hospitalPartyTotalComissionSet.toList());
-                    print(hospitalPartySet);
                   }
                   isShowHospital = true;
                 } else {
@@ -2479,37 +2405,32 @@ class HomepageController extends GetxController {
                   doctorComissionAmount = double.parse(
                       ((docotorComission * element.totalSale) / 100)
                           .toStringAsFixed(2));
-                  print('pname: ${checkDoctorParty?[0].name}');
+
                   if (doctorPartySet.contains(element.doctorID)) {
                     int index = doctorPartySet
                         .toList()
                         .indexWhere((item) => item.isEqual(element.doctorID));
-                    print(index);
+
                     var oldCommision =
                         doctorPartyTotalComissionSet.elementAt(index);
-                    print(oldCommision);
+
                     doctorPartyTotalComissionSet[index] =
                         oldCommision + doctorComissionAmount;
                     doctorPartyWiseList[index].add(element.id);
 
-                    print(doctorPartyWiseList);
-                    print(doctorPartyTotalComissionSet.toList());
                     // partyTotalComissionSet.add(comissionAmount);
                   } else {
                     doctorPartySet.add(element.doctorID);
                     int index = doctorPartySet
                         .toList()
                         .indexWhere((item) => item.isEqual(element.doctorID));
-                    print(index);
+
                     doctorPartyTotalComissionSet.insert(
                         index, doctorComissionAmount);
                     List<int> party = [];
                     party.add(element.id);
                     doctorPartyWiseList.insert(index, party);
                     // partyTotalComissionSet.elementAt(index);
-                    print(doctorPartyWiseList);
-                    print(doctorPartyTotalComissionSet.toList());
-                    print(doctorPartySet);
                   }
                   isShowDoctor = true;
                 } else {
@@ -2526,31 +2447,26 @@ class HomepageController extends GetxController {
                   if (technicianPartySet.contains(element.techniqalStaffID)) {
                     int index = technicianPartySet.toList().indexWhere(
                         (item) => item.isEqual(element.techniqalStaffID));
-                    print(index);
+
                     var oldCommision =
                         technicianPartyTotalComissionSet.elementAt(index);
-                    print(oldCommision);
+
                     technicianPartyTotalComissionSet[index] =
                         oldCommision + technicianComissionAmount;
                     technicianPartyWiseList[index].add(element.id);
 
-                    print(technicianPartyWiseList);
-                    print(technicianPartyTotalComissionSet.toList());
                     // partyTotalComissionSet.add(comissionAmount);
                   } else {
                     technicianPartySet.add(element.techniqalStaffID);
                     int index = technicianPartySet.toList().indexWhere(
                         (item) => item.isEqual(element.techniqalStaffID));
-                    print(index);
+
                     technicianPartyTotalComissionSet.insert(
                         index, technicianComissionAmount);
                     List<int> party = [];
                     party.add(element.id);
                     technicianPartyWiseList.insert(index, party);
                     // partyTotalComissionSet.elementAt(index);
-                    print(technicianPartyWiseList);
-                    print(technicianPartyTotalComissionSet.toList());
-                    print(technicianPartySet);
                   }
                   isShowTechnician = true;
                 } else {
@@ -2561,8 +2477,6 @@ class HomepageController extends GetxController {
                 if (isShowHospital == true &&
                     isShowDoctor == true &&
                     isShowTechnician == true) {
-                  print('No Party');
-
                   var resComissionUpdate = await (db.update(db.inputData)
                         ..where((tbl) => tbl.id.equals(element.id)))
                       .write(
@@ -2583,11 +2497,6 @@ class HomepageController extends GetxController {
                         // technicianComissionAmount: technicianComissionAmount,
                         logId: logID),
                   );
-                  print(resComissionUpdate);
-                  print('comission(%): $hospitalComission');
-                  print('comissionAmount(%): $hospitalComissionAmount');
-                  print('TotalAmount(%): ${element.totalSale}');
-                  print('************');
                 }
               }
             } else {
@@ -2597,15 +2506,15 @@ class HomepageController extends GetxController {
             partyNaNSetData.add(element.id);
           }
         }
-        print('done');
+
         // List ledgerIDList = [];
 
         // for (var i = 0; i < hospitalPartySet.length; i++) {
-        //   print('ledgerID: ${i + 1}');
+        //
         //   var pID = hospitalPartySet.elementAt(i);
-        //   print(hospitalPartySet.elementAt(i));
+        //
         //   var totalComission = hospitalPartyTotalComissionSet.elementAt(i);
-        //   print(hospitalPartyTotalComissionSet.elementAt(i));
+        //
         //   var resLedger =
         //       await db.into(db.ledger).insert(LedgerCompanion.insert(
         //             type: 'sale commission',
@@ -2617,7 +2526,7 @@ class HomepageController extends GetxController {
         //             extradrAmount: 0,
         //             ledgerNote: Constantdata.defualtNote,
         //           ));
-        //   print(resLedger);
+        //
         //   ledgerIDList.add(resLedger);
         // }
 
@@ -2627,16 +2536,16 @@ class HomepageController extends GetxController {
         //     var data = await (db.select(db.inputData)
         //           ..where((tbl) => tbl.smtInvNo.equals(element[j])))
         //         .get();
-        //     print(element[j]); //smtInvNo
-        //     print(data[0]); // smtInvNo-data
-        //     print(ledgerIDList[i]); //ledgerID
+        //
+        //
+        //
         //     var resUpdate = await (db.update(db.inputData)
         //           ..where((tbl) => tbl.smtInvNo.equals(element[j])))
         //         .write(data[0].copyWith(
         //       hospitalGenerateLedgerId: ledgerIDList[i],
         //     ));
-        //     print(resUpdate);
-        //     print('update record');
+        //
+        //
         //   }
         // }
         await generateComission(
@@ -2681,13 +2590,12 @@ class HomepageController extends GetxController {
   }) async {
     List ledgerIDList = [];
     for (var i = 0; i < partySet!.length; i++) {
-      print('ledgerID: ${i + 1}');
       var pID = partySet.elementAt(i);
-      print(partySet.elementAt(i));
+
       var totalComission = partyTotalComissionSet!.elementAt(i);
-      print(partyTotalComissionSet.elementAt(i));
+
       var resLedger = await db.into(db.ledger).insert(LedgerCompanion.insert(
-            type: 'sale commission',
+            type: Constantdata.generateComission,
             pID: pID,
             ledgerDate: DateTime.now(),
             drAmount: totalComission,
@@ -2696,7 +2604,7 @@ class HomepageController extends GetxController {
             extradrAmount: 0,
             ledgerNote: Constantdata.defualtAutoNote,
           ));
-      print(resLedger);
+
       ledgerIDList.add(resLedger);
     }
 
@@ -2706,9 +2614,6 @@ class HomepageController extends GetxController {
         var data = await (db.select(db.inputData)
               ..where((tbl) => tbl.id.equals(element[j])))
             .getSingle();
-        print(element[j]); //smtInvNo
-        print(data); // smtInvNo-data
-        print(ledgerIDList[i]); //ledgerID
 
         if (partyType == 1) {
           data = data.copyWith(
@@ -2726,28 +2631,22 @@ class HomepageController extends GetxController {
         var resUpdate = await (db.update(db.inputData)
               ..where((tbl) => tbl.id.equals(element[j])))
             .write(data);
-        print(resUpdate);
-        print('update record');
       }
     }
   }
 
   Future<void> insertData(List<List<dynamic>> data) async {
     try {
-      print(data.length);
       partyList = await (db.select(db.partyMaster)).get();
       materialTypeList = await (db.select(db.materialType)).get();
       if (materialTypeList!.isNotEmpty) {
         defaultMaterialType.value = materialTypeList![0];
       }
-      print(partyList);
-      print(materialTypeList);
+
       var tempList = [];
       // TODO: insert data Duaring check already exist or not
       List smtInvNoList = [];
       for (var i = 1; i < data.length; i++) {
-        print(i);
-
         String smtInvNo = (data[i][Constantdata.smtInvoiceNoIndex]).toString();
         // String smtDocDateIndex = (data[i][Constantdata.smtDocDateIndex]).toString();
 
@@ -2756,12 +2655,11 @@ class HomepageController extends GetxController {
             .get();
         if (res.isNotEmpty) {
           // 'already exist'.errorSnackbar;
-          print('already exist');
+
           smtInvNoList.add(smtInvNo);
-          print(smtInvNo);
         }
       }
-      print(smtInvNoList);
+
       if (smtInvNoList.isNotEmpty) {
         String smtInvNoListString = '';
         for (var i = 0; i < smtInvNoList.length; i++) {
@@ -2813,13 +2711,12 @@ class HomepageController extends GetxController {
               }
             }
 
-            print(tempdata);
             List<dynamic> dataHeader = [];
             dataHeader.addAll(data[0]);
             data.clear();
             data.add(dataHeader);
             data.addAll(tempdata);
-            print(data);
+
             pendingReportData.clear();
             pendingReportData.addAll(data);
             if (data.isEmpty) {
@@ -2923,7 +2820,7 @@ class HomepageController extends GetxController {
                             adjustComissionAmount,
                       ),
                     );
-                print(result);
+
                 // 'data insert Successful'.successSnackbar;
               }
               'data Updated Successful'.successDailog;
@@ -3031,7 +2928,7 @@ class HomepageController extends GetxController {
                   techniqalStaffAdjustComissionAmount: adjustComissionAmount,
                 ),
               );
-          print(result);
+
           // 'data insert Successful'.successSnackbar;
           'data insert Successful'.successDailog;
           Timer(const Duration(seconds: 2), () {
@@ -3040,8 +2937,6 @@ class HomepageController extends GetxController {
         }
       }
       // var res = await db.select(db.inputData).get();
-
-      print('done');
 
       //
     } catch (e) {
