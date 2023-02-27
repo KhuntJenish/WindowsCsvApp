@@ -1741,6 +1741,19 @@ class HomepageController extends GetxController {
                   extracrAmount: 0,
                   // ledgerNote: ledgerNote
                 ));
+      } else {
+        var pendingPaidPayment =
+            await db.into(db.ledger).insert(LedgerCompanion.insert(
+                  type: Constantdata.payment,
+                  pID: selectedParty.id,
+                  ledgerDate: currentDate,
+                  drAmount: 0,
+                  crAmount: pendingPaidAmount!,
+                  ledgerNote: Constantdata.pendingPaymentNote,
+                  extradrAmount: 0,
+                  extracrAmount: 0,
+                  // ledgerNote: ledgerNote
+                ));
       }
 
       //
