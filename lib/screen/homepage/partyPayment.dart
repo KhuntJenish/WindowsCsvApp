@@ -1332,7 +1332,7 @@ class PartyPaymentView extends StatelessWidget {
                                                     child: Column(
                                                       children: [
                                                         Text(
-                                                          'Old PendingPaid Amount : ${pendingAmount.toString()}₹ ',
+                                                          'Old PendingPaid Amount : ${pendingAmount.toStringAsFixed(2)}₹ ',
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontWeight:
@@ -1343,7 +1343,7 @@ class PartyPaymentView extends StatelessWidget {
                                                           ),
                                                         ),
                                                         Text(
-                                                          'Total Amount : ${totolAmount.toString()}₹ ',
+                                                          'Total Amount : ${totolAmount.toStringAsFixed(2)}₹ ',
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontWeight:

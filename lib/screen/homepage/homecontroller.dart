@@ -988,11 +988,13 @@ class HomepageController extends GetxController {
 
       var paymentLedgerID = 0;
       DateTime comissionPaidDate;
+      int comissionLedgerID;
       if (pID == 1) {
         crAmount = paymentbackRecord?[Constantdata.hcAmountIndex];
         paymentLedgerID = data.hospitalPaymentLedgerId;
-        comissionPaidDate = data.hospitalComissionPaidDate;
-        // data.copyWith();
+
+        // comissionPaidDate = data.hospitalComissionPaidDate;
+        comissionLedgerID = data.hospitalPaymentLedgerId;
 
         var updateInputData = await (db.update(db.inputData)
               ..where((tbl) => tbl.id.equals(data.id)))
@@ -1004,7 +1006,8 @@ class HomepageController extends GetxController {
       } else if (pID == 2) {
         crAmount = paymentbackRecord?[Constantdata.dcAmountIndex];
         paymentLedgerID = data.doctorPaymentLedgerId;
-        comissionPaidDate = data.doctorComissionPaidDate;
+        // comissionPaidDate = data.doctorComissionPaidDate;
+        comissionLedgerID = data.doctorPaymentLedgerId;
 
         var updateInputData = await (db.update(db.inputData)
               ..where((tbl) => tbl.id.equals(data.id)))
@@ -1014,7 +1017,8 @@ class HomepageController extends GetxController {
       } else {
         crAmount = paymentbackRecord?[Constantdata.tcAmountIndex];
         paymentLedgerID = data.techniqalStaffPaymentLedgerId;
-        comissionPaidDate = data.techniqalStaffComissionPaidDate;
+        // comissionPaidDate = data.techniqalStaffComissionPaidDate;
+        comissionLedgerID = data.techniqalStaffPaymentLedgerId;
 
         var updateInputData = await (db.update(db.inputData)
               ..where((tbl) => tbl.id.equals(data.id)))
@@ -1025,7 +1029,7 @@ class HomepageController extends GetxController {
       //
       if (paymentLedgerID != 0) {
         var ledgerData = await (db.select(db.ledger)
-              ..where((tbl) => tbl.ledgerDate.equals(comissionPaidDate)))
+              ..where((tbl) => tbl.id.equals(comissionLedgerID)))
             .getSingle();
 
         //
@@ -1229,8 +1233,10 @@ class HomepageController extends GetxController {
       d.Expression<bool> duration =
           db.ledger.ledgerDate.isBetweenValues(start!, end!);
 
-      ledgerData =
-          await (db.select(db.ledger)..where((tbl) => party & duration)).get();
+      ledgerData = await (db.select(db.ledger)
+            ..where((tbl) => party & duration)
+            ..orderBy([(t) => d.OrderingTerm(expression: t.ledgerDate)]))
+          .get();
 
       ledgerReportData.addAll(ledgerData);
 
@@ -1275,7 +1281,7 @@ class HomepageController extends GetxController {
           ledgerPartyWiseSet.add(tempPartyList);
         }
       }
-
+      ledgerPartySet.toList().sort();
       for (var i = 0; i < ledgerPartySet.length; i++) {
         double drAmount = (drcrAmountList[i][0] < drcrAmountList[i][1])
             ? drcrAmountList[i][1] - drcrAmountList[i][0]
@@ -1340,6 +1346,7 @@ class HomepageController extends GetxController {
               ),
             );
       }
+      debugPrint(ledgerReportData.toString());
 
       isLoading.value = false;
     } catch (e) {
