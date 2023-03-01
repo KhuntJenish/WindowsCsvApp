@@ -13,7 +13,8 @@ class Constantdata {
   static var extraPayment = 'ExtraPayment';
   static var defualtAutoNote = 'Auto';
   static var defualtmanualNote = 'manual';
-  static var pendingPaymentNote = 'PendingPaidAmount';
+  static var pendingPaymentNote = 'AdvancePaidAmount';
+  static var oldPendingPaymentNote = 'OldAdvancePaidAmount';
 
   // * Data Index /
   static var dataNoIndex = 0;

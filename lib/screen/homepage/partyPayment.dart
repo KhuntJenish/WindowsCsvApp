@@ -1065,8 +1065,11 @@ class PartyPaymentView extends StatelessWidget {
                                                     // color: Colors.red,
                                                     child: Visibility(
                                                       visible: date.isAfter(
-                                                          DateTime(
-                                                              1800, 01, 01)),
+                                                          DateTime.now()
+                                                              .subtract(
+                                                                  const Duration(
+                                                                      days:
+                                                                          2))),
                                                       replacement: Checkbox(
                                                         value: isPartyChecked
                                                             .value,
@@ -1181,58 +1184,6 @@ class PartyPaymentView extends StatelessWidget {
                                                                   const SizedBox(
                                                                     height: 10,
                                                                   ),
-                                                                  Obx(
-                                                                    () =>
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        SizedBox(
-                                                                          height:
-                                                                              Get.height * 0.02,
-                                                                          width:
-                                                                              Get.width * 0.2,
-                                                                          child:
-                                                                              LableWithCheckbox(
-                                                                            lebalWidth:
-                                                                                Get.width * 0.09,
-                                                                            lable:
-                                                                                'InCorrect payment:',
-                                                                            checkBoxOnchange: (value) =>
-                                                                                homepageController?.reversePayment1Onchnage(val: value),
-                                                                            checkBoxValue:
-                                                                                homepageController?.isReversePayment1.value,
-                                                                            isCheckBoxVisible:
-                                                                                true,
-                                                                          ),
-                                                                        ),
-                                                                        const SizedBox(
-                                                                          height:
-                                                                              10,
-                                                                        ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              Get.height * 0.02,
-                                                                          width:
-                                                                              Get.width * 0.2,
-                                                                          child:
-                                                                              LableWithCheckbox(
-                                                                            lebalWidth:
-                                                                                Get.width * 0.09,
-                                                                            lable:
-                                                                                'already done payment:',
-                                                                            checkBoxOnchange: (value) =>
-                                                                                homepageController?.reversePayment2Onchnage(val: value),
-                                                                            checkBoxValue:
-                                                                                homepageController?.isReversePayment2.value,
-                                                                            isCheckBoxVisible:
-                                                                                true,
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
                                                                 ],
                                                               ),
                                                             ),
@@ -1314,22 +1265,29 @@ class PartyPaymentView extends StatelessWidget {
                                             suffixIcon: IconButton(
                                               icon: const Icon(Icons.search),
                                               onPressed: () {
-                                                homepageController!
-                                                    .checkLumpsumPaymen(
-                                                  ptID: partyTypeID,
-                                                  generatedReportData:
-                                                      homepageController
-                                                          ?.generatedReportData,
-                                                  lumpsumAmount: double.parse(
-                                                          amountController
-                                                              .text) +
-                                                      homepageController!
-                                                          .partyWisePendingPaidAmount
-                                                          .value,
-                                                  selectedParty:
-                                                      homepageController
-                                                          ?.defaultParty.value,
-                                                );
+                                                if (amountController
+                                                    .text.isNotEmpty) {
+                                                  homepageController!
+                                                      .checkLumpsumPaymen(
+                                                    ptID: partyTypeID,
+                                                    generatedReportData:
+                                                        homepageController
+                                                            ?.generatedReportData,
+                                                    lumpsumAmount: double.parse(
+                                                            amountController
+                                                                .text) +
+                                                        homepageController!
+                                                            .partyWisePendingPaidAmount
+                                                            .value,
+                                                    selectedParty:
+                                                        homepageController
+                                                            ?.defaultParty
+                                                            .value,
+                                                  );
+                                                } else {
+                                                  'Please Enter Amount'
+                                                      .errorSnackbar;
+                                                }
                                               },
                                             ),
                                             hintText: 'Enter Payment Amount',
@@ -1468,7 +1426,7 @@ class PartyPaymentView extends StatelessWidget {
                                                   onConfirm: () async {
                                                     Get.back();
                                                     if (amountController
-                                                        .text.isNumericOnly) {
+                                                        .text.isNotEmpty) {
                                                       var crAmount =
                                                           homepageController!
                                                               .partyWisePayableAmount

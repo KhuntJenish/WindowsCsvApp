@@ -976,9 +976,10 @@ class HomepageController extends GetxController {
     try {
       //
       double? crAmount;
-
+      var ptID = defaultParty.value.ptID;
       var matCode = paymentbackRecord?[Constantdata.matCodeIndex];
       var smtInvoiceNo = paymentbackRecord?[Constantdata.smtInvoiceNoIndex];
+
       var data = await (db.select(db.inputData)
             ..where((tbl) =>
                 tbl.smtInvNo.equals(smtInvoiceNo) &
@@ -987,69 +988,108 @@ class HomepageController extends GetxController {
 
       var paymentLedgerID = 0;
       DateTime comissionPaidDate;
-      int comissionLedgerID;
+      // int comissionLedgerID;
       if (pID == 1) {
-        crAmount = paymentbackRecord?[Constantdata.hcAmountIndex];
+        // crAmount = paymentbackRecord?[Constantdata.hcAmountIndex];
         paymentLedgerID = data.hospitalPaymentLedgerId;
 
         // comissionPaidDate = data.hospitalComissionPaidDate;
-        comissionLedgerID = data.hospitalPaymentLedgerId;
-
-        var updateInputData = await (db.update(db.inputData)
-              ..where((tbl) => tbl.id.equals(data.id)))
-            .write(
-          data.copyWith(
-            hospitalComissionPaidDate: DateTime(1800, 01, 01),
-          ),
-        );
+        // comissionLedgerID = data.hospitalPaymentLedgerId;
+        var hospital = await (db.select(db.inputData)
+              ..where(
+                  (tbl) => tbl.hospitalPaymentLedgerId.equals(paymentLedgerID)))
+            .get();
+        for (var element in hospital) {
+          // print(element.hospitalPaymentLedgerId);
+          var updateInputData = await (db.update(db.inputData)
+                ..where((tbl) => tbl.id.equals(element.id)))
+              .write(
+            element.copyWith(
+              hospitalComissionPaidDate: DateTime(1800, 01, 01),
+              hospitalPaymentLedgerId: 0,
+            ),
+          );
+        }
       } else if (pID == 2) {
-        crAmount = paymentbackRecord?[Constantdata.dcAmountIndex];
+        // crAmount = paymentbackRecord?[Constantdata.dcAmountIndex];
         paymentLedgerID = data.doctorPaymentLedgerId;
         // comissionPaidDate = data.doctorComissionPaidDate;
-        comissionLedgerID = data.doctorPaymentLedgerId;
+        // comissionLedgerID = data.doctorPaymentLedgerId;
 
-        var updateInputData = await (db.update(db.inputData)
-              ..where((tbl) => tbl.id.equals(data.id)))
-            .write(data.copyWith(
-          doctorComissionPaidDate: DateTime(1800, 01, 01),
-        ));
+        var doctor = await (db.select(db.inputData)
+              ..where(
+                  (tbl) => tbl.doctorPaymentLedgerId.equals(paymentLedgerID)))
+            .get();
+        for (var element in doctor) {
+          // print(element.hospitalPaymentLedgerId);
+          var updateInputData = await (db.update(db.inputData)
+                ..where((tbl) => tbl.id.equals(element.id)))
+              .write(
+            element.copyWith(
+              doctorComissionPaidDate: DateTime(1800, 01, 01),
+              doctorPaymentLedgerId: 0,
+            ),
+          );
+        }
       } else {
-        crAmount = paymentbackRecord?[Constantdata.tcAmountIndex];
+        // crAmount = paymentbackRecord?[Constantdata.tcAmountIndex];
         paymentLedgerID = data.techniqalStaffPaymentLedgerId;
         // comissionPaidDate = data.techniqalStaffComissionPaidDate;
-        comissionLedgerID = data.techniqalStaffPaymentLedgerId;
+        // comissionLedgerID = data.techniqalStaffPaymentLedgerId;
+        var techniqalStaff = await (db.select(db.inputData)
+              ..where((tbl) =>
+                  tbl.techniqalStaffPaymentLedgerId.equals(paymentLedgerID)))
+            .get();
+        for (var element in techniqalStaff) {
+          // print(element.hospitalPaymentLedgerId);
+          var updateInputData = await (db.update(db.inputData)
+                ..where((tbl) => tbl.id.equals(element.id)))
+              .write(
+            element.copyWith(
+              techniqalStaffComissionPaidDate: DateTime(1800, 01, 01),
+              techniqalStaffPaymentLedgerId: 0,
+            ),
+          );
+        }
 
-        var updateInputData = await (db.update(db.inputData)
-              ..where((tbl) => tbl.id.equals(data.id)))
-            .write(data.copyWith(
-          techniqalStaffComissionPaidDate: DateTime(1800, 01, 01),
-        ));
+        // var updateInputData = await (db.update(db.inputData)
+        //       ..where((tbl) => tbl.id.equals(data.id)))
+        //     .write(data.copyWith(
+        //   techniqalStaffComissionPaidDate: DateTime(1800, 01, 01),
+        // ));
       }
       //
       if (paymentLedgerID != 0) {
+        // delete latest Advance payment ledger
         var ledgerData = await (db.select(db.ledger)
-              ..where((tbl) => tbl.id.equals(comissionLedgerID)))
+              ..where((tbl) => tbl.id.equals(paymentLedgerID)))
             .getSingle();
         var ledgerAdvancePaymentData = await (db.select(db.ledger)
               ..where((tbl) =>
-                  tbl.pID.equals(defaultParty.value.ptID) &
+                  tbl.pID.equals(defaultParty.value.id) &
                   tbl.ledgerNote.equals(Constantdata.pendingPaymentNote)))
             .getSingle();
 
-        //
+        var deleteAdvancePaymentLedgerData =
+            await db.delete(db.ledger).delete(ledgerAdvancePaymentData);
 
-        if (ledgerData.crAmount != crAmount) {
-          var updateLedgerData = await (db.update(db.ledger)
-                ..where((tbl) => tbl.id.equals(ledgerData.id)))
+        // update second last oldAdvance payment ledger
+        var oldPendingPaymentNote = await (db.select(db.ledger)
+              ..where((tbl) =>
+                  tbl.pID.equals(defaultParty.value.id) &
+                  tbl.ledgerNote.equals(Constantdata.oldPendingPaymentNote)))
+            .get();
+        if (oldPendingPaymentNote.isNotEmpty) {
+          (db.update(db.ledger)
+                ..where((tbl) => tbl.id.equals(
+                    oldPendingPaymentNote[oldPendingPaymentNote.length - 1]
+                        .id)))
               .write(
-            ledgerData.copyWith(
-              crAmount: ledgerData.crAmount - crAmount!.toDouble(),
-            ),
+            oldPendingPaymentNote[oldPendingPaymentNote.length - 1]
+                .copyWith(ledgerNote: Constantdata.pendingPaymentNote),
           );
-        } else {
-          var deletePaymentLedger =
-              await db.delete(db.ledger).delete(ledgerData);
         }
+        var deletePaymentLedger = await db.delete(db.ledger).delete(ledgerData);
 
         await getGeneratedSearchData(
             start: dateRange.value.start,
@@ -1238,7 +1278,10 @@ class HomepageController extends GetxController {
           db.ledger.ledgerDate.isBetweenValues(start!, end!);
 
       ledgerData = await (db.select(db.ledger)
-            ..where((tbl) => party & duration)
+            ..where((tbl) =>
+                party &
+                duration &
+                tbl.ledgerNote.isNotIn([Constantdata.oldPendingPaymentNote]))
             ..orderBy([(t) => d.OrderingTerm(expression: t.ledgerDate)]))
           .get();
 
@@ -1734,38 +1777,33 @@ class HomepageController extends GetxController {
 
       //
 
-      var oldpendingPaidPayemntRemove = await (db.delete(db.ledger)
+      var pendingPaidPayemnt = await (db.select(db.ledger)
             ..where((tbl) =>
                 tbl.pID.equals(selectedParty.id) &
                 tbl.ledgerNote.equals(Constantdata.pendingPaymentNote)))
-          .go();
-      if (oldpendingPaidPayemntRemove != 0) {
-        var pendingPaidPayment =
-            await db.into(db.ledger).insert(LedgerCompanion.insert(
-                  type: Constantdata.payment,
-                  pID: selectedParty.id,
-                  ledgerDate: currentDate,
-                  drAmount: 0,
-                  crAmount: pendingPaidAmount!,
-                  ledgerNote: Constantdata.pendingPaymentNote,
-                  extradrAmount: 0,
-                  extracrAmount: 0,
-                  // ledgerNote: ledgerNote
-                ));
-      } else {
-        var pendingPaidPayment =
-            await db.into(db.ledger).insert(LedgerCompanion.insert(
-                  type: Constantdata.payment,
-                  pID: selectedParty.id,
-                  ledgerDate: currentDate,
-                  drAmount: 0,
-                  crAmount: pendingPaidAmount!,
-                  ledgerNote: Constantdata.pendingPaymentNote,
-                  extradrAmount: 0,
-                  extracrAmount: 0,
-                  // ledgerNote: ledgerNote
-                ));
+          .get();
+      if (pendingPaidPayemnt.isNotEmpty) {
+        print(pendingPaidPayemnt);
+
+        db.update(db.ledger)
+          ..where((tbl) =>
+              tbl.pID.equals(selectedParty.id) &
+              tbl.ledgerNote.equals(Constantdata.pendingPaymentNote))
+          ..write(pendingPaidPayemnt[pendingPaidPayemnt.length - 1]
+              .copyWith(ledgerNote: Constantdata.oldPendingPaymentNote));
       }
+      var pendingPaidPayment =
+          await db.into(db.ledger).insert(LedgerCompanion.insert(
+                type: Constantdata.payment,
+                pID: selectedParty.id,
+                ledgerDate: currentDate,
+                drAmount: 0,
+                crAmount: pendingPaidAmount!,
+                ledgerNote: Constantdata.pendingPaymentNote,
+                extradrAmount: 0,
+                extracrAmount: 0,
+                // ledgerNote: ledgerNote
+              ));
 
       //
       if (ledgerData > 0) {
@@ -1783,15 +1821,10 @@ class HomepageController extends GetxController {
                   ..where((tbl) =>
                       tbl.smtInvNo.equals(smtInvoiceNo) &
                       tbl.matCode.equals(matCode)))
-                .getSingleOrNull();
-            inputDatadata.add(inputData!);
+                .getSingle();
+            inputDatadata.add(inputData);
           }
         }
-        // smtInvNoList.addAll(smtInvNoSet.toList());
-
-        // var inputDatadata = await (db.select(db.inputData)
-        //       ..where((tbl) => tbl.smtInvNo.isIn(smtInvNoList)))
-        //     .get();
 
         for (var i = 0; i < inputDatadata.length; i++) {
           var hinputData = inputDatadata[i].copyWith(
