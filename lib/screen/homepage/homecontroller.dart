@@ -1413,6 +1413,16 @@ class HomepageController extends GetxController {
       if (generatedReportData!.isEmpty) {
         "Payment not found".errorSnackbar();
       }
+      var advanceAmount = await (db.select(db.ledger)
+            ..where((tbl) =>
+                tbl.pID.equals(selectedParty!.id) &
+                tbl.ledgerNote.equals(Constantdata.pendingPaymentNote)))
+          .get();
+      if (advanceAmount.isNotEmpty) {
+        print(advanceAmount[0].crAmount);
+        lumpsumAmount = lumpsumAmount! + advanceAmount[0].crAmount;
+      }
+
       var pName, pCommission = 0.0, totalPayAmount = 0.0;
       bool isReturn = true;
       smtInvNoSet.clear();

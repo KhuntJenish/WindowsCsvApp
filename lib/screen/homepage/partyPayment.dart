@@ -1274,11 +1274,7 @@ class PartyPaymentView extends StatelessWidget {
                                                         homepageController
                                                             ?.generatedReportData,
                                                     lumpsumAmount: double.parse(
-                                                            amountController
-                                                                .text) +
-                                                        homepageController!
-                                                            .partyWisePendingPaidAmount
-                                                            .value,
+                                                        amountController.text),
                                                     selectedParty:
                                                         homepageController
                                                             ?.defaultParty
@@ -1450,6 +1446,7 @@ class PartyPaymentView extends StatelessWidget {
                                                                   .defaultParty
                                                                   .value,
                                                           ptID: partyTypeID);
+                                                      amountController.clear();
                                                     } else {
                                                       'Enter Valid Amount'
                                                           .errorSnackbar;
