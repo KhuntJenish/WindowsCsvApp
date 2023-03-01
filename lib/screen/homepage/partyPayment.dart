@@ -1146,6 +1146,12 @@ class PartyPaymentView extends StatelessWidget {
                                                             confirmTextColor:
                                                                 Colors.white,
                                                             content: Container(
+                                                              // color: Colors.red,
+                                                              margin: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          Get.height *
+                                                                              0.02),
                                                               child: Column(
                                                                 children: [
                                                                   Text(
@@ -1172,6 +1178,61 @@ class PartyPaymentView extends StatelessWidget {
                                                                             Get.height *
                                                                                 0.02),
                                                                   ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Obx(
+                                                                    () =>
+                                                                        Column(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        SizedBox(
+                                                                          height:
+                                                                              Get.height * 0.02,
+                                                                          width:
+                                                                              Get.width * 0.2,
+                                                                          child:
+                                                                              LableWithCheckbox(
+                                                                            lebalWidth:
+                                                                                Get.width * 0.09,
+                                                                            lable:
+                                                                                'InCorrect payment:',
+                                                                            checkBoxOnchange: (value) =>
+                                                                                homepageController?.reversePayment1Onchnage(val: value),
+                                                                            checkBoxValue:
+                                                                                homepageController?.isReversePayment1.value,
+                                                                            isCheckBoxVisible:
+                                                                                true,
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              Get.height * 0.02,
+                                                                          width:
+                                                                              Get.width * 0.2,
+                                                                          child:
+                                                                              LableWithCheckbox(
+                                                                            lebalWidth:
+                                                                                Get.width * 0.09,
+                                                                            lable:
+                                                                                'already done payment:',
+                                                                            checkBoxOnchange: (value) =>
+                                                                                homepageController?.reversePayment2Onchnage(val: value),
+                                                                            checkBoxValue:
+                                                                                homepageController?.isReversePayment2.value,
+                                                                            isCheckBoxVisible:
+                                                                                true,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
                                                                 ],
                                                               ),
                                                             ),
@@ -1179,6 +1240,10 @@ class PartyPaymentView extends StatelessWidget {
                                                               Get.back();
                                                               // !Todo: Payment Back
                                                               homepageController!.reversePaymentProcess(
+                                                                  isPayment1:
+                                                                      homepageController
+                                                                          ?.isReversePayment1
+                                                                          .value,
                                                                   pID:
                                                                       partyTypeID,
                                                                   paymentbackRecord:
@@ -1289,7 +1354,7 @@ class PartyPaymentView extends StatelessWidget {
                                             .partyWisePaidAmount.value
                                             .toStringAsFixed(2)),
                                     LableText(
-                                        name: 'Pending Paid Amount',
+                                        name: 'Advance Paid Amount',
                                         amount: homepageController!
                                             .partyWisePendingPaidAmount.value
                                             .toStringAsFixed(2)),

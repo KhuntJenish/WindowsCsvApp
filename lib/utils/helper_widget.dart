@@ -288,22 +288,25 @@ class LableWithCheckbox extends StatelessWidget {
       required this.lable,
       this.checkBoxOnchange,
       this.checkBoxValue,
+      this.lebalWidth,
       required this.isCheckBoxVisible});
 
   final String lable; // = 'Select Party:';
   final bool? checkBoxValue; //= false;
   final Function(bool?)? checkBoxOnchange;
   final bool? isCheckBoxVisible; //= false
+  final double? lebalWidth; //= false
 
   @override
   Widget build(BuildContext context) {
     ('checkbox : $isCheckBoxVisible');
     final TextTheme textTheme = Theme.of(context).textTheme;
     return SizedBox(
-      width: Get.width * 0.20,
+      // width: Get.width * 0.20,
       child: Row(
         children: [
           Container(
+            width: lebalWidth,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             child: AutoSizeText(
               lable,

@@ -63,6 +63,8 @@ class HomepageController extends GetxController {
   RxBool isAllMaterialTypeSelected = true.obs;
   RxBool isAllPartyCitySelected = true.obs;
   RxBool isAllPendingPayement = false.obs;
+  RxBool isReversePayment1 = true.obs;
+  RxBool isReversePayment2 = false.obs;
   RxDouble partyWiseTotalAmount = 0.0.obs;
   RxDouble partyWisePaidAmount = 0.0.obs;
   RxDouble partyWisePayableAmount = 0.0.obs;
@@ -970,10 +972,7 @@ class HomepageController extends GetxController {
   }
 
   reversePaymentProcess(
-      {
-      // double? crAmount,
-      int? pID,
-      List<dynamic>? paymentbackRecord}) async {
+      {bool? isPayment1, int? pID, List<dynamic>? paymentbackRecord}) async {
     try {
       //
       double? crAmount;
@@ -1030,6 +1029,11 @@ class HomepageController extends GetxController {
       if (paymentLedgerID != 0) {
         var ledgerData = await (db.select(db.ledger)
               ..where((tbl) => tbl.id.equals(comissionLedgerID)))
+            .getSingle();
+        var ledgerAdvancePaymentData = await (db.select(db.ledger)
+              ..where((tbl) =>
+                  tbl.pID.equals(defaultParty.value.ptID) &
+                  tbl.ledgerNote.equals(Constantdata.pendingPaymentNote)))
             .getSingle();
 
         //
@@ -2962,6 +2966,22 @@ class HomepageController extends GetxController {
     } catch (e) {
       printError(info: e.toString());
       e.toString().errorSnackbar;
+    }
+  }
+
+  reversePayment1Onchnage({bool? val}) {
+    print(val);
+    isReversePayment1.value = val!;
+    if (val) {
+      isReversePayment2.value = false;
+    }
+  }
+
+  reversePayment2Onchnage({bool? val}) {
+    print(val);
+    isReversePayment2.value = val!;
+    if (val) {
+      isReversePayment1.value = false;
     }
   }
 }
